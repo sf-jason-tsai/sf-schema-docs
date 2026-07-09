@@ -1,0 +1,10 @@
+{
+  "name": "sf-schema-docs",
+  "version": "1.0.0",
+  "description": "Salesforce SE demo docs · Auto-synced from local specs/ folders",
+  "type": "module",
+  "scripts": {
+    "sync": "node sync.mjs",
+    "url": "start https://sf-jason-tsai.github.io/sf-schema-docs/"
+  }
+}
