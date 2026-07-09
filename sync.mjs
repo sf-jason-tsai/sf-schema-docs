@@ -27,6 +27,32 @@ const PAGES = [
         dest: 'data-cloud-narrative.html',
         title: 'Data Cloud · Unified Individual'
     },
+    // ─── 有你共創 YCC (Marketing Cloud Growth on Core + Data Cloud) ───
+    {
+        src: 'C:/Users/bingyan.tsai/Desktop/Claude/ycc/specs/index.html',
+        dest: 'ycc/index.html',
+        title: '有你共創 · 專案首頁'
+    },
+    {
+        src: 'C:/Users/bingyan.tsai/Desktop/Claude/ycc/specs/schema.html',
+        dest: 'ycc/schema.html',
+        title: '有你共創 · 5 Object Schema'
+    },
+    {
+        src: 'C:/Users/bingyan.tsai/Desktop/Claude/ycc/specs/data-cloud-story.html',
+        dest: 'ycc/data-cloud-story.html',
+        title: '有你共創 · Data Cloud 敘事'
+    },
+    {
+        src: 'C:/Users/bingyan.tsai/Desktop/Claude/ycc/specs/mcoc-on-core.html',
+        dest: 'ycc/mcoc-on-core.html',
+        title: '有你共創 · Marketing Cloud on Core'
+    },
+    {
+        src: 'C:/Users/bingyan.tsai/Desktop/Claude/ycc/specs/demo-script.html',
+        dest: 'ycc/demo-script.html',
+        title: '有你共創 · 20 分鐘 Demo Script'
+    },
     // ↑ 加新頁時只需在這裡插入 { src, dest, title }
 ];
 

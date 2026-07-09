@@ -1,0 +1,833 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>有你共創 · Data Cloud 敘事文件</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ycc-cream: #FAF6F2;
+    --ycc-coral: #FF6B7A;
+    --ycc-coral-dk: #E14C5B;
+    --ycc-teal: #4FA3A0;
+    --ycc-dusty-rose: #E89BA8;
+    --ycc-royal: #3B5BA5;
+    --ycc-charcoal: #2B2B2B;
+    --ycc-graphite: #6B7280;
+    --ycc-border: #E5E1DA;
+    --ycc-card: #FFFFFF;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: 'Noto Sans TC', -apple-system, "Segoe UI", sans-serif;
+    background: var(--ycc-cream);
+    color: var(--ycc-charcoal);
+    line-height: 1.7;
+    font-size: 15px;
+  }
+  code, pre { font-family: 'JetBrains Mono', 'Consolas', monospace; }
+
+  /* Nav bar */
+  .navbar {
+    position: sticky; top: 0; z-index: 100;
+    background: rgba(255,255,255,0.95);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--ycc-border);
+    padding: 14px 32px;
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .nav-brand { display: flex; align-items: center; gap: 12px; font-weight: 600; }
+  .nav-brand .logo {
+    width: 32px; height: 32px; border-radius: 8px;
+    background: linear-gradient(135deg, var(--ycc-coral), var(--ycc-coral-dk));
+    display: flex; align-items: center; justify-content: center;
+    color: white; font-weight: 700; font-size: 14px;
+  }
+  .nav-brand-text small { display: block; color: var(--ycc-graphite); font-weight: 400; font-size: 12px; }
+  .nav-back {
+    color: var(--ycc-coral-dk); text-decoration: none; font-weight: 500;
+    display: flex; align-items: center; gap: 6px; font-size: 14px;
+  }
+  .nav-back:hover { color: var(--ycc-coral); }
+
+  /* Layout */
+  .layout {
+    display: grid;
+    grid-template-columns: 240px 1fr;
+    max-width: 1400px;
+    margin: 0 auto;
+    gap: 40px;
+    padding: 32px;
+  }
+  .toc {
+    position: sticky;
+    top: 80px;
+    align-self: start;
+    background: var(--ycc-card);
+    border: 1px solid var(--ycc-border);
+    border-radius: 12px;
+    padding: 20px;
+    max-height: calc(100vh - 100px);
+    overflow-y: auto;
+  }
+  .toc h4 {
+    font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em;
+    color: var(--ycc-graphite); margin-bottom: 12px;
+  }
+  .toc ol { list-style: none; }
+  .toc li { margin-bottom: 8px; }
+  .toc a {
+    color: var(--ycc-charcoal); text-decoration: none;
+    display: block; padding: 6px 10px; border-radius: 6px;
+    font-size: 13px; border-left: 3px solid transparent;
+  }
+  .toc a:hover { background: var(--ycc-cream); border-left-color: var(--ycc-coral); color: var(--ycc-coral-dk); }
+  .toc .toc-num { color: var(--ycc-coral); font-weight: 600; margin-right: 6px; }
+
+  main { min-width: 0; }
+
+  /* Hero */
+  .hero {
+    background: linear-gradient(135deg, #fff 0%, #fff5f5 100%);
+    border: 1px solid var(--ycc-border);
+    border-radius: 16px;
+    padding: 40px;
+    margin-bottom: 32px;
+    position: relative; overflow: hidden;
+  }
+  .hero::before {
+    content: ""; position: absolute; top: -60px; right: -60px;
+    width: 220px; height: 220px; border-radius: 50%;
+    background: radial-gradient(circle, rgba(255,107,122,0.12), transparent 70%);
+  }
+  .hero .eyebrow {
+    display: inline-block; padding: 4px 12px;
+    background: var(--ycc-coral); color: white;
+    border-radius: 999px; font-size: 12px; font-weight: 500;
+    margin-bottom: 12px;
+  }
+  .hero h1 { font-size: 32px; font-weight: 700; margin-bottom: 8px; }
+  .hero .subtitle { color: var(--ycc-graphite); font-size: 16px; }
+  .hero .company-tag {
+    display: inline-block; margin-top: 16px; padding: 8px 14px;
+    background: white; border: 1px solid var(--ycc-border);
+    border-radius: 8px; font-size: 13px; color: var(--ycc-graphite);
+  }
+  .hero .company-tag strong { color: var(--ycc-charcoal); }
+
+  /* Section */
+  section {
+    background: var(--ycc-card);
+    border: 1px solid var(--ycc-border);
+    border-radius: 16px;
+    padding: 36px;
+    margin-bottom: 28px;
+    scroll-margin-top: 80px;
+  }
+  section h2 {
+    font-size: 24px; font-weight: 700; margin-bottom: 8px;
+    display: flex; align-items: center; gap: 12px;
+  }
+  section h2 .part-num {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 36px; height: 36px; border-radius: 10px;
+    background: var(--ycc-coral); color: white;
+    font-size: 15px; font-weight: 700;
+  }
+  section .lead { color: var(--ycc-graphite); margin-bottom: 24px; font-size: 15px; }
+  section h3 {
+    font-size: 17px; font-weight: 600; margin: 24px 0 12px;
+    color: var(--ycc-charcoal);
+  }
+  section p { margin-bottom: 12px; }
+  section ul, section ol { margin: 12px 0 12px 24px; }
+  section li { margin-bottom: 6px; }
+
+  /* Pain points */
+  .pain-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr);
+    gap: 16px; margin: 20px 0;
+  }
+  .pain-card {
+    background: var(--ycc-cream);
+    border: 1px solid var(--ycc-border);
+    border-left: 4px solid var(--ycc-coral);
+    padding: 18px; border-radius: 10px;
+  }
+  .pain-card .pain-icon {
+    width: 40px; height: 40px; border-radius: 10px;
+    background: white; display: flex; align-items: center; justify-content: center;
+    margin-bottom: 12px;
+  }
+  .pain-card h4 { font-size: 15px; margin-bottom: 6px; }
+  .pain-card p { font-size: 13px; color: var(--ycc-graphite); margin: 0; }
+
+  .pain-consequence {
+    display: flex; gap: 16px;
+    background: #fff5f5;
+    border: 1px solid #ffd4d8;
+    border-radius: 10px;
+    padding: 16px; margin-top: 16px;
+  }
+  .pain-consequence .icon { flex: 0 0 40px; color: var(--ycc-coral-dk); }
+  .pain-consequence strong { color: var(--ycc-coral-dk); }
+
+  /* Table */
+  table {
+    width: 100%; border-collapse: collapse;
+    margin: 20px 0; font-size: 14px;
+    background: white; border-radius: 10px; overflow: hidden;
+    border: 1px solid var(--ycc-border);
+  }
+  th {
+    background: var(--ycc-cream); color: var(--ycc-charcoal);
+    text-align: left; padding: 12px 14px; font-weight: 600;
+    font-size: 13px; border-bottom: 2px solid var(--ycc-border);
+  }
+  td {
+    padding: 12px 14px; border-bottom: 1px solid var(--ycc-border);
+    vertical-align: top;
+  }
+  tr:last-child td { border-bottom: none; }
+  td code {
+    background: var(--ycc-cream); padding: 2px 6px;
+    border-radius: 4px; font-size: 12px; color: var(--ycc-coral-dk);
+  }
+
+  /* Key insight box */
+  .insight-box {
+    background: linear-gradient(135deg, #fff5f5, #fff);
+    border: 2px solid var(--ycc-coral);
+    border-radius: 12px;
+    padding: 20px 24px; margin: 24px 0;
+    display: flex; gap: 16px; align-items: flex-start;
+  }
+  .insight-box .icon {
+    flex: 0 0 44px; height: 44px; border-radius: 10px;
+    background: var(--ycc-coral); color: white;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .insight-box .content h4 {
+    font-size: 15px; color: var(--ycc-coral-dk); margin-bottom: 6px;
+  }
+  .insight-box .content p { margin: 0; font-size: 14px; }
+
+  /* Match rules */
+  .match-rules { display: flex; flex-direction: column; gap: 12px; margin: 20px 0; }
+  .match-rule {
+    display: grid; grid-template-columns: 48px 1fr auto;
+    gap: 16px; align-items: center;
+    background: var(--ycc-cream);
+    border: 1px solid var(--ycc-border);
+    border-radius: 10px; padding: 14px 18px;
+  }
+  .match-rule .priority {
+    width: 40px; height: 40px; border-radius: 10px;
+    background: var(--ycc-coral); color: white;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 700; font-size: 16px;
+  }
+  .match-rule .rule-body strong { display: block; font-size: 14px; }
+  .match-rule .rule-body small { color: var(--ycc-graphite); font-size: 12px; }
+  .match-rule .rule-method {
+    padding: 4px 10px; border-radius: 999px;
+    background: white; border: 1px solid var(--ycc-border);
+    font-size: 12px; color: var(--ycc-graphite);
+  }
+
+  /* Reconciliation */
+  .recon-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr);
+    gap: 12px; margin: 16px 0;
+  }
+  .recon-card {
+    background: var(--ycc-cream);
+    border: 1px solid var(--ycc-border);
+    border-radius: 10px; padding: 14px;
+  }
+  .recon-card h5 { font-size: 13px; color: var(--ycc-coral-dk); margin-bottom: 6px; }
+  .recon-card p { font-size: 12px; color: var(--ycc-graphite); margin: 0; }
+
+  /* SQL code block */
+  pre.sql {
+    background: #1e1e2e; color: #d9e0ee;
+    padding: 20px 24px; border-radius: 10px;
+    overflow-x: auto; font-size: 13px; line-height: 1.6;
+    margin: 16px 0; border: 1px solid #313244;
+  }
+  pre.sql .kw { color: #cba6f7; font-weight: 600; }
+  pre.sql .fn { color: #f9e2af; }
+  pre.sql .str { color: #a6e3a1; }
+  pre.sql .comment { color: #6c7086; font-style: italic; }
+  pre.sql .num { color: #fab387; }
+
+  /* Segment cards */
+  .segment-grid {
+    display: grid; grid-template-columns: repeat(2, 1fr);
+    gap: 16px; margin: 20px 0;
+  }
+  .segment-card {
+    background: white;
+    border: 1px solid var(--ycc-border);
+    border-radius: 12px; padding: 18px;
+    display: flex; flex-direction: column;
+    position: relative; overflow: hidden;
+  }
+  .segment-card::before {
+    content: ""; position: absolute; top: 0; left: 0;
+    width: 4px; height: 100%;
+    background: var(--ycc-coral);
+  }
+  .segment-card.teal::before { background: var(--ycc-teal); }
+  .segment-card.rose::before { background: var(--ycc-dusty-rose); }
+  .segment-card.royal::before { background: var(--ycc-royal); }
+  .segment-card.charcoal::before { background: var(--ycc-charcoal); }
+  .segment-card.coral-dk::before { background: var(--ycc-coral-dk); }
+  .segment-header {
+    display: flex; justify-content: space-between; align-items: flex-start;
+    margin-bottom: 10px;
+  }
+  .segment-title { font-size: 16px; font-weight: 700; }
+  .segment-code {
+    font-family: 'JetBrains Mono', monospace; font-size: 11px;
+    color: var(--ycc-graphite); background: var(--ycc-cream);
+    padding: 2px 6px; border-radius: 4px;
+  }
+  .segment-card p.desc { font-size: 13px; color: var(--ycc-graphite); margin-bottom: 10px; }
+  .segment-sql {
+    background: #1e1e2e; color: #d9e0ee;
+    padding: 10px 12px; border-radius: 6px;
+    font-family: 'JetBrains Mono', monospace; font-size: 11px;
+    margin-bottom: 12px; line-height: 1.5;
+  }
+  .segment-meta {
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 6px; margin-top: auto; font-size: 12px;
+  }
+  .segment-meta div { padding: 6px 8px; background: var(--ycc-cream); border-radius: 4px; }
+  .segment-meta strong { display: block; font-size: 10px; color: var(--ycc-graphite);
+    text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 2px; }
+
+  /* Activation diagram */
+  .activation-flow {
+    display: grid;
+    grid-template-columns: 1fr 60px 1fr 60px 1.2fr;
+    gap: 8px; align-items: center;
+    margin: 24px 0;
+    padding: 20px;
+    background: var(--ycc-cream);
+    border: 1px solid var(--ycc-border);
+    border-radius: 12px;
+  }
+  .flow-col-title {
+    font-size: 11px; text-transform: uppercase; letter-spacing: 0.06em;
+    color: var(--ycc-graphite); font-weight: 600;
+    margin-bottom: 8px; text-align: center;
+  }
+  .flow-nodes { display: flex; flex-direction: column; gap: 8px; }
+  .flow-node {
+    background: white; border: 1px solid var(--ycc-border);
+    border-radius: 8px; padding: 10px 12px; font-size: 13px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .flow-node.center {
+    background: var(--ycc-coral); color: white; border-color: var(--ycc-coral);
+    text-align: center; justify-content: center; font-weight: 600;
+  }
+  .flow-node.dest { justify-content: space-between; font-size: 12px; }
+  .flow-node .status-live {
+    color: #16a34a; font-size: 11px; font-weight: 600;
+  }
+  .flow-node .status-warn {
+    color: #ea580c; font-size: 11px; font-weight: 600;
+  }
+  .flow-arrow {
+    display: flex; align-items: center; justify-content: center;
+    color: var(--ycc-coral); font-size: 20px;
+  }
+
+  /* DMO mapping diagram */
+  .dmo-diagram {
+    display: grid; grid-template-columns: 1fr 60px 1fr;
+    gap: 12px; align-items: start; margin: 20px 0;
+    padding: 20px; background: var(--ycc-cream);
+    border: 1px solid var(--ycc-border); border-radius: 12px;
+  }
+  .dmo-col { display: flex; flex-direction: column; gap: 6px; }
+  .dmo-col h5 {
+    font-size: 11px; text-transform: uppercase; letter-spacing: 0.06em;
+    color: var(--ycc-graphite); margin-bottom: 6px; text-align: center;
+  }
+  .dmo-node {
+    background: white; border: 1px solid var(--ycc-border);
+    border-radius: 6px; padding: 8px 10px; font-size: 12px;
+    font-family: 'JetBrains Mono', monospace;
+  }
+  .dmo-node.custom { border-left: 3px solid var(--ycc-royal); }
+  .dmo-node.std { border-left: 3px solid var(--ycc-teal); }
+  .dmo-arrows { display: flex; flex-direction: column; justify-content: center;
+    align-items: center; color: var(--ycc-coral); font-size: 22px; padding-top: 30px; }
+
+  /* Footer */
+  footer {
+    text-align: center; padding: 32px;
+    color: var(--ycc-graphite); font-size: 13px;
+  }
+
+  @media (max-width: 900px) {
+    .layout { grid-template-columns: 1fr; }
+    .toc { position: static; }
+    .pain-grid, .segment-grid, .recon-grid { grid-template-columns: 1fr; }
+    .activation-flow { grid-template-columns: 1fr; }
+    .flow-arrow { transform: rotate(90deg); }
+    .dmo-diagram { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<nav class="navbar">
+  <div class="nav-brand">
+    <div class="logo">Y</div>
+    <div class="nav-brand-text">
+      有你共創 · Data Cloud 敘事
+      <small>Co-create With You · Data Cloud Story</small>
+    </div>
+  </div>
+  <a href="index.html" class="nav-back">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <path d="M19 12H5M12 19l-7-7 7-7"/>
+    </svg>
+    回專案首頁
+  </a>
+</nav>
+
+<div class="layout">
+  <aside class="toc">
+    <h4>目錄</h4>
+    <ol>
+      <li><a href="#part1"><span class="toc-num">01</span>現況痛點</a></li>
+      <li><a href="#part2"><span class="toc-num">02</span>DMO 映射</a></li>
+      <li><a href="#part3"><span class="toc-num">03</span>Identity Resolution</a></li>
+      <li><a href="#part4"><span class="toc-num">04</span>RFM Calculated Insight</a></li>
+      <li><a href="#part5"><span class="toc-num">05</span>6 Segments 定義</a></li>
+      <li><a href="#part6"><span class="toc-num">06</span>Activation 架構</a></li>
+    </ol>
+  </aside>
+
+  <main>
+    <div class="hero">
+      <span class="eyebrow">Data Cloud Narrative</span>
+      <h1>從三條斷裂的資料流，到一位可行動的統一客戶</h1>
+      <p class="subtitle">Oracle POS · LINE OA · 官網 → Data Cloud 統一身分 → 6 個可啟動 Segments</p>
+      <div class="company-tag">
+        <strong>有你共創股份有限公司</strong> · Co-create With You Co., Ltd. · 多品牌 IP 授權經銷
+      </div>
+    </div>
+
+    <!-- Part 1 -->
+    <section id="part1">
+      <h2><span class="part-num">1</span>現況痛點 · Current State Pain</h2>
+      <p class="lead">會員資料散落在三個彼此不相通的系統，跨渠道行銷幾乎全靠人工。</p>
+
+      <div class="pain-grid">
+        <div class="pain-card">
+          <div class="pain-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#FF6B7A" stroke-width="2">
+              <ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 5v14a9 3 0 0 0 18 0V5"/><path d="M3 12a9 3 0 0 0 18 0"/>
+            </svg>
+          </div>
+          <h4>Oracle POS 會員 DB</h4>
+          <p>實體門市／快閃店銷售主檔 · 姓名、生日、手機、Oracle Member ID · 唯一 Source of Truth 但只在店內查得到</p>
+        </div>
+        <div class="pain-card">
+          <div class="pain-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#FF6B7A" stroke-width="2">
+              <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/>
+            </svg>
+          </div>
+          <h4>LINE OA</h4>
+          <p>2 萬追蹤好友 · 只知道 LINE UID 與 Display Name · 完全不知道對應到 Oracle 哪個會員</p>
+        </div>
+        <div class="pain-card">
+          <div class="pain-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#FF6B7A" stroke-width="2">
+              <circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+            </svg>
+          </div>
+          <h4>官網 Contact Form</h4>
+          <p>經銷合作與活動報名的 Email 表單 · 只留 Email 與姓名 · 與 POS／LINE 從未打通</p>
+        </div>
+      </div>
+
+      <div class="pain-consequence">
+        <div class="icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/>
+          </svg>
+        </div>
+        <div>
+          <strong>直接影響 ·</strong> 撈跨渠道名單要行銷助理手動下載 3 份 CSV、用 Excel VLOOKUP 對 Email 與手機做 join · <strong>平均耗時 3 天</strong>，且新客／改號碼／改 Email 就會斷。LINE broadcast 全發、無 target ·「Labubu 新品 push 給只買 Sanrio 的 2 萬人」的荒謬情境每週上演。
+        </div>
+      </div>
+    </section>
+
+    <!-- Part 2 -->
+    <section id="part2">
+      <h2><span class="part-num">2</span>Data Cloud 標準 DMO 映射</h2>
+      <p class="lead">YCC 的 Salesforce 客製物件 (YCC_*__c) 全數映射到 Data Cloud 標準 DMO ·<strong> 不新增任何 Individual 客製欄位</strong>。</p>
+
+      <table>
+        <thead>
+          <tr>
+            <th>YCC 客製物件／欄位</th>
+            <th>Data Cloud 標準 DMO</th>
+            <th>說明</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>YCC_Member__c</code></td>
+            <td><code>ssot__Individual__dlm</code></td>
+            <td>會員主檔映射到 Individual (標準 DMO)</td>
+          </tr>
+          <tr>
+            <td><code>YCC_Member__c.YCC_Email__c</code></td>
+            <td><code>ssot__ContactPointEmail__dlm</code></td>
+            <td>拆到 Contact Point Email 一對多</td>
+          </tr>
+          <tr>
+            <td><code>YCC_Member__c.YCC_Mobile__c</code></td>
+            <td><code>ssot__ContactPointPhone__dlm</code></td>
+            <td>拆到 Contact Point Phone</td>
+          </tr>
+          <tr>
+            <td><code>YCC_Member__c.YCC_Oracle_Member_ID__c</code></td>
+            <td><code>ssot__PartyIdentification__dlm</code><br><small>type = Oracle_Member_ID</small></td>
+            <td>存到 Party Identification 而非 Individual 客製欄位</td>
+          </tr>
+          <tr>
+            <td><code>YCC_Member__c.YCC_LINE_UID__c</code></td>
+            <td><code>ssot__PartyIdentification__dlm</code><br><small>type = LINE_UID</small></td>
+            <td>同上 · 以 type 區分不同外部 ID</td>
+          </tr>
+          <tr>
+            <td><code>YCC_Sales_Order__c</code></td>
+            <td><code>ssot__SalesOrder__dlm</code></td>
+            <td>訂單映射到 Sales Order</td>
+          </tr>
+          <tr>
+            <td><code>YCC_Sales_Order_Item__c</code></td>
+            <td><code>ssot__SalesOrderProduct__dlm</code></td>
+            <td>訂單明細</td>
+          </tr>
+          <tr>
+            <td><code>YCC_Product_Catalog__c</code></td>
+            <td><code>ssot__Product__dlm</code></td>
+            <td>商品</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="dmo-diagram">
+        <div class="dmo-col">
+          <h5>YCC 客製 (Core Salesforce)</h5>
+          <div class="dmo-node custom">YCC_Member__c</div>
+          <div class="dmo-node custom">└ YCC_Email__c</div>
+          <div class="dmo-node custom">└ YCC_Mobile__c</div>
+          <div class="dmo-node custom">└ YCC_Oracle_Member_ID__c</div>
+          <div class="dmo-node custom">└ YCC_LINE_UID__c</div>
+          <div class="dmo-node custom">YCC_Sales_Order__c</div>
+          <div class="dmo-node custom">YCC_Sales_Order_Item__c</div>
+          <div class="dmo-node custom">YCC_Product_Catalog__c</div>
+        </div>
+        <div class="dmo-arrows">→<br>→<br>→<br>→<br>→<br>→<br>→<br>→</div>
+        <div class="dmo-col">
+          <h5>Data Cloud 標準 DMO</h5>
+          <div class="dmo-node std">ssot__Individual__dlm</div>
+          <div class="dmo-node std">ssot__ContactPointEmail__dlm</div>
+          <div class="dmo-node std">ssot__ContactPointPhone__dlm</div>
+          <div class="dmo-node std">ssot__PartyIdentification__dlm<br>(Oracle_Member_ID)</div>
+          <div class="dmo-node std">ssot__PartyIdentification__dlm<br>(LINE_UID)</div>
+          <div class="dmo-node std">ssot__SalesOrder__dlm</div>
+          <div class="dmo-node std">ssot__SalesOrderProduct__dlm</div>
+          <div class="dmo-node std">ssot__Product__dlm</div>
+        </div>
+      </div>
+
+      <div class="insight-box">
+        <div class="icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/>
+          </svg>
+        </div>
+        <div class="content">
+          <h4>關鍵設計原則</h4>
+          <p><strong>不在 Individual 上加 LINE_UID／Oracle_Member_ID 客製欄位</strong> · 用 Party Identification 存不同 ID type · 這是 Salesforce 官方最佳實踐 · 未來要加入 momo Buyer ID、蝦皮 UID、抖音 OpenID 都只是新增 PartyIdentification type · Individual schema 永遠乾淨。</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Part 3 -->
+    <section id="part3">
+      <h2><span class="part-num">3</span>Identity Resolution · 4 條 Match Rules</h2>
+      <p class="lead">按優先序處理 · 一條命中即停 · 4 條規則涵蓋 Email、Phone 與兩個外部系統 ID。</p>
+
+      <div class="match-rules">
+        <div class="match-rule">
+          <div class="priority">1</div>
+          <div class="rule-body">
+            <strong>Email 精確符合</strong>
+            <small>normalized · lowercase + trim · 主要用於官網／MC Email 對到 POS 會員</small>
+          </div>
+          <div class="rule-method">Exact Match</div>
+        </div>
+        <div class="match-rule">
+          <div class="priority">2</div>
+          <div class="rule-body">
+            <strong>Phone 精確符合</strong>
+            <small>normalized E.164 (+886...) · 用於 POS 手機對到 SMS／LINE 綁定手機</small>
+          </div>
+          <div class="rule-method">Exact Match</div>
+        </div>
+        <div class="match-rule">
+          <div class="priority">3</div>
+          <div class="rule-body">
+            <strong>Party Identification LINE_UID 精確符合</strong>
+            <small>LINE OA 的 UID · 綁定後可跨渠道使用</small>
+          </div>
+          <div class="rule-method">Exact Match</div>
+        </div>
+        <div class="match-rule">
+          <div class="priority">4</div>
+          <div class="rule-body">
+            <strong>Party Identification Oracle_Member_ID 精確符合</strong>
+            <small>POS 會員 ID · 內部 Golden ID · 最保險的最後一道</small>
+          </div>
+          <div class="rule-method">Exact Match</div>
+        </div>
+      </div>
+
+      <h3>Reconciliation Rules · 欄位衝突時誰贏</h3>
+      <div class="recon-grid">
+        <div class="recon-card">
+          <h5>Volatile Fields · Most Recent</h5>
+          <p>Email、Phone、Address · 誰最新誰贏 · 使用者今天改的最重要</p>
+        </div>
+        <div class="recon-card">
+          <h5>Authoritative Fields · Oracle POS Wins</h5>
+          <p>Name、Birthdate · 以 POS 註冊時填寫的為準 (身分證核對過)</p>
+        </div>
+        <div class="recon-card">
+          <h5>LINE-owned Fields · LINE OA Wins</h5>
+          <p>LINE Display Name、LINE Picture URL · 只在 LINE OA 存在的欄位</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Part 4 -->
+    <section id="part4">
+      <h2><span class="part-num">4</span>RFM Calculated Insight SQL</h2>
+      <p class="lead">Data Cloud Calculated Insight · 每小時執行一次 · 產出 <code>Insight_RFM__dlm</code> DMO，可直接在 Segmentation Builder 拉條件。</p>
+
+<pre class="sql"><span class="kw">SELECT</span>
+    UnifiedIndividualId__c <span class="kw">AS</span> IndividualId,
+    <span class="fn">DATEDIFF</span>(<span class="str">'day'</span>, <span class="fn">MAX</span>(so.OrderDateTime__c), <span class="fn">CURRENT_DATE</span>) <span class="kw">AS</span> Recency__c,
+    <span class="fn">COUNT</span>(<span class="kw">DISTINCT</span> so.OrderNumber__c) <span class="kw">AS</span> Frequency__c,
+    <span class="fn">SUM</span>(so.TotalAmount__c) <span class="kw">AS</span> Monetary__c,
+    <span class="fn">AVG</span>(so.TotalAmount__c) <span class="kw">AS</span> AvgOrderValue__c,
+    <span class="fn">COUNT</span>(<span class="kw">DISTINCT</span> sop.IpLicense__c) <span class="kw">AS</span> IpBrandDiversity__c,
+    <span class="kw">CASE</span>
+        <span class="kw">WHEN</span> <span class="fn">SUM</span>(so.TotalAmount__c) &gt; <span class="num">50000</span> <span class="kw">AND</span> <span class="fn">COUNT</span>(*) &gt;= <span class="num">6</span> <span class="kw">THEN</span> <span class="str">'VIP'</span>
+        <span class="kw">WHEN</span> <span class="fn">DATEDIFF</span>(<span class="str">'day'</span>, <span class="fn">MAX</span>(so.OrderDateTime__c), <span class="fn">CURRENT_DATE</span>) &gt; <span class="num">180</span> <span class="kw">THEN</span> <span class="str">'Sleeping'</span>
+        <span class="kw">WHEN</span> <span class="fn">DATEDIFF</span>(<span class="str">'day'</span>, <span class="fn">MAX</span>(so.OrderDateTime__c), <span class="fn">CURRENT_DATE</span>) &gt; <span class="num">90</span> <span class="kw">THEN</span> <span class="str">'AtRisk'</span>
+        <span class="kw">ELSE</span> <span class="str">'Active'</span>
+    <span class="kw">END</span> <span class="kw">AS</span> RFM_Segment__c
+<span class="kw">FROM</span> ssot__SalesOrder__dlm so
+<span class="kw">JOIN</span> UnifiedssotIndividual__dlm u <span class="kw">ON</span> so.SoldToCustomerId__c = u.SourceRecordId
+<span class="kw">JOIN</span> ssot__SalesOrderProduct__dlm sop <span class="kw">ON</span> sop.SalesOrderId__c = so.Id
+<span class="kw">LEFT JOIN</span> ssot__Product__dlm p <span class="kw">ON</span> sop.ProductId__c = p.Id
+<span class="kw">GROUP BY</span> UnifiedIndividualId__c</pre>
+
+      <h3>使用方式</h3>
+      <ul>
+        <li>每小時執行一次 · 產出可查詢的 <code>Insight_RFM__dlm</code></li>
+        <li>Segmentation Builder 可以直接把 Recency__c／Frequency__c／Monetary__c／IpBrandDiversity__c／RFM_Segment__c 當篩選條件</li>
+        <li>作為下方 6 個 seeded segments 的核心依據</li>
+      </ul>
+    </section>
+
+    <!-- Part 5 -->
+    <section id="part5">
+      <h2><span class="part-num">5</span>6 Segments 定義 (with SQL)</h2>
+      <p class="lead">6 個預先種好的 Segments · 覆蓋喚回、鐵粉、新品、快閃、生日、渠道 6 種常見行銷情境。</p>
+
+      <div class="segment-grid">
+        <div class="segment-card">
+          <div class="segment-header">
+            <div class="segment-title">高價值沉睡客</div>
+            <span class="segment-code">SEG_SLEEPING_VIP</span>
+          </div>
+          <p class="desc">曾經是 VIP、但已 180+ 天沒回購 · 用生日券、限量新品做喚回</p>
+          <div class="segment-sql">RFM_Segment__c = 'Sleeping'<br>AND Monetary__c &gt; 30000</div>
+          <div class="segment-meta">
+            <div><strong>Est. Members</strong>~ 1,200</div>
+            <div><strong>Journey</strong>Winback_VIP</div>
+            <div><strong>Channel</strong>LINE + Email</div>
+            <div><strong>Cadence</strong>雙週</div>
+          </div>
+        </div>
+
+        <div class="segment-card teal">
+          <div class="segment-header">
+            <div class="segment-title">Labubu 鐵粉</div>
+            <span class="segment-code">SEG_LABUBU_FANS</span>
+          </div>
+          <p class="desc">只買 Labubu (POP MART)、頻次 ≥ 3 · 新品首波優先推</p>
+          <div class="segment-sql">EXISTS (SELECT 1 FROM ... WHERE IpLicense = 'Labubu')<br>AND NOT EXISTS (... other IPs)<br>AND Frequency__c &gt;= 3</div>
+          <div class="segment-meta">
+            <div><strong>Est. Members</strong>~ 850</div>
+            <div><strong>Journey</strong>Labubu_NewDrop</div>
+            <div><strong>Channel</strong>LINE Rich Menu</div>
+            <div><strong>Cadence</strong>依新品</div>
+          </div>
+        </div>
+
+        <div class="segment-card rose">
+          <div class="segment-header">
+            <div class="segment-title">新品嚐鮮族</div>
+            <span class="segment-code">SEG_NEW_PRODUCT_LOVERS</span>
+          </div>
+          <p class="desc">跨 IP 品牌多樣性高 (≥4)、且為金卡以上 · 對新品接受度最高</p>
+          <div class="segment-sql">IpBrandDiversity__c &gt;= 4<br>AND Member_Level__c IN ('金卡', 'VIP')</div>
+          <div class="segment-meta">
+            <div><strong>Est. Members</strong>~ 620</div>
+            <div><strong>Journey</strong>New_IP_FirstLook</div>
+            <div><strong>Channel</strong>Email + LINE</div>
+            <div><strong>Cadence</strong>月</div>
+          </div>
+        </div>
+
+        <div class="segment-card royal">
+          <div class="segment-header">
+            <div class="segment-title">快閃店限定客</div>
+            <span class="segment-code">SEG_POPUP_ONLY</span>
+          </div>
+          <p class="desc">只在快閃店買過、未觸及其他渠道 · 未來快閃活動 EDM 目標</p>
+          <div class="segment-sql">Acquisition_Channel__c = '快閃店'<br>AND NOT EXISTS (orders via other channels)</div>
+          <div class="segment-meta">
+            <div><strong>Est. Members</strong>~ 2,400</div>
+            <div><strong>Journey</strong>PopUp_Invite</div>
+            <div><strong>Channel</strong>SMS + LINE</div>
+            <div><strong>Cadence</strong>季 (依快閃)</div>
+          </div>
+        </div>
+
+        <div class="segment-card charcoal">
+          <div class="segment-header">
+            <div class="segment-title">生日月客群</div>
+            <span class="segment-code">SEG_BIRTHDAY_MONTH</span>
+          </div>
+          <p class="desc">當月壽星 · Journey 於月初自動發送生日券</p>
+          <div class="segment-sql">EXTRACT(MONTH FROM Birthday__c) = EXTRACT(MONTH FROM CURRENT_DATE)</div>
+          <div class="segment-meta">
+            <div><strong>Est. Members</strong>~ 1,600／月</div>
+            <div><strong>Journey</strong>Birthday_Coupon</div>
+            <div><strong>Channel</strong>LINE + Email</div>
+            <div><strong>Cadence</strong>月初</div>
+          </div>
+        </div>
+
+        <div class="segment-card coral-dk">
+          <div class="segment-header">
+            <div class="segment-title">momo 高頻客</div>
+            <span class="segment-code">SEG_MOMO_FREQUENT</span>
+          </div>
+          <p class="desc">主力在 momo 下單、頻次 ≥ 4 · 供品牌方了解電商渠道核心受眾</p>
+          <div class="segment-sql">Channel__c = 'momo'<br>AND Frequency__c &gt;= 4</div>
+          <div class="segment-meta">
+            <div><strong>Est. Members</strong>~ 980</div>
+            <div><strong>Journey</strong>momo_Loyalty</div>
+            <div><strong>Channel</strong>Email + Meta Ads</div>
+            <div><strong>Cadence</strong>雙週</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Part 6 -->
+    <section id="part6">
+      <h2><span class="part-num">6</span>Activation 架構</h2>
+      <p class="lead">Segments → Data Cloud Activation → 5 個下游目的地 · 4 個 Live · 1 個架構設計但 Trial 環境限制。</p>
+
+      <div class="activation-flow">
+        <div>
+          <div class="flow-col-title">Segments (Source)</div>
+          <div class="flow-nodes">
+            <div class="flow-node">高價值沉睡客</div>
+            <div class="flow-node">Labubu 鐵粉</div>
+            <div class="flow-node">新品嚐鮮族</div>
+            <div class="flow-node">快閃店限定客</div>
+            <div class="flow-node">生日月客群</div>
+            <div class="flow-node">momo 高頻客</div>
+          </div>
+        </div>
+        <div class="flow-arrow">→</div>
+        <div>
+          <div class="flow-col-title">Activation</div>
+          <div class="flow-nodes">
+            <div class="flow-node center">Data Cloud<br>Activation Node</div>
+          </div>
+        </div>
+        <div class="flow-arrow">→</div>
+        <div>
+          <div class="flow-col-title">Destinations</div>
+          <div class="flow-nodes">
+            <div class="flow-node dest">
+              <span>Meta Ads · Custom Audience<br><small>SHA-256 hashed email／phone</small></span>
+              <span class="status-live">● Live</span>
+            </div>
+            <div class="flow-node dest">
+              <span>Google Ads · Customer Match</span>
+              <span class="status-live">● Live</span>
+            </div>
+            <div class="flow-node dest">
+              <span>LINE OA · via MC Engagement → LMC → LAP</span>
+              <span class="status-warn">⚠ Arch-only</span>
+            </div>
+            <div class="flow-node dest">
+              <span>Email · Marketing Cloud Growth (on Core) Campaign Flow</span>
+              <span class="status-live">● Live</span>
+            </div>
+            <div class="flow-node dest">
+              <span>SMS · Marketing Cloud Growth (on Core) Campaign Flow</span>
+              <span class="status-live">● Live</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="insight-box">
+        <div class="icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
+          </svg>
+        </div>
+        <div class="content">
+          <h4>LINE OA Activation 說明</h4>
+          <p>LINE 並非 Data Cloud 原生 Destination · 走 <strong>Marketing Cloud Growth (on Core) Engagement → LINE Message Connector (LMC) → LINE Ad Platform (LAP)</strong> 三段串接 · 目前於 Trial 環境為架構設計圖 · 正式上線需 LINE 商用帳號與 LMC 中介服務 (自建或第三方)。</p>
+        </div>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<footer>
+  有你共創股份有限公司 · Data Cloud Story · 內部文件 · Salesforce SE Demo
+</footer>
+
+</body>
+</html>

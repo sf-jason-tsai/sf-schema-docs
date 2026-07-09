@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<title>有你共創 · Object Schema</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ycc-cream:#FAF6F2;--ycc-coral:#FF6B7A;--ycc-coral-dk:#E14C5B;
+  --ycc-teal:#4FA3A0;--ycc-dusty-rose:#E89BA8;--ycc-royal:#3B5BA5;
+  --ycc-charcoal:#2B2B2B;--ycc-graphite:#6B7280;--ycc-border:#E5E1DA;--ycc-card:#FFFFFF;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Noto Sans TC',-apple-system,"Segoe UI",sans-serif;background:var(--ycc-cream);color:var(--ycc-charcoal);line-height:1.6;font-weight:400}
+.nav{background:var(--ycc-card);border-bottom:1px solid var(--ycc-border);padding:14px 40px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:100}
+.nav-brand{font-weight:900;font-size:17px;color:var(--ycc-charcoal)}
+.nav-brand .accent{color:var(--ycc-coral)}
+.nav-links a{color:var(--ycc-graphite);text-decoration:none;margin-left:24px;font-size:14px;font-weight:500}
+.nav-links a:hover{color:var(--ycc-coral)}
+.nav-links a.active{color:var(--ycc-coral);font-weight:700}
+.container{max-width:1200px;margin:0 auto;padding:40px}
+.hero{margin-bottom:40px}
+.hero .tag{display:inline-block;background:var(--ycc-coral);color:#fff;font-size:11px;font-weight:700;padding:4px 12px;border-radius:12px;letter-spacing:1.5px;margin-bottom:14px}
+.hero h1{font-size:36px;font-weight:900;letter-spacing:-.5px;margin-bottom:10px}
+.hero p{color:var(--ycc-graphite);font-size:15px;max-width:720px}
+.disclaimer{background:#FFF8F0;border:1px solid #F0D9B5;border-left:4px solid #D4941F;padding:12px 16px;border-radius:6px;margin-top:16px;font-size:13px;color:#7A5A1E}
+
+.erd-section{background:var(--ycc-card);border:1px solid var(--ycc-border);border-radius:12px;padding:28px;margin-bottom:40px}
+.erd-section h2{font-size:20px;font-weight:900;margin-bottom:6px}
+.erd-section .sub{color:var(--ycc-graphite);font-size:13px;margin-bottom:20px}
+.erd-svg{width:100%;height:auto;display:block}
+
+.obj-card{background:var(--ycc-card);border:1px solid var(--ycc-border);border-radius:12px;overflow:hidden;margin-bottom:28px;box-shadow:0 1px 3px rgba(0,0,0,.03)}
+.obj-header{padding:22px 28px;border-bottom:1px solid var(--ycc-border);display:flex;justify-content:space-between;align-items:center;background:linear-gradient(135deg,#FFF8F5 0%,#FFFFFF 100%)}
+.obj-header-left h2{font-size:20px;font-weight:900;color:var(--ycc-charcoal);margin-bottom:4px}
+.obj-header-left .api{font-family:'SF Mono','Consolas',monospace;font-size:12px;color:var(--ycc-coral);font-weight:600}
+.obj-badge{background:var(--ycc-coral);color:#fff;font-size:11px;font-weight:700;padding:5px 12px;border-radius:12px;letter-spacing:.5px}
+table{width:100%;border-collapse:collapse;font-size:13px}
+thead{background:#FAF6F2}
+th{text-align:left;padding:11px 14px;font-weight:700;color:var(--ycc-charcoal);border-bottom:2px solid var(--ycc-border);font-size:12px;letter-spacing:.3px}
+td{padding:11px 14px;border-bottom:1px solid var(--ycc-border);vertical-align:top}
+tr:last-child td{border-bottom:none}
+tr:hover{background:#FDFAF7}
+.api-name{font-family:'SF Mono','Consolas',monospace;font-size:12px;color:var(--ycc-royal);font-weight:600}
+.type-badge{display:inline-block;font-size:11px;font-weight:600;padding:2px 8px;border-radius:4px;background:#EEF2FF;color:var(--ycc-royal)}
+.type-badge.text{background:#F0FDF4;color:#166534}
+.type-badge.pick{background:#FEF3C7;color:#92400E}
+.type-badge.date{background:#FCE7F3;color:#9F1239}
+.type-badge.num{background:#DBEAFE;color:#1E40AF}
+.type-badge.lookup{background:#FDE68A;color:#78350F}
+.type-badge.md{background:#FCA5A5;color:#7F1D1D}
+.type-badge.formula{background:#DDD6FE;color:#5B21B6}
+.type-badge.currency{background:#D1FAE5;color:#065F46}
+.check{color:var(--ycc-coral);font-weight:900;font-size:14px}
+.dash{color:#D1D5DB}
+.picklist-values{font-size:11.5px;color:var(--ycc-graphite);line-height:1.5}
+.notes{font-size:11.5px;color:var(--ycc-graphite);font-style:italic}
+
+footer{text-align:center;padding:30px;color:var(--ycc-graphite);font-size:12px;border-top:1px solid var(--ycc-border);margin-top:40px}
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-brand">有你共創<span class="accent"> · Marketing Cloud on Core</span></div>
+  <div class="nav-links">
+    <a href="index.html">首頁</a>
+    <a href="schema.html" class="active">Object Schema</a>
+    <a href="demo-script.html">Demo Script</a>
+  </div>
+</nav>
+
+<div class="container">
+
+<div class="hero">
+  <span class="tag">DATA MODEL</span>
+  <h1>Object Schema · 5 Custom Objects</h1>
+  <p>有你共創股份有限公司 (Co-create With You Co., Ltd.) · 多品牌 IP 授權經銷 · Marketing Cloud Growth (on Core) 客戶資料模型設計。所有 objects 加上 <code>YCC_</code> namespace 前綴避免多專案 org 衝突。</p>
+  <div class="disclaimer">授權經銷聲明：Labubu / Disney / Sanrio / BT21 等 IP 品牌名稱僅用於 demo 情境模擬，實際運營時所有 IP 使用皆須取得原廠正式授權經銷合約，本 org data model 不代表任何 IP 擁有權。</div>
+</div>
+
+<!-- ERD -->
+<div class="erd-section">
+  <h2>ERD · Entity Relationship Diagram</h2>
+  <div class="sub">5 個 objects 關聯示意 · Master-Detail (實線) / Lookup (虛線)</div>
+  <svg class="erd-svg" viewBox="0 0 1100 460" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto">
+        <path d="M0,0 L10,5 L0,10 z" fill="#6B7280"/>
+      </marker>
+      <marker id="arrowCoral" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto">
+        <path d="M0,0 L10,5 L0,10 z" fill="#FF6B7A"/>
+      </marker>
+    </defs>
+
+    <!-- Member -->
+    <g>
+      <rect x="30" y="60" width="220" height="90" rx="10" fill="#FFFFFF" stroke="#FF6B7A" stroke-width="2"/>
+      <rect x="30" y="60" width="220" height="30" rx="10" fill="#FF6B7A"/>
+      <text x="140" y="80" text-anchor="middle" fill="#fff" font-weight="700" font-size="14">YCC_Member__c</text>
+      <text x="140" y="112" text-anchor="middle" fill="#2B2B2B" font-size="12" font-weight="600">會員</text>
+      <text x="140" y="132" text-anchor="middle" fill="#6B7280" font-size="11">17 fields · Oracle Ext ID</text>
+    </g>
+
+    <!-- Sales Order -->
+    <g>
+      <rect x="440" y="60" width="220" height="90" rx="10" fill="#FFFFFF" stroke="#3B5BA5" stroke-width="2"/>
+      <rect x="440" y="60" width="220" height="30" rx="10" fill="#3B5BA5"/>
+      <text x="550" y="80" text-anchor="middle" fill="#fff" font-weight="700" font-size="14">YCC_Sales_Order__c</text>
+      <text x="550" y="112" text-anchor="middle" fill="#2B2B2B" font-size="12" font-weight="600">銷售訂單</text>
+      <text x="550" y="132" text-anchor="middle" fill="#6B7280" font-size="11">9 fields · 跨渠道</text>
+    </g>
+
+    <!-- Sales Order Item -->
+    <g>
+      <rect x="440" y="240" width="220" height="90" rx="10" fill="#FFFFFF" stroke="#4FA3A0" stroke-width="2"/>
+      <rect x="440" y="240" width="220" height="30" rx="10" fill="#4FA3A0"/>
+      <text x="550" y="260" text-anchor="middle" fill="#fff" font-weight="700" font-size="14">YCC_Sales_Order_Item__c</text>
+      <text x="550" y="292" text-anchor="middle" fill="#2B2B2B" font-size="12" font-weight="600">訂單明細</text>
+      <text x="550" y="312" text-anchor="middle" fill="#6B7280" font-size="11">9 fields · Master-Detail</text>
+    </g>
+
+    <!-- Product -->
+    <g>
+      <rect x="840" y="240" width="220" height="90" rx="10" fill="#FFFFFF" stroke="#E89BA8" stroke-width="2"/>
+      <rect x="840" y="240" width="220" height="30" rx="10" fill="#E89BA8"/>
+      <text x="950" y="260" text-anchor="middle" fill="#fff" font-weight="700" font-size="14">YCC_Product_Catalog__c</text>
+      <text x="950" y="292" text-anchor="middle" fill="#2B2B2B" font-size="12" font-weight="600">商品目錄</text>
+      <text x="950" y="312" text-anchor="middle" fill="#6B7280" font-size="11">12 fields · IP 授權</text>
+    </g>
+
+    <!-- Segment -->
+    <g>
+      <rect x="30" y="340" width="220" height="90" rx="10" fill="#FFFFFF" stroke="#FF6B7A" stroke-width="2" stroke-dasharray="4,3"/>
+      <rect x="30" y="340" width="220" height="30" rx="10" fill="#FF6B7A"/>
+      <text x="140" y="360" text-anchor="middle" fill="#fff" font-weight="700" font-size="14">YCC_Segment__c</text>
+      <text x="140" y="392" text-anchor="middle" fill="#2B2B2B" font-size="12" font-weight="600">智慧分眾</text>
+      <text x="140" y="412" text-anchor="middle" fill="#6B7280" font-size="11">10 fields · DC Calculated Insight</text>
+    </g>
+
+    <!-- Relationships -->
+    <!-- Member -> Sales Order (Lookup dashed) -->
+    <line x1="250" y1="105" x2="440" y2="105" stroke="#6B7280" stroke-width="1.6" stroke-dasharray="6,4" marker-end="url(#arrow)"/>
+    <text x="345" y="97" text-anchor="middle" fill="#6B7280" font-size="11" font-weight="600">Lookup · 1..N</text>
+
+    <!-- Sales Order -> Sales Order Item (Master-Detail solid) -->
+    <line x1="550" y1="150" x2="550" y2="240" stroke="#FF6B7A" stroke-width="2.5" marker-end="url(#arrowCoral)"/>
+    <text x="600" y="200" fill="#FF6B7A" font-size="11" font-weight="700">M-D · 1..N</text>
+
+    <!-- Product -> Sales Order Item (Lookup) -->
+    <line x1="840" y1="285" x2="660" y2="285" stroke="#6B7280" stroke-width="1.6" stroke-dasharray="6,4" marker-end="url(#arrow)"/>
+    <text x="755" y="278" text-anchor="middle" fill="#6B7280" font-size="11" font-weight="600">Lookup · 1..N</text>
+
+    <!-- Segment feeds off Member (data lineage, dotted) -->
+    <line x1="140" y1="340" x2="140" y2="150" stroke="#E89BA8" stroke-width="1.4" stroke-dasharray="2,3"/>
+    <text x="160" y="245" fill="#E89BA8" font-size="10.5" font-weight="600">Data Cloud CI</text>
+    <text x="160" y="258" fill="#E89BA8" font-size="10.5" font-weight="600">Feeds Segment</text>
+  </svg>
+</div>
+
+<!-- Object 1: Member -->
+<div class="obj-card">
+  <div class="obj-header">
+    <div class="obj-header-left">
+      <h2>1 · 會員 Member</h2>
+      <div class="api">YCC_Member__c · 17 fields</div>
+    </div>
+    <span class="obj-badge">CORE</span>
+  </div>
+  <table>
+    <thead><tr><th>API Name</th><th>Label</th><th>Type</th><th>Length</th><th>Req</th><th>Ext ID</th><th>Picklist Values / Notes</th></tr></thead>
+    <tbody>
+      <tr><td class="api-name">Name</td><td>會員編號</td><td><span class="type-badge text">Auto Number</span></td><td>M-{00000}</td><td class="check">✓</td><td class="dash">—</td><td class="notes">系統自動編號</td></tr>
+      <tr><td class="api-name">YCC_Oracle_Member_ID__c</td><td>Oracle 會員 ID</td><td><span class="type-badge text">Text</span></td><td>30</td><td class="check">✓</td><td class="check">✓</td><td class="notes">Unique · 對接舊 Oracle DB 主鍵</td></tr>
+      <tr><td class="api-name">YCC_LINE_UID__c</td><td>LINE UID</td><td><span class="type-badge text">Text</span></td><td>50</td><td class="dash">—</td><td class="check">✓</td><td class="notes">LINE OA 綁定識別碼</td></tr>
+      <tr><td class="api-name">YCC_Email__c</td><td>Email</td><td><span class="type-badge text">Email</span></td><td>—</td><td class="dash">—</td><td class="dash">—</td><td class="notes">Identity Resolution 匹配欄位</td></tr>
+      <tr><td class="api-name">YCC_Mobile__c</td><td>手機</td><td><span class="type-badge text">Phone</span></td><td>—</td><td class="dash">—</td><td class="dash">—</td><td class="notes">格式：+886-9XX-XXXXXX</td></tr>
+      <tr><td class="api-name">YCC_Full_Name__c</td><td>姓名</td><td><span class="type-badge text">Text</span></td><td>80</td><td class="dash">—</td><td class="dash">—</td><td class="dash">—</td></tr>
+      <tr><td class="api-name">YCC_Gender__c</td><td>性別</td><td><span class="type-badge pick">Picklist</span></td><td>—</td><td class="dash">—</td><td class="dash">—</td><td class="picklist-values">女 / 男 / 其他 / 未提供</td></tr>
+      <tr><td class="api-name">YCC_Birthday__c</td><td>生日</td><td><span class="type-badge date">Date</span></td><td>—</td><td class="dash">—</td><td class="dash">—</td><td class="notes">用於「生日月專屬」journey</td></tr>
+      <tr><td class="api-name">YCC_Member_Level__c</td><td>會員等級</td><td><span class="type-badge pick">Picklist</span></td><td>—</td><td class="dash">—</td><td class="dash">—</td><td class="picklist-values">一般 / 銀卡 / 金卡 / VIP</td></tr>
+      <tr><td class="api-name">YCC_Join_Date__c</td><td>加入日期</td><td><span class="type-badge date">Date</span></td><td>—</td><td class="dash">—</td><td class="dash">—</td><td class="dash">—</td></tr>
+      <tr><td class="api-name">YCC_Acquisition_Channel__c</td><td>來源渠道</td><td><span class="type-badge pick">Picklist</span></td><td>—</td><td class="dash">—</td><td class="dash">—</td><td class="picklist-values">官網 / momo / 快閃店 / LINE / 朋友推薦</td></tr>
+      <tr><td class="api-name">YCC_City__c</td><td>城市</td><td><span class="type-badge pick">Picklist</span></td><td>—</td><td class="dash">—</td><td class="dash">—</td><td class="picklist-values">台北 / 新北 / 桃園 / 台中 / 台南 / 高雄 / 其他</td></tr>
+      <tr><td class="api-name">YCC_Lifetime_Value__c</td><td>顧客終身價值</td><td><span class="type-badge currency">Currency</span></td><td>12,2</td><td class="dash">—</td><td class="dash">—</td><td class="notes">Data Cloud CI 回寫欄位</td></tr>
+      <tr><td class="api-name">YCC_Last_Order_Date__c</td><td>最後訂購日</td><td><span class="type-badge date">Date</span></td><td>—</td><td class="dash">—</td><td class="dash">—</td><td class="notes">RFM Recency 計算基準</td></tr>
+      <tr><td class="api-name">YCC_RFM_Segment__c</td><td>RFM 分眾</td><td><span class="type-badge text">Text</span></td><td>40</td><td class="dash">—</td><td class="dash">—</td><td class="notes">Data Cloud 回寫 · 例：Champion / Sleeping</td></tr>
+      <tr><td class="api-name">YCC_Consent_Marketing__c</td><td>行銷同意</td><td><span class="type-badge">Checkbox</span></td><td>—</td><td class="dash">—</td><td class="dash">—</td><td class="notes">GDPR/PDPA consent flag</td></tr>
+      <tr><td class="api-name">YCC_Order_Count__c</td><td>訂單總數</td><td><span class="type-badge num">Number</span></td><td>6,0</td><td class="dash">—</td><td class="dash">—</td><td class="notes">Rollup / DC CI 回寫</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- Object 2: Sales Order -->
+<div class="obj-card">
+  <div class="obj-header">
+    <div class="obj-header-left">
+      <h2>2 · 銷售訂單 Sales Order</h2>
+      <div class="api">YCC_Sales_Order__c · 9 fields</div>
+    </div>
+    <span class="obj-badge">TRANSACTION</span>
+  </div>
+  <table>
+    <thead><tr><th>API Name</th><th>Label</th><th>Type</th><th>Length</th><th>Req</th><th>Ext ID</th><th>Picklist Values / Notes</th></tr></thead>
+    <tbody>
+      <tr><td class="api-name">Name</td><td>訂單編號</td><td><span class="type-badge text">Auto Number</span></td><td>SO-{000000}</td><td class="check">✓</td><td class="dash">—</td><td class="notes">系統自動編號</td></tr>
+      <tr><td class="api-name">YCC_Order_ID__c</td><td>訂單 ID (外部)</td><td><span class="type-badge text">Text</span></td><td>30</td><td class="check">✓</td><td class="check">✓</td><td class="notes">Unique · 對應 Oracle / momo 外部訂單編號</td></tr>
+      <tr><td class="api-name">YCC_Member__c</td><td>會員</td><td><span class="type-badge lookup">Lookup</span></td><td>—</td><td class="dash">—</td><td class="dash">—</td><td class="notes">→ YCC_Member__c</td></tr>
+      <tr><td class="api-name">YCC_Order_Date__c</td><td>訂單日期</td><td><span class="type-badge date">DateTime</span></td><td>—</td><td class="check">✓</td><td class="dash">—</td><td class="dash">—</td></tr>
+      <tr><td class="api-name">YCC_Channel__c</td><td>渠道</td><td><span class="type-badge pick">Picklist</span></td><td>—</td><td class="check">✓</td><td class="dash">—</td><td class="picklist-values">官網 / momo / 快閃店-信義 / 快閃店-西門 / 快閃店-台中 / LINE購物</td></tr>
+      <tr><td class="api-name">YCC_Total_Amount__c</td><td>總金額</td><td><span class="type-badge currency">Currency</span></td><td>12,2</td><td class="check">✓</td><td class="dash">—</td><td class="dash">—</td></tr>
+      <tr><td class="api-name">YCC_Item_Count__c</td><td>商品件數</td><td><span class="type-badge num">Number</span></td><td>3,0</td><td class="dash">—</td><td class="dash">—</td><td class="dash">—</td></tr>
+      <tr><td class="api-name">YCC_Order_Status__c</td><td>訂單狀態</td><td><span class="type-badge pick">Picklist</span></td><td>—</td><td class="dash">—</td><td class="dash">—</td><td class="picklist-values">已付款 / 出貨中 / 已完成 / 已退貨</td></tr>
+      <tr><td class="api-name">YCC_Payment_Method__c</td><td>付款方式</td><td><span class="type-badge pick">Picklist</span></td><td>—</td><td class="dash">—</td><td class="dash">—</td><td class="picklist-values">信用卡 / LINE Pay / 街口 / 貨到付款 / 門市</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- Object 3: Sales Order Item -->
+<div class="obj-card">
+  <div class="obj-header">
+    <div class="obj-header-left">
+      <h2>3 · 訂單明細 Sales Order Item</h2>
+      <div class="api">YCC_Sales_Order_Item__c · 9 fields</div>
+    </div>
+    <span class="obj-badge">LINE ITEM</span>
+  </div>
+  <table>
+    <thead><tr><th>API Name</th><th>Label</th><th>Type</th><th>Length</th><th>Req</th><th>Ext ID</th><th>Picklist Values / Notes</th></tr></thead>
+    <tbody>
+      <tr><td class="api-name">Name</td><td>明細編號</td><td><span class="type-badge text">Auto Number</span></td><td>SOI-{0000000}</td><td class="check">✓</td><td class="dash">—</td><td class="notes">系統自動編號</td></tr>
+      <tr><td class="api-name">YCC_Order__c</td><td>訂單</td><td><span class="type-badge md">Master-Detail</span></td><td>—</td><td class="check">✓</td><td class="dash">—</td><td class="notes">→ YCC_Sales_Order__c (parent)</td></tr>
+      <tr><td class="api-name">YCC_Product__c</td><td>商品</td><td><span class="type-badge lookup">Lookup</span></td><td>—</td><td class="dash">—</td><td class="dash">—</td><td class="notes">→ YCC_Product_Catalog__c</td></tr>
+      <tr><td class="api-name">YCC_IP_Brand__c</td><td>IP 品牌</td><td><span class="type-badge pick">Picklist</span></td><td>—</td><td class="check">✓</td><td class="dash">—</td><td class="picklist-values">Labubu / Disney / Sanrio / BT21 / 迪士尼-Duffy家族 / 其他</td></tr>
+      <tr><td class="api-name">YCC_Product_Category__c</td><td>品類</td><td><span class="type-badge pick">Picklist</span></td><td>—</td><td class="dash">—</td><td class="dash">—</td><td class="picklist-values">娃娃公仔 / 服飾 / 首飾配件 / 文具 / 生活雜貨 / 盲盒</td></tr>
+      <tr><td class="api-name">YCC_SKU__c</td><td>SKU</td><td><span class="type-badge text">Text</span></td><td>40</td><td class="dash">—</td><td class="dash">—</td><td class="notes">冗餘欄位加速查詢</td></tr>
+      <tr><td class="api-name">YCC_Unit_Price__c</td><td>單價</td><td><span class="type-badge currency">Currency</span></td><td>10,2</td><td class="dash">—</td><td class="dash">—</td><td class="dash">—</td></tr>
+      <tr><td class="api-name">YCC_Quantity__c</td><td>數量</td><td><span class="type-badge num">Number</span></td><td>3,0</td><td class="dash">—</td><td class="dash">—</td><td class="dash">—</td></tr>
+      <tr><td class="api-name">YCC_Line_Total__c</td><td>小計</td><td><span class="type-badge formula">Formula</span></td><td>Currency</td><td class="dash">—</td><td class="dash">—</td><td class="notes">= YCC_Unit_Price__c × YCC_Quantity__c</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- Object 4: Product Catalog -->
+<div class="obj-card">
+  <div class="obj-header">
+    <div class="obj-header-left">
+      <h2>4 · 商品目錄 Product Catalog</h2>
+      <div class="api">YCC_Product_Catalog__c · 12 fields</div>
+    </div>
+    <span class="obj-badge">MASTER DATA</span>
+  </div>
+  <table>
+    <thead><tr><th>API Name</th><th>Label</th><th>Type</th><th>Length</th><th>Req</th><th>Ext ID</th><th>Picklist Values / Notes</th></tr></thead>
+    <tbody>
+      <tr><td class="api-name">Name</td><td>商品名稱</td><td><span class="type-badge text">Text</span></td><td>80</td><td class="check">✓</td><td class="dash">—</td><td class="notes">例：Labubu × 迪士尼公主聯名娃娃</td></tr>
+      <tr><td class="api-name">YCC_SKU__c</td><td>SKU</td><td><span class="type-badge text">Text</span></td><td>40</td><td class="check">✓</td><td class="check">✓</td><td class="notes">Unique · SKU 主鍵</td></tr>
+      <tr><td class="api-name">YCC_IP_Brand__c</td><td>IP 品牌</td><td><span class="type-badge pick">Picklist</span></td><td>—</td><td class="check">✓</td><td class="dash">—</td><td class="picklist-values">Labubu / Disney / Sanrio / BT21 / 迪士尼-Duffy家族 / 其他</td></tr>
+      <tr><td class="api-name">YCC_Category__c</td><td>品類</td><td><span class="type-badge pick">Picklist</span></td><td>—</td><td class="dash">—</td><td class="dash">—</td><td class="picklist-values">娃娃公仔 / 服飾 / 首飾配件 / 文具 / 生活雜貨 / 盲盒</td></tr>
+      <tr><td class="api-name">YCC_License_Type__c</td><td>授權類型</td><td><span class="type-badge pick">Picklist</span></td><td>—</td><td class="dash">—</td><td class="dash">—</td><td class="picklist-values">授權經銷 / 聯名限定 / 快閃獨家</td></tr>
+      <tr><td class="api-name">YCC_License_Expiration__c</td><td>授權到期日</td><td><span class="type-badge date">Date</span></td><td>—</td><td class="dash">—</td><td class="dash">—</td><td class="notes">合約管理 · 到期前 90 天警示</td></tr>
+      <tr><td class="api-name">YCC_Series__c</td><td>系列</td><td><span class="type-badge text">Text</span></td><td>80</td><td class="dash">—</td><td class="dash">—</td><td class="notes">例：Labubu The Monsters 三代</td></tr>
+      <tr><td class="api-name">YCC_Retail_Price__c</td><td>零售價</td><td><span class="type-badge currency">Currency</span></td><td>10,2</td><td class="dash">—</td><td class="dash">—</td><td class="dash">—</td></tr>
+      <tr><td class="api-name">YCC_Cost__c</td><td>成本</td><td><span class="type-badge currency">Currency</span></td><td>10,2</td><td class="dash">—</td><td class="dash">—</td><td class="notes">內部欄位 · FLS 限管理員</td></tr>
+      <tr><td class="api-name">YCC_Stock_Level__c</td><td>庫存量</td><td><span class="type-badge num">Number</span></td><td>6,0</td><td class="dash">—</td><td class="dash">—</td><td class="dash">—</td></tr>
+      <tr><td class="api-name">YCC_Launch_Date__c</td><td>上市日期</td><td><span class="type-badge date">Date</span></td><td>—</td><td class="dash">—</td><td class="dash">—</td><td class="dash">—</td></tr>
+      <tr><td class="api-name">YCC_Image_URL__c</td><td>商品圖片</td><td><span class="type-badge text">URL</span></td><td>—</td><td class="dash">—</td><td class="dash">—</td><td class="notes">CDN 圖片連結</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- Object 5: Segment -->
+<div class="obj-card">
+  <div class="obj-header">
+    <div class="obj-header-left">
+      <h2>5 · 智慧分眾 Segment</h2>
+      <div class="api">YCC_Segment__c · 10 fields</div>
+    </div>
+    <span class="obj-badge">DATA CLOUD</span>
+  </div>
+  <table>
+    <thead><tr><th>API Name</th><th>Label</th><th>Type</th><th>Length</th><th>Req</th><th>Ext ID</th><th>Picklist Values / Notes</th></tr></thead>
+    <tbody>
+      <tr><td class="api-name">Name</td><td>分眾名稱</td><td><span class="type-badge text">Text</span></td><td>80</td><td class="check">✓</td><td class="dash">—</td><td class="notes">例：高價值沉睡客</td></tr>
+      <tr><td class="api-name">YCC_Segment_Code__c</td><td>分眾代碼</td><td><span class="type-badge text">Text</span></td><td>30</td><td class="check">✓</td><td class="check">✓</td><td class="notes">Unique · 例：SEG_VIP_SLEEP</td></tr>
+      <tr><td class="api-name">YCC_Description__c</td><td>分眾說明</td><td><span class="type-badge text">Long Text</span></td><td>1000</td><td class="dash">—</td><td class="dash">—</td><td class="notes">商業定義說明</td></tr>
+      <tr><td class="api-name">YCC_DC_Query_Preview__c</td><td>DC 查詢預覽</td><td><span class="type-badge text">Long Text</span></td><td>3000</td><td class="dash">—</td><td class="dash">—</td><td class="notes">Data Cloud Calculated Insight SQL 預覽</td></tr>
+      <tr><td class="api-name">YCC_Member_Count__c</td><td>會員人數</td><td><span class="type-badge num">Number</span></td><td>8,0</td><td class="dash">—</td><td class="dash">—</td><td class="notes">DC 回寫 · 每日更新</td></tr>
+      <tr><td class="api-name">YCC_Activation_Channels__c</td><td>激活渠道</td><td><span class="type-badge pick">MultiSelect</span></td><td>—</td><td class="dash">—</td><td class="dash">—</td><td class="picklist-values">Meta / Google / LINE OA / Email / SMS</td></tr>
+      <tr><td class="api-name">YCC_Journey_Template__c</td><td>Journey 範本</td><td><span class="type-badge pick">Picklist</span></td><td>—</td><td class="dash">—</td><td class="dash">—</td><td class="picklist-values">沉睡喚回 / 新品搶先 / 生日月專屬 / 快閃店回流 / 交叉品牌推薦 / 高頻加購</td></tr>
+      <tr><td class="api-name">YCC_Estimated_Revenue_Lift__c</td><td>預估營收提升</td><td><span class="type-badge currency">Currency</span></td><td>12,2</td><td class="dash">—</td><td class="dash">—</td><td class="notes">Marketing forecast · 手動維護</td></tr>
+      <tr><td class="api-name">YCC_Status__c</td><td>狀態</td><td><span class="type-badge pick">Picklist</span></td><td>—</td><td class="dash">—</td><td class="dash">—</td><td class="picklist-values">草稿 / 已發佈 / 已激活 / 已暫停</td></tr>
+      <tr><td class="api-name">YCC_Last_Refresh__c</td><td>最後刷新時間</td><td><span class="type-badge date">DateTime</span></td><td>—</td><td class="dash">—</td><td class="dash">—</td><td class="notes">DC CI 最後執行時間戳</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<footer>
+  有你共創股份有限公司 · Marketing Cloud Growth (on Core) · Object Schema v1.0 · 2026<br>
+  IP 品牌名稱為授權經銷情境示範用途 · 實務運營以正式授權合約為準
+</footer>
+
+</div>
+</body>
+</html>

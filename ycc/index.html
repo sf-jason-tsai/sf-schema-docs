@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>有你共創 · Marketing Cloud Growth (on Core) + Data Cloud</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;600;700;900&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --ycc-cream: #FAF6F2;
+    --ycc-coral: #FF6B7A;
+    --ycc-coral-dk: #E14C5B;
+    --ycc-teal: #4FA3A0;
+    --ycc-dusty-rose: #E89BA8;
+    --ycc-royal: #3B5BA5;
+    --ycc-charcoal: #2B2B2B;
+    --ycc-graphite: #6B7280;
+    --ycc-border: #E5E1DA;
+    --ycc-card: #FFFFFF;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: 'Noto Sans TC', -apple-system, "Segoe UI", sans-serif;
+    background: var(--ycc-cream);
+    color: var(--ycc-charcoal);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+  a { color: inherit; text-decoration: none; }
+
+  /* Nav */
+  .nav {
+    position: sticky; top: 0; z-index: 50;
+    background: rgba(250, 246, 242, 0.92);
+    backdrop-filter: saturate(180%) blur(12px);
+    border-bottom: 1px solid var(--ycc-border);
+  }
+  .nav-inner {
+    max-width: 1200px; margin: 0 auto;
+    padding: 14px 24px;
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .brand {
+    display: flex; align-items: center; gap: 10px;
+    font-weight: 700; font-size: 16px;
+  }
+  .brand-mark {
+    width: 32px; height: 32px; border-radius: 8px;
+    background: linear-gradient(135deg, var(--ycc-coral), var(--ycc-coral-dk));
+    display: grid; place-items: center; color: #fff; font-weight: 900;
+    box-shadow: 0 4px 14px rgba(255, 107, 122, 0.35);
+  }
+  .nav-links { display: flex; gap: 22px; font-size: 14px; color: var(--ycc-graphite); }
+  .nav-links a:hover { color: var(--ycc-coral-dk); }
+  .nav-cta {
+    padding: 8px 16px; border-radius: 999px;
+    background: var(--ycc-coral); color: #fff !important;
+    font-size: 13px; font-weight: 600;
+    box-shadow: 0 4px 12px rgba(255, 107, 122, 0.35);
+    transition: transform .15s ease;
+  }
+  .nav-cta:hover { transform: translateY(-1px); }
+
+  /* Hero */
+  .hero {
+    position: relative; overflow: hidden;
+    background:
+      radial-gradient(1200px 500px at 80% -10%, rgba(232, 155, 168, 0.35), transparent 60%),
+      radial-gradient(900px 400px at 0% 10%, rgba(79, 163, 160, 0.18), transparent 60%),
+      linear-gradient(135deg, #FF6B7A 0%, #E14C5B 55%, #C93A55 100%);
+    color: #fff;
+    padding: 88px 24px 96px;
+  }
+  .hero::before {
+    content: ""; position: absolute; inset: 0;
+    background: radial-gradient(600px 300px at 50% 100%, rgba(255,255,255,.12), transparent 70%);
+    pointer-events: none;
+  }
+  .hero-inner { position: relative; max-width: 1200px; margin: 0 auto; }
+  .hero-badge {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 6px 14px; border-radius: 999px;
+    background: rgba(255,255,255,.15);
+    border: 1px solid rgba(255,255,255,.28);
+    backdrop-filter: blur(6px);
+    font-size: 12.5px; font-weight: 500; letter-spacing: .04em;
+    margin-bottom: 20px;
+  }
+  .hero-badge .dot { width: 8px; height: 8px; border-radius: 50%; background: #FFD166; box-shadow: 0 0 0 4px rgba(255,209,102,.25); }
+  .hero h1 {
+    font-size: clamp(30px, 4.4vw, 52px);
+    font-weight: 900; letter-spacing: -0.01em;
+    line-height: 1.15;
+    max-width: 920px;
+  }
+  .hero h1 .accent { color: #FFE7C2; }
+  .hero-sub {
+    margin-top: 18px; max-width: 780px;
+    font-size: clamp(15px, 1.6vw, 18px);
+    color: rgba(255,255,255,.92);
+    font-weight: 400;
+  }
+  .hero-actions { margin-top: 28px; display: flex; gap: 12px; flex-wrap: wrap; }
+  .btn {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 12px 22px; border-radius: 999px;
+    font-weight: 600; font-size: 14.5px;
+    transition: transform .15s ease, box-shadow .15s ease;
+  }
+  .btn-primary { background: #fff; color: var(--ycc-coral-dk) !important; box-shadow: 0 10px 24px rgba(0,0,0,.15); }
+  .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 14px 28px rgba(0,0,0,.2); }
+  .btn-ghost { background: rgba(255,255,255,.14); color: #fff !important; border: 1px solid rgba(255,255,255,.36); }
+  .btn-ghost:hover { background: rgba(255,255,255,.22); }
+
+  /* Stats */
+  .stats {
+    max-width: 1200px; margin: -48px auto 0;
+    padding: 0 24px 8px;
+    display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px;
+    position: relative; z-index: 2;
+  }
+  .stat {
+    background: var(--ycc-card);
+    border: 1px solid var(--ycc-border);
+    border-radius: 16px;
+    padding: 22px 22px;
+    box-shadow: 0 12px 32px rgba(43, 43, 43, 0.06);
+  }
+  .stat-num {
+    font-size: clamp(24px, 2.6vw, 34px);
+    font-weight: 900; letter-spacing: -0.01em;
+    color: var(--ycc-coral-dk);
+    line-height: 1;
+  }
+  .stat-label {
+    margin-top: 8px; font-size: 13px; color: var(--ycc-graphite);
+    font-weight: 500;
+  }
+  .stat-icon {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 30px; height: 30px; border-radius: 8px;
+    background: rgba(255, 107, 122, 0.12);
+    color: var(--ycc-coral-dk);
+    margin-bottom: 10px;
+  }
+
+  /* Section */
+  section { padding: 72px 24px; }
+  .section-inner { max-width: 1200px; margin: 0 auto; }
+  .section-head { margin-bottom: 36px; }
+  .eyebrow {
+    display: inline-block; padding: 4px 12px; border-radius: 999px;
+    background: rgba(255, 107, 122, 0.1);
+    color: var(--ycc-coral-dk);
+    font-size: 12px; font-weight: 600; letter-spacing: .08em;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+  .section-title {
+    font-size: clamp(24px, 3vw, 34px); font-weight: 800;
+    letter-spacing: -0.01em; color: var(--ycc-charcoal);
+  }
+  .section-desc { margin-top: 10px; color: var(--ycc-graphite); max-width: 720px; }
+
+  /* Pillars */
+  .pillars { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+  .pillar {
+    background: var(--ycc-card);
+    border: 1px solid var(--ycc-border);
+    border-radius: 18px;
+    padding: 28px;
+    position: relative; overflow: hidden;
+    transition: transform .2s ease, box-shadow .2s ease;
+  }
+  .pillar:hover { transform: translateY(-4px); box-shadow: 0 20px 40px rgba(43,43,43,.08); }
+  .pillar::before {
+    content: ""; position: absolute; top: 0; left: 0; right: 0; height: 4px;
+    background: var(--pillar-accent, var(--ycc-coral));
+  }
+  .pillar-icon {
+    width: 48px; height: 48px; border-radius: 12px;
+    display: grid; place-items: center;
+    background: var(--pillar-bg, rgba(255, 107, 122, 0.12));
+    color: var(--pillar-accent, var(--ycc-coral-dk));
+    margin-bottom: 16px;
+  }
+  .pillar h3 { font-size: 20px; font-weight: 700; margin-bottom: 8px; }
+  .pillar p { color: var(--ycc-graphite); font-size: 14.5px; }
+  .pillar-tags { margin-top: 14px; display: flex; flex-wrap: wrap; gap: 6px; }
+  .tag {
+    font-size: 11.5px; padding: 3px 9px; border-radius: 999px;
+    background: rgba(0,0,0,.04); color: var(--ycc-charcoal);
+    font-weight: 500;
+  }
+
+  /* Docs / Tree navigation */
+  .docs-wrap {
+    display: grid; grid-template-columns: 280px 1fr; gap: 28px;
+    align-items: start;
+  }
+  .tree {
+    background: var(--ycc-card);
+    border: 1px solid var(--ycc-border);
+    border-radius: 14px;
+    padding: 18px 18px;
+    font-size: 14px;
+    position: sticky; top: 84px;
+  }
+  .tree-title {
+    font-size: 12px; font-weight: 700; letter-spacing: .1em;
+    color: var(--ycc-graphite); text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+  .tree ul { list-style: none; padding-left: 0; }
+  .tree > ul > li { margin: 4px 0; }
+  .tree ul ul { padding-left: 16px; border-left: 1px dashed var(--ycc-border); margin-left: 6px; }
+  .tree li { position: relative; padding: 4px 0; }
+  .tree ul ul li::before {
+    content: ""; position: absolute; left: -10px; top: 14px;
+    width: 8px; height: 1px; background: var(--ycc-border);
+  }
+  .tree a {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 3px 6px; border-radius: 6px;
+    color: var(--ycc-charcoal);
+    transition: background .15s ease, color .15s ease;
+  }
+  .tree a:hover { background: rgba(255, 107, 122, 0.08); color: var(--ycc-coral-dk); }
+  .tree .tree-folder { font-weight: 600; color: var(--ycc-charcoal); }
+  .tree .tree-ico { font-size: 12px; }
+
+  .doc-cards { display: grid; grid-template-columns: repeat(2, 1fr); gap: 18px; }
+  .doc-card {
+    background: var(--ycc-card);
+    border: 1px solid var(--ycc-border);
+    border-radius: 16px;
+    padding: 24px;
+    display: flex; flex-direction: column;
+    transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease;
+  }
+  .doc-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 18px 36px rgba(43,43,43,.08);
+    border-color: rgba(255, 107, 122, 0.4);
+  }
+  .doc-head { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; }
+  .doc-ico {
+    width: 42px; height: 42px; border-radius: 10px;
+    display: grid; place-items: center;
+    background: var(--doc-bg, rgba(255,107,122,.1));
+    color: var(--doc-fg, var(--ycc-coral-dk));
+    font-size: 20px;
+  }
+  .doc-badge {
+    font-size: 11px; padding: 2px 8px; border-radius: 999px;
+    background: rgba(0,0,0,.05); color: var(--ycc-graphite); font-weight: 600;
+    letter-spacing: .06em;
+  }
+  .doc-title { font-size: 18px; font-weight: 700; margin-bottom: 6px; }
+  .doc-desc { color: var(--ycc-graphite); font-size: 14px; flex-grow: 1; }
+  .doc-meta {
+    display: flex; flex-wrap: wrap; gap: 6px; margin-top: 14px;
+  }
+  .doc-cta {
+    margin-top: 18px;
+    display: inline-flex; align-items: center; gap: 6px;
+    font-weight: 600; color: var(--ycc-coral-dk);
+    font-size: 14px;
+  }
+  .doc-cta::after {
+    content: "→"; transition: transform .2s ease;
+  }
+  .doc-card:hover .doc-cta::after { transform: translateX(4px); }
+
+  /* Footer */
+  footer {
+    background: #fff;
+    border-top: 1px solid var(--ycc-border);
+    padding: 44px 24px 28px;
+    margin-top: 40px;
+  }
+  .footer-inner {
+    max-width: 1200px; margin: 0 auto;
+    display: grid; grid-template-columns: 1.4fr 1fr 1fr; gap: 32px;
+  }
+  .footer h4 { font-size: 13px; font-weight: 700; margin-bottom: 12px; letter-spacing: .05em; text-transform: uppercase; color: var(--ycc-graphite); }
+  .footer p, .footer li { font-size: 14px; color: var(--ycc-graphite); }
+  .footer ul { list-style: none; }
+  .footer li { padding: 4px 0; }
+  .footer a:hover { color: var(--ycc-coral-dk); }
+  .footer-brand { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; color: var(--ycc-charcoal); font-weight: 700; }
+  .footer-note {
+    margin-top: 12px; padding: 10px 12px; border-radius: 10px;
+    background: rgba(79, 163, 160, 0.08);
+    border-left: 3px solid var(--ycc-teal);
+    color: var(--ycc-charcoal); font-size: 13px;
+  }
+  .footer-bottom {
+    max-width: 1200px; margin: 30px auto 0; padding-top: 20px;
+    border-top: 1px solid var(--ycc-border);
+    display: flex; justify-content: space-between; flex-wrap: wrap; gap: 12px;
+    font-size: 12.5px; color: var(--ycc-graphite);
+  }
+
+  /* Responsive */
+  @media (max-width: 960px) {
+    .stats { grid-template-columns: repeat(2, 1fr); }
+    .pillars { grid-template-columns: 1fr; }
+    .docs-wrap { grid-template-columns: 1fr; }
+    .tree { position: static; }
+    .doc-cards { grid-template-columns: 1fr; }
+    .footer-inner { grid-template-columns: 1fr; }
+    .nav-links { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <div class="brand">
+      <div class="brand-mark">共</div>
+      <span>有你共創 · Docs</span>
+    </div>
+    <div class="nav-links">
+      <a href="#pillars">三大主軸</a>
+      <a href="#docs">文件</a>
+      <a href="schema.html">Schema</a>
+      <a href="demo-script.html">Demo</a>
+    </div>
+    <a class="nav-cta" href="demo-script.html">開始 Demo →</a>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="hero-inner">
+    <span class="hero-badge"><span class="dot"></span> Salesforce Marketing Cloud Growth (on Core) · Data Cloud</span>
+    <h1>有你共創 <span class="accent">×</span> 一次看懂<br />全渠道會員經營藍圖</h1>
+    <p class="hero-sub">
+      從 <b>Data Cloud</b> 統一身份、到 <b>Marketing Cloud Growth (on Core)</b> 執行 IP 品牌旅程。
+      本文件庫收錄 Schema、DMO 映射、Campaign Flow、與 20 分鐘 Demo 動線 — 讓 IP 授權經銷商也能像 D2C 品牌一樣經營粉絲。
+    </p>
+    <div class="hero-actions">
+      <a class="btn btn-primary" href="#docs">📚 瀏覽文件</a>
+      <a class="btn btn-ghost" href="demo-script.html">🎬 Demo Script</a>
+    </div>
+  </div>
+</header>
+
+<div class="stats">
+  <div class="stat">
+    <div class="stat-icon">👥</div>
+    <div class="stat-num">1,500</div>
+    <div class="stat-label">Members · 會員數</div>
+  </div>
+  <div class="stat">
+    <div class="stat-icon">🧾</div>
+    <div class="stat-num">6,000</div>
+    <div class="stat-label">Orders · 訂單數</div>
+  </div>
+  <div class="stat">
+    <div class="stat-icon">🎁</div>
+    <div class="stat-num">80</div>
+    <div class="stat-label">SKUs · 授權商品</div>
+  </div>
+  <div class="stat">
+    <div class="stat-icon">🎯</div>
+    <div class="stat-num">6</div>
+    <div class="stat-label">Segments · 分眾</div>
+  </div>
+</div>
+
+<!-- Pillars -->
+<section id="pillars">
+  <div class="section-inner">
+    <div class="section-head">
+      <span class="eyebrow">Three Pillars</span>
+      <h2 class="section-title">三大主軸 · 從資料到旅程</h2>
+      <p class="section-desc">將分散在 POS、電商、Line、活動報名的顧客資料收攏成單一輪廓，透過 AI 分眾驅動全渠道互動。</p>
+    </div>
+
+    <div class="pillars">
+      <div class="pillar" style="--pillar-accent: var(--ycc-teal); --pillar-bg: rgba(79,163,160,.12);">
+        <div class="pillar-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/></svg>
+        </div>
+        <h3>統一顧客身份</h3>
+        <p>Data Cloud Identity Resolution 用 Email / 電話 / 會員卡號合併多來源檔案，建立單一 Unified Individual。</p>
+        <div class="pillar-tags">
+          <span class="tag">Data Cloud</span>
+          <span class="tag">Identity Resolution</span>
+          <span class="tag">DMO Mapping</span>
+        </div>
+      </div>
+
+      <div class="pillar" style="--pillar-accent: var(--ycc-coral); --pillar-bg: rgba(255,107,122,.12);">
+        <div class="pillar-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M7 15l4-4 4 4 5-6"/></svg>
+        </div>
+        <h3>智慧分眾</h3>
+        <p>用 RFM + IP 偏好 (Labubu / Sanrio / Disney) 打造 6 大 Segment，AI 建議下一步行銷動作。</p>
+        <div class="pillar-tags">
+          <span class="tag">RFM</span>
+          <span class="tag">Segmentation</span>
+          <span class="tag">Einstein</span>
+        </div>
+      </div>
+
+      <div class="pillar" style="--pillar-accent: var(--ycc-royal); --pillar-bg: rgba(59,91,165,.12);">
+        <div class="pillar-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12h16"/><path d="M4 6h16"/><path d="M4 18h16"/><circle cx="6" cy="6" r="1.5" fill="currentColor"/><circle cx="12" cy="12" r="1.5" fill="currentColor"/><circle cx="18" cy="18" r="1.5" fill="currentColor"/></svg>
+        </div>
+        <h3>全渠道旅程</h3>
+        <p>Marketing Cloud Growth (on Core) 一站設定 Email / SMS / LINE 觸發旅程，跨渠道體驗一致。</p>
+        <div class="pillar-tags">
+          <span class="tag">MCoC</span>
+          <span class="tag">Flow Builder</span>
+          <span class="tag">Journey</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Docs -->
+<section id="docs" style="background: linear-gradient(180deg, transparent, rgba(232,155,168,.06));">
+  <div class="section-inner">
+    <div class="section-head">
+      <span class="eyebrow">Documentation</span>
+      <h2 class="section-title">文件導覽</h2>
+      <p class="section-desc">四份核心文件涵蓋資料模型、Data Cloud 故事、Marketing Cloud Growth (on Core) 設定、以及可執行的 Demo 動線。</p>
+    </div>
+
+    <div class="docs-wrap">
+      <!-- Tree nav -->
+      <aside class="tree" aria-label="文件樹狀導覽">
+        <div class="tree-title">📁 有你共創 / specs</div>
+        <ul>
+          <li>
+            <span class="tree-folder">📂 資料層</span>
+            <ul>
+              <li><a href="schema.html"><span class="tree-ico">📊</span> schema.html</a></li>
+              <li><a href="data-cloud-story.html"><span class="tree-ico">☁️</span> data-cloud-story.html</a></li>
+            </ul>
+          </li>
+          <li>
+            <span class="tree-folder">📂 執行層</span>
+            <ul>
+              <li><a href="mcoc-on-core.html"><span class="tree-ico">✉️</span> mcoc-on-core.html</a></li>
+              <li><a href="demo-script.html"><span class="tree-ico">🎬</span> demo-script.html</a></li>
+            </ul>
+          </li>
+          <li>
+            <span class="tree-folder">📂 附件</span>
+            <ul>
+              <li><a href="schema.xlsx"><span class="tree-ico">📗</span> schema.xlsx</a></li>
+            </ul>
+          </li>
+        </ul>
+      </aside>
+
+      <!-- Doc cards -->
+      <div class="doc-cards">
+        <a href="schema.html" class="doc-card" style="--doc-bg: rgba(79,163,160,.12); --doc-fg: var(--ycc-teal);">
+          <div class="doc-head">
+            <div class="doc-ico">📊</div>
+            <span class="doc-badge">SCHEMA</span>
+          </div>
+          <div class="doc-title">Object Schema · 5 個 Custom Object</div>
+          <div class="doc-desc">Member__c / Order__c / OrderItem__c / Product__c / IP_Brand__c 完整欄位表、關聯圖、與 Excel 下載。</div>
+          <div class="doc-meta">
+            <span class="tag">5 Objects</span>
+            <span class="tag">完整欄位</span>
+            <span class="tag">Excel 下載</span>
+          </div>
+          <span class="doc-cta">開啟 schema.html</span>
+        </a>
+
+        <a href="data-cloud-story.html" class="doc-card" style="--doc-bg: rgba(59,91,165,.12); --doc-fg: var(--ycc-royal);">
+          <div class="doc-head">
+            <div class="doc-ico">☁️</div>
+            <span class="doc-badge">DATA CLOUD</span>
+          </div>
+          <div class="doc-title">Data Cloud Story · DMO + Identity + RFM</div>
+          <div class="doc-desc">Custom Object → DMO 映射、Identity Resolution 規則、RFM 分眾 SQL 與 Segment 定義。</div>
+          <div class="doc-meta">
+            <span class="tag">DMO Mapping</span>
+            <span class="tag">Identity</span>
+            <span class="tag">RFM SQL</span>
+          </div>
+          <span class="doc-cta">開啟 data-cloud-story.html</span>
+        </a>
+
+        <a href="mcoc-on-core.html" class="doc-card" style="--doc-bg: rgba(255,107,122,.12); --doc-fg: var(--ycc-coral-dk);">
+          <div class="doc-head">
+            <div class="doc-ico">✉️</div>
+            <span class="doc-badge">MCoC</span>
+          </div>
+          <div class="doc-title">Marketing Cloud Growth (on Core)</div>
+          <div class="doc-desc">MCoC vs MC Engagement 差異對比、6 個 Campaign Flow (歡迎 / 生日 / 補購 / VIP / 挽回 / 新品) 完整設定。</div>
+          <div class="doc-meta">
+            <span class="tag">6 Flows</span>
+            <span class="tag">vs Engagement</span>
+            <span class="tag">Flow Builder</span>
+          </div>
+          <span class="doc-cta">開啟 mcoc-on-core.html</span>
+        </a>
+
+        <a href="demo-script.html" class="doc-card" style="--doc-bg: rgba(232,155,168,.18); --doc-fg: #B8506A;">
+          <div class="doc-head">
+            <div class="doc-ico">🎬</div>
+            <span class="doc-badge">DEMO</span>
+          </div>
+          <div class="doc-title">20 分鐘 Demo 動線</div>
+          <div class="doc-desc">5 個 Persona (小雨 / 阿凱 / Mia / 佳穎 / 志豪) 完整故事流、Screen-by-Screen 導覽與 Talk Track。</div>
+          <div class="doc-meta">
+            <span class="tag">20 min</span>
+            <span class="tag">5 Personas</span>
+            <span class="tag">Talk Track</span>
+          </div>
+          <span class="doc-cta">開啟 demo-script.html</span>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer>
+  <div class="footer-inner">
+    <div>
+      <div class="footer-brand">
+        <div class="brand-mark" style="width:28px;height:28px;font-size:13px;">共</div>
+        有你共創股份有限公司
+      </div>
+      <p><b>Co-create With You Co., Ltd.</b></p>
+      <p>多品牌 IP 授權經銷 · Multi-Brand IP Licensed Distributor</p>
+      <div class="footer-note">
+        本公司為 <b>授權經銷商</b>，非 IP 擁有權人。Labubu / Sanrio / Disney 等品牌權利歸各原廠所有。
+      </div>
+    </div>
+    <div>
+      <h4>文件</h4>
+      <ul>
+        <li><a href="schema.html">Object Schema</a></li>
+        <li><a href="data-cloud-story.html">Data Cloud Story</a></li>
+        <li><a href="mcoc-on-core.html">Marketing Cloud Growth (on Core)</a></li>
+        <li><a href="demo-script.html">Demo Script</a></li>
+      </ul>
+    </div>
+    <div>
+      <h4>資源</h4>
+      <ul>
+        <li><a href="https://github.com/" target="_blank" rel="noopener">📦 GitHub Repository</a></li>
+        <li><a href="https://bingyan-tsai.github.io/sf-schema-docs/" target="_blank" rel="noopener">🌐 GitHub Pages</a></li>
+        <li><a href="schema.xlsx">📗 Schema.xlsx 下載</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <div>© 2026 有你共創股份有限公司 · Salesforce Demo Documentation</div>
+    <div>Built with Marketing Cloud Growth (on Core) + Data Cloud</div>
+  </div>
+</footer>
+
+</body>
+</html>
