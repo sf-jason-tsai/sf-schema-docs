@@ -1,0 +1,3647 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Account · Object Schema · Salesforce</title>
+<style>
+:root {
+    --slds-blue:      #0176D3;
+    --slds-blue-dk:   #014486;
+    --slds-blue-lt:   #EEF4FF;
+    --slds-teal:      #056764;
+    --slds-orange:    #FE9339;
+    --slds-red:       #EA001E;
+    --slds-red-bg:    #FEE3E9;
+    --slds-purple:    #8C4EFF;
+    --slds-purple-bg: #F1E7FE;
+    --slds-ink:       #181818;
+    --slds-ink-2:     #444;
+    --slds-mut:       #706E6B;
+    --slds-border:    #DDDBDA;
+    --slds-border-dk: #C9C7C5;
+    --slds-bg:        #F3F3F3;
+    --slds-card:      #FFFFFF;
+    --slds-hover:     #F3F2F2;
+
+    /* 鎖定 sticky 高度 · 避免重疊 */
+    --toolbar-h:      64px;
+    --thead-top:      64px;
+}
+* { box-sizing: border-box; }
+body {
+    margin:0; padding:0;
+    font-family: 'Salesforce Sans','SF Pro Text',-apple-system,"Segoe UI","Noto Sans TC",sans-serif;
+    background: var(--slds-bg);
+    color: var(--slds-ink);
+    font-size: 15px; line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+}
+
+/* ══════════ Global Header ══════════ */
+.slds-globalheader {
+    background: var(--slds-blue);
+    color: #fff;
+    padding: 18px 28px;
+    border-bottom: 1px solid var(--slds-blue-dk);
+    box-shadow: 0 1px 3px rgba(0,0,0,0.10);
+}
+.slds-globalheader__inner { max-width: 1600px; margin: 0 auto; display: flex; align-items: center; gap: 18px; }
+.slds-globalheader__cloud {
+    width: 38px; height: 38px; border-radius: 8px;
+    background: rgba(255,255,255,0.15);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 22px;
+}
+.slds-globalheader__title { font-size: 17px; font-weight: 700; }
+.slds-globalheader__title-sub { font-size: 13px; opacity: 0.88; margin-top: 2px; }
+
+/* ══════════ Page Header ══════════ */
+.slds-page-header { background: var(--slds-card); border-bottom: 1px solid var(--slds-border); padding: 22px 28px; }
+.slds-page-header__inner { max-width: 1600px; margin: 0 auto; }
+.slds-page-header__row1 { display: flex; align-items: center; gap: 14px; margin-bottom: 4px; }
+.slds-page-header__icon {
+    width: 48px; height: 48px; border-radius: 8px;
+    background: linear-gradient(135deg,var(--slds-orange),#F38019);
+    display: flex; align-items: center; justify-content: center;
+    color: #fff; font-weight: 700; font-size: 22px;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.10);
+}
+.slds-page-header__label { font-size: 13px; color: var(--slds-mut); }
+.slds-page-header__title { font-size: 24px; font-weight: 700; color: var(--slds-ink); margin-top: 2px; }
+.slds-page-header__meta { display: flex; gap: 28px; margin-top: 16px; font-size: 13px; color: var(--slds-mut); flex-wrap: wrap; }
+.slds-page-header__meta strong { color: var(--slds-ink); font-weight: 700; }
+
+/* ══════════ Highlights ══════════ */
+.slds-hi-panel { background: var(--slds-card); border-bottom: 1px solid var(--slds-border); padding: 18px 28px; }
+.slds-hi-panel__inner { max-width: 1600px; margin: 0 auto; display: grid; grid-template-columns: repeat(8, 1fr); gap: 24px; }
+@media (max-width: 1100px) { .slds-hi-panel__inner { grid-template-columns: repeat(4, 1fr); gap: 16px; } }
+.slds-hi-item__label { font-size: 11px; color: var(--slds-mut); text-transform: uppercase; letter-spacing: 0.5px; }
+.slds-hi-item__value { font-size: 24px; font-weight: 700; color: var(--slds-ink); margin-top: 3px; }
+
+/* ══════════ Toolbar · 固定高度 64px ══════════ */
+.slds-toolbar {
+    background: var(--slds-card);
+    border-bottom: 1px solid var(--slds-border);
+    height: var(--toolbar-h);
+    padding: 0 28px;
+    position: sticky; top: 0; z-index: 20;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    display: flex; align-items: center;
+}
+.slds-toolbar__inner {
+    max-width: 1600px; margin: 0 auto; width: 100%;
+    display: flex; gap: 12px; align-items: center; flex-wrap: wrap;
+}
+.slds-input, .slds-select {
+    padding: 8px 14px; border: 1px solid var(--slds-border-dk);
+    border-radius: 4px; font-size: 14px; font-family: inherit;
+    background: #fff; color: var(--slds-ink);
+    height: 36px;
+    transition: border-color 0.1s, box-shadow 0.1s;
+}
+.slds-input:focus, .slds-select:focus {
+    outline: none; border-color: var(--slds-blue);
+    box-shadow: 0 0 3px var(--slds-blue);
+}
+.slds-input--search {
+    flex: 1; min-width: 260px; max-width: 560px;
+    background: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 14 14'><path fill='%23706E6B' d='M11.7 10.3L9.6 8.2c.6-.9 1-2 1-3.2 0-2.9-2.3-5.2-5.2-5.2S.2 2.1.2 5s2.3 5.2 5.2 5.2c1.2 0 2.3-.4 3.2-1l2.1 2.1c.2.2.5.2.7 0l.3-.3c.2-.2.2-.5 0-.7zM5.4 8.7C3.4 8.7 1.7 7 1.7 5s1.7-3.7 3.7-3.7S9.1 3 9.1 5 7.4 8.7 5.4 8.7z'/></svg>") no-repeat 12px center;
+    padding-left: 36px;
+}
+.slds-select {
+    padding: 8px 30px 8px 14px;
+    background: #fff url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='7' viewBox='0 0 10 6'><path fill='%23706E6B' d='M1 1l4 4 4-4'/></svg>") no-repeat right 12px center;
+    appearance: none; cursor: pointer;
+}
+.slds-count {
+    margin-left: auto; font-size: 13px; color: var(--slds-mut);
+    font-family: 'SF Mono',Consolas,monospace;
+}
+.slds-count strong { color: var(--slds-blue); font-size: 16px; font-weight: 700; margin-right: 3px; }
+
+/* ══════════ Table ══════════ */
+.slds-table-wrap { max-width: 1600px; margin: 0 auto; padding: 18px 28px 80px; }
+.slds-table {
+    width: 100%; border-collapse: collapse;
+    background: var(--slds-card);
+    border: 1px solid var(--slds-border);
+    border-radius: 4px; overflow: visible;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+    font-size: 14px;
+}
+.slds-table thead th {
+    background: #FAFAF9;
+    color: var(--slds-ink-2);
+    font-weight: 600;
+    padding: 12px 14px;
+    text-align: left;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    border-bottom: 1px solid var(--slds-border);
+    white-space: nowrap;
+    position: sticky;
+    top: var(--thead-top);
+    z-index: 5;
+}
+.slds-table tbody td {
+    padding: 12px 14px;
+    border-bottom: 1px solid var(--slds-border);
+    vertical-align: top;
+    line-height: 1.5;
+    font-size: 14px;
+}
+.slds-table tbody tr:hover td { background: var(--slds-hover); }
+.slds-table tbody tr:last-child td { border-bottom: 0; }
+
+/* Cell styles */
+.api {
+    font-family: 'SF Mono','JetBrains Mono',Consolas,monospace;
+    font-weight: 600;
+    color: var(--slds-ink);
+    font-size: 14px;
+}
+.api--custom { color: var(--slds-purple); }
+.api--pc     { color: var(--slds-teal); }
+
+.type {
+    font-family: 'SF Mono',Consolas,monospace;
+    font-size: 13px; color: var(--slds-mut);
+}
+.ref { font-size: 13.5px; color: var(--slds-blue); font-weight: 600; }
+
+.slds-badge {
+    display: inline-block; padding: 3px 10px;
+    border-radius: 12px;
+    font-size: 12px; font-weight: 600;
+    line-height: 18px;
+    letter-spacing: 0.3px;
+    white-space: nowrap;
+}
+.slds-badge--std {
+    background: #ECEBEA; color: #444444;
+}
+.slds-badge--cus {
+    background: var(--slds-purple-bg); color: #5C1EAD;
+}
+.slds-badge--pc {
+    background: #D4EEEB; color: var(--slds-teal);
+}
+.slds-badge--req {
+    background: var(--slds-red-bg); color: #B01B2C;
+    font-weight: 700;
+}
+
+.pl {
+    font-size: 13px; color: var(--slds-mut); font-style: italic;
+    max-width: 340px; line-height: 1.5;
+}
+.check-mark {
+    display: inline-block; width: 20px; height: 20px; line-height: 20px;
+    background: var(--slds-blue); color: #fff;
+    border-radius: 50%; font-size: 12px; text-align: center; font-weight: 700;
+}
+.help {
+    display: block;
+    font-size: 12.5px; color: var(--slds-mut); margin-top: 5px;
+    padding: 4px 8px; background: #FAFAF9;
+    border-left: 3px solid var(--slds-blue);
+    max-width: 340px;
+    line-height: 1.5;
+}
+.cat {
+    display: inline-block; font-size: 11.5px; padding: 3px 8px;
+    background: var(--slds-blue-lt); color: var(--slds-blue-dk);
+    border-radius: 3px; font-weight: 600;
+    letter-spacing: 0.3px;
+}
+</style>
+</head>
+<body>
+
+<div class="slds-globalheader">
+    <div class="slds-globalheader__inner">
+        <div class="slds-globalheader__cloud">☁</div>
+        <div>
+            <div class="slds-globalheader__title">Salesforce · Object Manager</div>
+            <div class="slds-globalheader__title-sub">CBUSDO · Enterprise + Person Account</div>
+        </div>
+    </div>
+</div>
+
+<div class="slds-page-header">
+    <div class="slds-page-header__inner">
+        <div class="slds-page-header__row1">
+            <div class="slds-page-header__icon">A</div>
+            <div>
+                <div class="slds-page-header__label">Standard Object</div>
+                <div class="slds-page-header__title">帳戶</div>
+            </div>
+        </div>
+        <div class="slds-page-header__meta">
+            <div>API Name · <strong>Account</strong></div>
+            <div>Key Prefix · <strong>001</strong></div>
+            <div>Custom · <strong>false</strong></div>
+            <div>Createable · <strong>true</strong></div>
+            <div>Feeds Enabled · <strong>true</strong></div>
+        </div>
+    </div>
+</div>
+
+<div class="slds-hi-panel">
+    <div class="slds-hi-panel__inner">
+        <div><div class="slds-hi-item__label">Total Fields</div><div class="slds-hi-item__value">302</div></div>
+        <div><div class="slds-hi-item__label">Standard</div><div class="slds-hi-item__value">116</div></div>
+        <div><div class="slds-hi-item__label">Custom __c</div><div class="slds-hi-item__value">103</div></div>
+        <div><div class="slds-hi-item__label">Person __pc</div><div class="slds-hi-item__value">83</div></div>
+        <div><div class="slds-hi-item__label">Required</div><div class="slds-hi-item__value">0</div></div>
+        <div><div class="slds-hi-item__label">Lookup</div><div class="slds-hi-item__value">29</div></div>
+        <div><div class="slds-hi-item__label">Picklist</div><div class="slds-hi-item__value">45</div></div>
+        <div><div class="slds-hi-item__label">Long Text</div><div class="slds-hi-item__value">12</div></div>
+    </div>
+</div>
+
+<div class="slds-toolbar">
+    <div class="slds-toolbar__inner">
+        <input class="slds-input slds-input--search" id="q" type="search" placeholder="Search fields · API name / label / type / help..." autocomplete="off"/>
+        <select class="slds-select" id="kind">
+            <option value="">All Types</option>
+            <option value="Standard">Standard</option>
+            <option value="Custom">Custom (__c)</option>
+            <option value="PersonAccount">Person Account (__pc)</option>
+        </select>
+        <select class="slds-select" id="req">
+            <option value="">Required · All</option>
+            <option value="yes">Required Only</option>
+            <option value="no">Optional Only</option>
+        </select>
+        <span class="slds-count"><strong id="cnt">302</strong>/ 302 fields</span>
+    </div>
+</div>
+
+<div class="slds-table-wrap">
+    <table class="slds-table" id="tbl">
+        <thead><tr>
+            <th style="width:18%;">Field API Name</th>
+            <th style="width:14%;">Label</th>
+            <th style="width:12%;">Data Type</th>
+            <th style="width:8%;">Type</th>
+            <th style="width:7%;">Required</th>
+            <th style="width:5%;">Ext ID</th>
+            <th style="width:11%;">Reference</th>
+            <th style="width:18%;">Values / Help</th>
+            <th style="width:7%;">Category</th>
+        </tr></thead>
+        <tbody>
+        <tr data-api="id" data-label="帳戶識別碼" data-type="id" data-kind="Standard" data-req="no">
+            <td><span class="api ">Id</span></td>
+            <td>帳戶識別碼</td>
+            <td><span class="type">id</span></td>
+            <td><span class="slds-badge slds-badge--std">Std</span></td>
+            <td></td>
+            <td></td>
+            <td><span class="ref"></span></td>
+            <td><span class="pl"></span></td>
+            <td><span class="cat">系統</span></td>
+        </tr>
+        <tr data-api="isdeleted" data-label="已刪除" data-type="boolean" data-kind="Standard" data-req="no">
+            <td><span class="api ">IsDeleted</span></td>
+            <td>已刪除</td>
+            <td><span class="type">boolean</span></td>
+            <td><span class="slds-badge slds-badge--std">Std</span></td>
+            <td></td>
+            <td></td>
+            <td><span class="ref"></span></td>
+            <td><span class="pl"></span></td>
+            <td><span class="cat">系統</span></td>
+        </tr>
+        <tr data-api="masterrecordid" data-label="主要記錄識別碼" data-type="lookup → account" data-kind="Standard" data-req="no">
+            <td><span class="api ">MasterRecordId</span></td>
+            <td>主要記錄識別碼</td>
+            <td><span class="type">Lookup → Account</span></td>
+            <td><span class="slds-badge slds-badge--std">Std</span></td>
+            <td></td>
+            <td></td>
+            <td><span class="ref">Account</span></td>
+            <td><span class="pl"></span></td>
+            <td><span class="cat">層級關聯</span></td>
+        </tr>
+        <tr data-api="name" data-label="帳戶名稱" data-type="text(255)" data-kind="Standard" data-req="no">
+            <td><span class="api ">Name</span></td>
+            <td>帳戶名稱</td>
+            <td><span class="type">Text(255)</span></td>
+            <td><span class="slds-badge slds-badge--std">Std</span></td>
+            <td></td>
+            <td></td>
+            <td><span class="ref"></span></td>
+            <td><span class="pl"></span></td>
+            <td><span class="cat">系統</span></td>
+        </tr>
+        <tr data-api="lastname" data-label="姓氏" data-type="text(80)" data-kind="Standard" data-req="no">
+            <td><span class="api ">LastName</span></td>
+            <td>姓氏</td>
+            <td><span class="type">Text(80)</span></td>
+            <td><span class="slds-badge slds-badge--std">Std</span></td>
+            <td></td>
+            <td></td>
+            <td><span class="ref"></span></td>
+            <td><span class="pl"></span></td>
+            <td><span class="cat">其他</span></td>
+        </tr>
+        <tr data-api="firstname" data-label="名字" data-type="text(40)" data-kind="Standard" data-req="no">
+            <td><span class="api ">FirstName</span></td>
+            <td>名字</td>
+            <td><span class="type">Text(40)</span></td>
+            <td><span class="slds-badge slds-badge--std">Std</span></td>
+            <td></td>
+            <td></td>
+            <td><span class="ref"></span></td>
+            <td><span class="pl"></span></td>
+            <td><span class="cat">其他</span></td>
+        </tr>
+        <tr data-api="salutation" data-label="稱呼" data-type="picklist" data-kind="Standard" data-req="no">
+            <td><span class="api ">Salutation</span></td>
+            <td>稱呼</td>
+            <td><span class="type">Picklist</span></td>
+            <td><span class="slds-badge slds-badge--std">Std</span></td>
+            <td></td>
+            <td></td>
+            <td><span class="ref"></span></td>
+            <td><span class="pl">Mr. · Ms. · Mrs. · Dr. · Prof. · Mx.</span></td>
+            <td><span class="cat">其他</span></td>
+        </tr>
+        <tr data-api="type" data-label="帳戶類型" data-type="picklist" data-kind="Standard" data-req="no">
+            <td><span class="api ">Type</span></td>
+            <td>帳戶類型</td>
+            <td><span class="type">Picklist</span></td>
+            <td><span class="slds-badge slds-badge--std">Std</span></td>
+            <td></td>
+            <td></td>
+            <td><span class="ref"></span></td>
+            <td><span class="pl">Enterprise · Mid-Market · Partner · Person · Small Business</span></td>
+            <td><span class="cat">其他</span></td>
+        </tr>
+        <tr data-api="recordtypeid" data-label="記錄類型識別碼" data-type="lookup → recordtype" data-kind="Standard" data-req="no">
+            <td><span class="api ">RecordTypeId</span></td>
+            <td>記錄類型識別碼</td>
+            <td><span class="type">Lookup → RecordType</span></td>
+            <td><span class="slds-badge slds-badge--std">Std</span></td>
+            <td></td>
+            <td></td>
+            <td><span class="ref">RecordType</span></td>
+            <td><span class="pl"></span></td>
+            <td><span class="cat">其他</span></td>
+        </tr>
+        <tr data-api="parentid" data-label="父系帳戶識別碼" data-type="lookup → account" data-kind="Standard" data-req="no">
+            <td><span class="api ">ParentId</span></td>
+            <td>父系帳戶識別碼</td>
+            <td><span class="type">Lookup → Account</span></td>
+            <td><span class="slds-badge slds-badge--std">Std</span></td>
+            <td></td>
+            <td></td>
+            <td><span class="ref">Account</span></td>
+            <td><span class="pl"></span></td>
+            <td><span class="cat">層級關聯</span></td>
+        </tr>
+        <tr data-api="billingstreet" data-label="帳單街道" data-type="textarea(255)" data-kind="Standard" data-req="no">
+            <td><span class="api ">BillingStreet</span></td>
+            <td>帳單街道</td>
+            <td><span class="type">TextArea(255)</span></td>
+            <td><span class="slds-badge slds-badge--std">Std</span></td>
+            <td></td>
+            <td></td>
+            <td><span class="ref"></span></td>
+            <td><span class="pl"></span></td>
+            <td><span class="cat">帳單地址</span></td>
+        </tr>
+        <tr data-api="billingcity" data-label="帳單城市" data-type="text(40)" data-kind="Standard" data-req="no">
+            <td><span class="api ">BillingCity</span></td>
+            <td>帳單城市</td>
+            <td><span class="type">Text(40)</span></td>
+            <td><span class="slds-badge slds-badge--std">Std</span></td>
+            <td></td>
+            <td></td>
+            <td><span class="ref"></span></td>
+            <td><span class="pl"></span></td>
+            <td><span class="cat">帳單地址</span></td>
+        </tr>
+        <tr data-api="billingstate" data-label="帳單州/省" data-type="text(80)" data-kind="Standard" data-req="no">
+            <td><span class="api ">BillingState</span></td>
+            <td>帳單州/省</td>
+            <td><span class="type">Text(80)</span></td>
+            <td><span class="slds-badge slds-badge--std">Std</span></td>
+            <td></td>
+            <td></td>
+            <td><span class="ref"></span></td>
+            <td><span class="pl"></span></td>
+            <td><span class="cat">帳單地址</span></td>
+        </tr>
+        <tr data-api="billingpostalcode" data-label="帳單郵遞區號" data-type="text(20)" data-kind="Standard" data-req="no">
+            <td><span class="api ">BillingPostalCode</span></td>
+            <td>帳單郵遞區號</td>
+            <td><span class="type">Text(20)</span></td>
+            <td><span class="slds-badge slds-badge--std">Std</span></td>
+            <td></td>
+            <td></td>
+            <td><span class="ref"></span></td>
+            <td><span class="pl"></span></td>
+            <td><span class="cat">帳單地址</span></td>
+        </tr>
+        <tr data-api="billingcountry" data-label="帳單國家" data-type="text(80)" data-kind="Standard" data-req="no">
+            <td><span class="api ">BillingCountry</span></td>
+            <td>帳單國家</td>
+            <td><span class="type">Text(80)</span></td>
+            <td><span class="slds-badge slds-badge--std">Std</span></td>
+            <td></td>
+            <td></td>
+            <td><span class="ref"></span></td>
+            <td><span class="pl"></span></td>
+            <td><span class="cat">帳單地址</span></td>
+        </tr>
+        <tr data-api="billinglatitude" data-label="帳單緯度" data-type="double(18,15)" data-kind="Standard" data-req="no">
+            <td><span class="api ">BillingLatitude</span></td>
+            <td>帳單緯度</td>
+            <td><span class="type">Double(18,15)</span></td>
+            <td><span class="slds-badge slds-badge--std">Std</span></td>
+            <td></td>
+            <td></td>
+            <td><span class="ref"></span></td>
+            <td><span class="pl"></span></td>
+            <td><span class="cat">帳單地址</span></td>
+        </tr>
+        <tr data-api="billinglongitude" data-label="帳單經度" data-type="double(18,15)" data-kind="Standard" data-req="no">
+            <td><span class="api ">BillingLongitude</span></td>
+            <td>帳單經度</td>
+            <td><span class="type">Double(18,15)</span></td>
+            <td><span class="slds-badge slds-badge--std">Std</span></td>
+            <td></td>
+            <td></td>
+            <td><span class="ref"></span></td>
+            <td><span class="pl"></span></td>
+            <td><span class="cat">帳單地址</span></td>
+        </tr>
+        <tr data-api="billinggeocodeaccuracy" data-label="billing geocode accuracy" data-type="picklist" data-kind="Standard" data-req="no">
+            <td><span class="api ">BillingGeocodeAccuracy</span></td>
+            <td>Billing Geocode Accuracy</td>
+            <td><span class="type">Picklist</span></td>
+            <td><span class="slds-badge slds-badge--std">Std</span></td>
+            <td></td>
+            <td></td>
+            <td><span class="ref"></span></td>
+            <td><span class="pl">Address · NearAddress · Block · Street · ExtendedZip · Zip · Neighborhood · City · County · State · Unknown</span></td>
+            <td><span class="cat">帳單地址</span></td>
+        </tr>
+        <tr data-api="billingaddress" data-label="帳單地址" data-type="address" data-kind="Standard" data-req="no">
+            <td><span class="api ">BillingAddress</span></td>
+            <td>帳單地址</td>
+            <td><span class="type">address</span></td>
+            <td><span class="slds-badge slds-badge--std">Std</span></td>
+            <td></td>
+            <td></td>
+            <td><span class="ref"></span></td>
+            <td><span class="pl"></span></td>
+            <td><span class="cat">帳單地址</span></td>
+        </tr>
+        <tr data-api="shippingstreet" data-label="寄送街道" data-type="textarea(255)" data-kind="Standard" data-req="no">
+            <td><span class="api ">ShippingStreet</span></td>
+            <td>寄送街道</td>
+            <td><span class="type">TextArea(255)</span></td>
+            <td><span class="slds-badge slds-badge--std">Std</span></td>
+            <td></td>
+            <td></td>
+            <td><span class="ref"></span></td>
+            <td><span class="pl"></span></td>
+            <td><span class="cat">運送地址</span></td>
+        </tr>
+        <tr data-api="shippingcity" data-label="寄送城市" data-type="text(40)" data-kind="Standard" data-req="no">
+            <td><span class="api ">ShippingCity</span></td>
+            <td>寄送城市</td>
+            <td><span class="type">Text(40)</span></td>
+            <td><span class="slds-badge slds-badge--std">Std</span></td>
+            <td></td>
+            <td></td>
+            <td><span class="ref"></span></td>
+            <td><span class="pl"></span></td>
+            <td><span class="cat">運送地址</span></td>
+        </tr>
+        <tr data-api="shippingstate" data-label="寄送州/省" data-type="text(80)" data-kind="Standard" data-req="no">
+            <td><span class="api ">ShippingState</span></td>
+            <td>寄送州/省</td>
+            <td><span class="type">Text(80)</span></td>
+            <td><span class="slds-badge slds-badge--std">Std</span></td>
+            <td></td>
+            <td></td>
+            <td><span class="ref"></span></td>
+            <td><span class="pl"></span></td>
+            <td><span class="cat">運送地址</span></td>
+        </tr>
+        <tr data-api="shippingpostalcode" data-label="寄送郵遞區號" data-type="text(20)" data-kind="Standard" data-req="no">
+            <td><span class="api ">ShippingPostalCode</span></td>
+            <td>寄送郵遞區號</td>
+            <td><span class="type">Text(20)</span></td>
+            <td><span class="slds-badge slds-badge--std">Std</span></td>
+            <td></td>
+            <td></td>
+            <td><span class="ref"></span></td>
+            <td><span class="pl"></span></td>
+            <td><span class="cat">運送地址</span></td>
+        </tr>
+        <tr data-api="shippingcountry" data-label="寄送國家" data-type="text(80)" data-kind="Standard" data-req="no">
+            <td><span class="api ">ShippingCountry</span></td>
+            <td>寄送國家</td>
+            <td><span class="type">Text(80)</span></td>
+            <td><span class="slds-badge slds-badge--std">Std</span></td>
+            <td></td>
+            <td></td>
+            <td><span class="ref"></span></td>
+            <td><span class="pl"></span></td>
+            <td><span class="cat">運送地址</span></td>
+        </tr>
+        <tr data-api="shippinglatitude" data-label="寄送緯度" data-type="double(18,15)" data-kind="Standard" data-req="no">
+            <td><span class="api ">ShippingLatitude</span></td>
+            <td>寄送緯度</td>
+            <td><span class="type">Double(18,15)</span></td>
+            <td><span class="slds-badge slds-badge--std">Std</span></td>
+            <td></td>
+            <td></td>
+            <td><span class="ref"></span></td>
+            <td><span class="pl"></span></td>
+            <td><span class="cat">運送地址</span></td>
+        </tr>
+        <tr data-api="shippinglongitude" data-label="寄送經度" data-type="double(18,15)" data-kind="Standard" data-req="no">
+            <td><span class="api ">ShippingLongitude</span></td>
+            <td>寄送經度</td>
+            <td><span class="type">Double(18,15)</span></td>
+            <td><span class="slds-badge slds-badge--std">Std</span></td>
+            <td></td>
+            <td></td>
+            <td><span class="ref"></span></td>
+            <td><span class="pl"></span></td>
+            <td><span class="cat">運送地址</span></td>
+        </tr>
+        <tr data-api="shippinggeocodeaccuracy" data-label="shipping geocode accuracy" data-type="picklist" data-kind="Standard" data-req="no">
+            <td><span class="api ">ShippingGeocodeAccuracy</span></td>
+            <td>Shipping Geocode Accuracy</td>
+            <td><span class="type">Picklist</span></td>
+            <td><span class="slds-badge slds-badge--std">Std</span></td>
+            <td></td>
+            <td></td>
+            <td><span class="ref"></span></td>
+            <td><span class="pl">Address · NearAddress · Block · Street · ExtendedZip · Zip · Neighborhood · City · County · State · Unknown</span></td>
+            <td><span class="cat">運送地址</span></td>
+        </tr>
+        <tr data-api="shippingaddress" data-label="寄送地址" data-type="address" data-kind="Standard" data-req="no">
+            <td><span class="api ">ShippingAddress</span></td>
+            <td>寄送地址</td>
+            <td><span class="type">address</span></td>
+            <td><span class="slds-badge slds-badge--std">Std</span></td>
+            <td></td>
+            <td></td>
+            <td><span class="ref"></span></td>
+            <td><span class="pl"></span></td>
+            <td><span class="cat">運送地址</span></td>
+        </tr>
+        <tr data-api="phone" data-label="帳戶電話" data-type="phone" data-kind="Standard" data-req="no">
+            <td><span class="api ">Phone</span></td>
+            <td>帳戶電話</td>
+            <td><span class="type">phone</span></td>
+            <td><span class="slds-badge slds-badge--std">Std</span></td>
+            <td></td>
+            <td></td>
+            <td><span class="ref"></span></td>
+            <td><span class="pl"></span></td>
+            <td><span class="cat">其他</span></td>
+        </tr>
+        <tr data-api="fax" data-label="帳戶傳真" data-type="phone" data-kind="Standard" data-req="no">
+            <td><span class="api ">Fax</span></td>
+            <td>帳戶傳真</td>
+            <td><span class="type">phone</span></td>
+            <td><span class="slds-badge slds-badge--std">Std</span></td>
+            <td></td>
+            <td></td>
+            <td><span class="ref"></span></td>
+            <td><span class="pl"></span></td>
+            <td><span class="cat">其他</span></td>
+        </tr>
+        <tr data-api="accountnumber" data-label="帳戶號碼" data-type="text(40)" data-kind="Standard" data-req="no">
+            <td><span class="api ">AccountNumber</span></td>
+            <td>帳戶號碼</td>
+            <td><span class="type">Text(40)</span></td>
+            <td><span class="slds-badge slds-badge--std">Std</span></td>
+            <td></td>
+            <td></td>
+            <td><span class="ref"></span></td>
+            <td><span class="pl"></span></td>
+            <td><span class="cat">其他</span></td>
+        </tr>
+        <tr data-api="website" data-label="網站" data-type="url" data-kind="Standard" data-req="no">
+            <td><span class="api ">Website</span></td>
+            <td>網站</td>
+            <td><span class="type">url</span></td>
+            <td><span class="slds-badge slds-badge--std">Std</span></td>
+            <td></td>
+            <td></td>
+            <td><span class="ref"></span></td>
+            <td><span class="pl"></span></td>
+            <td><span class="cat">媒體/連結</span></td>
+        </tr>
+        <tr data-api="photourl" data-label="相片 url" data-type="url" data-kind="Standard" data-req="no">
+            <td><span class="api ">PhotoUrl</span></td>
+            <td>相片 URL</td>
+            <td><span class="type">url</span></td>
+            <td><span class="slds-badge slds-badge--std">Std</span></td>
+            <td></td>
+            <td></td>
+            <td><span class="ref"></span></td>
+            <td><span class="pl"></span></td>
+            <td><span class="cat">媒體/連結</span></td>
+        </tr>
+        <tr data-api="sic" data-label="sic 代碼" data-type="text(20)" data-kind="Standard" data-req="no">
+            <td><span class="api ">Sic</span></td>
+            <td>SIC 代碼</td>
+            <td><span class="type">Text(20)</span></td>
+            <td><span class="slds-badge slds-badge--std">Std</span></td>
+            <td></td>
+            <td></td>
+            <td><span class="ref"></span></td>
+            <td><span class="pl"></span></td>
+            <td><span class="cat">其他</span></td>
+        </tr>
+        <tr data-api="industry" data-label="行業" data-type="picklist" data-kind="Standard" data-req="no">
+            <td><span class="api ">Industry</span></td>
+            <td>行業</td>
+            <td><span class="type">Picklist</span></td>
+            <td><span class="slds-badge slds-badge--std">Std</span></td>
+            <td></td>
+            <td></td>
+            <td><span class="ref"></span></td>
+            <td><span class="pl">Agriculture · Apparel · Banking · Biotechnology · Chemicals · Communications · Construction · Consulting · Education · Electronics · Energy · Engineering · Entertainment · Environmental · Financial Services · Food &amp; Beverage · Government · Healthcare &amp; Life Sciences · Hospitality · Insurance … +12</span></td>
+            <td><span class="cat">其他</span></td>
+        </tr>
+        <tr data-api="annualrevenue" data-label="年度收入" data-type="currency(18,0)" data-kind="Standard" data-req="no">
+            <td><span class="api ">AnnualRevenue</span></td>
+            <td>年度收入</td>
+            <td><span class="type">Currency(18,0)</span></td>
+            <td><span class="slds-badge slds-badge--std">Std</span></td>
+            <td></td>
+            <td></td>
+            <td><span class="ref"></span></td>
+            <td><span class="pl"></span></td>
+            <td><span class="cat">其他</span></td>
+        </tr>
+        <tr data-api="numberofemployees" data-label="員工人數" data-type="int" data-kind="Standard" data-req="no">
+            <td><span class="api ">NumberOfEmployees</span></td>
+            <td>員工人數</td>
+            <td><span class="type">int</span></td>
+            <td><span class="slds-badge slds-badge--std">Std</span></td>
+            <td></td>
+            <td></td>
+            <td><span class="ref"></span></td>
+            <td><span class="pl"></span></td>
+            <td><span class="cat">其他</span></td>
+        </tr>
+        <tr data-api="ownership" data-label="擁有權" data-type="picklist" data-kind="Standard" data-req="no">
+            <td><span class="api ">Ownership</span></td>
+            <td>擁有權</td>
+            <td><span class="type">Picklist</span></td>
+            <td><span class="slds-badge slds-badge--std">Std</span></td>
+            <td></td>
+            <td></td>
+            <td><span class="ref"></span></td>
+            <td><span class="pl">Public · Private · Subsidiary · Other</span></td>
+            <td><span class="cat">擁有者</span></td>
+        </tr>
+        <tr data-api="tickersymbol" data-label="股票代號" data-type="text(20)" data-kind="Standard" data-req="no">
+            <td><span class="api ">TickerSymbol</span></td>
+            <td>股票代號</td>
+            <td><span class="type">Text(20)</span></td>
+            <td><span class="slds-badge slds-badge--std">Std</span></td>
+            <td></td>
+            <td></td>
+            <td><span class="ref"></span></td>
+            <td><span class="pl"></span></td>
+            <td><span class="cat">其他</span></td>
+        </tr>
+        <tr data-api="description" data-label="帳戶描述" data-type="textarea(32000)" data-kind="Standard" data-req="no">
+            <td><span class="api ">Description</span></td>
+            <td>帳戶描述</td>
+            <td><span class="type">TextArea(32000)</span></td>
+            <td><span class="slds-badge slds-badge--std">Std</span></td>
+            <td></td>
+            <td></td>
+            <td><span class="ref"></span></td>
+            <td><span class="pl"></span></td>
+            <td><span class="cat">其他</span></td>
+        </tr>
+        <tr data-api="rating" data-label="帳戶分級" data-type="picklist" data-kind="Standard" data-req="no">
+            <td><span class="api ">Rating</span></td>
+            <td>帳戶分級</td>
+            <td><span class="type">Picklist</span></td>
+            <td><span class="slds-badge slds-badge--std">Std</span></td>
+            <td></td>
+            <td></td>
+            <td><span class="ref"></span></td>
+            <td><span class="pl">Cool · Hot · Warm</span></td>
+            <td><span class="cat">其他</span></td>
+        </tr>
+        <tr data-api="site" data-label="帳戶位置" data-type="text(80)" data-kind="Standard" data-req="no">
+            <td><span class="api ">Site</span></td>
+            <td>帳戶位置</td>
+            <td><span class="type">Text(80)</span></td>
+            <td><span class="slds-badge slds-badge--std">Std</span></td>
+            <td></td>
+            <td></td>
+            <td><span class="ref"></span></td>
+            <td><span class="pl"></span></td>
+            <td><span class="cat">其他</span></td>
+        </tr>
+        <tr data-api="currencyisocode" data-label="帳戶貨幣" data-type="picklist" data-kind="Standard" data-req="no">
+            <td><span class="api ">CurrencyIsoCode</span></td>
+            <td>帳戶貨幣</td>
+            <td><span class="type">Picklist</span></td>
+            <td><span class="slds-badge slds-badge--std">Std</span></td>
+            <td></td>
+            <td></td>
+            <td><span class="ref"></span></td>
+            <td><span class="pl">USD</span></td>
+            <td><span class="cat">其他</span></td>
+        </tr>
+        <tr data-api="ownerid" data-label="擁有者識別碼" data-type="lookup → user" data-kind="Standard" data-req="no">
+            <td><span class="api ">OwnerId</span></td>
+            <td>擁有者識別碼</td>
+            <td><span class="type">Lookup → User</span></td>
+            <td><span class="slds-badge slds-badge--std">Std</span></td>
+            <td></td>
+            <td></td>
+            <td><span class="ref">User</span></td>
+            <td><span class="pl"></span></td>
+            <td><span class="cat">擁有者</span></td>
+        </tr>
+        <tr data-api="createddate" data-label="建立日期" data-type="datetime" data-kind="Standard" data-req="no">
+            <td><span class="api ">CreatedDate</span></td>
+            <td>建立日期</td>
+            <td><span class="type">datetime</span></td>
+            <td><span class="slds-badge slds-badge--std">Std</span></td>
+            <td></td>
+            <td></td>
+            <td><span class="ref"></span></td>
+            <td><span class="pl"></span></td>
+            <td><span class="cat">系統</span></td>
+        </tr>
+        <tr data-api="createdbyid" data-label="建立者識別碼" data-type="lookup → user" data-kind="Standard" data-req="no">
+            <td><span class="api ">CreatedById</span></td>
+            <td>建立者識別碼</td>
+            <td><span class="type">Lookup → User</span></td>
+            <td><span class="slds-badge slds-badge--std">Std</span></td>
+            <td></td>
+            <td></td>
+            <td><span class="ref">User</span></td>
+            <td><span class="pl"></span></td>
+            <td><span class="cat">系統</span></td>
+        </tr>
+        <tr data-api="lastmodifieddate" data-label="上次修改日期" data-type="datetime" data-kind="Standard" data-req="no">
+            <td><span class="api ">LastModifiedDate</span></td>
+            <td>上次修改日期</td>
+            <td><span class="type">datetime</span></td>
+            <td><span class="slds-badge slds-badge--std">Std</span></td>
+            <td></td>
+            <td></td>
+            <td><span class="ref"></span></td>
+            <td><span class="pl"></span></td>
+            <td><span class="cat">系統</span></td>
+        </tr>
+        <tr data-api="lastmodifiedbyid" data-label="上次修改者識別碼" data-type="lookup → user" data-kind="Standard" data-req="no">
+            <td><span class="api ">LastModifiedById</span></td>
+            <td>上次修改者識別碼</td>
+            <td><span class="type">Lookup → User</span></td>
+            <td><span class="slds-badge slds-badge--std">Std</span></td>
+            <td></td>
+            <td></td>
+            <td><span class="ref">User</span></td>
+            <td><span class="pl"></span></td>
+            <td><span class="cat">系統</span></td>
+        </tr>
+        <tr data-api="systemmodstamp" data-label="系統修改時間戳記" data-type="datetime" data-kind="Standard" data-req="no">
+            <td><span class="api ">SystemModstamp</span></td>
+            <td>系統修改時間戳記</td>
+            <td><span class="type">datetime</span></td>
+            <td><span class="slds-badge slds-badge--std">Std</span></td>
+            <td></td>
+            <td></td>
+            <td><span class="ref"></span></td>
+            <td><span class="pl"></span></td>
+            <td><span class="cat">系統</span></td>
+        </tr>
+        <tr data-api="lastactivitydate" data-label="上次活動" data-type="date" data-kind="Standard" data-req="no">
+            <td><span class="api ">LastActivityDate</span></td>
+            <td>上次活動</td>
+            <td><span class="type">date</span></td>
+            <td><span class="slds-badge slds-badge--std">Std</span></td>
+            <td></td>
+            <td></td>
+            <td><span class="ref"></span></td>
+            <td><span class="pl"></span></td>
+            <td><span class="cat">其他</span></td>
+        </tr>
+        <tr data-api="mayedit" data-label="可編輯" data-type="boolean" data-kind="Standard" data-req="no">
+            <td><span class="api ">MayEdit</span></td>
+            <td>可編輯</td>
+            <td><span class="type">boolean</span></td>
+            <td><span class="slds-badge slds-badge--std">Std</span></td>
+            <td></td>
+            <td></td>
+            <td><span class="ref"></span></td>
+            <td><span class="pl"></span></td>
+            <td><span class="cat">其他</span></td>
+        </tr>
+        <tr data-api="islocked" data-label="已鎖定" data-type="boolean" data-kind="Standard" data-req="no">
+            <td><span class="api ">IsLocked</span></td>
+            <td>已鎖定</td>
+            <td><span class="type">boolean</span></td>
+            <td><span class="slds-badge slds-badge--std">Std</span></td>
+            <td></td>
+            <td></td>
+            <td><span class="ref"></span></td>
+            <td><span class="pl"></span></td>
+            <td><span class="cat">其他</span></td>
+        </tr>
+        <tr data-api="lastvieweddate" data-label="最後檢視日期" data-type="datetime" data-kind="Standard" data-req="no">
+            <td><span class="api ">LastViewedDate</span></td>
+            <td>最後檢視日期</td>
+            <td><span class="type">datetime</span></td>
+            <td><span class="slds-badge slds-badge--std">Std</span></td>
+            <td></td>
+            <td></td>
+            <td><span class="ref"></span></td>
+            <td><span class="pl"></span></td>
+            <td><span class="cat">其他</span></td>
+        </tr>
+        <tr data-api="lastreferenceddate" data-label="上次參照日期" data-type="datetime" data-kind="Standard" data-req="no">
+            <td><span class="api ">LastReferencedDate</span></td>
+            <td>上次參照日期</td>
+            <td><span class="type">datetime</span></td>
+            <td><span class="slds-badge slds-badge--std">Std</span></td>
+            <td></td>
+            <td></td>
+            <td><span class="ref"></span></td>
+            <td><span class="pl"></span></td>
+            <td><span class="cat">其他</span></td>
+        </tr>
+        <tr data-api="isexcludedfromrealign" data-label="從地區範圍指派規則中排除" data-type="boolean" data-kind="Standard" data-req="no">
+            <td><span class="api ">IsExcludedFromRealign</span></td>
+            <td>從地區範圍指派規則中排除</td>
+            <td><span class="type">boolean</span></td>
+            <td><span class="slds-badge slds-badge--std">Std</span></td>
+            <td></td>
+            <td></td>
+            <td><span class="ref"></span></td>
+            <td><span class="pl"></span></td>
+            <td><span class="cat">其他</span></td>
+        </tr>
+        <tr data-api="isactive" data-label="啟用" data-type="boolean" data-kind="Standard" data-req="no">
+            <td><span class="api ">IsActive</span></td>
+            <td>啟用</td>
+            <td><span class="type">boolean</span></td>
+            <td><span class="slds-badge slds-badge--std">Std</span></td>
+            <td></td>
+            <td></td>
+            <td><span class="ref"></span></td>
+            <td><span class="pl"></span></td>
+            <td><span class="cat">其他</span></td>
+        </tr>
+        <tr data-api="effectivedate" data-label="生效日期" data-type="datetime" data-kind="Standard" data-req="no">
+            <td><span class="api ">EffectiveDate</span></td>
+            <td>生效日期</td>
+            <td><span class="type">datetime</span></td>
+            <td><span class="slds-badge slds-badge--std">Std</span></td>
+            <td></td>
+            <td></td>
+            <td><span class="ref"></span></td>
+            <td><span class="pl"></span></td>
+            <td><span class="cat">其他</span></td>
+        </tr>
+        <tr data-api="enddate" data-label="結束日期" data-type="datetime" data-kind="Standard" data-req="no">
+            <td><span class="api ">EndDate</span></td>
+            <td>結束日期</td>
+            <td><span class="type">datetime</span></td>
+            <td><span class="slds-badge slds-badge--std">Std</span></td>
+            <td></td>
+            <td></td>
+            <td><span class="ref"></span></td>
+            <td><span class="pl"></span></td>
+            <td><span class="cat">其他</span></td>
+        </tr>
+        <tr data-api="sourcesystemidentifier" data-label="來源系統識別碼" data-type="text(85)" data-kind="Standard" data-req="no">
+            <td><span class="api ">SourceSystemIdentifier</span></td>
+            <td>來源系統識別碼</td>
+            <td><span class="type">Text(85)</span></td>
+            <td><span class="slds-badge slds-badge--std">Std</span></td>
+            <td></td>
+            <td></td>
+            <td><span class="ref"></span></td>
+            <td><span class="pl"></span></td>
+            <td><span class="cat">其他</span></td>
+        </tr>
+        <tr data-api="sourcesystemmodifieddate" data-label="來源系統修改" data-type="datetime" data-kind="Standard" data-req="no">
+            <td><span class="api ">SourceSystemModifiedDate</span></td>
+            <td>來源系統修改</td>
+            <td><span class="type">datetime</span></td>
+            <td><span class="slds-badge slds-badge--std">Std</span></td>
+            <td></td>
+            <td></td>
+            <td><span class="ref"></span></td>
+            <td><span class="pl"></span></td>
+            <td><span class="cat">其他</span></td>
+        </tr>
+        <tr data-api="ispartner" data-label="合作夥伴帳戶" data-type="boolean" data-kind="Standard" data-req="no">
+            <td><span class="api ">IsPartner</span></td>
+            <td>合作夥伴帳戶</td>
+            <td><span class="type">boolean</span></td>
+            <td><span class="slds-badge slds-badge--std">Std</span></td>
+            <td></td>
+            <td></td>
+            <td><span class="ref"></span></td>
+            <td><span class="pl"></span></td>
+            <td><span class="cat">其他</span></td>
+        </tr>
+        <tr data-api="iscustomerportal" data-label="客戶入口網頁帳戶" data-type="boolean" data-kind="Standard" data-req="no">
+            <td><span class="api ">IsCustomerPortal</span></td>
+            <td>客戶入口網頁帳戶</td>
+            <td><span class="type">boolean</span></td>
+            <td><span class="slds-badge slds-badge--std">Std</span></td>
+            <td></td>
+            <td></td>
+            <td><span class="ref"></span></td>
+            <td><span class="pl"></span></td>
+            <td><span class="cat">其他</span></td>
+        </tr>
+        <tr data-api="personcontactid" data-label="連絡人識別碼" data-type="lookup → contact" data-kind="Standard" data-req="no">
+            <td><span class="api ">PersonContactId</span></td>
+            <td>連絡人識別碼</td>
+            <td><span class="type">Lookup → Contact</span></td>
+            <td><span class="slds-badge slds-badge--std">Std</span></td>
+            <td></td>
+            <td></td>
+            <td><span class="ref">Contact</span></td>
+            <td><span class="pl"></span></td>
+            <td><span class="cat">個人資料</span></td>
+        </tr>
+        <tr data-api="ispersonaccount" data-label="為個人帳戶" data-type="boolean" data-kind="Standard" data-req="no">
+            <td><span class="api ">IsPersonAccount</span></td>
+            <td>為個人帳戶</td>
+            <td><span class="type">boolean</span></td>
+            <td><span class="slds-badge slds-badge--std">Std</span></td>
+            <td></td>
+            <td></td>
+            <td><span class="ref"></span></td>
+            <td><span class="pl"></span></td>
+            <td><span class="cat">系統</span></td>
+        </tr>
+        <tr data-api="channelprogramname" data-label="通路計畫名稱" data-type="text(255)" data-kind="Standard" data-req="no">
+            <td><span class="api ">ChannelProgramName</span></td>
+            <td>通路計畫名稱</td>
+            <td><span class="type">Text(255)</span></td>
+            <td><span class="slds-badge slds-badge--std">Std</span></td>
+            <td></td>
+            <td></td>
+            <td><span class="ref"></span></td>
+            <td><span class="pl"></span></td>
+            <td><span class="cat">其他</span></td>
+        </tr>
+        <tr data-api="channelprogramlevelname" data-label="通路計畫等級 名稱" data-type="text(255)" data-kind="Standard" data-req="no">
+            <td><span class="api ">ChannelProgramLevelName</span></td>
+            <td>通路計畫等級 名稱</td>
+            <td><span class="type">Text(255)</span></td>
+            <td><span class="slds-badge slds-badge--std">Std</span></td>
+            <td></td>
+            <td></td>
+            <td><span class="ref"></span></td>
+            <td><span class="pl"></span></td>
+            <td><span class="cat">其他</span></td>
+        </tr>
+        <tr data-api="personmailingstreet" data-label="郵寄街道" data-type="textarea(255)" data-kind="Standard" data-req="no">
+            <td><span class="api ">PersonMailingStreet</span></td>
+            <td>郵寄街道</td>
+            <td><span class="type">TextArea(255)</span></td>
+            <td><span class="slds-badge slds-badge--std">Std</span></td>
+            <td></td>
+            <td></td>
+            <td><span class="ref"></span></td>
+            <td><span class="pl"></span></td>
+            <td><span class="cat">個人資料</span></td>
+        </tr>
+        <tr data-api="personmailingcity" data-label="郵寄城市" data-type="text(40)" data-kind="Standard" data-req="no">
+            <td><span class="api ">PersonMailingCity</span></td>
+            <td>郵寄城市</td>
+            <td><span class="type">Text(40)</span></td>
+            <td><span class="slds-badge slds-badge--std">Std</span></td>
+            <td></td>
+            <td></td>
+            <td><span class="ref"></span></td>
+            <td><span class="pl"></span></td>
+            <td><span class="cat">個人資料</span></td>
+        </tr>
+        <tr data-api="personmailingstate" data-label="郵寄州/省" data-type="text(80)" data-kind="Standard" data-req="no">
+            <td><span class="api ">PersonMailingState</span></td>
+            <td>郵寄州/省</td>
+            <td><span class="type">Text(80)</span></td>
+            <td><span class="slds-badge slds-badge--std">Std</span></td>
+            <td></td>
+            <td></td>
+            <td><span class="ref"></span></td>
+            <td><span class="pl"></span></td>
+            <td><span class="cat">個人資料</span></td>
+        </tr>
+        <tr data-api="personmailingpostalcode" data-label="郵寄郵遞區號" data-type="text(20)" data-kind="Standard" data-req="no">
+            <td><span class="api ">PersonMailingPostalCode</span></td>
+            <td>郵寄郵遞區號</td>
+            <td><span class="type">Text(20)</span></td>
+            <td><span class="slds-badge slds-badge--std">Std</span></td>
+            <td></td>
+            <td></td>
+            <td><span class="ref"></span></td>
+            <td><span class="pl"></span></td>
+            <td><span class="cat">個人資料</span></td>
+        </tr>
+        <tr data-api="personmailingcountry" data-label="郵寄國家" data-type="text(80)" data-kind="Standard" data-req="no">
+            <td><span class="api ">PersonMailingCountry</span></td>
+            <td>郵寄國家</td>
+            <td><span class="type">Text(80)</span></td>
+            <td><span class="slds-badge slds-badge--std">Std</span></td>
+            <td></td>
+            <td></td>
+            <td><span class="ref"></span></td>
+            <td><span class="pl"></span></td>
+            <td><span class="cat">個人資料</span></td>
+        </tr>
+        <tr data-api="personmailinglatitude" data-label="郵寄緯度" data-type="double(18,15)" data-kind="Standard" data-req="no">
+            <td><span class="api ">PersonMailingLatitude</span></td>
+            <td>郵寄緯度</td>
+            <td><span class="type">Double(18,15)</span></td>
+            <td><span class="slds-badge slds-badge--std">Std</span></td>
+            <td></td>
+            <td></td>
+            <td><span class="ref"></span></td>
+            <td><span class="pl"></span></td>
+            <td><span class="cat">個人資料</span></td>
+        </tr>
+        <tr data-api="personmailinglongitude" data-label="郵寄經度" data-type="double(18,15)" data-kind="Standard" data-req="no">
+            <td><span class="api ">PersonMailingLongitude</span></td>
+            <td>郵寄經度</td>
+            <td><span class="type">Double(18,15)</span></td>
+            <td><span class="slds-badge slds-badge--std">Std</span></td>
+            <td></td>
+            <td></td>
+            <td><span class="ref"></span></td>
+            <td><span class="pl"></span></td>
+            <td><span class="cat">個人資料</span></td>
+        </tr>
+        <tr data-api="personmailinggeocodeaccuracy" data-label="mailing geocode accuracy" data-type="picklist" data-kind="Standard" data-req="no">
+            <td><span class="api ">PersonMailingGeocodeAccuracy</span></td>
+            <td>Mailing Geocode Accuracy</td>
+            <td><span class="type">Picklist</span></td>
+            <td><span class="slds-badge slds-badge--std">Std</span></td>
+            <td></td>
+            <td></td>
+            <td><span class="ref"></span></td>
+            <td><span class="pl">Address · NearAddress · Block · Street · ExtendedZip · Zip · Neighborhood · City · County · State · Unknown</span></td>
+            <td><span class="cat">個人資料</span></td>
+        </tr>
+        <tr data-api="personmailingaddress" data-label="郵寄地址" data-type="address" data-kind="Standard" data-req="no">
+            <td><span class="api ">PersonMailingAddress</span></td>
+            <td>郵寄地址</td>
+            <td><span class="type">address</span></td>
+            <td><span class="slds-badge slds-badge--std">Std</span></td>
+            <td></td>
+            <td></td>
+            <td><span class="ref"></span></td>
+            <td><span class="pl"></span></td>
+            <td><span class="cat">個人資料</span></td>
+        </tr>
+        <tr data-api="personotherstreet" data-label="其他地址 - 街道" data-type="textarea(255)" data-kind="Standard" data-req="no">
+            <td><span class="api ">PersonOtherStreet</span></td>
+            <td>其他地址 - 街道</td>
+            <td><span class="type">TextArea(255)</span></td>
+            <td><span class="slds-badge slds-badge--std">Std</span></td>
+            <td></td>
+            <td></td>
+            <td><span class="ref"></span></td>
+            <td><span class="pl"></span></td>
+            <td><span class="cat">個人資料</span></td>
+        </tr>
+        <tr data-api="personothercity" data-label="其他地址 - 城市" data-type="text(40)" data-kind="Standard" data-req="no">
+            <td><span class="api ">PersonOtherCity</span></td>
+            <td>其他地址 - 城市</td>
+            <td><span class="type">Text(40)</span></td>
+            <td><span class="slds-badge slds-badge--std">Std</span></td>
+            <td></td>
+            <td></td>
+            <td><span class="ref"></span></td>
+            <td><span class="pl"></span></td>
+            <td><span class="cat">個人資料</span></td>
+        </tr>
+        <tr data-api="personotherstate" data-label="其他地址 - 州/省" data-type="text(80)" data-kind="Standard" data-req="no">
+            <td><span class="api ">PersonOtherState</span></td>
+            <td>其他地址 - 州/省</td>
+            <td><span class="type">Text(80)</span></td>
+            <td><span class="slds-badge slds-badge--std">Std</span></td>
+            <td></td>
+            <td></td>
+            <td><span class="ref"></span></td>
+            <td><span class="pl"></span></td>
+            <td><span class="cat">個人資料</span></td>
+        </tr>
+        <tr data-api="personotherpostalcode" data-label="其他地址 - 郵遞區號" data-type="text(20)" data-kind="Standard" data-req="no">
+            <td><span class="api ">PersonOtherPostalCode</span></td>
+            <td>其他地址 - 郵遞區號</td>
+            <td><span class="type">Text(20)</span></td>
+            <td><span class="slds-badge slds-badge--std">Std</span></td>
+            <td></td>
+            <td></td>
+            <td><span class="ref"></span></td>
+            <td><span class="pl"></span></td>
+            <td><span class="cat">個人資料</span></td>
+        </tr>
+        <tr data-api="personothercountry" data-label="其他地址 - 國家" data-type="text(80)" data-kind="Standard" data-req="no">
+            <td><span class="api ">PersonOtherCountry</span></td>
+            <td>其他地址 - 國家</td>
+            <td><span class="type">Text(80)</span></td>
+            <td><span class="slds-badge slds-badge--std">Std</span></td>
+            <td></td>
+            <td></td>
+            <td><span class="ref"></span></td>
+            <td><span class="pl"></span></td>
+            <td><span class="cat">個人資料</span></td>
+        </tr>
+        <tr data-api="personotherlatitude" data-label="其他緯度" data-type="double(18,15)" data-kind="Standard" data-req="no">
+            <td><span class="api ">PersonOtherLatitude</span></td>
+            <td>其他緯度</td>
+            <td><span class="type">Double(18,15)</span></td>
+            <td><span class="slds-badge slds-badge--std">Std</span></td>
+            <td></td>
+            <td></td>
+            <td><span class="ref"></span></td>
+            <td><span class="pl"></span></td>
+            <td><span class="cat">個人資料</span></td>
+        </tr>
+        <tr data-api="personotherlongitude" data-label="其他經度" data-type="double(18,15)" data-kind="Standard" data-req="no">
+            <td><span class="api ">PersonOtherLongitude</span></td>
+            <td>其他經度</td>
+            <td><span class="type">Double(18,15)</span></td>
+            <td><span class="slds-badge slds-badge--std">Std</span></td>
+            <td></td>
+            <td></td>
+            <td><span class="ref"></span></td>
+            <td><span class="pl"></span></td>
+            <td><span class="cat">個人資料</span></td>
+        </tr>
+        <tr data-api="personothergeocodeaccuracy" data-label="other geocode accuracy" data-type="picklist" data-kind="Standard" data-req="no">
+            <td><span class="api ">PersonOtherGeocodeAccuracy</span></td>
+            <td>Other Geocode Accuracy</td>
+            <td><span class="type">Picklist</span></td>
+            <td><span class="slds-badge slds-badge--std">Std</span></td>
+            <td></td>
+            <td></td>
+            <td><span class="ref"></span></td>
+            <td><span class="pl">Address · NearAddress · Block · Street · ExtendedZip · Zip · Neighborhood · City · County · State · Unknown</span></td>
+            <td><span class="cat">個人資料</span></td>
+        </tr>
+        <tr data-api="personotheraddress" data-label="其他地址" data-type="address" data-kind="Standard" data-req="no">
+            <td><span class="api ">PersonOtherAddress</span></td>
+            <td>其他地址</td>
+            <td><span class="type">address</span></td>
+            <td><span class="slds-badge slds-badge--std">Std</span></td>
+            <td></td>
+            <td></td>
+            <td><span class="ref"></span></td>
+            <td><span class="pl"></span></td>
+            <td><span class="cat">個人資料</span></td>
+        </tr>
+        <tr data-api="personmobilephone" data-label="行動電話" data-type="phone" data-kind="Standard" data-req="no">
+            <td><span class="api ">PersonMobilePhone</span></td>
+            <td>行動電話</td>
+            <td><span class="type">phone</span></td>
+            <td><span class="slds-badge slds-badge--std">Std</span></td>
+            <td></td>
+            <td></td>
+            <td><span class="ref"></span></td>
+            <td><span class="pl"></span></td>
+            <td><span class="cat">個人資料</span></td>
+        </tr>
+        <tr data-api="personhomephone" data-label="住家電話" data-type="phone" data-kind="Standard" data-req="no">
+            <td><span class="api ">PersonHomePhone</span></td>
+            <td>住家電話</td>
+            <td><span class="type">phone</span></td>
+            <td><span class="slds-badge slds-badge--std">Std</span></td>
+            <td></td>
+            <td></td>
+            <td><span class="ref"></span></td>
+            <td><span class="pl"></span></td>
+            <td><span class="cat">個人資料</span></td>
+        </tr>
+        <tr data-api="personotherphone" data-label="其他電話" data-type="phone" data-kind="Standard" data-req="no">
+            <td><span class="api ">PersonOtherPhone</span></td>
+            <td>其他電話</td>
+            <td><span class="type">phone</span></td>
+            <td><span class="slds-badge slds-badge--std">Std</span></td>
+            <td></td>
+            <td></td>
+            <td><span class="ref"></span></td>
+            <td><span class="pl"></span></td>
+            <td><span class="cat">個人資料</span></td>
+        </tr>
+        <tr data-api="personassistantphone" data-label="助理電話" data-type="phone" data-kind="Standard" data-req="no">
+            <td><span class="api ">PersonAssistantPhone</span></td>
+            <td>助理電話</td>
+            <td><span class="type">phone</span></td>
+            <td><span class="slds-badge slds-badge--std">Std</span></td>
+            <td></td>
+            <td></td>
+            <td><span class="ref"></span></td>
+            <td><span class="pl"></span></td>
+            <td><span class="cat">個人資料</span></td>
+        </tr>
+        <tr data-api="personemail" data-label="電子郵件" data-type="email" data-kind="Standard" data-req="no">
+            <td><span class="api ">PersonEmail</span></td>
+            <td>電子郵件</td>
+            <td><span class="type">email</span></td>
+            <td><span class="slds-badge slds-badge--std">Std</span></td>
+            <td></td>
+            <td></td>
+            <td><span class="ref"></span></td>
+            <td><span class="pl"></span></td>
+            <td><span class="cat">個人資料</span></td>
+        </tr>
+        <tr data-api="persontitle" data-label="職稱" data-type="text(80)" data-kind="Standard" data-req="no">
+            <td><span class="api ">PersonTitle</span></td>
+            <td>職稱</td>
+            <td><span class="type">Text(80)</span></td>
+            <td><span class="slds-badge slds-badge--std">Std</span></td>
+            <td></td>
+            <td></td>
+            <td><span class="ref"></span></td>
+            <td><span class="pl"></span></td>
+            <td><span class="cat">個人資料</span></td>
+        </tr>
+        <tr data-api="persondepartment" data-label="部門" data-type="text(80)" data-kind="Standard" data-req="no">
+            <td><span class="api ">PersonDepartment</span></td>
+            <td>部門</td>
+            <td><span class="type">Text(80)</span></td>
+            <td><span class="slds-badge slds-badge--std">Std</span></td>
+            <td></td>
+            <td></td>
+            <td><span class="ref"></span></td>
+            <td><span class="pl"></span></td>
+            <td><span class="cat">個人資料</span></td>
+        </tr>
+        <tr data-api="personassistantname" data-label="助理" data-type="text(40)" data-kind="Standard" data-req="no">
+            <td><span class="api ">PersonAssistantName</span></td>
+            <td>助理</td>
+            <td><span class="type">Text(40)</span></td>
+            <td><span class="slds-badge slds-badge--std">Std</span></td>
+            <td></td>
+            <td></td>
+            <td><span class="ref"></span></td>
+            <td><span class="pl"></span></td>
+            <td><span class="cat">個人資料</span></td>
+        </tr>
+        <tr data-api="personleadsource" data-label="商機來源" data-type="picklist" data-kind="Standard" data-req="no">
+            <td><span class="api ">PersonLeadSource</span></td>
+            <td>商機來源</td>
+            <td><span class="type">Picklist</span></td>
+            <td><span class="slds-badge slds-badge--std">Std</span></td>
+            <td></td>
+            <td></td>
+            <td><span class="ref"></span></td>
+            <td><span class="pl">Cold Call · Community · Data.com · Inbound Call · Marketing Event · Partner · Referral · Salesforce IoT · Social Media · Website</span></td>
+            <td><span class="cat">個人資料</span></td>
+        </tr>
+        <tr data-api="personbirthdate" data-label="生日" data-type="date" data-kind="Standard" data-req="no">
+            <td><span class="api ">PersonBirthdate</span></td>
+            <td>生日</td>
+            <td><span class="type">date</span></td>
+            <td><span class="slds-badge slds-badge--std">Std</span></td>
+            <td></td>
+            <td></td>
+            <td><span class="ref"></span></td>
+            <td><span class="pl"></span></td>
+            <td><span class="cat">個人資料</span></td>
+        </tr>
+        <tr data-api="personhasoptedoutofemail" data-label="電子郵件取消選取" data-type="boolean" data-kind="Standard" data-req="no">
+            <td><span class="api ">PersonHasOptedOutOfEmail</span></td>
+            <td>電子郵件取消選取</td>
+            <td><span class="type">boolean</span></td>
+            <td><span class="slds-badge slds-badge--std">Std</span></td>
+            <td></td>
+            <td></td>
+            <td><span class="ref"></span></td>
+            <td><span class="pl"></span></td>
+            <td><span class="cat">個人資料</span></td>
+        </tr>
+        <tr data-api="personhasoptedoutoffax" data-label="傳真取消選取" data-type="boolean" data-kind="Standard" data-req="no">
+            <td><span class="api ">PersonHasOptedOutOfFax</span></td>
+            <td>傳真取消選取</td>
+            <td><span class="type">boolean</span></td>
+            <td><span class="slds-badge slds-badge--std">Std</span></td>
+            <td></td>
+            <td></td>
+            <td><span class="ref"></span></td>
+            <td><span class="pl"></span></td>
+            <td><span class="cat">個人資料</span></td>
+        </tr>
+        <tr data-api="persondonotcall" data-label="請勿致電" data-type="boolean" data-kind="Standard" data-req="no">
+            <td><span class="api ">PersonDoNotCall</span></td>
+            <td>請勿致電</td>
+            <td><span class="type">boolean</span></td>
+            <td><span class="slds-badge slds-badge--std">Std</span></td>
+            <td></td>
+            <td></td>
+            <td><span class="ref"></span></td>
+            <td><span class="pl"></span></td>
+            <td><span class="cat">個人資料</span></td>
+        </tr>
+        <tr data-api="personlastcurequestdate" data-label="上次保持聯繫要求日期" data-type="datetime" data-kind="Standard" data-req="no">
+            <td><span class="api ">PersonLastCURequestDate</span></td>
+            <td>上次保持聯繫要求日期</td>
+            <td><span class="type">datetime</span></td>
+            <td><span class="slds-badge slds-badge--std">Std</span></td>
+            <td></td>
+            <td></td>
+            <td><span class="ref"></span></td>
+            <td><span class="pl"></span></td>
+            <td><span class="cat">個人資料</span></td>
+        </tr>
+        <tr data-api="personlastcuupdatedate" data-label="上次保持聯繫儲存日期" data-type="datetime" data-kind="Standard" data-req="no">
+            <td><span class="api ">PersonLastCUUpdateDate</span></td>
+            <td>上次保持聯繫儲存日期</td>
+            <td><span class="type">datetime</span></td>
+            <td><span class="slds-badge slds-badge--std">Std</span></td>
+            <td></td>
+            <td></td>
+            <td><span class="ref"></span></td>
+            <td><span class="pl"></span></td>
+            <td><span class="cat">個人資料</span></td>
+        </tr>
+        <tr data-api="personemailbouncedreason" data-label="電子郵件拒絕原因" data-type="text(255)" data-kind="Standard" data-req="no">
+            <td><span class="api ">PersonEmailBouncedReason</span></td>
+            <td>電子郵件拒絕原因</td>
+            <td><span class="type">Text(255)</span></td>
+            <td><span class="slds-badge slds-badge--std">Std</span></td>
+            <td></td>
+            <td></td>
+            <td><span class="ref"></span></td>
+            <td><span class="pl"></span></td>
+            <td><span class="cat">個人資料</span></td>
+        </tr>
+        <tr data-api="personemailbounceddate" data-label="電子郵件拒絕日期" data-type="datetime" data-kind="Standard" data-req="no">
+            <td><span class="api ">PersonEmailBouncedDate</span></td>
+            <td>電子郵件拒絕日期</td>
+            <td><span class="type">datetime</span></td>
+            <td><span class="slds-badge slds-badge--std">Std</span></td>
+            <td></td>
+            <td></td>
+            <td><span class="ref"></span></td>
+            <td><span class="pl"></span></td>
+            <td><span class="cat">個人資料</span></td>
+        </tr>
+        <tr data-api="personindividualid" data-label="個人識別碼" data-type="lookup → individual" data-kind="Standard" data-req="no">
+            <td><span class="api ">PersonIndividualId</span></td>
+            <td>個人識別碼</td>
+            <td><span class="type">Lookup → Individual</span></td>
+            <td><span class="slds-badge slds-badge--std">Std</span></td>
+            <td></td>
+            <td></td>
+            <td><span class="ref">Individual</span></td>
+            <td><span class="pl"></span></td>
+            <td><span class="cat">個人資料</span></td>
+        </tr>
+        <tr data-api="personmaritalstatus" data-label="婚姻狀態" data-type="picklist" data-kind="Standard" data-req="no">
+            <td><span class="api ">PersonMaritalStatus</span></td>
+            <td>婚姻狀態</td>
+            <td><span class="type">Picklist</span></td>
+            <td><span class="slds-badge slds-badge--std">Std</span></td>
+            <td></td>
+            <td></td>
+            <td><span class="ref"></span></td>
+            <td><span class="pl">Married · Single · Divorced · Widowed · Separated</span></td>
+            <td><span class="cat">個人資料</span></td>
+        </tr>
+        <tr data-api="persongender" data-label="性別" data-type="picklist" data-kind="Standard" data-req="no">
+            <td><span class="api ">PersonGender</span></td>
+            <td>性別</td>
+            <td><span class="type">Picklist</span></td>
+            <td><span class="slds-badge slds-badge--std">Std</span></td>
+            <td></td>
+            <td></td>
+            <td><span class="ref"></span></td>
+            <td><span class="pl">Male · Female · Other · Unknown</span></td>
+            <td><span class="cat">個人資料</span></td>
+        </tr>
+        <tr data-api="persondeceaseddate" data-label="死亡日期" data-type="datetime" data-kind="Standard" data-req="no">
+            <td><span class="api ">PersonDeceasedDate</span></td>
+            <td>死亡日期</td>
+            <td><span class="type">datetime</span></td>
+            <td><span class="slds-badge slds-badge--std">Std</span></td>
+            <td></td>
+            <td></td>
+            <td><span class="ref"></span></td>
+            <td><span class="pl"></span></td>
+            <td><span class="cat">個人資料</span></td>
+        </tr>
+        <tr data-api="personsequenceinmultiplebirth" data-label="多重出生順序" data-type="int" data-kind="Standard" data-req="no">
+            <td><span class="api ">PersonSequenceInMultipleBirth</span></td>
+            <td>多重出生順序</td>
+            <td><span class="type">int</span></td>
+            <td><span class="slds-badge slds-badge--std">Std</span></td>
+            <td></td>
+            <td></td>
+            <td><span class="ref"></span></td>
+            <td><span class="pl"></span></td>
+            <td><span class="cat">個人資料</span></td>
+        </tr>
+        <tr data-api="personpronouns" data-label="代名詞" data-type="picklist" data-kind="Standard" data-req="no">
+            <td><span class="api ">PersonPronouns</span></td>
+            <td>代名詞</td>
+            <td><span class="type">Picklist</span></td>
+            <td><span class="slds-badge slds-badge--std">Std</span></td>
+            <td></td>
+            <td></td>
+            <td><span class="ref"></span></td>
+            <td><span class="pl">He/Him · She/Her · They/Them · He/They · She/They · Not Listed</span></td>
+            <td><span class="cat">個人資料</span></td>
+        </tr>
+        <tr data-api="persongenderidentity" data-label="性別認同" data-type="picklist" data-kind="Standard" data-req="no">
+            <td><span class="api ">PersonGenderIdentity</span></td>
+            <td>性別認同</td>
+            <td><span class="type">Picklist</span></td>
+            <td><span class="slds-badge slds-badge--std">Std</span></td>
+            <td></td>
+            <td></td>
+            <td><span class="ref"></span></td>
+            <td><span class="pl">Male · Female · Nonbinary · Not Listed</span></td>
+            <td><span class="cat">個人資料</span></td>
+        </tr>
+        <tr data-api="jigsaw" data-label="data.com 金鑰" data-type="text(20)" data-kind="Standard" data-req="no">
+            <td><span class="api ">Jigsaw</span></td>
+            <td>Data.com 金鑰</td>
+            <td><span class="type">Text(20)</span></td>
+            <td><span class="slds-badge slds-badge--std">Std</span></td>
+            <td></td>
+            <td></td>
+            <td><span class="ref"></span></td>
+            <td><span class="pl"></span></td>
+            <td><span class="cat">資料集</span></td>
+        </tr>
+        <tr data-api="jigsawcompanyid" data-label="jigsaw company id" data-type="text(20)" data-kind="Standard" data-req="no">
+            <td><span class="api ">JigsawCompanyId</span></td>
+            <td>Jigsaw Company ID</td>
+            <td><span class="type">Text(20)</span></td>
+            <td><span class="slds-badge slds-badge--std">Std</span></td>
+            <td></td>
+            <td></td>
+            <td><span class="ref"></span></td>
+            <td><span class="pl"></span></td>
+            <td><span class="cat">資料集</span></td>
+        </tr>
+        <tr data-api="accountsource" data-label="帳戶來源" data-type="picklist" data-kind="Standard" data-req="no">
+            <td><span class="api ">AccountSource</span></td>
+            <td>帳戶來源</td>
+            <td><span class="type">Picklist</span></td>
+            <td><span class="slds-badge slds-badge--std">Std</span></td>
+            <td></td>
+            <td></td>
+            <td><span class="ref"></span></td>
+            <td><span class="pl">Cold Call · Community · Data.com · Inbound Call · Marketing Event · Partner · Referral · Salesforce IoT · Social Media · Website</span></td>
+            <td><span class="cat">其他</span></td>
+        </tr>
+        <tr data-api="sicdesc" data-label="sic 描述" data-type="text(80)" data-kind="Standard" data-req="no">
+            <td><span class="api ">SicDesc</span></td>
+            <td>SIC 描述</td>
+            <td><span class="type">Text(80)</span></td>
+            <td><span class="slds-badge slds-badge--std">Std</span></td>
+            <td></td>
+            <td></td>
+            <td><span class="ref"></span></td>
+            <td><span class="pl"></span></td>
+            <td><span class="cat">其他</span></td>
+        </tr>
+        <tr data-api="operatinghoursid" data-label="作業時間識別碼" data-type="lookup → operatinghours" data-kind="Standard" data-req="no">
+            <td><span class="api ">OperatingHoursId</span></td>
+            <td>作業時間識別碼</td>
+            <td><span class="type">Lookup → OperatingHours</span></td>
+            <td><span class="slds-badge slds-badge--std">Std</span></td>
+            <td></td>
+            <td></td>
+            <td><span class="ref">OperatingHours</span></td>
+            <td><span class="pl"></span></td>
+            <td><span class="cat">其他</span></td>
+        </tr>
+        <tr data-api="isbuyer" data-label="買方帳戶" data-type="boolean" data-kind="Standard" data-req="no">
+            <td><span class="api ">IsBuyer</span></td>
+            <td>買方帳戶</td>
+            <td><span class="type">boolean</span></td>
+            <td><span class="slds-badge slds-badge--std">Std</span></td>
+            <td></td>
+            <td></td>
+            <td><span class="ref"></span></td>
+            <td><span class="pl"></span></td>
+            <td><span class="cat">其他</span></td>
+        </tr>
+        <tr data-api="hasprivacyhold" data-label="隱私保留" data-type="boolean" data-kind="Standard" data-req="no">
+            <td><span class="api ">HasPrivacyHold</span></td>
+            <td>隱私保留</td>
+            <td><span class="type">boolean</span></td>
+            <td><span class="slds-badge slds-badge--std">Std</span></td>
+            <td></td>
+            <td></td>
+            <td><span class="ref"></span></td>
+            <td><span class="pl"></span></td>
+            <td><span class="cat">其他</span></td>
+        </tr>
+        <tr data-api="ispriorityrecord" data-label="重要" data-type="boolean" data-kind="Standard" data-req="no">
+            <td><span class="api ">IsPriorityRecord</span></td>
+            <td>重要</td>
+            <td><span class="type">boolean</span></td>
+            <td><span class="slds-badge slds-badge--std">Std</span></td>
+            <td></td>
+            <td></td>
+            <td><span class="ref"></span></td>
+            <td><span class="pl"></span></td>
+            <td><span class="cat">其他</span></td>
+        </tr>
+        <tr data-api="external_id__c" data-label="external id" data-type="text(32)" data-kind="Custom" data-req="no">
+            <td><span class="api api--custom">External_ID__c</span></td>
+            <td>External ID</td>
+            <td><span class="type">Text(32)</span></td>
+            <td><span class="slds-badge slds-badge--cus">Custom</span></td>
+            <td></td>
+            <td><span class="check-mark">✓</span></td>
+            <td><span class="ref"></span></td>
+            <td><span class="pl"></span></td>
+            <td><span class="cat">客製</span></td>
+        </tr>
+        <tr data-api="sdo_partner_certification__c" data-label="partner certification" data-type="picklist" data-kind="Custom" data-req="no">
+            <td><span class="api api--custom">SDO_Partner_Certification__c</span></td>
+            <td>Partner Certification</td>
+            <td><span class="type">Picklist</span></td>
+            <td><span class="slds-badge slds-badge--cus">Custom</span></td>
+            <td></td>
+            <td></td>
+            <td><span class="ref"></span></td>
+            <td><span class="pl">Certified Partner · Elite Partner</span></td>
+            <td><span class="cat">客製</span></td>
+        </tr>
+        <tr data-api="sdo_partner_program_level__c" data-label="partner program level" data-type="picklist" data-kind="Custom" data-req="no">
+            <td><span class="api api--custom">SDO_Partner_Program_Level__c</span></td>
+            <td>Partner Program Level</td>
+            <td><span class="type">Picklist</span></td>
+            <td><span class="slds-badge slds-badge--cus">Custom</span></td>
+            <td></td>
+            <td></td>
+            <td><span class="ref"></span></td>
+            <td><span class="pl">Platinum · Gold · Silver · Bronze</span></td>
+            <td><span class="cat">客製</span></td>
+        </tr>
+        <tr data-api="sdo_partner_type__c" data-label="partner type" data-type="picklist" data-kind="Custom" data-req="no">
+            <td><span class="api api--custom">SDO_Partner_Type__c</span></td>
+            <td>Partner Type</td>
+            <td><span class="type">Picklist</span></td>
+            <td><span class="slds-badge slds-badge--cus">Custom</span></td>
+            <td></td>
+            <td></td>
+            <td><span class="ref"></span></td>
+            <td><span class="pl">Partner · Reseller · Distributor · Alliance Partner · Service Provider · System Integrator · Service &amp; Support Specialist</span></td>
+            <td><span class="cat">客製</span></td>
+        </tr>
+        <tr data-api="sdo_sales_region__c" data-label="region" data-type="picklist" data-kind="Custom" data-req="no">
+            <td><span class="api api--custom">SDO_Sales_Region__c</span></td>
+            <td>Region</td>
+            <td><span class="type">Picklist</span></td>
+            <td><span class="slds-badge slds-badge--cus">Custom</span></td>
+            <td></td>
+            <td></td>
+            <td><span class="ref"></span></td>
+            <td><span class="pl">East · Central · West</span></td>
+            <td><span class="cat">客製</span></td>
+        </tr>
+        <tr data-api="sdo_value__c" data-label="value" data-type="double(1,0)" data-kind="Custom" data-req="no">
+            <td><span class="api api--custom">SDO_Value__c</span></td>
+            <td>Value</td>
+            <td><span class="type">Double(1,0)</span></td>
+            <td><span class="slds-badge slds-badge--cus">Custom</span></td>
+            <td></td>
+            <td></td>
+            <td><span class="ref"></span></td>
+            <td><span class="pl"></span></td>
+            <td><span class="cat">客製</span></td>
+        </tr>
+        <tr data-api="sdo_sales_rating_indicator__c" data-label="value indicator" data-type="text(1300)" data-kind="Custom" data-req="no">
+            <td><span class="api api--custom">SDO_Sales_Rating_Indicator__c</span></td>
+            <td>Value Indicator</td>
+            <td><span class="type">Text(1300)</span></td>
+            <td><span class="slds-badge slds-badge--cus">Custom</span></td>
+            <td></td>
+            <td></td>
+            <td><span class="ref"></span></td>
+            <td><span class="pl"></span></td>
+            <td><span class="cat">客製</span></td>
+        </tr>
+        <tr data-api="edy_orgcustom__db__c" data-label="db" data-type="boolean" data-kind="Custom" data-req="no">
+            <td><span class="api api--custom">EDY_ORGCUSTOM__DB__c</span></td>
+            <td>DB</td>
+            <td><span class="type">boolean</span></td>
+            <td><span class="slds-badge slds-badge--cus">Custom</span></td>
+            <td></td>
+            <td></td>
+            <td><span class="ref"></span></td>
+            <td><span class="pl"></span></td>
+            <td><span class="cat">客製</span></td>
+        </tr>
+        <tr data-api="edy_orgcustom__old_name__c" data-label="old name" data-type="text(50)" data-kind="Custom" data-req="no">
+            <td><span class="api api--custom">EDY_ORGCUSTOM__Old_Name__c</span></td>
+            <td>Old Name</td>
+            <td><span class="type">Text(50)</span></td>
+            <td><span class="slds-badge slds-badge--cus">Custom</span></td>
+            <td></td>
+            <td></td>
+            <td><span class="ref"></span></td>
+            <td><span class="pl"></span></td>
+            <td><span class="cat">客製</span></td>
+        </tr>
+        <tr data-api="number_closed_lost_opportunities__c" data-label="lost opportunities" data-type="double(18,0)" data-kind="Custom" data-req="no">
+            <td><span class="api api--custom">Number_Closed_Lost_Opportunities__c</span></td>
+            <td>Lost Opportunities</td>
+            <td><span class="type">Double(18,0)</span></td>
+            <td><span class="slds-badge slds-badge--cus">Custom</span></td>
+            <td></td>
+            <td></td>
+            <td><span class="ref"></span></td>
+            <td><span class="pl"></span></td>
+            <td><span class="cat">客製</span></td>
+        </tr>
+        <tr data-api="number_closed_opportunities__c" data-label="closed opportunities" data-type="double(18,0)" data-kind="Custom" data-req="no">
+            <td><span class="api api--custom">Number_Closed_Opportunities__c</span></td>
+            <td>Closed Opportunities</td>
+            <td><span class="type">Double(18,0)</span></td>
+            <td><span class="slds-badge slds-badge--cus">Custom</span></td>
+            <td></td>
+            <td></td>
+            <td><span class="ref"></span></td>
+            <td><span class="pl"></span></td>
+            <td><span class="cat">客製</span></td>
+        </tr>
+        <tr data-api="number_closed_won_opportunities__c" data-label="won opportunities" data-type="double(18,0)" data-kind="Custom" data-req="no">
+            <td><span class="api api--custom">Number_Closed_Won_Opportunities__c</span></td>
+            <td>Won Opportunities</td>
+            <td><span class="type">Double(18,0)</span></td>
+            <td><span class="slds-badge slds-badge--cus">Custom</span></td>
+            <td></td>
+            <td></td>
+            <td><span class="ref"></span></td>
+            <td><span class="pl"></span></td>
+            <td><span class="cat">客製</span></td>
+        </tr>
+        <tr data-api="number_leads_active__c" data-label="active leads" data-type="double(18,0)" data-kind="Custom" data-req="no">
+            <td><span class="api api--custom">Number_Leads_Active__c</span></td>
+            <td>Active Leads</td>
+            <td><span class="type">Double(18,0)</span></td>
+            <td><span class="slds-badge slds-badge--cus">Custom</span></td>
+            <td></td>
+            <td></td>
+            <td><span class="ref"></span></td>
+            <td><span class="pl"></span></td>
+            <td><span class="cat">客製</span></td>
+        </tr>
+        <tr data-api="number_leads_converted__c" data-label="converted leads" data-type="double(18,0)" data-kind="Custom" data-req="no">
+            <td><span class="api api--custom">Number_Leads_Converted__c</span></td>
+            <td>Converted Leads</td>
+            <td><span class="type">Double(18,0)</span></td>
+            <td><span class="slds-badge slds-badge--cus">Custom</span></td>
+            <td></td>
+            <td></td>
+            <td><span class="ref"></span></td>
+            <td><span class="pl"></span></td>
+            <td><span class="cat">客製</span></td>
+        </tr>
+        <tr data-api="number_leads_total__c" data-label="total leads" data-type="double(18,0)" data-kind="Custom" data-req="no">
+            <td><span class="api api--custom">Number_Leads_Total__c</span></td>
+            <td>Total Leads</td>
+            <td><span class="type">Double(18,0)</span></td>
+            <td><span class="slds-badge slds-badge--cus">Custom</span></td>
+            <td></td>
+            <td></td>
+            <td><span class="ref"></span></td>
+            <td><span class="pl"></span></td>
+            <td><span class="cat">客製</span></td>
+        </tr>
+        <tr data-api="partner_certification__c" data-label="partner certification" data-type="picklist" data-kind="Custom" data-req="no">
+            <td><span class="api api--custom">Partner_Certification__c</span></td>
+            <td>Partner Certification</td>
+            <td><span class="type">Picklist</span></td>
+            <td><span class="slds-badge slds-badge--cus">Custom</span></td>
+            <td></td>
+            <td></td>
+            <td><span class="ref"></span></td>
+            <td><span class="pl">Certified Partner · Elite Partner</span></td>
+            <td><span class="cat">客製</span></td>
+        </tr>
+        <tr data-api="partner_program_level__c" data-label="partner program level" data-type="picklist" data-kind="Custom" data-req="no">
+            <td><span class="api api--custom">Partner_Program_Level__c</span></td>
+            <td>Partner Program Level</td>
+            <td><span class="type">Picklist</span></td>
+            <td><span class="slds-badge slds-badge--cus">Custom</span></td>
+            <td></td>
+            <td></td>
+            <td><span class="ref"></span></td>
+            <td><span class="pl">Platinum · Gold · Silver · Bronze</span></td>
+            <td><span class="cat">客製</span></td>
+        </tr>
+        <tr data-api="partnership_status__c" data-label="partnership status" data-type="picklist" data-kind="Custom" data-req="no">
+            <td><span class="api api--custom">Partnership_Status__c</span></td>
+            <td>Partnership Status</td>
+            <td><span class="type">Picklist</span></td>
+            <td><span class="slds-badge slds-badge--cus">Custom</span></td>
+            <td></td>
+            <td></td>
+            <td><span class="ref"></span></td>
+            <td><span class="pl">Active · Pending · Inactive · Onboarding · Suspended</span></td>
+            <td><span class="cat">客製</span></td>
+        </tr>
+        <tr data-api="value_closed_won_opportunties__c" data-label="value closed won opportunities" data-type="currency(18,0)" data-kind="Custom" data-req="no">
+            <td><span class="api api--custom">Value_Closed_Won_Opportunties__c</span></td>
+            <td>Value Closed Won Opportunities</td>
+            <td><span class="type">Currency(18,0)</span></td>
+            <td><span class="slds-badge slds-badge--cus">Custom</span></td>
+            <td></td>
+            <td></td>
+            <td><span class="ref"></span></td>
+            <td><span class="pl"></span></td>
+            <td><span class="cat">客製</span></td>
+        </tr>
+        <tr data-api="lead_conversion_rate__c" data-label="lead conversion rate" data-type="percent(18,1)" data-kind="Custom" data-req="no">
+            <td><span class="api api--custom">Lead_Conversion_Rate__c</span></td>
+            <td>Lead Conversion Rate</td>
+            <td><span class="type">Percent(18,1)</span></td>
+            <td><span class="slds-badge slds-badge--cus">Custom</span></td>
+            <td></td>
+            <td></td>
+            <td><span class="ref"></span></td>
+            <td><span class="pl"></span></td>
+            <td><span class="cat">客製</span></td>
+        </tr>
+        <tr data-api="opportunity_win_rate__c" data-label="opportunity win rate" data-type="percent(18,1)" data-kind="Custom" data-req="no">
+            <td><span class="api api--custom">Opportunity_Win_Rate__c</span></td>
+            <td>Opportunity Win Rate</td>
+            <td><span class="type">Percent(18,1)</span></td>
+            <td><span class="slds-badge slds-badge--cus">Custom</span></td>
+            <td></td>
+            <td></td>
+            <td><span class="ref"></span></td>
+            <td><span class="pl"></span></td>
+            <td><span class="cat">客製</span></td>
+        </tr>
+        <tr data-api="sdo_account_priority__c" data-label="account priority" data-type="text(1300)" data-kind="Custom" data-req="no">
+            <td><span class="api api--custom">SDO_Account_Priority__c</span></td>
+            <td>Account Priority</td>
+            <td><span class="type">Text(1300)</span></td>
+            <td><span class="slds-badge slds-badge--cus">Custom</span></td>
+            <td></td>
+            <td></td>
+            <td><span class="ref"></span></td>
+            <td><span class="pl"></span></td>
+            <td><span class="cat">客製</span></td>
+        </tr>
+        <tr data-api="sdo_days_since_activity__c" data-label="days since activity" data-type="double(18,0)" data-kind="Custom" data-req="no">
+            <td><span class="api api--custom">SDO_Days_Since_Activity__c</span></td>
+            <td>Days Since Activity</td>
+            <td><span class="type">Double(18,0)</span></td>
+            <td><span class="slds-badge slds-badge--cus">Custom</span></td>
+            <td></td>
+            <td></td>
+            <td><span class="ref"></span></td>
+            <td><span class="pl"></span></td>
+            <td><span class="cat">客製</span></td>
+        </tr>
+        <tr data-api="sdo_default_price_book__c" data-label="default price book" data-type="lookup → pricebook2" data-kind="Custom" data-req="no">
+            <td><span class="api api--custom">SDO_Default_Price_Book__c</span></td>
+            <td>Default Price Book</td>
+            <td><span class="type">Lookup → Pricebook2</span></td>
+            <td><span class="slds-badge slds-badge--cus">Custom</span></td>
+            <td></td>
+            <td></td>
+            <td><span class="ref">Pricebook2</span></td>
+            <td><span class="pl"></span><span class="help">Default price book for work orders</span></td>
+            <td><span class="cat">客製</span></td>
+        </tr>
+        <tr data-api="sdo_number_leads_active__c" data-label="active leads" data-type="double(18,0)" data-kind="Custom" data-req="no">
+            <td><span class="api api--custom">SDO_Number_Leads_Active__c</span></td>
+            <td>Active Leads</td>
+            <td><span class="type">Double(18,0)</span></td>
+            <td><span class="slds-badge slds-badge--cus">Custom</span></td>
+            <td></td>
+            <td></td>
+            <td><span class="ref"></span></td>
+            <td><span class="pl"></span></td>
+            <td><span class="cat">客製</span></td>
+        </tr>
+        <tr data-api="sdo_number_leads_converted__c" data-label="converted leads" data-type="double(18,0)" data-kind="Custom" data-req="no">
+            <td><span class="api api--custom">SDO_Number_Leads_Converted__c</span></td>
+            <td>Converted Leads</td>
+            <td><span class="type">Double(18,0)</span></td>
+            <td><span class="slds-badge slds-badge--cus">Custom</span></td>
+            <td></td>
+            <td></td>
+            <td><span class="ref"></span></td>
+            <td><span class="pl"></span></td>
+            <td><span class="cat">客製</span></td>
+        </tr>
+        <tr data-api="sdo_number_open_opportunities__c" data-label="open opportunities" data-type="double(18,0)" data-kind="Custom" data-req="no">
+            <td><span class="api api--custom">SDO_Number_Open_Opportunities__c</span></td>
+            <td>Open Opportunities</td>
+            <td><span class="type">Double(18,0)</span></td>
+            <td><span class="slds-badge slds-badge--cus">Custom</span></td>
+            <td></td>
+            <td></td>
+            <td><span class="ref"></span></td>
+            <td><span class="pl"></span></td>
+            <td><span class="cat">客製</span></td>
+        </tr>
+        <tr data-api="sdo_operating_hours__c" data-label="operating hours" data-type="lookup → operatinghours" data-kind="Custom" data-req="no">
+            <td><span class="api api--custom">SDO_Operating_Hours__c</span></td>
+            <td>Operating Hours</td>
+            <td><span class="type">Lookup → OperatingHours</span></td>
+            <td><span class="slds-badge slds-badge--cus">Custom</span></td>
+            <td></td>
+            <td></td>
+            <td><span class="ref">OperatingHours</span></td>
+            <td><span class="pl"></span><span class="help">If the customer has defined visiting hours, select them here.</span></td>
+            <td><span class="cat">客製</span></td>
+        </tr>
+        <tr data-api="sdo_partner_geographic_coverage__c" data-label="partner geographic coverage" data-type="multipicklist" data-kind="Custom" data-req="no">
+            <td><span class="api api--custom">SDO_Partner_Geographic_Coverage__c</span></td>
+            <td>Partner Geographic Coverage</td>
+            <td><span class="type">MultiPicklist</span></td>
+            <td><span class="slds-badge slds-badge--cus">Custom</span></td>
+            <td></td>
+            <td></td>
+            <td><span class="ref"></span></td>
+            <td><span class="pl">APAC · North America · LACA · EMEA</span></td>
+            <td><span class="cat">客製</span></td>
+        </tr>
+        <tr data-api="sdo_partnership_status__c" data-label="partnership status" data-type="picklist" data-kind="Custom" data-req="no">
+            <td><span class="api api--custom">SDO_Partnership_Status__c</span></td>
+            <td>Partnership Status</td>
+            <td><span class="type">Picklist</span></td>
+            <td><span class="slds-badge slds-badge--cus">Custom</span></td>
+            <td></td>
+            <td></td>
+            <td><span class="ref"></span></td>
+            <td><span class="pl">Active · Pending · Inactive · Suspended</span></td>
+            <td><span class="cat">客製</span></td>
+        </tr>
+        <tr data-api="sdo_sales_current_year_revenue_goal__c" data-label="current year revenue goal" data-type="currency(18,0)" data-kind="Custom" data-req="no">
+            <td><span class="api api--custom">SDO_Sales_Current_Year_Revenue_Goal__c</span></td>
+            <td>Current Year Revenue Goal</td>
+            <td><span class="type">Currency(18,0)</span></td>
+            <td><span class="slds-badge slds-badge--cus">Custom</span></td>
+            <td></td>
+            <td></td>
+            <td><span class="ref"></span></td>
+            <td><span class="pl"></span></td>
+            <td><span class="cat">客製</span></td>
+        </tr>
+        <tr data-api="sdo_sales_num_closed_lost_opportunities__c" data-label="lost opportunities" data-type="double(18,0)" data-kind="Custom" data-req="no">
+            <td><span class="api api--custom">SDO_Sales_Num_Closed_Lost_Opportunities__c</span></td>
+            <td>Lost Opportunities</td>
+            <td><span class="type">Double(18,0)</span></td>
+            <td><span class="slds-badge slds-badge--cus">Custom</span></td>
+            <td></td>
+            <td></td>
+            <td><span class="ref"></span></td>
+            <td><span class="pl"></span></td>
+            <td><span class="cat">客製</span></td>
+        </tr>
+        <tr data-api="sdo_sales_num_closed_won_opportunities__c" data-label="won opportunities" data-type="double(18,0)" data-kind="Custom" data-req="no">
+            <td><span class="api api--custom">SDO_Sales_Num_Closed_Won_Opportunities__c</span></td>
+            <td>Won Opportunities</td>
+            <td><span class="type">Double(18,0)</span></td>
+            <td><span class="slds-badge slds-badge--cus">Custom</span></td>
+            <td></td>
+            <td></td>
+            <td><span class="ref"></span></td>
+            <td><span class="pl"></span></td>
+            <td><span class="cat">客製</span></td>
+        </tr>
+        <tr data-api="sdo_sales_number_closed_opportunities__c" data-label="closed opportunities" data-type="double(18,0)" data-kind="Custom" data-req="no">
+            <td><span class="api api--custom">SDO_Sales_Number_Closed_Opportunities__c</span></td>
+            <td>Closed Opportunities</td>
+            <td><span class="type">Double(18,0)</span></td>
+            <td><span class="slds-badge slds-badge--cus">Custom</span></td>
+            <td></td>
+            <td></td>
+            <td><span class="ref"></span></td>
+            <td><span class="pl"></span></td>
+            <td><span class="cat">客製</span></td>
+        </tr>
+        <tr data-api="sdo_sales_number_leads_total__c" data-label="total leads" data-type="double(18,0)" data-kind="Custom" data-req="no">
+            <td><span class="api api--custom">SDO_Sales_Number_Leads_Total__c</span></td>
+            <td>Total Leads</td>
+            <td><span class="type">Double(18,0)</span></td>
+            <td><span class="slds-badge slds-badge--cus">Custom</span></td>
+            <td></td>
+            <td></td>
+            <td><span class="ref"></span></td>
+            <td><span class="pl"></span></td>
+            <td><span class="cat">客製</span></td>
+        </tr>
+        <tr data-api="sdo_sales_value_closed_won_opportunties__c" data-label="value closed won opportunities" data-type="currency(18,0)" data-kind="Custom" data-req="no">
+            <td><span class="api api--custom">SDO_Sales_Value_Closed_Won_Opportunties__c</span></td>
+            <td>Value Closed Won Opportunities</td>
+            <td><span class="type">Currency(18,0)</span></td>
+            <td><span class="slds-badge slds-badge--cus">Custom</span></td>
+            <td></td>
+            <td></td>
+            <td><span class="ref"></span></td>
+            <td><span class="pl"></span></td>
+            <td><span class="cat">客製</span></td>
+        </tr>
+        <tr data-api="sdo_value_open_opportunties__c" data-label="value of open opportunities" data-type="currency(18,0)" data-kind="Custom" data-req="no">
+            <td><span class="api api--custom">SDO_Value_Open_Opportunties__c</span></td>
+            <td>Value of Open Opportunities</td>
+            <td><span class="type">Currency(18,0)</span></td>
+            <td><span class="slds-badge slds-badge--cus">Custom</span></td>
+            <td></td>
+            <td></td>
+            <td><span class="ref"></span></td>
+            <td><span class="pl"></span></td>
+            <td><span class="cat">客製</span></td>
+        </tr>
+        <tr data-api="sdo_ytd_revenue_generated__c" data-label="ytd revenue generated" data-type="currency(18,0)" data-kind="Custom" data-req="no">
+            <td><span class="api api--custom">SDO_YTD_Revenue_Generated__c</span></td>
+            <td>YTD Revenue Generated</td>
+            <td><span class="type">Currency(18,0)</span></td>
+            <td><span class="slds-badge slds-badge--cus">Custom</span></td>
+            <td></td>
+            <td></td>
+            <td><span class="ref"></span></td>
+            <td><span class="pl"></span></td>
+            <td><span class="cat">客製</span></td>
+        </tr>
+        <tr data-api="sdo_sales_closed_lost_opptys__c" data-label="closed lost opptys" data-type="double(18,0)" data-kind="Custom" data-req="no">
+            <td><span class="api api--custom">SDO_Sales_Closed_Lost_Opptys__c</span></td>
+            <td>Closed Lost Opptys</td>
+            <td><span class="type">Double(18,0)</span></td>
+            <td><span class="slds-badge slds-badge--cus">Custom</span></td>
+            <td></td>
+            <td></td>
+            <td><span class="ref"></span></td>
+            <td><span class="pl"></span></td>
+            <td><span class="cat">客製</span></td>
+        </tr>
+        <tr data-api="sdo_sales_closed_won_opptys__c" data-label="closed won opptys" data-type="double(18,0)" data-kind="Custom" data-req="no">
+            <td><span class="api api--custom">SDO_Sales_Closed_Won_Opptys__c</span></td>
+            <td>Closed Won Opptys</td>
+            <td><span class="type">Double(18,0)</span></td>
+            <td><span class="slds-badge slds-badge--cus">Custom</span></td>
+            <td></td>
+            <td></td>
+            <td><span class="ref"></span></td>
+            <td><span class="pl"></span></td>
+            <td><span class="cat">客製</span></td>
+        </tr>
+        <tr data-api="sdo_sales_closed_won_value__c" data-label="total sales" data-type="currency(18,2)" data-kind="Custom" data-req="no">
+            <td><span class="api api--custom">SDO_Sales_Closed_Won_Value__c</span></td>
+            <td>Total Sales</td>
+            <td><span class="type">Currency(18,2)</span></td>
+            <td><span class="slds-badge slds-badge--cus">Custom</span></td>
+            <td></td>
+            <td></td>
+            <td><span class="ref"></span></td>
+            <td><span class="pl"></span><span class="help">This is automatically calculated from closed opportunities.</span></td>
+            <td><span class="cat">客製</span></td>
+        </tr>
+        <tr data-api="sdo_sales_open_oppty_value__c" data-label="open oppty value" data-type="currency(18,2)" data-kind="Custom" data-req="no">
+            <td><span class="api api--custom">SDO_Sales_Open_Oppty_Value__c</span></td>
+            <td>Open Oppty Value</td>
+            <td><span class="type">Currency(18,2)</span></td>
+            <td><span class="slds-badge slds-badge--cus">Custom</span></td>
+            <td></td>
+            <td></td>
+            <td><span class="ref"></span></td>
+            <td><span class="pl"></span></td>
+            <td><span class="cat">客製</span></td>
+        </tr>
+        <tr data-api="sdo_sales_open_opptys__c" data-label="open opptys" data-type="double(18,0)" data-kind="Custom" data-req="no">
+            <td><span class="api api--custom">SDO_Sales_Open_Opptys__c</span></td>
+            <td>Open Opptys</td>
+            <td><span class="type">Double(18,0)</span></td>
+            <td><span class="slds-badge slds-badge--cus">Custom</span></td>
+            <td></td>
+            <td></td>
+            <td><span class="ref"></span></td>
+            <td><span class="pl"></span></td>
+            <td><span class="cat">客製</span></td>
+        </tr>
+        <tr data-api="sdo_sales_goal_attainment__c" data-label="% goal attainment" data-type="percent(18,0)" data-kind="Custom" data-req="no">
+            <td><span class="api api--custom">SDO_Sales_Goal_Attainment__c</span></td>
+            <td>% Goal Attainment</td>
+            <td><span class="type">Percent(18,0)</span></td>
+            <td><span class="slds-badge slds-badge--cus">Custom</span></td>
+            <td></td>
+            <td></td>
+            <td><span class="ref"></span></td>
+            <td><span class="pl"></span></td>
+            <td><span class="cat">客製</span></td>
+        </tr>
+        <tr data-api="sdo_sales_lead_conversion_rate__c" data-label="lead conversion rate" data-type="percent(18,1)" data-kind="Custom" data-req="no">
+            <td><span class="api api--custom">SDO_Sales_Lead_Conversion_Rate__c</span></td>
+            <td>Lead Conversion Rate</td>
+            <td><span class="type">Percent(18,1)</span></td>
+            <td><span class="slds-badge slds-badge--cus">Custom</span></td>
+            <td></td>
+            <td></td>
+            <td><span class="ref"></span></td>
+            <td><span class="pl"></span></td>
+            <td><span class="cat">客製</span></td>
+        </tr>
+        <tr data-api="sdo_sales_lead_to_opportunity_close_rate__c" data-label="lead to opportunity close rate" data-type="percent(18,1)" data-kind="Custom" data-req="no">
+            <td><span class="api api--custom">SDO_Sales_Lead_To_Opportunity_Close_Rate__c</span></td>
+            <td>Lead To Opportunity Close Rate</td>
+            <td><span class="type">Percent(18,1)</span></td>
+            <td><span class="slds-badge slds-badge--cus">Custom</span></td>
+            <td></td>
+            <td></td>
+            <td><span class="ref"></span></td>
+            <td><span class="pl"></span></td>
+            <td><span class="cat">客製</span></td>
+        </tr>
+        <tr data-api="sdo_sales_opportunity_win_rate__c" data-label="opportunity win rate" data-type="percent(18,1)" data-kind="Custom" data-req="no">
+            <td><span class="api api--custom">SDO_Sales_Opportunity_Win_Rate__c</span></td>
+            <td>Opportunity Win Rate</td>
+            <td><span class="type">Percent(18,1)</span></td>
+            <td><span class="slds-badge slds-badge--cus">Custom</span></td>
+            <td></td>
+            <td></td>
+            <td><span class="ref"></span></td>
+            <td><span class="pl"></span></td>
+            <td><span class="cat">客製</span></td>
+        </tr>
+        <tr data-api="maps__assignmentrule__c" data-label="maps 指派規則" data-type="lookup → maps__assignmentrule__c" data-kind="Custom" data-req="no">
+            <td><span class="api api--custom">maps__AssignmentRule__c</span></td>
+            <td>Maps 指派規則</td>
+            <td><span class="type">Lookup → maps__AssignmentRule__c</span></td>
+            <td><span class="slds-badge slds-badge--cus">Custom</span></td>
+            <td></td>
+            <td></td>
+            <td><span class="ref">maps__AssignmentRule__c</span></td>
+            <td><span class="pl"></span></td>
+            <td><span class="cat">客製</span></td>
+        </tr>
+        <tr data-api="sdo_maps_aa_user_territory__c" data-label="maps - user territory" data-type="lookup → user" data-kind="Custom" data-req="no">
+            <td><span class="api api--custom">SDO_Maps_AA_User_Territory__c</span></td>
+            <td>Maps - User Territory</td>
+            <td><span class="type">Lookup → User</span></td>
+            <td><span class="slds-badge slds-badge--cus">Custom</span></td>
+            <td></td>
+            <td></td>
+            <td><span class="ref">User</span></td>
+            <td><span class="pl"></span></td>
+            <td><span class="cat">客製</span></td>
+        </tr>
+        <tr data-api="sdo_maps_tam__c" data-label="tam" data-type="double(18,0)" data-kind="Custom" data-req="no">
+            <td><span class="api api--custom">SDO_Maps_TAM__c</span></td>
+            <td>TAM</td>
+            <td><span class="type">Double(18,0)</span></td>
+            <td><span class="slds-badge slds-badge--cus">Custom</span></td>
+            <td></td>
+            <td></td>
+            <td><span class="ref"></span></td>
+            <td><span class="pl"></span></td>
+            <td><span class="cat">客製</span></td>
+        </tr>
+        <tr data-api="tier__c" data-label="tier" data-type="picklist" data-kind="Custom" data-req="no">
+            <td><span class="api api--custom">Tier__c</span></td>
+            <td>Tier</td>
+            <td><span class="type">Picklist</span></td>
+            <td><span class="slds-badge slds-badge--cus">Custom</span></td>
+            <td></td>
+            <td></td>
+            <td><span class="ref"></span></td>
+            <td><span class="pl">A · B · C</span></td>
+            <td><span class="cat">客製</span></td>
+        </tr>
+        <tr data-api="createddate__c" data-label="created date" data-type="datetime" data-kind="Custom" data-req="no">
+            <td><span class="api api--custom">CreatedDate__c</span></td>
+            <td>Created Date</td>
+            <td><span class="type">datetime</span></td>
+            <td><span class="slds-badge slds-badge--cus">Custom</span></td>
+            <td></td>
+            <td></td>
+            <td><span class="ref"></span></td>
+            <td><span class="pl"></span></td>
+            <td><span class="cat">客製</span></td>
+        </tr>
+        <tr data-api="sdo_analytics_latest_sentiment__c" data-label="latest sentiment" data-type="picklist" data-kind="Custom" data-req="no">
+            <td><span class="api api--custom">SDO_Analytics_Latest_Sentiment__c</span></td>
+            <td>Latest Sentiment</td>
+            <td><span class="type">Picklist</span></td>
+            <td><span class="slds-badge slds-badge--cus">Custom</span></td>
+            <td></td>
+            <td></td>
+            <td><span class="ref"></span></td>
+            <td><span class="pl">Negative · Positive</span></td>
+            <td><span class="cat">客製</span></td>
+        </tr>
+        <tr data-api="sdo_application_date__c" data-label="application date" data-type="date" data-kind="Custom" data-req="no">
+            <td><span class="api api--custom">SDO_Application_Date__c</span></td>
+            <td>Application Date</td>
+            <td><span class="type">date</span></td>
+            <td><span class="slds-badge slds-badge--cus">Custom</span></td>
+            <td></td>
+            <td></td>
+            <td><span class="ref"></span></td>
+            <td><span class="pl"></span></td>
+            <td><span class="cat">客製</span></td>
+        </tr>
+        <tr data-api="sdo_default_location__c" data-label="default location" data-type="lookup → location" data-kind="Custom" data-req="no">
+            <td><span class="api api--custom">SDO_Default_Location__c</span></td>
+            <td>Default Location</td>
+            <td><span class="type">Lookup → Location</span></td>
+            <td><span class="slds-badge slds-badge--cus">Custom</span></td>
+            <td></td>
+            <td></td>
+            <td><span class="ref">Location</span></td>
+            <td><span class="pl"></span></td>
+            <td><span class="cat">客製</span></td>
+        </tr>
+        <tr data-api="sdo_sfs_default_field_entitlement__c" data-label="default field entitlement" data-type="lookup → entitlement" data-kind="Custom" data-req="no">
+            <td><span class="api api--custom">SDO_SFS_Default_Field_Entitlement__c</span></td>
+            <td>Default Field Entitlement</td>
+            <td><span class="type">Lookup → Entitlement</span></td>
+            <td><span class="slds-badge slds-badge--cus">Custom</span></td>
+            <td></td>
+            <td></td>
+            <td><span class="ref">Entitlement</span></td>
+            <td><span class="pl"></span><span class="help">Select the default field service entitlement to use for this account and all of its assets</span></td>
+            <td><span class="cat">客製</span></td>
+        </tr>
+        <tr data-api="sdo_sfs_service_territory__c" data-label="service territory" data-type="lookup → serviceterritory" data-kind="Custom" data-req="no">
+            <td><span class="api api--custom">SDO_SFS_Service_Territory__c</span></td>
+            <td>Service Territory</td>
+            <td><span class="type">Lookup → ServiceTerritory</span></td>
+            <td><span class="slds-badge slds-badge--cus">Custom</span></td>
+            <td></td>
+            <td></td>
+            <td><span class="ref">ServiceTerritory</span></td>
+            <td><span class="pl"></span><span class="help">What service territory is this account located in</span></td>
+            <td><span class="cat">客製</span></td>
+        </tr>
+        <tr data-api="sdo_sfs_shippinggeo__latitude__s" data-label="shippinggeo (緯度)" data-type="double(9,6)" data-kind="Custom" data-req="no">
+            <td><span class="api api--custom">SDO_SFS_ShippingGeo__Latitude__s</span></td>
+            <td>ShippingGeo (緯度)</td>
+            <td><span class="type">Double(9,6)</span></td>
+            <td><span class="slds-badge slds-badge--cus">Custom</span></td>
+            <td></td>
+            <td></td>
+            <td><span class="ref"></span></td>
+            <td><span class="pl"></span></td>
+            <td><span class="cat">其他</span></td>
+        </tr>
+        <tr data-api="sdo_sfs_shippinggeo__longitude__s" data-label="shippinggeo (經度)" data-type="double(9,6)" data-kind="Custom" data-req="no">
+            <td><span class="api api--custom">SDO_SFS_ShippingGeo__Longitude__s</span></td>
+            <td>ShippingGeo (經度)</td>
+            <td><span class="type">Double(9,6)</span></td>
+            <td><span class="slds-badge slds-badge--cus">Custom</span></td>
+            <td></td>
+            <td></td>
+            <td><span class="ref"></span></td>
+            <td><span class="pl"></span></td>
+            <td><span class="cat">其他</span></td>
+        </tr>
+        <tr data-api="sdo_sfs_shippinggeo__c" data-label="shippinggeo" data-type="location" data-kind="Custom" data-req="no">
+            <td><span class="api api--custom">SDO_SFS_ShippingGeo__c</span></td>
+            <td>ShippingGeo</td>
+            <td><span class="type">location</span></td>
+            <td><span class="slds-badge slds-badge--cus">Custom</span></td>
+            <td></td>
+            <td></td>
+            <td><span class="ref"></span></td>
+            <td><span class="pl"></span></td>
+            <td><span class="cat">客製</span></td>
+        </tr>
+        <tr data-api="sdo_sfs_work_type__c" data-label="work type" data-type="lookup → worktype" data-kind="Custom" data-req="no">
+            <td><span class="api api--custom">SDO_SFS_Work_Type__c</span></td>
+            <td>Work Type</td>
+            <td><span class="type">Lookup → WorkType</span></td>
+            <td><span class="slds-badge slds-badge--cus">Custom</span></td>
+            <td></td>
+            <td></td>
+            <td><span class="ref">WorkType</span></td>
+            <td><span class="pl"></span><span class="help">Default work type to use for this account for field service activity</span></td>
+            <td><span class="cat">客製</span></td>
+        </tr>
+        <tr data-api="sdo_sfs_work_type_for_quote_creation__c" data-label="work type for quote creation" data-type="lookup → worktype" data-kind="Custom" data-req="no">
+            <td><span class="api api--custom">SDO_SFS_Work_Type_for_Quote_Creation__c</span></td>
+            <td>Work Type for Quote Creation</td>
+            <td><span class="type">Lookup → WorkType</span></td>
+            <td><span class="slds-badge slds-badge--cus">Custom</span></td>
+            <td></td>
+            <td></td>
+            <td><span class="ref">WorkType</span></td>
+            <td><span class="pl"></span></td>
+            <td><span class="cat">客製</span></td>
+        </tr>
+        <tr data-api="brinno_account_manager__c" data-label="brinno account manager" data-type="lookup → user" data-kind="Custom" data-req="no">
+            <td><span class="api api--custom">Brinno_Account_Manager__c</span></td>
+            <td>Brinno Account Manager</td>
+            <td><span class="type">Lookup → User</span></td>
+            <td><span class="slds-badge slds-badge--cus">Custom</span></td>
+            <td></td>
+            <td></td>
+            <td><span class="ref">User</span></td>
+            <td><span class="pl"></span></td>
+            <td><span class="cat">客製</span></td>
+        </tr>
+        <tr data-api="brinno_dealer_since__c" data-label="dealer since" data-type="date" data-kind="Custom" data-req="no">
+            <td><span class="api api--custom">Brinno_Dealer_Since__c</span></td>
+            <td>Dealer Since</td>
+            <td><span class="type">date</span></td>
+            <td><span class="slds-badge slds-badge--cus">Custom</span></td>
+            <td></td>
+            <td></td>
+            <td><span class="ref"></span></td>
+            <td><span class="pl"></span></td>
+            <td><span class="cat">客製</span></td>
+        </tr>
+        <tr data-api="brinno_dealer_tier__c" data-label="dealer tier" data-type="picklist" data-kind="Custom" data-req="no">
+            <td><span class="api api--custom">Brinno_Dealer_Tier__c</span></td>
+            <td>Dealer Tier</td>
+            <td><span class="type">Picklist</span></td>
+            <td><span class="slds-badge slds-badge--cus">Custom</span></td>
+            <td></td>
+            <td></td>
+            <td><span class="ref"></span></td>
+            <td><span class="pl">Distributor · Premium Reseller · Authorized Reseller</span></td>
+            <td><span class="cat">客製</span></td>
+        </tr>
+        <tr data-api="brinno_region__c" data-label="dealer region" data-type="picklist" data-kind="Custom" data-req="no">
+            <td><span class="api api--custom">Brinno_Region__c</span></td>
+            <td>Dealer Region</td>
+            <td><span class="type">Picklist</span></td>
+            <td><span class="slds-badge slds-badge--cus">Custom</span></td>
+            <td></td>
+            <td></td>
+            <td><span class="ref"></span></td>
+            <td><span class="pl">Taiwan · Japan · APAC · Europe · North America · Middle East</span></td>
+            <td><span class="cat">客製</span></td>
+        </tr>
+        <tr data-api="brinno_ytd_revenue__c" data-label="ytd revenue (usd)" data-type="currency(18,0)" data-kind="Custom" data-req="no">
+            <td><span class="api api--custom">Brinno_YTD_Revenue__c</span></td>
+            <td>YTD Revenue (USD)</td>
+            <td><span class="type">Currency(18,0)</span></td>
+            <td><span class="slds-badge slds-badge--cus">Custom</span></td>
+            <td></td>
+            <td></td>
+            <td><span class="ref"></span></td>
+            <td><span class="pl"></span></td>
+            <td><span class="cat">客製</span></td>
+        </tr>
+        <tr data-api="account_plan__c" data-label="account plan" data-type="url" data-kind="Custom" data-req="no">
+            <td><span class="api api--custom">Account_Plan__c</span></td>
+            <td>Account Plan</td>
+            <td><span class="type">url</span></td>
+            <td><span class="slds-badge slds-badge--cus">Custom</span></td>
+            <td></td>
+            <td></td>
+            <td><span class="ref"></span></td>
+            <td><span class="pl"></span></td>
+            <td><span class="cat">客製</span></td>
+        </tr>
+        <tr data-api="ptnr_onbd_fmwk__onboarding_plan__c" data-label="onboarding template" data-type="lookup → ptnr_onbd_fmwk__onboarding__c" data-kind="Custom" data-req="no">
+            <td><span class="api api--custom">Ptnr_Onbd_Fmwk__Onboarding_Plan__c</span></td>
+            <td>Onboarding Template</td>
+            <td><span class="type">Lookup → Ptnr_Onbd_Fmwk__Onboarding__c</span></td>
+            <td><span class="slds-badge slds-badge--cus">Custom</span></td>
+            <td></td>
+            <td></td>
+            <td><span class="ref">Ptnr_Onbd_Fmwk__Onboarding__c</span></td>
+            <td><span class="pl"></span></td>
+            <td><span class="cat">客製</span></td>
+        </tr>
+        <tr data-api="sdo_maps_dataset_split__c" data-label="account dataset split" data-type="double(3,0)" data-kind="Custom" data-req="no">
+            <td><span class="api api--custom">SDO_MAPS_Dataset_Split__c</span></td>
+            <td>Account Dataset Split</td>
+            <td><span class="type">Double(3,0)</span></td>
+            <td><span class="slds-badge slds-badge--cus">Custom</span></td>
+            <td></td>
+            <td></td>
+            <td><span class="ref"></span></td>
+            <td><span class="pl"></span></td>
+            <td><span class="cat">客製</span></td>
+        </tr>
+        <tr data-api="sdo_maps_days_since_last_visit__c" data-label="days since last visit" data-type="double(18,0)" data-kind="Custom" data-req="no">
+            <td><span class="api api--custom">SDO_MAPS_Days_Since_Last_Visit__c</span></td>
+            <td>Days Since Last Visit</td>
+            <td><span class="type">Double(18,0)</span></td>
+            <td><span class="slds-badge slds-badge--cus">Custom</span></td>
+            <td></td>
+            <td></td>
+            <td><span class="ref"></span></td>
+            <td><span class="pl"></span></td>
+            <td><span class="cat">客製</span></td>
+        </tr>
+        <tr data-api="sdo_maps_segment_c__c" data-label="segment" data-type="text(50)" data-kind="Custom" data-req="no">
+            <td><span class="api api--custom">SDO_MAPS_Segment_c__c</span></td>
+            <td>Segment</td>
+            <td><span class="type">Text(50)</span></td>
+            <td><span class="slds-badge slds-badge--cus">Custom</span></td>
+            <td></td>
+            <td></td>
+            <td><span class="ref"></span></td>
+            <td><span class="pl"></span></td>
+            <td><span class="cat">客製</span></td>
+        </tr>
+        <tr data-api="sdo_maps_service_tier__c" data-label="service tier" data-type="text(20)" data-kind="Custom" data-req="no">
+            <td><span class="api api--custom">SDO_MAPS_Service_Tier__c</span></td>
+            <td>Service Tier</td>
+            <td><span class="type">Text(20)</span></td>
+            <td><span class="slds-badge slds-badge--cus">Custom</span></td>
+            <td></td>
+            <td></td>
+            <td><span class="ref"></span></td>
+            <td><span class="pl"></span></td>
+            <td><span class="cat">客製</span></td>
+        </tr>
+        <tr data-api="sdo_maps_tag__c" data-label="tag" data-type="text(10)" data-kind="Custom" data-req="no">
+            <td><span class="api api--custom">SDO_MAPS_Tag__c</span></td>
+            <td>Tag</td>
+            <td><span class="type">Text(10)</span></td>
+            <td><span class="slds-badge slds-badge--cus">Custom</span></td>
+            <td></td>
+            <td></td>
+            <td><span class="ref"></span></td>
+            <td><span class="pl"></span></td>
+            <td><span class="cat">客製</span></td>
+        </tr>
+        <tr data-api="sdo_maps_tier__c" data-label="maps tier" data-type="text(4)" data-kind="Custom" data-req="no">
+            <td><span class="api api--custom">SDO_MAPS_Tier__c</span></td>
+            <td>Maps Tier</td>
+            <td><span class="type">Text(4)</span></td>
+            <td><span class="slds-badge slds-badge--cus">Custom</span></td>
+            <td></td>
+            <td></td>
+            <td><span class="ref"></span></td>
+            <td><span class="pl"></span></td>
+            <td><span class="cat">客製</span></td>
+        </tr>
+        <tr data-api="sdo_maps_time_per_visit_c__c" data-label="time per visit" data-type="double(18,0)" data-kind="Custom" data-req="no">
+            <td><span class="api api--custom">SDO_MAPS_Time_Per_Visit_c__c</span></td>
+            <td>Time Per Visit</td>
+            <td><span class="type">Double(18,0)</span></td>
+            <td><span class="slds-badge slds-badge--cus">Custom</span></td>
+            <td></td>
+            <td></td>
+            <td><span class="ref"></span></td>
+            <td><span class="pl"></span></td>
+            <td><span class="cat">客製</span></td>
+        </tr>
+        <tr data-api="sdo_maps_visit_frequency__c" data-label="visit frequency" data-type="double(18,0)" data-kind="Custom" data-req="no">
+            <td><span class="api api--custom">SDO_MAPS_Visit_Frequency__c</span></td>
+            <td>Visit Frequency</td>
+            <td><span class="type">Double(18,0)</span></td>
+            <td><span class="slds-badge slds-badge--cus">Custom</span></td>
+            <td></td>
+            <td></td>
+            <td><span class="ref"></span></td>
+            <td><span class="pl"></span></td>
+            <td><span class="cat">客製</span></td>
+        </tr>
+        <tr data-api="analyticsdemo_batch_id__c" data-label="analyticsdemo_batch_id__c" data-type="text(50)" data-kind="Custom" data-req="no">
+            <td><span class="api api--custom">analyticsdemo_batch_id__c</span></td>
+            <td>analyticsdemo_batch_id__c</td>
+            <td><span class="type">Text(50)</span></td>
+            <td><span class="slds-badge slds-badge--cus">Custom</span></td>
+            <td></td>
+            <td></td>
+            <td><span class="ref"></span></td>
+            <td><span class="pl"></span></td>
+            <td><span class="cat">客製</span></td>
+        </tr>
+        <tr data-api="sdo_maps_district__c" data-label="maps region" data-type="text(100)" data-kind="Custom" data-req="no">
+            <td><span class="api api--custom">SDO_Maps_District__c</span></td>
+            <td>Maps Region</td>
+            <td><span class="type">Text(100)</span></td>
+            <td><span class="slds-badge slds-badge--cus">Custom</span></td>
+            <td></td>
+            <td></td>
+            <td><span class="ref"></span></td>
+            <td><span class="pl"></span></td>
+            <td><span class="cat">客製</span></td>
+        </tr>
+        <tr data-api="sdo_maps_territory__c" data-label="territory name" data-type="text(100)" data-kind="Custom" data-req="no">
+            <td><span class="api api--custom">SDO_Maps_Territory__c</span></td>
+            <td>Territory Name</td>
+            <td><span class="type">Text(100)</span></td>
+            <td><span class="slds-badge slds-badge--cus">Custom</span></td>
+            <td></td>
+            <td></td>
+            <td><span class="ref"></span></td>
+            <td><span class="pl"></span></td>
+            <td><span class="cat">客製</span></td>
+        </tr>
+        <tr data-api="creditlimit__c" data-label="credit limit" data-type="currency(18,2)" data-kind="Custom" data-req="no">
+            <td><span class="api api--custom">CreditLimit__c</span></td>
+            <td>Credit Limit</td>
+            <td><span class="type">Currency(18,2)</span></td>
+            <td><span class="slds-badge slds-badge--cus">Custom</span></td>
+            <td></td>
+            <td></td>
+            <td><span class="ref"></span></td>
+            <td><span class="pl"></span></td>
+            <td><span class="cat">客製</span></td>
+        </tr>
+        <tr data-api="credit_balance__c" data-label="credit balance" data-type="currency(18,2)" data-kind="Custom" data-req="no">
+            <td><span class="api api--custom">Credit_Balance__c</span></td>
+            <td>Credit Balance</td>
+            <td><span class="type">Currency(18,2)</span></td>
+            <td><span class="slds-badge slds-badge--cus">Custom</span></td>
+            <td></td>
+            <td></td>
+            <td><span class="ref"></span></td>
+            <td><span class="pl"></span></td>
+            <td><span class="cat">客製</span></td>
+        </tr>
+        <tr data-api="credit_remaining__c" data-label="credit remaining" data-type="currency(18,2)" data-kind="Custom" data-req="no">
+            <td><span class="api api--custom">Credit_Remaining__c</span></td>
+            <td>Credit Remaining</td>
+            <td><span class="type">Currency(18,2)</span></td>
+            <td><span class="slds-badge slds-badge--cus">Custom</span></td>
+            <td></td>
+            <td></td>
+            <td><span class="ref"></span></td>
+            <td><span class="pl"></span></td>
+            <td><span class="cat">客製</span></td>
+        </tr>
+        <tr data-api="sdo_service_customer_satisfaction_index__c" data-label="customer satisfaction index" data-type="picklist" data-kind="Custom" data-req="no">
+            <td><span class="api api--custom">SDO_Service_Customer_Satisfaction_Index__c</span></td>
+            <td>Customer Satisfaction Index</td>
+            <td><span class="type">Picklist</span></td>
+            <td><span class="slds-badge slds-badge--cus">Custom</span></td>
+            <td></td>
+            <td></td>
+            <td><span class="ref"></span></td>
+            <td><span class="pl">A - Extremely Satisfied - Customer Evangelist · B - Satisfied · C - Neutral · D - Dissatisfied - At risk of losing business · F - Unsatisfactory - Losing Business</span><span class="help">What does this customer think of us?</span></td>
+            <td><span class="cat">客製</span></td>
+        </tr>
+        <tr data-api="quip_url__c" data-label="quip url" data-type="url" data-kind="Custom" data-req="no">
+            <td><span class="api api--custom">Quip_URL__c</span></td>
+            <td>Quip URL</td>
+            <td><span class="type">url</span></td>
+            <td><span class="slds-badge slds-badge--cus">Custom</span></td>
+            <td></td>
+            <td></td>
+            <td><span class="ref"></span></td>
+            <td><span class="pl"></span></td>
+            <td><span class="cat">客製</span></td>
+        </tr>
+        <tr data-api="maps_advanced_route_visit_windows__c" data-label="maps advanced route visit windows" data-type="lookup → maps__advroutevisitwindows__c" data-kind="Custom" data-req="no">
+            <td><span class="api api--custom">Maps_Advanced_Route_Visit_Windows__c</span></td>
+            <td>Maps Advanced Route Visit Windows</td>
+            <td><span class="type">Lookup → maps__AdvRouteVisitWindows__c</span></td>
+            <td><span class="slds-badge slds-badge--cus">Custom</span></td>
+            <td></td>
+            <td></td>
+            <td><span class="ref">maps__AdvRouteVisitWindows__c</span></td>
+            <td><span class="pl"></span><span class="help">Create a Visit Window that indicates the ideal visit days and times for a specific customer.  Maps Advanced will ensure all future visits are made within these windows during routing optimization.  Created by: Aaron Bendickson Aug, 18 2023</span></td>
+            <td><span class="cat">客製</span></td>
+        </tr>
+        <tr data-api="sdo_maps_adv_maps_user_assignment__c" data-label="adv maps user assignment" data-type="lookup → user" data-kind="Custom" data-req="no">
+            <td><span class="api api--custom">SDO_MAPS_Adv_Maps_User_Assignment__c</span></td>
+            <td>Adv Maps User Assignment</td>
+            <td><span class="type">Lookup → User</span></td>
+            <td><span class="slds-badge slds-badge--cus">Custom</span></td>
+            <td></td>
+            <td></td>
+            <td><span class="ref">User</span></td>
+            <td><span class="pl"></span></td>
+            <td><span class="cat">客製</span></td>
+        </tr>
+        <tr data-api="sdo_cpq_churn_risk__c" data-label="churn risk" data-type="boolean" data-kind="Custom" data-req="no">
+            <td><span class="api api--custom">SDO_CPQ_Churn_Risk__c</span></td>
+            <td>Churn Risk</td>
+            <td><span class="type">boolean</span></td>
+            <td><span class="slds-badge slds-badge--cus">Custom</span></td>
+            <td></td>
+            <td></td>
+            <td><span class="ref"></span></td>
+            <td><span class="pl"></span></td>
+            <td><span class="cat">客製</span></td>
+        </tr>
+        <tr data-api="sdo_contract_signed__c" data-label="contract signed" data-type="boolean" data-kind="Custom" data-req="no">
+            <td><span class="api api--custom">SDO_Contract_Signed__c</span></td>
+            <td>Contract Signed</td>
+            <td><span class="type">boolean</span></td>
+            <td><span class="slds-badge slds-badge--cus">Custom</span></td>
+            <td></td>
+            <td></td>
+            <td><span class="ref"></span></td>
+            <td><span class="pl"></span></td>
+            <td><span class="cat">客製</span></td>
+        </tr>
+        <tr data-api="sdo_current_year_target__c" data-label="current year target" data-type="currency(18,0)" data-kind="Custom" data-req="no">
+            <td><span class="api api--custom">SDO_Current_Year_Target__c</span></td>
+            <td>Current Year Target</td>
+            <td><span class="type">Currency(18,0)</span></td>
+            <td><span class="slds-badge slds-badge--cus">Custom</span></td>
+            <td></td>
+            <td></td>
+            <td><span class="ref"></span></td>
+            <td><span class="pl"></span></td>
+            <td><span class="cat">客製</span></td>
+        </tr>
+        <tr data-api="sdo_spm_area_auto_calc__c" data-label="area (auto-calc)" data-type="text(1300)" data-kind="Custom" data-req="no">
+            <td><span class="api api--custom">SDO_SPM_Area_Auto_Calc__c</span></td>
+            <td>Area (Auto-Calc)</td>
+            <td><span class="type">Text(1300)</span></td>
+            <td><span class="slds-badge slds-badge--cus">Custom</span></td>
+            <td></td>
+            <td></td>
+            <td><span class="ref"></span></td>
+            <td><span class="pl"></span><span class="help">Auto-calculated Area based on the Billing State value.</span></td>
+            <td><span class="cat">客製</span></td>
+        </tr>
+        <tr data-api="sdo_spm_hardware_revenue__c" data-label="hardware revenue" data-type="double(18,0)" data-kind="Custom" data-req="no">
+            <td><span class="api api--custom">SDO_SPM_Hardware_Revenue__c</span></td>
+            <td>Hardware Revenue</td>
+            <td><span class="type">Double(18,0)</span></td>
+            <td><span class="slds-badge slds-badge--cus">Custom</span></td>
+            <td></td>
+            <td></td>
+            <td><span class="ref"></span></td>
+            <td><span class="pl"></span></td>
+            <td><span class="cat">客製</span></td>
+        </tr>
+        <tr data-api="sdo_spm_open_opportunity_value__c" data-label="open opportunity value" data-type="double(18,0)" data-kind="Custom" data-req="no">
+            <td><span class="api api--custom">SDO_SPM_Open_Opportunity_Value__c</span></td>
+            <td>Open Opportunity Value</td>
+            <td><span class="type">Double(18,0)</span></td>
+            <td><span class="slds-badge slds-badge--cus">Custom</span></td>
+            <td></td>
+            <td></td>
+            <td><span class="ref"></span></td>
+            <td><span class="pl"></span></td>
+            <td><span class="cat">客製</span></td>
+        </tr>
+        <tr data-api="sdo_spm_region_auto_calc__c" data-label="region (auto-calc)" data-type="text(1300)" data-kind="Custom" data-req="no">
+            <td><span class="api api--custom">SDO_SPM_Region_Auto_Calc__c</span></td>
+            <td>Region (Auto-Calc)</td>
+            <td><span class="type">Text(1300)</span></td>
+            <td><span class="slds-badge slds-badge--cus">Custom</span></td>
+            <td></td>
+            <td></td>
+            <td><span class="ref"></span></td>
+            <td><span class="pl"></span></td>
+            <td><span class="cat">客製</span></td>
+        </tr>
+        <tr data-api="sdo_spm_segment_auto_calc__c" data-label="segment (auto-calc)" data-type="text(1300)" data-kind="Custom" data-req="no">
+            <td><span class="api api--custom">SDO_SPM_Segment_Auto_Calc__c</span></td>
+            <td>Segment (Auto-Calc)</td>
+            <td><span class="type">Text(1300)</span></td>
+            <td><span class="slds-badge slds-badge--cus">Custom</span></td>
+            <td></td>
+            <td></td>
+            <td><span class="ref"></span></td>
+            <td><span class="pl"></span></td>
+            <td><span class="cat">客製</span></td>
+        </tr>
+        <tr data-api="sdo_spm_software_revenue__c" data-label="software revenue" data-type="double(18,0)" data-kind="Custom" data-req="no">
+            <td><span class="api api--custom">SDO_SPM_Software_Revenue__c</span></td>
+            <td>Software Revenue</td>
+            <td><span class="type">Double(18,0)</span></td>
+            <td><span class="slds-badge slds-badge--cus">Custom</span></td>
+            <td></td>
+            <td></td>
+            <td><span class="ref"></span></td>
+            <td><span class="pl"></span></td>
+            <td><span class="cat">客製</span></td>
+        </tr>
+        <tr data-api="sdo_spm_upside_potential__c" data-label="upside potential" data-type="double(18,0)" data-kind="Custom" data-req="no">
+            <td><span class="api api--custom">SDO_SPM_Upside_Potential__c</span></td>
+            <td>Upside Potential</td>
+            <td><span class="type">Double(18,0)</span></td>
+            <td><span class="slds-badge slds-badge--cus">Custom</span></td>
+            <td></td>
+            <td></td>
+            <td><span class="ref"></span></td>
+            <td><span class="pl"></span></td>
+            <td><span class="cat">客製</span></td>
+        </tr>
+        <tr data-api="sdo_spm_area_formatted__c" data-label="area (formatted)" data-type="text(1300)" data-kind="Custom" data-req="no">
+            <td><span class="api api--custom">SDO_SPM_Area_Formatted__c</span></td>
+            <td>Area (Formatted)</td>
+            <td><span class="type">Text(1300)</span></td>
+            <td><span class="slds-badge slds-badge--cus">Custom</span></td>
+            <td></td>
+            <td></td>
+            <td><span class="ref"></span></td>
+            <td><span class="pl"></span><span class="help">Combines Region, Segment and Area to create a formatted Area name.</span></td>
+            <td><span class="cat">客製</span></td>
+        </tr>
+        <tr data-api="sdo_spm_segment_formatted__c" data-label="segment (formatted)" data-type="text(1300)" data-kind="Custom" data-req="no">
+            <td><span class="api api--custom">SDO_SPM_Segment_Formatted__c</span></td>
+            <td>Segment (Formatted)</td>
+            <td><span class="type">Text(1300)</span></td>
+            <td><span class="slds-badge slds-badge--cus">Custom</span></td>
+            <td></td>
+            <td></td>
+            <td><span class="ref"></span></td>
+            <td><span class="pl"></span><span class="help">Combines Region and Segment to create a formatted Segment name</span></td>
+            <td><span class="cat">客製</span></td>
+        </tr>
+        <tr data-api="sdo_sales_account_plan_filled_in__c" data-label="account plan filled in?" data-type="boolean" data-kind="Custom" data-req="no">
+            <td><span class="api api--custom">SDO_Sales_Account_Plan_Filled_in__c</span></td>
+            <td>Account Plan Filled in?</td>
+            <td><span class="type">boolean</span></td>
+            <td><span class="slds-badge slds-badge--cus">Custom</span></td>
+            <td></td>
+            <td></td>
+            <td><span class="ref"></span></td>
+            <td><span class="pl"></span></td>
+            <td><span class="cat">客製</span></td>
+        </tr>
+        <tr data-api="sdo_sales_account_plan_details__c" data-label="account plan details" data-type="textarea(32768)" data-kind="Custom" data-req="no">
+            <td><span class="api api--custom">SDO_Sales_Account_Plan_Details__c</span></td>
+            <td>Account Plan Details</td>
+            <td><span class="type">TextArea(32768)</span></td>
+            <td><span class="slds-badge slds-badge--cus">Custom</span></td>
+            <td></td>
+            <td></td>
+            <td><span class="ref"></span></td>
+            <td><span class="pl"></span></td>
+            <td><span class="cat">客製</span></td>
+        </tr>
+        <tr data-api="sdo_scom_default_store__c" data-label="default store" data-type="lookup → location" data-kind="Custom" data-req="no">
+            <td><span class="api api--custom">Sdo_Scom_Default_Store__c</span></td>
+            <td>Default Store</td>
+            <td><span class="type">Lookup → Location</span></td>
+            <td><span class="slds-badge slds-badge--cus">Custom</span></td>
+            <td></td>
+            <td></td>
+            <td><span class="ref">Location</span></td>
+            <td><span class="pl"></span></td>
+            <td><span class="cat">客製</span></td>
+        </tr>
+        <tr data-api="sdo_spm_billing_country_code__c" data-label="billing country code" data-type="text(255)" data-kind="Custom" data-req="no">
+            <td><span class="api api--custom">SDO_SPM_Billing_Country_Code__c</span></td>
+            <td>Billing Country Code</td>
+            <td><span class="type">Text(255)</span></td>
+            <td><span class="slds-badge slds-badge--cus">Custom</span></td>
+            <td></td>
+            <td></td>
+            <td><span class="ref"></span></td>
+            <td><span class="pl"></span></td>
+            <td><span class="cat">客製</span></td>
+        </tr>
+        <tr data-api="edy_orgcustom__db__pc" data-label="db" data-type="boolean" data-kind="PersonAccount" data-req="no">
+            <td><span class="api api--pc">EDY_ORGCUSTOM__DB__pc</span></td>
+            <td>DB</td>
+            <td><span class="type">boolean</span></td>
+            <td><span class="slds-badge slds-badge--pc">__pc</span></td>
+            <td></td>
+            <td></td>
+            <td><span class="ref"></span></td>
+            <td><span class="pl"></span></td>
+            <td><span class="cat">Person 客製</span></td>
+        </tr>
+        <tr data-api="edy_orgcustom__old_title__pc" data-label="old title" data-type="text(50)" data-kind="PersonAccount" data-req="no">
+            <td><span class="api api--pc">EDY_ORGCUSTOM__Old_Title__pc</span></td>
+            <td>Old Title</td>
+            <td><span class="type">Text(50)</span></td>
+            <td><span class="slds-badge slds-badge--pc">__pc</span></td>
+            <td></td>
+            <td></td>
+            <td><span class="ref"></span></td>
+            <td><span class="pl"></span></td>
+            <td><span class="cat">Person 客製</span></td>
+        </tr>
+        <tr data-api="external_id__pc" data-label="external id" data-type="text(255)" data-kind="PersonAccount" data-req="no">
+            <td><span class="api api--pc">External_ID__pc</span></td>
+            <td>External ID</td>
+            <td><span class="type">Text(255)</span></td>
+            <td><span class="slds-badge slds-badge--pc">__pc</span></td>
+            <td></td>
+            <td></td>
+            <td><span class="ref"></span></td>
+            <td><span class="pl"></span></td>
+            <td><span class="cat">Person 客製</span></td>
+        </tr>
+        <tr data-api="sdo_pa_inclusive_preferred_name__pc" data-label="preferred name" data-type="text(255)" data-kind="PersonAccount" data-req="no">
+            <td><span class="api api--pc">SDO_PA_Inclusive_Preferred_Name__pc</span></td>
+            <td>Preferred Name</td>
+            <td><span class="type">Text(255)</span></td>
+            <td><span class="slds-badge slds-badge--pc">__pc</span></td>
+            <td></td>
+            <td></td>
+            <td><span class="ref"></span></td>
+            <td><span class="pl"></span></td>
+            <td><span class="cat">Person 客製</span></td>
+        </tr>
+        <tr data-api="sdo_pa_inclusive_pronouns__pc" data-label="preferred pronoun" data-type="picklist" data-kind="PersonAccount" data-req="no">
+            <td><span class="api api--pc">SDO_PA_Inclusive_Pronouns__pc</span></td>
+            <td>Preferred Pronoun</td>
+            <td><span class="type">Picklist</span></td>
+            <td><span class="slds-badge slds-badge--pc">__pc</span></td>
+            <td></td>
+            <td></td>
+            <td><span class="ref"></span></td>
+            <td><span class="pl">He/Him/His · She/Her/Hers · They/Them/Theirs · Other</span></td>
+            <td><span class="cat">Person 客製</span></td>
+        </tr>
+        <tr data-api="sdo_pa_inclusive_tdd_tty__pc" data-label="tdd / tty required" data-type="boolean" data-kind="PersonAccount" data-req="no">
+            <td><span class="api api--pc">SDO_PA_Inclusive_TDD_TTY__pc</span></td>
+            <td>TDD / TTY Required</td>
+            <td><span class="type">boolean</span></td>
+            <td><span class="slds-badge slds-badge--pc">__pc</span></td>
+            <td></td>
+            <td></td>
+            <td><span class="ref"></span></td>
+            <td><span class="pl"></span><span class="help">Does this individual have impaired hearing?</span></td>
+            <td><span class="cat">Person 客製</span></td>
+        </tr>
+        <tr data-api="sdo_pa_preferred_contact_channel__pc" data-label="preferred contact channel" data-type="picklist" data-kind="PersonAccount" data-req="no">
+            <td><span class="api api--pc">SDO_PA_Preferred_Contact_Channel__pc</span></td>
+            <td>Preferred Contact Channel</td>
+            <td><span class="type">Picklist</span></td>
+            <td><span class="slds-badge slds-badge--pc">__pc</span></td>
+            <td></td>
+            <td></td>
+            <td><span class="ref"></span></td>
+            <td><span class="pl">Email · Facebook Messenger · Home Phone · Mobile Phone · SMS · WhatsApp</span></td>
+            <td><span class="cat">Person 客製</span></td>
+        </tr>
+        <tr data-api="sdo_cust360_csat__pc" data-label="cust360 csat" data-type="double(4,2)" data-kind="PersonAccount" data-req="no">
+            <td><span class="api api--pc">SDO_Cust360_CSAT__pc</span></td>
+            <td>Cust360 CSAT</td>
+            <td><span class="type">Double(4,2)</span></td>
+            <td><span class="slds-badge slds-badge--pc">__pc</span></td>
+            <td></td>
+            <td></td>
+            <td><span class="ref"></span></td>
+            <td><span class="pl"></span></td>
+            <td><span class="cat">Person 客製</span></td>
+        </tr>
+        <tr data-api="sdo_cust360_churnrisk__pc" data-label="risk of churn" data-type="double(4,2)" data-kind="PersonAccount" data-req="no">
+            <td><span class="api api--pc">SDO_Cust360_ChurnRisk__pc</span></td>
+            <td>Risk of Churn</td>
+            <td><span class="type">Double(4,2)</span></td>
+            <td><span class="slds-badge slds-badge--pc">__pc</span></td>
+            <td></td>
+            <td></td>
+            <td><span class="ref"></span></td>
+            <td><span class="pl"></span></td>
+            <td><span class="cat">Person 客製</span></td>
+        </tr>
+        <tr data-api="sdo_cust360_contact_picture_url__pc" data-label="cust360 contact picture url" data-type="text(255)" data-kind="PersonAccount" data-req="no">
+            <td><span class="api api--pc">SDO_Cust360_Contact_Picture_URL__pc</span></td>
+            <td>Cust360 Contact Picture URL</td>
+            <td><span class="type">Text(255)</span></td>
+            <td><span class="slds-badge slds-badge--pc">__pc</span></td>
+            <td></td>
+            <td></td>
+            <td><span class="ref"></span></td>
+            <td><span class="pl"></span></td>
+            <td><span class="cat">Person 客製</span></td>
+        </tr>
+        <tr data-api="sdo_cust360_id__pc" data-label="cust360 id" data-type="text(255)" data-kind="PersonAccount" data-req="no">
+            <td><span class="api api--pc">SDO_Cust360_Id__pc</span></td>
+            <td>Cust360 Id</td>
+            <td><span class="type">Text(255)</span></td>
+            <td><span class="slds-badge slds-badge--pc">__pc</span></td>
+            <td></td>
+            <td></td>
+            <td><span class="ref"></span></td>
+            <td><span class="pl"></span></td>
+            <td><span class="cat">Person 客製</span></td>
+        </tr>
+        <tr data-api="sdo_cust360_metric1__pc" data-label="cust360 metric 1" data-type="text(255)" data-kind="PersonAccount" data-req="no">
+            <td><span class="api api--pc">SDO_Cust360_Metric1__pc</span></td>
+            <td>Cust360 Metric 1</td>
+            <td><span class="type">Text(255)</span></td>
+            <td><span class="slds-badge slds-badge--pc">__pc</span></td>
+            <td></td>
+            <td></td>
+            <td><span class="ref"></span></td>
+            <td><span class="pl"></span></td>
+            <td><span class="cat">Person 客製</span></td>
+        </tr>
+        <tr data-api="sdo_cust360_metric2__pc" data-label="cust360 metric 2" data-type="text(255)" data-kind="PersonAccount" data-req="no">
+            <td><span class="api api--pc">SDO_Cust360_Metric2__pc</span></td>
+            <td>Cust360 Metric 2</td>
+            <td><span class="type">Text(255)</span></td>
+            <td><span class="slds-badge slds-badge--pc">__pc</span></td>
+            <td></td>
+            <td></td>
+            <td><span class="ref"></span></td>
+            <td><span class="pl"></span></td>
+            <td><span class="cat">Person 客製</span></td>
+        </tr>
+        <tr data-api="sdo_pa_year_of_birth__pc" data-label="year of birth" data-type="picklist" data-kind="PersonAccount" data-req="no">
+            <td><span class="api api--pc">SDO_PA_Year_of_Birth__pc</span></td>
+            <td>Year of Birth</td>
+            <td><span class="type">Picklist</span></td>
+            <td><span class="slds-badge slds-badge--pc">__pc</span></td>
+            <td></td>
+            <td></td>
+            <td><span class="ref"></span></td>
+            <td><span class="pl">2012 · 2011 · 2010 · 2009 · 2008 · 2007 · 2006 · 2005 · 2004 · 2003 · 2002 · 2001 · 2000 · 1999 · 1998 · 1997 · 1996 · 1995 · 1994 · 1993 … +73</span><span class="help">Used by the Identity and Verification (ID&amp;V) flow.</span></td>
+            <td><span class="cat">Person 客製</span></td>
+        </tr>
+        <tr data-api="sdo_service_month_of_birth__pc" data-label="month of birth" data-type="picklist" data-kind="PersonAccount" data-req="no">
+            <td><span class="api api--pc">SDO_Service_Month_of_Birth__pc</span></td>
+            <td>Month of Birth</td>
+            <td><span class="type">Picklist</span></td>
+            <td><span class="slds-badge slds-badge--pc">__pc</span></td>
+            <td></td>
+            <td></td>
+            <td><span class="ref"></span></td>
+            <td><span class="pl">January · February · March · April · May · June · July · August · September · October · November · December</span><span class="help">Used by the Identity and Verification (ID&amp;V) flow.</span></td>
+            <td><span class="cat">Person 客製</span></td>
+        </tr>
+        <tr data-api="sdo_service_primary_messaging_user__pc" data-label="primary messaging user" data-type="lookup → messagingenduser" data-kind="PersonAccount" data-req="no">
+            <td><span class="api api--pc">SDO_Service_Primary_Messaging_User__pc</span></td>
+            <td>Primary Messaging User</td>
+            <td><span class="type">Lookup → MessagingEndUser</span></td>
+            <td><span class="slds-badge slds-badge--pc">__pc</span></td>
+            <td></td>
+            <td></td>
+            <td><span class="ref">MessagingEndUser</span></td>
+            <td><span class="pl"></span></td>
+            <td><span class="cat">Person 客製</span></td>
+        </tr>
+        <tr data-api="sdo_service_sms_message__pc" data-label="sms message" data-type="textarea(800)" data-kind="PersonAccount" data-req="no">
+            <td><span class="api api--pc">SDO_Service_SMS_Message__pc</span></td>
+            <td>SMS Message</td>
+            <td><span class="type">TextArea(800)</span></td>
+            <td><span class="slds-badge slds-badge--pc">__pc</span></td>
+            <td></td>
+            <td></td>
+            <td><span class="ref"></span></td>
+            <td><span class="pl"></span></td>
+            <td><span class="cat">Person 客製</span></td>
+        </tr>
+        <tr data-api="notes__pc" data-label="notes" data-type="textarea(32000)" data-kind="PersonAccount" data-req="no">
+            <td><span class="api api--pc">Notes__pc</span></td>
+            <td>Notes</td>
+            <td><span class="type">TextArea(32000)</span></td>
+            <td><span class="slds-badge slds-badge--pc">__pc</span></td>
+            <td></td>
+            <td></td>
+            <td><span class="ref"></span></td>
+            <td><span class="pl"></span></td>
+            <td><span class="cat">Person 客製</span></td>
+        </tr>
+        <tr data-api="sdo_sfs_rider_botcontext__pc" data-label="rider context" data-type="lookup → serviceappointment" data-kind="PersonAccount" data-req="no">
+            <td><span class="api api--pc">SDO_SFS_Rider_BotContext__pc</span></td>
+            <td>Rider Context</td>
+            <td><span class="type">Lookup → ServiceAppointment</span></td>
+            <td><span class="slds-badge slds-badge--pc">__pc</span></td>
+            <td></td>
+            <td></td>
+            <td><span class="ref">ServiceAppointment</span></td>
+            <td><span class="pl"></span><span class="help">A reference to the most recent service appointment an outbound notification was sent about</span></td>
+            <td><span class="cat">Person 客製</span></td>
+        </tr>
+        <tr data-api="sdo_sfs_rider_enabled__pc" data-label="rider enabled" data-type="boolean" data-kind="PersonAccount" data-req="no">
+            <td><span class="api api--pc">SDO_SFS_Rider_Enabled__pc</span></td>
+            <td>Rider Enabled</td>
+            <td><span class="type">boolean</span></td>
+            <td><span class="slds-badge slds-badge--pc">__pc</span></td>
+            <td></td>
+            <td></td>
+            <td><span class="ref"></span></td>
+            <td><span class="pl"></span><span class="help">Denotes if the Contact is allowed to interact with Rider</span></td>
+            <td><span class="cat">Person 客製</span></td>
+        </tr>
+        <tr data-api="sdo_sfs_rider_serviceterritory__pc" data-label="rider service territory" data-type="lookup → serviceterritory" data-kind="PersonAccount" data-req="no">
+            <td><span class="api api--pc">SDO_SFS_Rider_ServiceTerritory__pc</span></td>
+            <td>Rider Service Territory</td>
+            <td><span class="type">Lookup → ServiceTerritory</span></td>
+            <td><span class="slds-badge slds-badge--pc">__pc</span></td>
+            <td></td>
+            <td></td>
+            <td><span class="ref">ServiceTerritory</span></td>
+            <td><span class="pl"></span><span class="help">The Service Territory of the Contact (for Rider to schedule service appointments)</span></td>
+            <td><span class="cat">Person 客製</span></td>
+        </tr>
+        <tr data-api="et4ae5__hasoptedoutofmobile__pc" data-label="mobile opt out" data-type="boolean" data-kind="PersonAccount" data-req="no">
+            <td><span class="api api--pc">et4ae5__HasOptedOutOfMobile__pc</span></td>
+            <td>Mobile Opt Out</td>
+            <td><span class="type">boolean</span></td>
+            <td><span class="slds-badge slds-badge--pc">__pc</span></td>
+            <td></td>
+            <td></td>
+            <td><span class="ref"></span></td>
+            <td><span class="pl"></span></td>
+            <td><span class="cat">Person 客製</span></td>
+        </tr>
+        <tr data-api="et4ae5__mobile_country_code__pc" data-label="mobile country code" data-type="picklist" data-kind="PersonAccount" data-req="no">
+            <td><span class="api api--pc">et4ae5__Mobile_Country_Code__pc</span></td>
+            <td>Mobile Country Code</td>
+            <td><span class="type">Picklist</span></td>
+            <td><span class="slds-badge slds-badge--pc">__pc</span></td>
+            <td></td>
+            <td></td>
+            <td><span class="ref"></span></td>
+            <td><span class="pl">US · AC · AD · AE · AF · AG · AI · AL · AM · AO · AQ · AR · AS · AT · AU · AW · AX · AZ · BA · BB … +228</span></td>
+            <td><span class="cat">Person 客製</span></td>
+        </tr>
+        <tr data-api="sdo_certification_level_c__pc" data-label="certification level" data-type="picklist" data-kind="PersonAccount" data-req="no">
+            <td><span class="api api--pc">SDO_Certification_Level_c__pc</span></td>
+            <td>Certification Level</td>
+            <td><span class="type">Picklist</span></td>
+            <td><span class="slds-badge slds-badge--pc">__pc</span></td>
+            <td></td>
+            <td></td>
+            <td><span class="ref"></span></td>
+            <td><span class="pl">Associate · Professional · Expert · Architect</span></td>
+            <td><span class="cat">Person 客製</span></td>
+        </tr>
+        <tr data-api="pi__needs_score_synced__pc" data-label="needs score synced" data-type="boolean" data-kind="PersonAccount" data-req="no">
+            <td><span class="api api--pc">pi__Needs_Score_Synced__pc</span></td>
+            <td>Needs Score Synced</td>
+            <td><span class="type">boolean</span></td>
+            <td><span class="slds-badge slds-badge--pc">__pc</span></td>
+            <td></td>
+            <td></td>
+            <td><span class="ref"></span></td>
+            <td><span class="pl"></span></td>
+            <td><span class="cat">Person 客製</span></td>
+        </tr>
+        <tr data-api="pi__pardot_last_scored_at__pc" data-label="account engagement last scored at" data-type="datetime" data-kind="PersonAccount" data-req="no">
+            <td><span class="api api--pc">pi__Pardot_Last_Scored_At__pc</span></td>
+            <td>Account Engagement Last Scored At</td>
+            <td><span class="type">datetime</span></td>
+            <td><span class="slds-badge slds-badge--pc">__pc</span></td>
+            <td></td>
+            <td></td>
+            <td><span class="ref"></span></td>
+            <td><span class="pl"></span></td>
+            <td><span class="cat">Person 客製</span></td>
+        </tr>
+        <tr data-api="pi__campaign__pc" data-label="account engagement campaign" data-type="text(255)" data-kind="PersonAccount" data-req="no">
+            <td><span class="api api--pc">pi__campaign__pc</span></td>
+            <td>Account Engagement Campaign</td>
+            <td><span class="type">Text(255)</span></td>
+            <td><span class="slds-badge slds-badge--pc">__pc</span></td>
+            <td></td>
+            <td></td>
+            <td><span class="ref"></span></td>
+            <td><span class="pl"></span></td>
+            <td><span class="cat">Person 客製</span></td>
+        </tr>
+        <tr data-api="pi__comments__pc" data-label="account engagement comments" data-type="textarea(32000)" data-kind="PersonAccount" data-req="no">
+            <td><span class="api api--pc">pi__comments__pc</span></td>
+            <td>Account Engagement Comments</td>
+            <td><span class="type">TextArea(32000)</span></td>
+            <td><span class="slds-badge slds-badge--pc">__pc</span></td>
+            <td></td>
+            <td></td>
+            <td><span class="ref"></span></td>
+            <td><span class="pl"></span></td>
+            <td><span class="cat">Person 客製</span></td>
+        </tr>
+        <tr data-api="pi__conversion_date__pc" data-label="account engagement conversion date" data-type="datetime" data-kind="PersonAccount" data-req="no">
+            <td><span class="api api--pc">pi__conversion_date__pc</span></td>
+            <td>Account Engagement Conversion Date</td>
+            <td><span class="type">datetime</span></td>
+            <td><span class="slds-badge slds-badge--pc">__pc</span></td>
+            <td></td>
+            <td></td>
+            <td><span class="ref"></span></td>
+            <td><span class="pl"></span></td>
+            <td><span class="cat">Person 客製</span></td>
+        </tr>
+        <tr data-api="pi__conversion_object_name__pc" data-label="conversion object name" data-type="text(255)" data-kind="PersonAccount" data-req="no">
+            <td><span class="api api--pc">pi__conversion_object_name__pc</span></td>
+            <td>Conversion Object Name</td>
+            <td><span class="type">Text(255)</span></td>
+            <td><span class="slds-badge slds-badge--pc">__pc</span></td>
+            <td></td>
+            <td></td>
+            <td><span class="ref"></span></td>
+            <td><span class="pl"></span></td>
+            <td><span class="cat">Person 客製</span></td>
+        </tr>
+        <tr data-api="pi__conversion_object_type__pc" data-label="conversion object type" data-type="text(255)" data-kind="PersonAccount" data-req="no">
+            <td><span class="api api--pc">pi__conversion_object_type__pc</span></td>
+            <td>Conversion Object Type</td>
+            <td><span class="type">Text(255)</span></td>
+            <td><span class="slds-badge slds-badge--pc">__pc</span></td>
+            <td></td>
+            <td></td>
+            <td><span class="ref"></span></td>
+            <td><span class="pl"></span></td>
+            <td><span class="cat">Person 客製</span></td>
+        </tr>
+        <tr data-api="pi__created_date__pc" data-label="account engagement created date" data-type="datetime" data-kind="PersonAccount" data-req="no">
+            <td><span class="api api--pc">pi__created_date__pc</span></td>
+            <td>Account Engagement Created Date</td>
+            <td><span class="type">datetime</span></td>
+            <td><span class="slds-badge slds-badge--pc">__pc</span></td>
+            <td></td>
+            <td></td>
+            <td><span class="ref"></span></td>
+            <td><span class="pl"></span></td>
+            <td><span class="cat">Person 客製</span></td>
+        </tr>
+        <tr data-api="pi__first_activity__pc" data-label="account engagement first activity" data-type="datetime" data-kind="PersonAccount" data-req="no">
+            <td><span class="api api--pc">pi__first_activity__pc</span></td>
+            <td>Account Engagement First Activity</td>
+            <td><span class="type">datetime</span></td>
+            <td><span class="slds-badge slds-badge--pc">__pc</span></td>
+            <td></td>
+            <td></td>
+            <td><span class="ref"></span></td>
+            <td><span class="pl"></span></td>
+            <td><span class="cat">Person 客製</span></td>
+        </tr>
+        <tr data-api="pi__first_search_term__pc" data-label="account engagement first referrer query" data-type="text(255)" data-kind="PersonAccount" data-req="no">
+            <td><span class="api api--pc">pi__first_search_term__pc</span></td>
+            <td>Account Engagement First Referrer Query</td>
+            <td><span class="type">Text(255)</span></td>
+            <td><span class="slds-badge slds-badge--pc">__pc</span></td>
+            <td></td>
+            <td></td>
+            <td><span class="ref"></span></td>
+            <td><span class="pl"></span></td>
+            <td><span class="cat">Person 客製</span></td>
+        </tr>
+        <tr data-api="pi__first_search_type__pc" data-label="account engagement first referrer type" data-type="text(255)" data-kind="PersonAccount" data-req="no">
+            <td><span class="api api--pc">pi__first_search_type__pc</span></td>
+            <td>Account Engagement First Referrer Type</td>
+            <td><span class="type">Text(255)</span></td>
+            <td><span class="slds-badge slds-badge--pc">__pc</span></td>
+            <td></td>
+            <td></td>
+            <td><span class="ref"></span></td>
+            <td><span class="pl"></span></td>
+            <td><span class="cat">Person 客製</span></td>
+        </tr>
+        <tr data-api="pi__first_touch_url__pc" data-label="account engagement first referrer" data-type="textarea(65000)" data-kind="PersonAccount" data-req="no">
+            <td><span class="api api--pc">pi__first_touch_url__pc</span></td>
+            <td>Account Engagement First Referrer</td>
+            <td><span class="type">TextArea(65000)</span></td>
+            <td><span class="slds-badge slds-badge--pc">__pc</span></td>
+            <td></td>
+            <td></td>
+            <td><span class="ref"></span></td>
+            <td><span class="pl"></span></td>
+            <td><span class="cat">Person 客製</span></td>
+        </tr>
+        <tr data-api="pi__grade__pc" data-label="account engagement grade" data-type="text(10)" data-kind="PersonAccount" data-req="no">
+            <td><span class="api api--pc">pi__grade__pc</span></td>
+            <td>Account Engagement Grade</td>
+            <td><span class="type">Text(10)</span></td>
+            <td><span class="slds-badge slds-badge--pc">__pc</span></td>
+            <td></td>
+            <td></td>
+            <td><span class="ref"></span></td>
+            <td><span class="pl"></span></td>
+            <td><span class="cat">Person 客製</span></td>
+        </tr>
+        <tr data-api="pi__last_activity__pc" data-label="account engagement last activity" data-type="datetime" data-kind="PersonAccount" data-req="no">
+            <td><span class="api api--pc">pi__last_activity__pc</span></td>
+            <td>Account Engagement Last Activity</td>
+            <td><span class="type">datetime</span></td>
+            <td><span class="slds-badge slds-badge--pc">__pc</span></td>
+            <td></td>
+            <td></td>
+            <td><span class="ref"></span></td>
+            <td><span class="pl"></span></td>
+            <td><span class="cat">Person 客製</span></td>
+        </tr>
+        <tr data-api="pi__notes__pc" data-label="account engagement notes" data-type="textarea(32000)" data-kind="PersonAccount" data-req="no">
+            <td><span class="api api--pc">pi__notes__pc</span></td>
+            <td>Account Engagement Notes</td>
+            <td><span class="type">TextArea(32000)</span></td>
+            <td><span class="slds-badge slds-badge--pc">__pc</span></td>
+            <td></td>
+            <td></td>
+            <td><span class="ref"></span></td>
+            <td><span class="pl"></span></td>
+            <td><span class="cat">Person 客製</span></td>
+        </tr>
+        <tr data-api="pi__pardot_hard_bounced__pc" data-label="account engagement hard bounced" data-type="boolean" data-kind="PersonAccount" data-req="no">
+            <td><span class="api api--pc">pi__pardot_hard_bounced__pc</span></td>
+            <td>Account Engagement Hard Bounced</td>
+            <td><span class="type">boolean</span></td>
+            <td><span class="slds-badge slds-badge--pc">__pc</span></td>
+            <td></td>
+            <td></td>
+            <td><span class="ref"></span></td>
+            <td><span class="pl"></span></td>
+            <td><span class="cat">Person 客製</span></td>
+        </tr>
+        <tr data-api="pi__score__pc" data-label="account engagement score" data-type="double(18,0)" data-kind="PersonAccount" data-req="no">
+            <td><span class="api api--pc">pi__score__pc</span></td>
+            <td>Account Engagement Score</td>
+            <td><span class="type">Double(18,0)</span></td>
+            <td><span class="slds-badge slds-badge--pc">__pc</span></td>
+            <td></td>
+            <td></td>
+            <td><span class="ref"></span></td>
+            <td><span class="pl"></span></td>
+            <td><span class="cat">Person 客製</span></td>
+        </tr>
+        <tr data-api="pi__url__pc" data-label="account engagement url" data-type="url" data-kind="PersonAccount" data-req="no">
+            <td><span class="api api--pc">pi__url__pc</span></td>
+            <td>Account Engagement URL</td>
+            <td><span class="type">url</span></td>
+            <td><span class="slds-badge slds-badge--pc">__pc</span></td>
+            <td></td>
+            <td></td>
+            <td><span class="ref"></span></td>
+            <td><span class="pl"></span></td>
+            <td><span class="cat">Person 客製</span></td>
+        </tr>
+        <tr data-api="pi__utm_campaign__pc" data-label="google analytics campaign" data-type="text(255)" data-kind="PersonAccount" data-req="no">
+            <td><span class="api api--pc">pi__utm_campaign__pc</span></td>
+            <td>Google Analytics Campaign</td>
+            <td><span class="type">Text(255)</span></td>
+            <td><span class="slds-badge slds-badge--pc">__pc</span></td>
+            <td></td>
+            <td></td>
+            <td><span class="ref"></span></td>
+            <td><span class="pl"></span></td>
+            <td><span class="cat">Person 客製</span></td>
+        </tr>
+        <tr data-api="pi__utm_content__pc" data-label="google analytics content" data-type="text(255)" data-kind="PersonAccount" data-req="no">
+            <td><span class="api api--pc">pi__utm_content__pc</span></td>
+            <td>Google Analytics Content</td>
+            <td><span class="type">Text(255)</span></td>
+            <td><span class="slds-badge slds-badge--pc">__pc</span></td>
+            <td></td>
+            <td></td>
+            <td><span class="ref"></span></td>
+            <td><span class="pl"></span></td>
+            <td><span class="cat">Person 客製</span></td>
+        </tr>
+        <tr data-api="pi__utm_medium__pc" data-label="google analytics medium" data-type="text(255)" data-kind="PersonAccount" data-req="no">
+            <td><span class="api api--pc">pi__utm_medium__pc</span></td>
+            <td>Google Analytics Medium</td>
+            <td><span class="type">Text(255)</span></td>
+            <td><span class="slds-badge slds-badge--pc">__pc</span></td>
+            <td></td>
+            <td></td>
+            <td><span class="ref"></span></td>
+            <td><span class="pl"></span></td>
+            <td><span class="cat">Person 客製</span></td>
+        </tr>
+        <tr data-api="pi__utm_source__pc" data-label="google analytics source" data-type="text(255)" data-kind="PersonAccount" data-req="no">
+            <td><span class="api api--pc">pi__utm_source__pc</span></td>
+            <td>Google Analytics Source</td>
+            <td><span class="type">Text(255)</span></td>
+            <td><span class="slds-badge slds-badge--pc">__pc</span></td>
+            <td></td>
+            <td></td>
+            <td><span class="ref"></span></td>
+            <td><span class="pl"></span></td>
+            <td><span class="cat">Person 客製</span></td>
+        </tr>
+        <tr data-api="pi__utm_term__pc" data-label="google analytics term" data-type="text(255)" data-kind="PersonAccount" data-req="no">
+            <td><span class="api api--pc">pi__utm_term__pc</span></td>
+            <td>Google Analytics Term</td>
+            <td><span class="type">Text(255)</span></td>
+            <td><span class="slds-badge slds-badge--pc">__pc</span></td>
+            <td></td>
+            <td></td>
+            <td><span class="ref"></span></td>
+            <td><span class="pl"></span></td>
+            <td><span class="cat">Person 客製</span></td>
+        </tr>
+        <tr data-api="ptnr_onbd_fmwk__onboarding_plan__pc" data-label="onboarding template" data-type="lookup → ptnr_onbd_fmwk__onboarding__c" data-kind="PersonAccount" data-req="no">
+            <td><span class="api api--pc">Ptnr_Onbd_Fmwk__Onboarding_Plan__pc</span></td>
+            <td>Onboarding Template</td>
+            <td><span class="type">Lookup → Ptnr_Onbd_Fmwk__Onboarding__c</span></td>
+            <td><span class="slds-badge slds-badge--pc">__pc</span></td>
+            <td></td>
+            <td></td>
+            <td><span class="ref">Ptnr_Onbd_Fmwk__Onboarding__c</span></td>
+            <td><span class="pl"></span></td>
+            <td><span class="cat">Person 客製</span></td>
+        </tr>
+        <tr data-api="ptnr_onbd_fmwk__onboarding_start_date__pc" data-label="onboarding start date" data-type="date" data-kind="PersonAccount" data-req="no">
+            <td><span class="api api--pc">Ptnr_Onbd_Fmwk__Onboarding_Start_Date__pc</span></td>
+            <td>Onboarding Start Date</td>
+            <td><span class="type">date</span></td>
+            <td><span class="slds-badge slds-badge--pc">__pc</span></td>
+            <td></td>
+            <td></td>
+            <td><span class="ref"></span></td>
+            <td><span class="pl"></span><span class="help">This determines when the contact's onboarding journey needs to begin.When left blank, start date is taken to be the date when the onboarding plan is attached to the contact. It drives calculation of step duration.</span></td>
+            <td><span class="cat">Person 客製</span></td>
+        </tr>
+        <tr data-api="ptnr_onbd_fmwk__onboarding_status__pc" data-label="onboarding status" data-type="picklist" data-kind="PersonAccount" data-req="no">
+            <td><span class="api api--pc">Ptnr_Onbd_Fmwk__Onboarding_Status__pc</span></td>
+            <td>Onboarding Status</td>
+            <td><span class="type">Picklist</span></td>
+            <td><span class="slds-badge slds-badge--pc">__pc</span></td>
+            <td></td>
+            <td></td>
+            <td><span class="ref"></span></td>
+            <td><span class="pl">Not Started · In Progress · Completed</span><span class="help">Holds the current status of the onboarding plan for the contact. Key field to drive business process based on journey status. Use it to trigger notifications, posts, requesting of funds etc.</span></td>
+            <td><span class="cat">Person 客製</span></td>
+        </tr>
+        <tr data-api="ptnr_onbd_fmwk__role_function__pc" data-label="role function" data-type="picklist" data-kind="PersonAccount" data-req="no">
+            <td><span class="api api--pc">Ptnr_Onbd_Fmwk__Role_Function__pc</span></td>
+            <td>Role Function</td>
+            <td><span class="type">Picklist</span></td>
+            <td><span class="slds-badge slds-badge--pc">__pc</span></td>
+            <td></td>
+            <td></td>
+            <td><span class="ref"></span></td>
+            <td><span class="pl">Manager · Marketing · Sales · Service · All · Technical</span><span class="help">When defining a partner contact, use these values to broadly identify the contact's function. Field used to generate onboarding tasks apt for role if tasks are defined to map to functions</span></td>
+            <td><span class="cat">Person 客製</span></td>
+        </tr>
+        <tr data-api="sdo_maps_dataset_split__pc" data-label="contact dataset split" data-type="double(3,0)" data-kind="PersonAccount" data-req="no">
+            <td><span class="api api--pc">SDO_MAPS_Dataset_Split__pc</span></td>
+            <td>Contact Dataset Split</td>
+            <td><span class="type">Double(3,0)</span></td>
+            <td><span class="slds-badge slds-badge--pc">__pc</span></td>
+            <td></td>
+            <td></td>
+            <td><span class="ref"></span></td>
+            <td><span class="pl"></span></td>
+            <td><span class="cat">Person 客製</span></td>
+        </tr>
+        <tr data-api="sdo_maps_days_since_last_visit__pc" data-label="days since last visit" data-type="double(18,0)" data-kind="PersonAccount" data-req="no">
+            <td><span class="api api--pc">SDO_MAPS_Days_Since_Last_Visit__pc</span></td>
+            <td>Days Since Last Visit</td>
+            <td><span class="type">Double(18,0)</span></td>
+            <td><span class="slds-badge slds-badge--pc">__pc</span></td>
+            <td></td>
+            <td></td>
+            <td><span class="ref"></span></td>
+            <td><span class="pl"></span></td>
+            <td><span class="cat">Person 客製</span></td>
+        </tr>
+        <tr data-api="sdo_maps_tag_contact__pc" data-label="tag contact" data-type="text(40)" data-kind="PersonAccount" data-req="no">
+            <td><span class="api api--pc">SDO_MAPS_Tag_Contact__pc</span></td>
+            <td>Tag Contact</td>
+            <td><span class="type">Text(40)</span></td>
+            <td><span class="slds-badge slds-badge--pc">__pc</span></td>
+            <td></td>
+            <td></td>
+            <td><span class="ref"></span></td>
+            <td><span class="pl"></span></td>
+            <td><span class="cat">Person 客製</span></td>
+        </tr>
+        <tr data-api="sdo_maps_value_tier__pc" data-label="value tier" data-type="text(4)" data-kind="PersonAccount" data-req="no">
+            <td><span class="api api--pc">SDO_MAPS_Value_Tier__pc</span></td>
+            <td>Value Tier</td>
+            <td><span class="type">Text(4)</span></td>
+            <td><span class="slds-badge slds-badge--pc">__pc</span></td>
+            <td></td>
+            <td></td>
+            <td><span class="ref"></span></td>
+            <td><span class="pl"></span></td>
+            <td><span class="cat">Person 客製</span></td>
+        </tr>
+        <tr data-api="sdo_sfs_tracker_botcontext__pc" data-label="tracker botcontext" data-type="lookup → serviceappointment" data-kind="PersonAccount" data-req="no">
+            <td><span class="api api--pc">SDO_SFS_Tracker_BotContext__pc</span></td>
+            <td>Tracker BotContext</td>
+            <td><span class="type">Lookup → ServiceAppointment</span></td>
+            <td><span class="slds-badge slds-badge--pc">__pc</span></td>
+            <td></td>
+            <td></td>
+            <td><span class="ref">ServiceAppointment</span></td>
+            <td><span class="pl"></span></td>
+            <td><span class="cat">Person 客製</span></td>
+        </tr>
+        <tr data-api="sdo_scom_ooa_access__pc" data-label="b2b access" data-type="picklist" data-kind="PersonAccount" data-req="no">
+            <td><span class="api api--pc">SDO_SCOM_OOA_Access__pc</span></td>
+            <td>B2B Access</td>
+            <td><span class="type">Picklist</span></td>
+            <td><span class="slds-badge slds-badge--pc">__pc</span></td>
+            <td></td>
+            <td></td>
+            <td><span class="ref"></span></td>
+            <td><span class="pl">Admin · Finance · Buyer · Viewer</span></td>
+            <td><span class="cat">Person 客製</span></td>
+        </tr>
+        <tr data-api="sdo_scom_ooa_approver__pc" data-label="b2b approver" data-type="lookup → contact" data-kind="PersonAccount" data-req="no">
+            <td><span class="api api--pc">SDO_SCOM_OOA_Approver__pc</span></td>
+            <td>B2B Approver</td>
+            <td><span class="type">Lookup → Contact</span></td>
+            <td><span class="slds-badge slds-badge--pc">__pc</span></td>
+            <td></td>
+            <td></td>
+            <td><span class="ref">Contact</span></td>
+            <td><span class="pl"></span></td>
+            <td><span class="cat">Person 客製</span></td>
+        </tr>
+        <tr data-api="sdo_scom_ooa_budget_limit__pc" data-label="b2b budget limit" data-type="currency(18,0)" data-kind="PersonAccount" data-req="no">
+            <td><span class="api api--pc">SDO_SCOM_OOA_Budget_Limit__pc</span></td>
+            <td>B2B Budget Limit</td>
+            <td><span class="type">Currency(18,0)</span></td>
+            <td><span class="slds-badge slds-badge--pc">__pc</span></td>
+            <td></td>
+            <td></td>
+            <td><span class="ref"></span></td>
+            <td><span class="pl"></span></td>
+            <td><span class="cat">Person 客製</span></td>
+        </tr>
+        <tr data-api="loyalty_status__pc" data-label="loyalty status" data-type="picklist" data-kind="PersonAccount" data-req="no">
+            <td><span class="api api--pc">Loyalty_Status__pc</span></td>
+            <td>Loyalty Status</td>
+            <td><span class="type">Picklist</span></td>
+            <td><span class="slds-badge slds-badge--pc">__pc</span></td>
+            <td></td>
+            <td></td>
+            <td><span class="ref"></span></td>
+            <td><span class="pl">Basic · Pronto One</span></td>
+            <td><span class="cat">Person 客製</span></td>
+        </tr>
+        <tr data-api="ana_member_number__pc" data-label="ana 會員號碼" data-type="text(20)" data-kind="PersonAccount" data-req="no">
+            <td><span class="api api--pc">ANA_Member_Number__pc</span></td>
+            <td>ANA 會員號碼</td>
+            <td><span class="type">Text(20)</span></td>
+            <td><span class="slds-badge slds-badge--pc">__pc</span></td>
+            <td></td>
+            <td></td>
+            <td><span class="ref"></span></td>
+            <td><span class="pl"></span></td>
+            <td><span class="cat">Person 客製</span></td>
+        </tr>
+        <tr data-api="loyalty_tier__pc" data-label="會員等級" data-type="picklist" data-kind="PersonAccount" data-req="no">
+            <td><span class="api api--pc">Loyalty_Tier__pc</span></td>
+            <td>會員等級</td>
+            <td><span class="type">Picklist</span></td>
+            <td><span class="slds-badge slds-badge--pc">__pc</span></td>
+            <td></td>
+            <td></td>
+            <td><span class="ref"></span></td>
+            <td><span class="pl">Diamond · Platinum · Gold · Bronze · General</span></td>
+            <td><span class="cat">Person 客製</span></td>
+        </tr>
+        <tr data-api="membership_since__pc" data-label="入會日期" data-type="date" data-kind="PersonAccount" data-req="no">
+            <td><span class="api api--pc">Membership_Since__pc</span></td>
+            <td>入會日期</td>
+            <td><span class="type">date</span></td>
+            <td><span class="slds-badge slds-badge--pc">__pc</span></td>
+            <td></td>
+            <td></td>
+            <td><span class="ref"></span></td>
+            <td><span class="pl"></span></td>
+            <td><span class="cat">Person 客製</span></td>
+        </tr>
+        <tr data-api="mileage_points__pc" data-label="累積哩程" data-type="double(18,0)" data-kind="PersonAccount" data-req="no">
+            <td><span class="api api--pc">Mileage_Points__pc</span></td>
+            <td>累積哩程</td>
+            <td><span class="type">Double(18,0)</span></td>
+            <td><span class="slds-badge slds-badge--pc">__pc</span></td>
+            <td></td>
+            <td></td>
+            <td><span class="ref"></span></td>
+            <td><span class="pl"></span></td>
+            <td><span class="cat">Person 客製</span></td>
+        </tr>
+        <tr data-api="brinno_dealer_role__pc" data-label="dealer role" data-type="picklist" data-kind="PersonAccount" data-req="no">
+            <td><span class="api api--pc">Brinno_Dealer_Role__pc</span></td>
+            <td>Dealer Role</td>
+            <td><span class="type">Picklist</span></td>
+            <td><span class="slds-badge slds-badge--pc">__pc</span></td>
+            <td></td>
+            <td></td>
+            <td><span class="ref"></span></td>
+            <td><span class="pl">Primary Contact · Technical Lead · Sales Lead · Marketing Lead · Operations Lead · Finance Contact</span></td>
+            <td><span class="cat">Person 客製</span></td>
+        </tr>
+        <tr data-api="preferred_channel__pc" data-label="慣用渠道" data-type="picklist" data-kind="PersonAccount" data-req="no">
+            <td><span class="api api--pc">Preferred_Channel__pc</span></td>
+            <td>慣用渠道</td>
+            <td><span class="type">Picklist</span></td>
+            <td><span class="slds-badge slds-badge--pc">__pc</span></td>
+            <td></td>
+            <td></td>
+            <td><span class="ref"></span></td>
+            <td><span class="pl">官網 · 蝦皮 · LINE · 電話 · Email</span></td>
+            <td><span class="cat">Person 客製</span></td>
+        </tr>
+        <tr data-api="avatar_url__pc" data-label="頭像 url" data-type="url" data-kind="PersonAccount" data-req="no">
+            <td><span class="api api--pc">Avatar_URL__pc</span></td>
+            <td>頭像 URL</td>
+            <td><span class="type">url</span></td>
+            <td><span class="slds-badge slds-badge--pc">__pc</span></td>
+            <td></td>
+            <td></td>
+            <td><span class="ref"></span></td>
+            <td><span class="pl"></span></td>
+            <td><span class="cat">Person 客製</span></td>
+        </tr>
+        <tr data-api="bio_note__pc" data-label="客戶側寫備註" data-type="textarea(255)" data-kind="PersonAccount" data-req="no">
+            <td><span class="api api--pc">Bio_Note__pc</span></td>
+            <td>客戶側寫備註</td>
+            <td><span class="type">TextArea(255)</span></td>
+            <td><span class="slds-badge slds-badge--pc">__pc</span></td>
+            <td></td>
+            <td></td>
+            <td><span class="ref"></span></td>
+            <td><span class="pl"></span></td>
+            <td><span class="cat">Person 客製</span></td>
+        </tr>
+        <tr data-api="case_count__pc" data-label="客訴數" data-type="double(10,0)" data-kind="PersonAccount" data-req="no">
+            <td><span class="api api--pc">Case_Count__pc</span></td>
+            <td>客訴數</td>
+            <td><span class="type">Double(10,0)</span></td>
+            <td><span class="slds-badge slds-badge--pc">__pc</span></td>
+            <td></td>
+            <td></td>
+            <td><span class="ref"></span></td>
+            <td><span class="pl"></span></td>
+            <td><span class="cat">Person 客製</span></td>
+        </tr>
+        <tr data-api="customer_segment__pc" data-label="客戶區隔" data-type="picklist" data-kind="PersonAccount" data-req="no">
+            <td><span class="api api--pc">Customer_Segment__pc</span></td>
+            <td>客戶區隔</td>
+            <td><span class="type">Picklist</span></td>
+            <td><span class="slds-badge slds-badge--pc">__pc</span></td>
+            <td></td>
+            <td></td>
+            <td><span class="ref"></span></td>
+            <td><span class="pl">高頻回購型 · 促銷敏感型 · 嘗鮮型 · 組合購買型 · 單品忠誠型</span></td>
+            <td><span class="cat">Person 客製</span></td>
+        </tr>
+        <tr data-api="customer_tier__pc" data-label="客戶分層" data-type="picklist" data-kind="PersonAccount" data-req="no">
+            <td><span class="api api--pc">Customer_Tier__pc</span></td>
+            <td>客戶分層</td>
+            <td><span class="type">Picklist</span></td>
+            <td><span class="slds-badge slds-badge--pc">__pc</span></td>
+            <td></td>
+            <td></td>
+            <td><span class="ref"></span></td>
+            <td><span class="pl">高價值 · 流失風險 · 新客觀察 · 沉默待喚 · 一般</span></td>
+            <td><span class="cat">Person 客製</span></td>
+        </tr>
+        <tr data-api="customer_value_score__pc" data-label="客戶價值分數" data-type="double(3,0)" data-kind="PersonAccount" data-req="no">
+            <td><span class="api api--pc">Customer_Value_Score__pc</span></td>
+            <td>客戶價值分數</td>
+            <td><span class="type">Double(3,0)</span></td>
+            <td><span class="slds-badge slds-badge--pc">__pc</span></td>
+            <td></td>
+            <td></td>
+            <td><span class="ref"></span></td>
+            <td><span class="pl"></span></td>
+            <td><span class="cat">Person 客製</span></td>
+        </tr>
+        <tr data-api="first_purchase_date__pc" data-label="首購日" data-type="date" data-kind="PersonAccount" data-req="no">
+            <td><span class="api api--pc">First_Purchase_Date__pc</span></td>
+            <td>首購日</td>
+            <td><span class="type">date</span></td>
+            <td><span class="slds-badge slds-badge--pc">__pc</span></td>
+            <td></td>
+            <td></td>
+            <td><span class="ref"></span></td>
+            <td><span class="pl"></span></td>
+            <td><span class="cat">Person 客製</span></td>
+        </tr>
+        <tr data-api="gender__pc" data-label="性別" data-type="picklist" data-kind="PersonAccount" data-req="no">
+            <td><span class="api api--pc">Gender__pc</span></td>
+            <td>性別</td>
+            <td><span class="type">Picklist</span></td>
+            <td><span class="slds-badge slds-badge--pc">__pc</span></td>
+            <td></td>
+            <td></td>
+            <td><span class="ref"></span></td>
+            <td><span class="pl">男 · 女 · 其他</span></td>
+            <td><span class="cat">Person 客製</span></td>
+        </tr>
+        <tr data-api="health_concerns__pc" data-label="健康關注" data-type="multipicklist" data-kind="PersonAccount" data-req="no">
+            <td><span class="api api--pc">Health_Concerns__pc</span></td>
+            <td>健康關注</td>
+            <td><span class="type">MultiPicklist</span></td>
+            <td><span class="slds-badge slds-badge--pc">__pc</span></td>
+            <td></td>
+            <td></td>
+            <td><span class="ref"></span></td>
+            <td><span class="pl">免疫保健 · 心血管保健 · 腸胃保健 · 眼部保健 · 骨骼保健 · 睡眠舒壓 · 女性保健 · 男性保健 · 美容保健 · 代謝保健 · 關節保健 · 能量代謝</span></td>
+            <td><span class="cat">Person 客製</span></td>
+        </tr>
+        <tr data-api="line_user_id__pc" data-label="line user id" data-type="text(64)" data-kind="PersonAccount" data-req="no">
+            <td><span class="api api--pc">LINE_User_ID__pc</span></td>
+            <td>LINE User ID</td>
+            <td><span class="type">Text(64)</span></td>
+            <td><span class="slds-badge slds-badge--pc">__pc</span></td>
+            <td></td>
+            <td></td>
+            <td><span class="ref"></span></td>
+            <td><span class="pl"></span></td>
+            <td><span class="cat">Person 客製</span></td>
+        </tr>
+        <tr data-api="last_interaction_date__pc" data-label="最近互動日" data-type="date" data-kind="PersonAccount" data-req="no">
+            <td><span class="api api--pc">Last_Interaction_Date__pc</span></td>
+            <td>最近互動日</td>
+            <td><span class="type">date</span></td>
+            <td><span class="slds-badge slds-badge--pc">__pc</span></td>
+            <td></td>
+            <td></td>
+            <td><span class="ref"></span></td>
+            <td><span class="pl"></span></td>
+            <td><span class="cat">Person 客製</span></td>
+        </tr>
+        <tr data-api="last_purchase_date__pc" data-label="最近購買日" data-type="date" data-kind="PersonAccount" data-req="no">
+            <td><span class="api api--pc">Last_Purchase_Date__pc</span></td>
+            <td>最近購買日</td>
+            <td><span class="type">date</span></td>
+            <td><span class="slds-badge slds-badge--pc">__pc</span></td>
+            <td></td>
+            <td></td>
+            <td><span class="ref"></span></td>
+            <td><span class="pl"></span></td>
+            <td><span class="cat">Person 客製</span></td>
+        </tr>
+        <tr data-api="lifetime_value__pc" data-label="累積消費 (ltv)" data-type="currency(16,2)" data-kind="PersonAccount" data-req="no">
+            <td><span class="api api--pc">Lifetime_Value__pc</span></td>
+            <td>累積消費 (LTV)</td>
+            <td><span class="type">Currency(16,2)</span></td>
+            <td><span class="slds-badge slds-badge--pc">__pc</span></td>
+            <td></td>
+            <td></td>
+            <td><span class="ref"></span></td>
+            <td><span class="pl"></span></td>
+            <td><span class="cat">Person 客製</span></td>
+        </tr>
+        <tr data-api="marketing_opt_in__pc" data-label="同意行銷" data-type="boolean" data-kind="PersonAccount" data-req="no">
+            <td><span class="api api--pc">Marketing_Opt_In__pc</span></td>
+            <td>同意行銷</td>
+            <td><span class="type">boolean</span></td>
+            <td><span class="slds-badge slds-badge--pc">__pc</span></td>
+            <td></td>
+            <td></td>
+            <td><span class="ref"></span></td>
+            <td><span class="pl"></span></td>
+            <td><span class="cat">Person 客製</span></td>
+        </tr>
+        <tr data-api="order_count__pc" data-label="訂單數" data-type="double(10,0)" data-kind="PersonAccount" data-req="no">
+            <td><span class="api api--pc">Order_Count__pc</span></td>
+            <td>訂單數</td>
+            <td><span class="type">Double(10,0)</span></td>
+            <td><span class="slds-badge slds-badge--pc">__pc</span></td>
+            <td></td>
+            <td></td>
+            <td><span class="ref"></span></td>
+            <td><span class="pl"></span></td>
+            <td><span class="cat">Person 客製</span></td>
+        </tr>
+        <tr data-api="shopee_customer_id__pc" data-label="蝦皮帳號" data-type="text(32)" data-kind="PersonAccount" data-req="no">
+            <td><span class="api api--pc">Shopee_Customer_ID__pc</span></td>
+            <td>蝦皮帳號</td>
+            <td><span class="type">Text(32)</span></td>
+            <td><span class="slds-badge slds-badge--pc">__pc</span></td>
+            <td></td>
+            <td></td>
+            <td><span class="ref"></span></td>
+            <td><span class="pl"></span></td>
+            <td><span class="cat">Person 客製</span></td>
+        </tr>
+        <tr data-api="shopline_customer_id__pc" data-label="shopline 客戶 id" data-type="text(32)" data-kind="PersonAccount" data-req="no">
+            <td><span class="api api--pc">Shopline_Customer_ID__pc</span></td>
+            <td>Shopline 客戶 ID</td>
+            <td><span class="type">Text(32)</span></td>
+            <td><span class="slds-badge slds-badge--pc">__pc</span></td>
+            <td></td>
+            <td></td>
+            <td><span class="ref"></span></td>
+            <td><span class="pl"></span></td>
+            <td><span class="cat">Person 客製</span></td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+<script>
+const q = document.getElementById('q');
+const kf = document.getElementById('kind');
+const rf = document.getElementById('req');
+const cnt = document.getElementById('cnt');
+const rows = Array.from(document.querySelectorAll('#tbl tbody tr'));
+function apply() {
+    const qv = q.value.toLowerCase().trim();
+    const kv = kf.value;
+    const rv = rf.value;
+    let n = 0;
+    rows.forEach(r => {
+        const okQ = !qv || r.dataset.api.includes(qv) || r.dataset.label.includes(qv) || r.dataset.type.includes(qv) || r.innerText.toLowerCase().includes(qv);
+        const okK = !kv || r.dataset.kind === kv;
+        const okR = !rv || r.dataset.req === rv;
+        const show = okQ && okK && okR;
+        r.style.display = show ? '' : 'none';
+        if (show) n++;
+    });
+    cnt.textContent = n;
+}
+[q,kf,rf].forEach(el => el.addEventListener('input', apply));
+</script>
+</body>
+</html>

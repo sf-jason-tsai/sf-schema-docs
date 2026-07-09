@@ -1,0 +1,2672 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>配方時代 · Care Cloud Demo · 專案說明</title>
+<style>
+  :root {
+    --wine: #B8395C;
+    --wine-lt: #FAE7EC;
+    --wine-dk: #7A2440;
+    --ink: #1E293B;
+    --mut: #64748B;
+    --bg: #F8FAFC;
+    --card: #fff;
+    --border: #E2E8F0;
+    --ok: #38A169;
+    --danger: #EA4B4B;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; padding: 0;
+    font-family: -apple-system, "Segoe UI", "Noto Sans TC", "微軟正黑體", sans-serif;
+    background: var(--bg); color: var(--ink);
+    -webkit-font-smoothing: antialiased;
+  }
+  .hero {
+    background: linear-gradient(135deg, var(--wine-dk) 0%, var(--wine) 100%);
+    color: #fff; padding: 60px 40px 50px;
+    position: relative; overflow: hidden;
+  }
+  .hero::before {
+    content: ""; position: absolute; top: -50px; right: -50px;
+    width: 300px; height: 300px; border-radius: 50%;
+    background: radial-gradient(circle, rgba(255,255,255,0.10), transparent 70%);
+  }
+  .hero__inner { max-width: 1200px; margin: 0 auto; position: relative; z-index: 1; }
+  .hero__tag { display: inline-block; padding: 4px 12px; background: rgba(255,255,255,0.15); border-radius: 999px; font-size: 12px; letter-spacing: 2px; }
+  .hero__title { font-size: 42px; font-weight: 900; margin: 14px 0 8px; letter-spacing: 1px; }
+  .hero__sub { font-size: 16px; opacity: 0.88; max-width: 720px; line-height: 1.6; }
+  .hero__meta { display: flex; gap: 24px; margin-top: 22px; }
+  .hero__meta-item { }
+  .hero__meta-lbl { font-size: 10px; letter-spacing: 2px; opacity: 0.7; }
+  .hero__meta-val { font-size: 20px; font-weight: 800; margin-top: 2px; }
+
+  .container { max-width: 1200px; margin: 0 auto; padding: 40px 30px; }
+  section { margin-bottom: 60px; }
+  h2 {
+    font-size: 24px; font-weight: 800; margin: 0 0 6px;
+    color: var(--wine-dk);
+    display: flex; align-items: center; gap: 10px;
+  }
+  h2::before {
+    content: ""; width: 4px; height: 22px; background: var(--wine);
+    border-radius: 2px; display: inline-block;
+  }
+  .sub { font-size: 13px; color: var(--mut); margin-bottom: 20px; }
+
+  /* Value pillars */
+  .pillars { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+  @media (max-width: 900px) { .pillars { grid-template-columns: 1fr; } }
+  .pillar {
+    background: var(--card); border: 1px solid var(--border); border-radius: 14px;
+    padding: 22px; position: relative;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .pillar:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(184,57,92,0.10); }
+  .pillar__num { font-size: 12px; color: var(--wine); font-weight: 700; letter-spacing: 2px; }
+  .pillar__title { font-size: 18px; font-weight: 800; margin: 6px 0 12px; }
+  .pillar__pain { background: #FEF3F5; color: var(--wine-dk); padding: 10px 12px; border-radius: 8px; font-size: 12px; margin-bottom: 10px; border-left: 3px solid var(--wine); }
+  .pillar__solve { font-size: 13px; color: var(--ink); line-height: 1.6; }
+
+  /* Data Model Graph */
+  .model {
+    background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 30px;
+    overflow-x: auto;
+  }
+  .model svg { display: block; margin: 0 auto; min-width: 900px; }
+
+  /* Objects grid */
+  .objects { display: grid; grid-template-columns: 1fr; gap: 12px; }
+  .obj {
+    background: var(--card); border: 1px solid var(--border); border-radius: 12px;
+    overflow: hidden;
+  }
+  .obj__head {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 14px 18px; background: linear-gradient(90deg, var(--wine-lt), transparent);
+    border-bottom: 1px solid var(--border);
+    cursor: pointer;
+  }
+  .obj__title { font-size: 15px; font-weight: 800; }
+  .obj__api {
+    display: inline-block; padding: 2px 8px; border-radius: 4px;
+    background: rgba(184,57,92,0.10); color: var(--wine-dk);
+    font-family: "SF Mono", Consolas, monospace; font-size: 11px;
+    margin-left: 8px;
+  }
+  .obj__badge { font-size: 10px; padding: 2px 8px; border-radius: 999px; letter-spacing: 1px; font-weight: 700; }
+  .obj__badge--std { background: #E0E7EF; color: #475569; }
+  .obj__badge--cus { background: var(--wine); color: #fff; }
+  .obj__stats {
+    display: flex; gap: 16px; align-items: center; font-size: 12px; color: var(--mut);
+  }
+  .obj__stats strong { color: var(--wine); font-size: 15px; }
+  .obj__purpose { padding: 10px 18px 12px; font-size: 13px; color: var(--mut); background: #FAFBFC; }
+  .obj__fields {
+    display: none; padding: 12px 18px 18px;
+  }
+  .obj[open] .obj__fields { display: block; }
+  .obj__fields table {
+    width: 100%; border-collapse: collapse; font-size: 12px;
+  }
+  .obj__fields th, .obj__fields td {
+    padding: 8px 10px; text-align: left; border-bottom: 1px solid var(--border); vertical-align: top;
+  }
+  .obj__fields th { background: #FAFBFC; font-weight: 700; color: var(--wine-dk); font-size: 11px; letter-spacing: 1px; text-transform: uppercase; }
+  .obj__fields tr:last-child td { border-bottom: 0; }
+  .fapi { font-family: "SF Mono", Consolas, monospace; color: var(--wine); font-weight: 600; }
+  .fapi--std { color: var(--ink); font-weight: 500; }
+  .ftype { color: var(--mut); font-size: 11px; }
+  .fref  { color: var(--wine-dk); font-size: 11px; }
+  .fpl   { color: var(--mut); font-size: 11px; font-style: italic; }
+  .toggle { color: var(--wine); font-size: 12px; font-weight: 700; }
+
+  /* LWC cards */
+  .lwc-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; }
+  @media (max-width: 900px) { .lwc-grid { grid-template-columns: 1fr; } }
+  .lwc {
+    background: var(--card); border: 1px solid var(--border); border-radius: 12px;
+    padding: 18px;
+    transition: all 0.2s;
+  }
+  .lwc:hover { border-color: var(--wine); box-shadow: 0 4px 12px rgba(184,57,92,0.10); }
+  .lwc__idx {
+    display: inline-block; width: 26px; height: 26px; border-radius: 50%;
+    background: var(--wine); color: #fff; text-align: center;
+    line-height: 26px; font-weight: 700; font-size: 12px;
+    margin-right: 10px;
+  }
+  .lwc__title { font-size: 15px; font-weight: 800; display: inline-block; vertical-align: middle; }
+  .lwc__api {
+    display: block; font-family: "SF Mono", Consolas, monospace;
+    color: var(--mut); font-size: 11px; margin: 4px 0 10px 36px;
+  }
+  .lwc__desc { font-size: 13px; color: var(--ink); line-height: 1.6; margin-left: 36px; }
+
+  /* Apex table */
+  .apex-table {
+    width: 100%; background: var(--card); border: 1px solid var(--border);
+    border-radius: 12px; overflow: hidden; border-collapse: collapse;
+  }
+  .apex-table th {
+    background: linear-gradient(90deg, var(--wine-dk), var(--wine)); color: #fff;
+    padding: 12px 16px; text-align: left; font-size: 12px; letter-spacing: 1px;
+  }
+  .apex-table td {
+    padding: 12px 16px; border-top: 1px solid var(--border); font-size: 13px;
+  }
+  .apex-table tr:nth-child(even) td { background: #FAFBFC; }
+  .apex-table code { font-family: "SF Mono", Consolas, monospace; background: var(--wine-lt); color: var(--wine-dk); padding: 2px 6px; border-radius: 4px; font-size: 12px; }
+
+  /* Journey */
+  .journey {
+    display: grid; grid-template-columns: repeat(5, 1fr); gap: 0;
+    background: var(--card); border: 1px solid var(--border); border-radius: 12px; overflow: hidden;
+  }
+  @media (max-width: 900px) { .journey { grid-template-columns: 1fr; } }
+  .journey__step {
+    padding: 20px 18px; border-right: 1px solid var(--border);
+    position: relative;
+  }
+  .journey__step:last-child { border-right: 0; }
+  @media (max-width: 900px) { .journey__step { border-right: 0; border-bottom: 1px solid var(--border); } }
+  .journey__icon {
+    width: 36px; height: 36px; border-radius: 10px;
+    background: linear-gradient(135deg, var(--wine-dk), var(--wine));
+    color: #fff; display: flex; align-items: center; justify-content: center;
+    font-weight: 800; font-size: 15px;
+  }
+  .journey__ttl { font-size: 15px; font-weight: 800; margin: 12px 0 4px; }
+  .journey__sub { font-size: 12px; color: var(--mut); line-height: 1.5; }
+
+  /* KPI band */
+  .kpis {
+    display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 30px;
+  }
+  @media (max-width: 900px) { .kpis { grid-template-columns: repeat(2, 1fr); } }
+  .kpi {
+    background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 16px;
+    display: flex; flex-direction: column; gap: 4px;
+  }
+  .kpi__lbl { font-size: 10px; color: var(--mut); letter-spacing: 2px; text-transform: uppercase; }
+  .kpi__val { font-size: 28px; font-weight: 900; color: var(--wine); }
+  .kpi__sub { font-size: 11px; color: var(--mut); }
+
+  footer {
+    padding: 30px 20px; text-align: center; color: var(--mut); font-size: 12px;
+    border-top: 1px solid var(--border); background: var(--card);
+  }
+  footer a { color: var(--wine); text-decoration: none; }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="hero__inner">
+    <span class="hero__tag">SALESFORCE · CARE CLOUD DEMO</span>
+    <h1 class="hero__title">配方時代 · Health Formula</h1>
+    <div class="hero__sub">
+      DTC 保健食品品牌的客戶 360°、Omni-Channel Case、Service Cloud + Slack Swarm 完整 demo。
+      Person Account 為中心，串接 Shopline / 蝦皮 / LINE OA / EDM / 廣告五大通路，
+      支撐售前漏斗、售中配送、售後客服 + 回購三段生命週期。
+    </div>
+    <div class="hero__meta">
+      <div class="hero__meta-item"><div class="hero__meta-lbl">TARGET ORG</div><div class="hero__meta-val">CBUSDO</div></div>
+      <div class="hero__meta-item"><div class="hero__meta-lbl">EDITION</div><div class="hero__meta-val">Enterprise + Person Account</div></div>
+      <div class="hero__meta-item"><div class="hero__meta-lbl">OBJECTS</div><div class="hero__meta-val">10</div></div>
+      <div class="hero__meta-item"><div class="hero__meta-lbl">LWC 組件</div><div class="hero__meta-val">10</div></div>
+      <div class="hero__meta-item"><div class="hero__meta-lbl">資料筆數</div><div class="hero__meta-val">4,600+</div></div>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+
+  <!-- ============ KPI band ============ -->
+  <div class="kpis">
+    <div class="kpi"><div class="kpi__lbl">Person Accounts</div><div class="kpi__val">50</div><div class="kpi__sub">DTC 保健食品消費者</div></div>
+    <div class="kpi"><div class="kpi__lbl">Orders</div><div class="kpi__val">500</div><div class="kpi__sub">跨 5 個通路的訂單</div></div>
+    <div class="kpi"><div class="kpi__lbl">Cases</div><div class="kpi__val">49</div><div class="kpi__sub">6 種類型 · 5 個進線來源</div></div>
+    <div class="kpi"><div class="kpi__lbl">Channel Interactions</div><div class="kpi__val">2,186</div><div class="kpi__sub">跨通路互動記錄</div></div>
+  </div>
+
+  <!-- ============ Value Pillars ============ -->
+  <section>
+    <h2>三大價值支柱</h2>
+    <div class="sub">每個畫面、每個 LWC、每個假資料設計都對應到這三根柱子</div>
+    <div class="pillars">
+      <div class="pillar">
+        <div class="pillar__num">PILLAR 01</div>
+        <div class="pillar__title">客戶 360°</div>
+        <div class="pillar__pain">現況痛點：Shopline / 蝦皮 / LINE / EDM / 廣告 資料互不相通</div>
+        <div class="pillar__solve">統一 Person Account → 一個畫面看到所有渠道所有互動 · 客戶分層 · LTV · 品牌聲量 · AI 客戶簡報 · 建議行動</div>
+      </div>
+      <div class="pillar">
+        <div class="pillar__num">PILLAR 02</div>
+        <div class="pillar__title">Omni-Channel 收攏</div>
+        <div class="pillar__pain">現況痛點：客服全在 LINE 手動處理，一個月 4-5K 訊息 6 人扛</div>
+        <div class="pillar__solve">Case + Omni-Channel Routing + LINE / Email / Phone / 官網表單 / 蝦皮訊息 統一進 Service Console</div>
+      </div>
+      <div class="pillar">
+        <div class="pillar__num">PILLAR 03</div>
+        <div class="pillar__title">Service Cloud Case 處理</div>
+        <div class="pillar__pain">現況痛點：沒工單系統 · 沒分派 · 沒 SLA · 沒客戶脈絡</div>
+        <div class="pillar__solve">Case 生命週期 + Agentforce 起草 + Slack 升級 + Knowledge 沉澱 · 跨部門 Swarm 對話</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ Data Model Graph ============ -->
+  <section>
+    <h2>資料模型關係圖</h2>
+    <div class="sub">10 個 Object 的核心關聯 · Person Account 為主體，向下輻射訂單 / 客服 / 通路 / 消耗</div>
+    <div class="model">
+      <svg width="1000" height="480" viewBox="0 0 1000 480" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <linearGradient id="wineGrad" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0" stop-color="#7A2440"/>
+            <stop offset="1" stop-color="#B8395C"/>
+          </linearGradient>
+          <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+            <path d="M0,0 L10,5 L0,10 z" fill="#B8395C"/>
+          </marker>
+        </defs>
+
+        <!-- Account center -->
+        <g>
+          <rect x="410" y="210" width="180" height="70" rx="10" fill="url(#wineGrad)"/>
+          <text x="500" y="240" fill="#fff" font-size="18" font-weight="800" text-anchor="middle">Account</text>
+          <text x="500" y="262" fill="#fff" opacity="0.85" font-size="11" text-anchor="middle">Person Account · 50 筆</text>
+        </g>
+
+        <!-- Contact (under Account) -->
+        <g>
+          <rect x="410" y="310" width="180" height="50" rx="8" fill="#fff" stroke="#B8395C" stroke-width="1.5" stroke-dasharray="4,3"/>
+          <text x="500" y="332" fill="#7A2440" font-size="12" font-weight="700" text-anchor="middle">Contact (底層)</text>
+          <text x="500" y="349" fill="#64748B" font-size="10" text-anchor="middle">__c → __pc 映射至 Account</text>
+        </g>
+        <line x1="500" y1="280" x2="500" y2="310" stroke="#B8395C" stroke-width="1" stroke-dasharray="3,3"/>
+
+        <!-- Order -->
+        <g>
+          <rect x="140" y="60" width="150" height="50" rx="8" fill="#fff" stroke="#B8395C" stroke-width="1.5"/>
+          <text x="215" y="82" fill="#7A2440" font-size="13" font-weight="800" text-anchor="middle">Order</text>
+          <text x="215" y="99" fill="#64748B" font-size="10" text-anchor="middle">500 筆訂單</text>
+        </g>
+        <line x1="290" y1="110" x2="420" y2="220" stroke="#B8395C" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+        <!-- OrderItem -->
+        <g>
+          <rect x="10" y="150" width="150" height="50" rx="8" fill="#fff" stroke="#B8395C" stroke-width="1.5"/>
+          <text x="85" y="172" fill="#7A2440" font-size="13" font-weight="800" text-anchor="middle">OrderItem</text>
+          <text x="85" y="189" fill="#64748B" font-size="10" text-anchor="middle">901 筆明細</text>
+        </g>
+        <line x1="140" y1="110" x2="120" y2="150" stroke="#B8395C" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+        <!-- Product2 -->
+        <g>
+          <rect x="10" y="260" width="150" height="50" rx="8" fill="#fff" stroke="#B8395C" stroke-width="1.5"/>
+          <text x="85" y="282" fill="#7A2440" font-size="13" font-weight="800" text-anchor="middle">Product2</text>
+          <text x="85" y="299" fill="#64748B" font-size="10" text-anchor="middle">15 個 SKU</text>
+        </g>
+        <line x1="85" y1="200" x2="85" y2="260" stroke="#B8395C" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+        <!-- Case -->
+        <g>
+          <rect x="710" y="60" width="150" height="50" rx="8" fill="#fff" stroke="#B8395C" stroke-width="1.5"/>
+          <text x="785" y="82" fill="#7A2440" font-size="13" font-weight="800" text-anchor="middle">Case</text>
+          <text x="785" y="99" fill="#64748B" font-size="10" text-anchor="middle">49 筆客服</text>
+        </g>
+        <line x1="710" y1="110" x2="580" y2="220" stroke="#B8395C" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+        <!-- Channel_Interaction -->
+        <g>
+          <rect x="840" y="180" width="150" height="60" rx="8" fill="#B8395C"/>
+          <text x="915" y="205" fill="#fff" font-size="12" font-weight="800" text-anchor="middle">Channel_Interaction__c</text>
+          <text x="915" y="224" fill="#fff" opacity="0.85" font-size="10" text-anchor="middle">2,186 筆跨通路互動</text>
+        </g>
+        <line x1="840" y1="240" x2="590" y2="260" stroke="#B8395C" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+        <!-- Brand_Voice -->
+        <g>
+          <rect x="710" y="380" width="150" height="60" rx="8" fill="#B8395C"/>
+          <text x="785" y="405" fill="#fff" font-size="12" font-weight="800" text-anchor="middle">Brand_Voice__c</text>
+          <text x="785" y="424" fill="#fff" opacity="0.85" font-size="10" text-anchor="middle">41 筆品牌聲量</text>
+        </g>
+        <line x1="710" y1="410" x2="590" y2="335" stroke="#B8395C" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+        <!-- Product_Consumption -->
+        <g>
+          <rect x="140" y="380" width="180" height="60" rx="8" fill="#B8395C"/>
+          <text x="230" y="405" fill="#fff" font-size="12" font-weight="800" text-anchor="middle">Product_Consumption__c</text>
+          <text x="230" y="424" fill="#fff" opacity="0.85" font-size="10" text-anchor="middle">901 筆消耗記錄</text>
+        </g>
+        <line x1="320" y1="410" x2="410" y2="335" stroke="#B8395C" stroke-width="1.5" marker-end="url(#arrow)"/>
+        <line x1="230" y1="380" x2="130" y2="310" stroke="#B8395C" stroke-width="1" stroke-dasharray="3,3"/>
+
+        <!-- PricebookEntry -->
+        <g>
+          <rect x="10" y="330" width="150" height="40" rx="8" fill="#fff" stroke="#B8395C" stroke-width="1"/>
+          <text x="85" y="354" fill="#7A2440" font-size="11" font-weight="700" text-anchor="middle">PricebookEntry</text>
+        </g>
+        <line x1="85" y1="310" x2="85" y2="330" stroke="#B8395C" stroke-width="1" stroke-dasharray="3,3"/>
+
+        <!-- Legend -->
+        <g transform="translate(20, 460)">
+          <rect x="0" y="-10" width="10" height="10" rx="2" fill="#B8395C"/>
+          <text x="16" y="-1" font-size="10" fill="#64748B">Custom Object</text>
+          <rect x="120" y="-10" width="10" height="10" rx="2" fill="#fff" stroke="#B8395C" stroke-width="1"/>
+          <text x="136" y="-1" font-size="10" fill="#64748B">Standard Object</text>
+          <line x1="240" y1="-6" x2="260" y2="-6" stroke="#B8395C" stroke-width="1.5" marker-end="url(#arrow)"/>
+          <text x="265" y="-1" font-size="10" fill="#64748B">Master-Detail / Lookup</text>
+          <line x1="380" y1="-6" x2="400" y2="-6" stroke="#B8395C" stroke-width="1" stroke-dasharray="3,3"/>
+          <text x="405" y="-1" font-size="10" fill="#64748B">映射 / 底層關係</text>
+        </g>
+      </svg>
+    </div>
+  </section>
+
+  <!-- ============ Object List ============ -->
+  <section>
+    <h2>10 個 Object · 完整欄位表</h2>
+    <div class="sub">點卡片標題展開欄位明細 · <a href="配方時代-Object-Schema-v2.xlsx" style="color: var(--wine); font-weight: 700;">📊 完整 Excel Schema</a></div>
+    <div class="objects">
+
+      <details class="obj">
+        <summary class="obj__head" style="list-style: none;">
+          <div>
+            <span class="obj__title">客戶（Person Account）</span>
+            <span class="obj__api">Account</span>
+            <span class="obj__badge obj__badge--std">Standard</span>
+          </div>
+          <div class="obj__stats">
+            <div>欄位 <strong>29</strong></div>
+            <div>資料 <strong>50</strong> 筆</div>
+            <span class="toggle">▸ 展開</span>
+          </div>
+        </summary>
+        <div class="obj__purpose">客戶主檔 · B2C Person Account · 每筆帳戶即一位健康食品消費者 · CSV: <code style="color: var(--wine);">accounts.csv</code></div>
+        <div class="obj__fields">
+          <table>
+            <thead><tr>
+              <th style="width: 26%;">API Name</th>
+              <th style="width: 18%;">Label / 用途</th>
+              <th style="width: 12%;">型別</th>
+              <th style="width: 8%;">必填</th>
+              <th style="width: 36%;">參照 / Picklist / 備註</th>
+            </tr></thead>
+            <tbody>
+              
+                <tr>
+                  <td><span class="fapi ">External_ID__c</span></td>
+                  <td>External ID</td>
+                  <td><span class="ftype">Text</span></td>
+                  <td></td>
+                  <td>
+                    
+                    
+                    <span style="color: var(--wine); font-weight: 700; font-size: 11px;">External ID</span>
+                    <span class="ftype">Length: 32</span>
+                  </td>
+                </tr>
+                <tr>
+                  <td><span class="fapi fapi--std">FirstName</span></td>
+                  <td>—</td>
+                  <td><span class="ftype">Standard</span></td>
+                  <td></td>
+                  <td>
+                    
+                    
+                    
+                    
+                  </td>
+                </tr>
+                <tr>
+                  <td><span class="fapi fapi--std">LastName</span></td>
+                  <td>—</td>
+                  <td><span class="ftype">Standard</span></td>
+                  <td></td>
+                  <td>
+                    
+                    
+                    
+                    
+                  </td>
+                </tr>
+                <tr>
+                  <td><span class="fapi fapi--std">PersonBirthdate</span></td>
+                  <td>—</td>
+                  <td><span class="ftype">Standard</span></td>
+                  <td></td>
+                  <td>
+                    
+                    
+                    
+                    
+                  </td>
+                </tr>
+                <tr>
+                  <td><span class="fapi ">Gender__pc</span></td>
+                  <td>性別</td>
+                  <td><span class="ftype">Picklist</span></td>
+                  <td></td>
+                  <td>
+                    
+                    <div class="fpl">男 · 女 · 其他</div>
+                    
+                    
+                  </td>
+                </tr>
+                <tr>
+                  <td><span class="fapi fapi--std">PersonMailingCountry</span></td>
+                  <td>—</td>
+                  <td><span class="ftype">Standard</span></td>
+                  <td></td>
+                  <td>
+                    
+                    
+                    
+                    
+                  </td>
+                </tr>
+                <tr>
+                  <td><span class="fapi fapi--std">PersonMailingState</span></td>
+                  <td>—</td>
+                  <td><span class="ftype">Standard</span></td>
+                  <td></td>
+                  <td>
+                    
+                    
+                    
+                    
+                  </td>
+                </tr>
+                <tr>
+                  <td><span class="fapi fapi--std">PersonMailingCity</span></td>
+                  <td>—</td>
+                  <td><span class="ftype">Standard</span></td>
+                  <td></td>
+                  <td>
+                    
+                    
+                    
+                    
+                  </td>
+                </tr>
+                <tr>
+                  <td><span class="fapi fapi--std">PersonMailingStreet</span></td>
+                  <td>—</td>
+                  <td><span class="ftype">Standard</span></td>
+                  <td></td>
+                  <td>
+                    
+                    
+                    
+                    
+                  </td>
+                </tr>
+                <tr>
+                  <td><span class="fapi fapi--std">PersonMobilePhone</span></td>
+                  <td>—</td>
+                  <td><span class="ftype">Standard</span></td>
+                  <td></td>
+                  <td>
+                    
+                    
+                    
+                    
+                  </td>
+                </tr>
+                <tr>
+                  <td><span class="fapi fapi--std">PersonEmail</span></td>
+                  <td>—</td>
+                  <td><span class="ftype">Standard</span></td>
+                  <td></td>
+                  <td>
+                    
+                    
+                    
+                    
+                  </td>
+                </tr>
+                <tr>
+                  <td><span class="fapi ">LINE_User_ID__pc</span></td>
+                  <td>LINE User ID</td>
+                  <td><span class="ftype">Text</span></td>
+                  <td></td>
+                  <td>
+                    
+                    
+                    
+                    <span class="ftype">Length: 64</span>
+                  </td>
+                </tr>
+                <tr>
+                  <td><span class="fapi ">Shopline_Customer_ID__pc</span></td>
+                  <td>Shopline 客戶 ID</td>
+                  <td><span class="ftype">Text</span></td>
+                  <td></td>
+                  <td>
+                    
+                    
+                    
+                    <span class="ftype">Length: 32</span>
+                  </td>
+                </tr>
+                <tr>
+                  <td><span class="fapi ">Shopee_Customer_ID__pc</span></td>
+                  <td>蝦皮帳號</td>
+                  <td><span class="ftype">Text</span></td>
+                  <td></td>
+                  <td>
+                    
+                    
+                    
+                    <span class="ftype">Length: 32</span>
+                  </td>
+                </tr>
+                <tr>
+                  <td><span class="fapi ">Preferred_Channel__pc</span></td>
+                  <td>慣用渠道</td>
+                  <td><span class="ftype">Picklist</span></td>
+                  <td></td>
+                  <td>
+                    
+                    <div class="fpl">官網 · 蝦皮 · LINE · 電話 · Email</div>
+                    
+                    
+                  </td>
+                </tr>
+                <tr>
+                  <td><span class="fapi ">Health_Concerns__pc</span></td>
+                  <td>健康關注</td>
+                  <td><span class="ftype">MultiselectPicklist</span></td>
+                  <td></td>
+                  <td>
+                    
+                    <div class="fpl">免疫保健 · 心血管保健 · 腸胃保健 · 眼部保健 · 骨骼保健 · 睡眠舒壓 · 女性保健 · 男性保健 · 美容保健 · 代謝保健 · 關節保健 · 能量代謝</div>
+                    
+                    
+                  </td>
+                </tr>
+                <tr>
+                  <td><span class="fapi ">First_Purchase_Date__pc</span></td>
+                  <td>首購日</td>
+                  <td><span class="ftype">Date</span></td>
+                  <td></td>
+                  <td>
+                    
+                    
+                    
+                    
+                  </td>
+                </tr>
+                <tr>
+                  <td><span class="fapi ">Last_Purchase_Date__pc</span></td>
+                  <td>最近購買日</td>
+                  <td><span class="ftype">Date</span></td>
+                  <td></td>
+                  <td>
+                    
+                    
+                    
+                    
+                  </td>
+                </tr>
+                <tr>
+                  <td><span class="fapi ">Last_Interaction_Date__pc</span></td>
+                  <td>最近互動日</td>
+                  <td><span class="ftype">Date</span></td>
+                  <td></td>
+                  <td>
+                    
+                    
+                    
+                    
+                  </td>
+                </tr>
+                <tr>
+                  <td><span class="fapi ">Lifetime_Value__pc</span></td>
+                  <td>累積消費 (LTV)</td>
+                  <td><span class="ftype">Currency</span></td>
+                  <td></td>
+                  <td>
+                    
+                    
+                    
+                    
+                  </td>
+                </tr>
+                <tr>
+                  <td><span class="fapi ">Order_Count__pc</span></td>
+                  <td>訂單數</td>
+                  <td><span class="ftype">Number</span></td>
+                  <td></td>
+                  <td>
+                    
+                    
+                    
+                    
+                  </td>
+                </tr>
+                <tr>
+                  <td><span class="fapi ">Case_Count__pc</span></td>
+                  <td>客訴數</td>
+                  <td><span class="ftype">Number</span></td>
+                  <td></td>
+                  <td>
+                    
+                    
+                    
+                    
+                  </td>
+                </tr>
+                <tr>
+                  <td><span class="fapi ">Customer_Tier__pc</span></td>
+                  <td>客戶分層</td>
+                  <td><span class="ftype">Picklist</span></td>
+                  <td></td>
+                  <td>
+                    
+                    <div class="fpl">高價值 · 流失風險 · 新客觀察 · 沉默待喚 · 一般</div>
+                    
+                    
+                  </td>
+                </tr>
+                <tr>
+                  <td><span class="fapi ">Customer_Segment__pc</span></td>
+                  <td>客戶區隔</td>
+                  <td><span class="ftype">Picklist</span></td>
+                  <td></td>
+                  <td>
+                    
+                    <div class="fpl">高頻回購型 · 促銷敏感型 · 嘗鮮型 · 組合購買型 · 單品忠誠型</div>
+                    
+                    
+                  </td>
+                </tr>
+                <tr>
+                  <td><span class="fapi ">Customer_Value_Score__pc</span></td>
+                  <td>客戶價值分數</td>
+                  <td><span class="ftype">Number</span></td>
+                  <td></td>
+                  <td>
+                    
+                    
+                    
+                    
+                  </td>
+                </tr>
+                <tr>
+                  <td><span class="fapi ">Marketing_Opt_In__pc</span></td>
+                  <td>同意行銷</td>
+                  <td><span class="ftype">Checkbox</span></td>
+                  <td></td>
+                  <td>
+                    
+                    
+                    
+                    
+                  </td>
+                </tr>
+                <tr>
+                  <td><span class="fapi ">Avatar_URL__pc</span></td>
+                  <td>頭像 URL</td>
+                  <td><span class="ftype">Url</span></td>
+                  <td></td>
+                  <td>
+                    
+                    
+                    
+                    
+                  </td>
+                </tr>
+                <tr>
+                  <td><span class="fapi ">Bio_Note__pc</span></td>
+                  <td>客戶側寫備註</td>
+                  <td><span class="ftype">TextArea</span></td>
+                  <td></td>
+                  <td>
+                    
+                    
+                    
+                    
+                  </td>
+                </tr>
+                <tr>
+                  <td><span class="fapi fapi--std">RecordType.DeveloperName</span></td>
+                  <td>—</td>
+                  <td><span class="ftype">Lookup</span></td>
+                  <td></td>
+                  <td>
+                    
+                    
+                    
+                    
+                  </td>
+                </tr>
+            </tbody>
+          </table>
+        </div>
+      </details>
+      <details class="obj">
+        <summary class="obj__head" style="list-style: none;">
+          <div>
+            <span class="obj__title">Contact</span>
+            <span class="obj__api">Contact</span>
+            <span class="obj__badge obj__badge--std">Standard</span>
+          </div>
+          <div class="obj__stats">
+            <div>欄位 <strong>18</strong></div>
+            <div>資料 <strong>—</strong> 筆</div>
+            <span class="toggle">▸ 展開</span>
+          </div>
+        </summary>
+        <div class="obj__purpose">Person Account 底層 Contact · 客製欄位定義於此，透過 __pc 映射到 Account</div>
+        <div class="obj__fields">
+          <table>
+            <thead><tr>
+              <th style="width: 26%;">API Name</th>
+              <th style="width: 18%;">Label / 用途</th>
+              <th style="width: 12%;">型別</th>
+              <th style="width: 8%;">必填</th>
+              <th style="width: 36%;">參照 / Picklist / 備註</th>
+            </tr></thead>
+            <tbody>
+              
+                <tr>
+                  <td><span class="fapi ">Avatar_URL__c</span></td>
+                  <td>頭像 URL</td>
+                  <td><span class="ftype">Url</span></td>
+                  <td></td>
+                  <td>
+                    
+                    
+                    
+                    
+                  </td>
+                </tr>
+                <tr>
+                  <td><span class="fapi ">Bio_Note__c</span></td>
+                  <td>客戶側寫備註</td>
+                  <td><span class="ftype">TextArea</span></td>
+                  <td></td>
+                  <td>
+                    
+                    
+                    
+                    
+                  </td>
+                </tr>
+                <tr>
+                  <td><span class="fapi ">Case_Count__c</span></td>
+                  <td>客訴數</td>
+                  <td><span class="ftype">Number</span></td>
+                  <td></td>
+                  <td>
+                    
+                    
+                    
+                    
+                  </td>
+                </tr>
+                <tr>
+                  <td><span class="fapi ">Customer_Segment__c</span></td>
+                  <td>客戶區隔</td>
+                  <td><span class="ftype">Picklist</span></td>
+                  <td></td>
+                  <td>
+                    
+                    <div class="fpl">高頻回購型 · 促銷敏感型 · 嘗鮮型 · 組合購買型 · 單品忠誠型</div>
+                    
+                    
+                  </td>
+                </tr>
+                <tr>
+                  <td><span class="fapi ">Customer_Tier__c</span></td>
+                  <td>客戶分層</td>
+                  <td><span class="ftype">Picklist</span></td>
+                  <td></td>
+                  <td>
+                    
+                    <div class="fpl">高價值 · 流失風險 · 新客觀察 · 沉默待喚 · 一般</div>
+                    
+                    
+                  </td>
+                </tr>
+                <tr>
+                  <td><span class="fapi ">Customer_Value_Score__c</span></td>
+                  <td>客戶價值分數</td>
+                  <td><span class="ftype">Number</span></td>
+                  <td></td>
+                  <td>
+                    
+                    
+                    
+                    
+                  </td>
+                </tr>
+                <tr>
+                  <td><span class="fapi ">First_Purchase_Date__c</span></td>
+                  <td>首購日</td>
+                  <td><span class="ftype">Date</span></td>
+                  <td></td>
+                  <td>
+                    
+                    
+                    
+                    
+                  </td>
+                </tr>
+                <tr>
+                  <td><span class="fapi ">Gender__c</span></td>
+                  <td>性別</td>
+                  <td><span class="ftype">Picklist</span></td>
+                  <td></td>
+                  <td>
+                    
+                    <div class="fpl">男 · 女 · 其他</div>
+                    
+                    
+                  </td>
+                </tr>
+                <tr>
+                  <td><span class="fapi ">Health_Concerns__c</span></td>
+                  <td>健康關注</td>
+                  <td><span class="ftype">MultiselectPicklist</span></td>
+                  <td></td>
+                  <td>
+                    
+                    <div class="fpl">免疫保健 · 心血管保健 · 腸胃保健 · 眼部保健 · 骨骼保健 · 睡眠舒壓 · 女性保健 · 男性保健 · 美容保健 · 代謝保健 · 關節保健 · 能量代謝</div>
+                    
+                    
+                  </td>
+                </tr>
+                <tr>
+                  <td><span class="fapi ">Last_Interaction_Date__c</span></td>
+                  <td>最近互動日</td>
+                  <td><span class="ftype">Date</span></td>
+                  <td></td>
+                  <td>
+                    
+                    
+                    
+                    
+                  </td>
+                </tr>
+                <tr>
+                  <td><span class="fapi ">Last_Purchase_Date__c</span></td>
+                  <td>最近購買日</td>
+                  <td><span class="ftype">Date</span></td>
+                  <td></td>
+                  <td>
+                    
+                    
+                    
+                    
+                  </td>
+                </tr>
+                <tr>
+                  <td><span class="fapi ">Lifetime_Value__c</span></td>
+                  <td>累積消費 (LTV)</td>
+                  <td><span class="ftype">Currency</span></td>
+                  <td></td>
+                  <td>
+                    
+                    
+                    
+                    
+                  </td>
+                </tr>
+                <tr>
+                  <td><span class="fapi ">LINE_User_ID__c</span></td>
+                  <td>LINE User ID</td>
+                  <td><span class="ftype">Text</span></td>
+                  <td></td>
+                  <td>
+                    
+                    
+                    
+                    <span class="ftype">Length: 64</span>
+                  </td>
+                </tr>
+                <tr>
+                  <td><span class="fapi ">Marketing_Opt_In__c</span></td>
+                  <td>同意行銷</td>
+                  <td><span class="ftype">Checkbox</span></td>
+                  <td></td>
+                  <td>
+                    
+                    
+                    
+                    
+                  </td>
+                </tr>
+                <tr>
+                  <td><span class="fapi ">Order_Count__c</span></td>
+                  <td>訂單數</td>
+                  <td><span class="ftype">Number</span></td>
+                  <td></td>
+                  <td>
+                    
+                    
+                    
+                    
+                  </td>
+                </tr>
+                <tr>
+                  <td><span class="fapi ">Preferred_Channel__c</span></td>
+                  <td>慣用渠道</td>
+                  <td><span class="ftype">Picklist</span></td>
+                  <td></td>
+                  <td>
+                    
+                    <div class="fpl">官網 · 蝦皮 · LINE · 電話 · Email</div>
+                    
+                    
+                  </td>
+                </tr>
+                <tr>
+                  <td><span class="fapi ">Shopee_Customer_ID__c</span></td>
+                  <td>蝦皮帳號</td>
+                  <td><span class="ftype">Text</span></td>
+                  <td></td>
+                  <td>
+                    
+                    
+                    
+                    <span class="ftype">Length: 32</span>
+                  </td>
+                </tr>
+                <tr>
+                  <td><span class="fapi ">Shopline_Customer_ID__c</span></td>
+                  <td>Shopline 客戶 ID</td>
+                  <td><span class="ftype">Text</span></td>
+                  <td></td>
+                  <td>
+                    
+                    
+                    
+                    <span class="ftype">Length: 32</span>
+                  </td>
+                </tr>
+            </tbody>
+          </table>
+        </div>
+      </details>
+      <details class="obj">
+        <summary class="obj__head" style="list-style: none;">
+          <div>
+            <span class="obj__title">訂單</span>
+            <span class="obj__api">Order</span>
+            <span class="obj__badge obj__badge--std">Standard</span>
+          </div>
+          <div class="obj__stats">
+            <div>欄位 <strong>12</strong></div>
+            <div>資料 <strong>500</strong> 筆</div>
+            <span class="toggle">▸ 展開</span>
+          </div>
+        </summary>
+        <div class="obj__purpose">訂單主檔 · 記錄每筆購買、通路、付款、物流狀態 · CSV: <code style="color: var(--wine);">orders.csv</code></div>
+        <div class="obj__fields">
+          <table>
+            <thead><tr>
+              <th style="width: 26%;">API Name</th>
+              <th style="width: 18%;">Label / 用途</th>
+              <th style="width: 12%;">型別</th>
+              <th style="width: 8%;">必填</th>
+              <th style="width: 36%;">參照 / Picklist / 備註</th>
+            </tr></thead>
+            <tbody>
+              
+                <tr>
+                  <td><span class="fapi ">External_ID__c</span></td>
+                  <td>External ID</td>
+                  <td><span class="ftype">Text</span></td>
+                  <td></td>
+                  <td>
+                    
+                    
+                    <span style="color: var(--wine); font-weight: 700; font-size: 11px;">External ID</span>
+                    <span class="ftype">Length: 32</span>
+                  </td>
+                </tr>
+                <tr>
+                  <td><span class="fapi ">Account.External_ID__c</span></td>
+                  <td>—</td>
+                  <td><span class="ftype">Lookup</span></td>
+                  <td></td>
+                  <td>
+                    
+                    
+                    
+                    
+                  </td>
+                </tr>
+                <tr>
+                  <td><span class="fapi fapi--std">EffectiveDate</span></td>
+                  <td>—</td>
+                  <td><span class="ftype">Standard</span></td>
+                  <td></td>
+                  <td>
+                    
+                    
+                    
+                    
+                  </td>
+                </tr>
+                <tr>
+                  <td><span class="fapi fapi--std">Status</span></td>
+                  <td>—</td>
+                  <td><span class="ftype">Standard</span></td>
+                  <td></td>
+                  <td>
+                    
+                    
+                    
+                    
+                  </td>
+                </tr>
+                <tr>
+                  <td><span class="fapi fapi--std">Pricebook2.Name</span></td>
+                  <td>—</td>
+                  <td><span class="ftype">Lookup</span></td>
+                  <td></td>
+                  <td>
+                    
+                    
+                    
+                    
+                  </td>
+                </tr>
+                <tr>
+                  <td><span class="fapi ">Channel__c</span></td>
+                  <td>通路</td>
+                  <td><span class="ftype">Picklist</span></td>
+                  <td></td>
+                  <td>
+                    
+                    <div class="fpl">官網 · 蝦皮 · LINE客訂 · 電話</div>
+                    
+                    
+                  </td>
+                </tr>
+                <tr>
+                  <td><span class="fapi ">Payment_Method__c</span></td>
+                  <td>支付方式</td>
+                  <td><span class="ftype">Picklist</span></td>
+                  <td></td>
+                  <td>
+                    
+                    <div class="fpl">信用卡 · LINE Pay · ATM 轉帳 · 貨到付款 · 蝦皮支付</div>
+                    
+                    
+                  </td>
+                </tr>
+                <tr>
+                  <td><span class="fapi ">Promo_Code__c</span></td>
+                  <td>促銷代碼</td>
+                  <td><span class="ftype">Text</span></td>
+                  <td></td>
+                  <td>
+                    
+                    
+                    
+                    <span class="ftype">Length: 50</span>
+                  </td>
+                </tr>
+                <tr>
+                  <td><span class="fapi ">Shipping_Status__c</span></td>
+                  <td>配送狀態</td>
+                  <td><span class="ftype">Picklist</span></td>
+                  <td></td>
+                  <td>
+                    
+                    <div class="fpl">待出貨 · 已出貨 · 配送中 · 已送達 · 退貨中</div>
+                    
+                    
+                  </td>
+                </tr>
+                <tr>
+                  <td><span class="fapi ">Shipping_Carrier__c</span></td>
+                  <td>物流商</td>
+                  <td><span class="ftype">Text</span></td>
+                  <td></td>
+                  <td>
+                    
+                    
+                    
+                    <span class="ftype">Length: 50</span>
+                  </td>
+                </tr>
+                <tr>
+                  <td><span class="fapi ">Tracking_Number__c</span></td>
+                  <td>追蹤號碼</td>
+                  <td><span class="ftype">Text</span></td>
+                  <td></td>
+                  <td>
+                    
+                    
+                    
+                    <span class="ftype">Length: 50</span>
+                  </td>
+                </tr>
+                <tr>
+                  <td><span class="fapi ">Order_Amount__c</span></td>
+                  <td>訂單總額</td>
+                  <td><span class="ftype">Currency</span></td>
+                  <td></td>
+                  <td>
+                    
+                    
+                    
+                    
+                  </td>
+                </tr>
+            </tbody>
+          </table>
+        </div>
+      </details>
+      <details class="obj">
+        <summary class="obj__head" style="list-style: none;">
+          <div>
+            <span class="obj__title">訂單明細</span>
+            <span class="obj__api">OrderItem</span>
+            <span class="obj__badge obj__badge--std">Standard</span>
+          </div>
+          <div class="obj__stats">
+            <div>欄位 <strong>6</strong></div>
+            <div>資料 <strong>901</strong> 筆</div>
+            <span class="toggle">▸ 展開</span>
+          </div>
+        </summary>
+        <div class="obj__purpose">一筆訂單拆到 N 個商品項 · CSV: <code style="color: var(--wine);">order_items.csv</code></div>
+        <div class="obj__fields">
+          <table>
+            <thead><tr>
+              <th style="width: 26%;">API Name</th>
+              <th style="width: 18%;">Label / 用途</th>
+              <th style="width: 12%;">型別</th>
+              <th style="width: 8%;">必填</th>
+              <th style="width: 36%;">參照 / Picklist / 備註</th>
+            </tr></thead>
+            <tbody>
+              
+                <tr>
+                  <td><span class="fapi ">External_ID__c</span></td>
+                  <td>—</td>
+                  <td><span class="ftype">Standard</span></td>
+                  <td></td>
+                  <td>
+                    
+                    
+                    
+                    
+                  </td>
+                </tr>
+                <tr>
+                  <td><span class="fapi ">Order.External_ID__c</span></td>
+                  <td>—</td>
+                  <td><span class="ftype">Lookup</span></td>
+                  <td></td>
+                  <td>
+                    
+                    
+                    
+                    
+                  </td>
+                </tr>
+                <tr>
+                  <td><span class="fapi ">Product2.External_ID__c</span></td>
+                  <td>—</td>
+                  <td><span class="ftype">Lookup</span></td>
+                  <td></td>
+                  <td>
+                    
+                    
+                    
+                    
+                  </td>
+                </tr>
+                <tr>
+                  <td><span class="fapi fapi--std">Quantity</span></td>
+                  <td>—</td>
+                  <td><span class="ftype">Standard</span></td>
+                  <td></td>
+                  <td>
+                    
+                    
+                    
+                    
+                  </td>
+                </tr>
+                <tr>
+                  <td><span class="fapi fapi--std">UnitPrice</span></td>
+                  <td>—</td>
+                  <td><span class="ftype">Standard</span></td>
+                  <td></td>
+                  <td>
+                    
+                    
+                    
+                    
+                  </td>
+                </tr>
+                <tr>
+                  <td><span class="fapi fapi--std">TotalPrice</span></td>
+                  <td>—</td>
+                  <td><span class="ftype">Standard</span></td>
+                  <td></td>
+                  <td>
+                    
+                    
+                    
+                    
+                  </td>
+                </tr>
+            </tbody>
+          </table>
+        </div>
+      </details>
+      <details class="obj">
+        <summary class="obj__head" style="list-style: none;">
+          <div>
+            <span class="obj__title">商品</span>
+            <span class="obj__api">Product2</span>
+            <span class="obj__badge obj__badge--std">Standard</span>
+          </div>
+          <div class="obj__stats">
+            <div>欄位 <strong>13</strong></div>
+            <div>資料 <strong>15</strong> 筆</div>
+            <span class="toggle">▸ 展開</span>
+          </div>
+        </summary>
+        <div class="obj__purpose">保健食品 SKU · 名稱 / 定價 / 圖片 / 分類 · CSV: <code style="color: var(--wine);">products.csv</code></div>
+        <div class="obj__fields">
+          <table>
+            <thead><tr>
+              <th style="width: 26%;">API Name</th>
+              <th style="width: 18%;">Label / 用途</th>
+              <th style="width: 12%;">型別</th>
+              <th style="width: 8%;">必填</th>
+              <th style="width: 36%;">參照 / Picklist / 備註</th>
+            </tr></thead>
+            <tbody>
+              
+                <tr>
+                  <td><span class="fapi fapi--std">ProductCode</span></td>
+                  <td>—</td>
+                  <td><span class="ftype">Standard</span></td>
+                  <td></td>
+                  <td>
+                    
+                    
+                    
+                    
+                  </td>
+                </tr>
+                <tr>
+                  <td><span class="fapi ">External_ID__c</span></td>
+                  <td>External ID</td>
+                  <td><span class="ftype">Text</span></td>
+                  <td></td>
+                  <td>
+                    
+                    
+                    <span style="color: var(--wine); font-weight: 700; font-size: 11px;">External ID</span>
+                    <span class="ftype">Length: 32</span>
+                  </td>
+                </tr>
+                <tr>
+                  <td><span class="fapi fapi--std">Name</span></td>
+                  <td>—</td>
+                  <td><span class="ftype">Standard</span></td>
+                  <td></td>
+                  <td>
+                    
+                    
+                    
+                    
+                  </td>
+                </tr>
+                <tr>
+                  <td><span class="fapi ">Handle__c</span></td>
+                  <td>商品 Handle</td>
+                  <td><span class="ftype">Text</span></td>
+                  <td></td>
+                  <td>
+                    
+                    
+                    
+                    <span class="ftype">Length: 50</span>
+                  </td>
+                </tr>
+                <tr>
+                  <td><span class="fapi ">Category__c</span></td>
+                  <td>品類</td>
+                  <td><span class="ftype">Picklist</span></td>
+                  <td></td>
+                  <td>
+                    
+                    <div class="fpl">免疫保健 · 心血管保健 · 腸胃保健 · 眼部保健 · 骨骼保健 · 睡眠舒壓 · 女性保健 · 男性保健 · 美容保健 · 代謝保健 · 關節保健 · 能量代謝</div>
+                    
+                    
+                  </td>
+                </tr>
+                <tr>
+                  <td><span class="fapi ">Formula_Hero__c</span></td>
+                  <td>主打成分</td>
+                  <td><span class="ftype">Text</span></td>
+                  <td></td>
+                  <td>
+                    
+                    
+                    
+                    <span class="ftype">Length: 100</span>
+                  </td>
+                </tr>
+                <tr>
+                  <td><span class="fapi ">Single_Box_Price__c</span></td>
+                  <td>單盒售價</td>
+                  <td><span class="ftype">Currency</span></td>
+                  <td></td>
+                  <td>
+                    
+                    
+                    
+                    
+                  </td>
+                </tr>
+                <tr>
+                  <td><span class="fapi ">Bundle_10_Price__c</span></td>
+                  <td>十盒優惠價</td>
+                  <td><span class="ftype">Currency</span></td>
+                  <td></td>
+                  <td>
+                    
+                    
+                    
+                    
+                  </td>
+                </tr>
+                <tr>
+                  <td><span class="fapi ">Original_Price__c</span></td>
+                  <td>原價</td>
+                  <td><span class="ftype">Currency</span></td>
+                  <td></td>
+                  <td>
+                    
+                    
+                    
+                    
+                  </td>
+                </tr>
+                <tr>
+                  <td><span class="fapi ">Suggested_Days__c</span></td>
+                  <td>建議服用天數</td>
+                  <td><span class="ftype">Number</span></td>
+                  <td></td>
+                  <td>
+                    
+                    
+                    
+                    
+                  </td>
+                </tr>
+                <tr>
+                  <td><span class="fapi ">Image_URL__c</span></td>
+                  <td>商品圖片 URL</td>
+                  <td><span class="ftype">Text</span></td>
+                  <td></td>
+                  <td>
+                    
+                    
+                    
+                    <span class="ftype">Length: 255</span>
+                  </td>
+                </tr>
+                <tr>
+                  <td><span class="fapi fapi--std">IsActive</span></td>
+                  <td>—</td>
+                  <td><span class="ftype">Standard</span></td>
+                  <td></td>
+                  <td>
+                    
+                    
+                    
+                    
+                  </td>
+                </tr>
+                <tr>
+                  <td><span class="fapi fapi--std">Description</span></td>
+                  <td>—</td>
+                  <td><span class="ftype">Standard</span></td>
+                  <td></td>
+                  <td>
+                    
+                    
+                    
+                    
+                  </td>
+                </tr>
+            </tbody>
+          </table>
+        </div>
+      </details>
+      <details class="obj">
+        <summary class="obj__head" style="list-style: none;">
+          <div>
+            <span class="obj__title">價目表明細</span>
+            <span class="obj__api">PricebookEntry</span>
+            <span class="obj__badge obj__badge--std">Standard</span>
+          </div>
+          <div class="obj__stats">
+            <div>欄位 <strong>6</strong></div>
+            <div>資料 <strong>15</strong> 筆</div>
+            <span class="toggle">▸ 展開</span>
+          </div>
+        </summary>
+        <div class="obj__purpose">Product × Pricebook 定價 (單盒 vs 十盒優惠) · CSV: <code style="color: var(--wine);">pricebook_entries.csv</code></div>
+        <div class="obj__fields">
+          <table>
+            <thead><tr>
+              <th style="width: 26%;">API Name</th>
+              <th style="width: 18%;">Label / 用途</th>
+              <th style="width: 12%;">型別</th>
+              <th style="width: 8%;">必填</th>
+              <th style="width: 36%;">參照 / Picklist / 備註</th>
+            </tr></thead>
+            <tbody>
+              
+                <tr>
+                  <td><span class="fapi ">External_ID__c</span></td>
+                  <td>—</td>
+                  <td><span class="ftype">Standard</span></td>
+                  <td></td>
+                  <td>
+                    
+                    
+                    
+                    
+                  </td>
+                </tr>
+                <tr>
+                  <td><span class="fapi ">Product2.External_ID__c</span></td>
+                  <td>—</td>
+                  <td><span class="ftype">Lookup</span></td>
+                  <td></td>
+                  <td>
+                    
+                    
+                    
+                    
+                  </td>
+                </tr>
+                <tr>
+                  <td><span class="fapi fapi--std">Pricebook2.Name</span></td>
+                  <td>—</td>
+                  <td><span class="ftype">Lookup</span></td>
+                  <td></td>
+                  <td>
+                    
+                    
+                    
+                    
+                  </td>
+                </tr>
+                <tr>
+                  <td><span class="fapi fapi--std">UnitPrice</span></td>
+                  <td>—</td>
+                  <td><span class="ftype">Standard</span></td>
+                  <td></td>
+                  <td>
+                    
+                    
+                    
+                    
+                  </td>
+                </tr>
+                <tr>
+                  <td><span class="fapi fapi--std">IsActive</span></td>
+                  <td>—</td>
+                  <td><span class="ftype">Standard</span></td>
+                  <td></td>
+                  <td>
+                    
+                    
+                    
+                    
+                  </td>
+                </tr>
+                <tr>
+                  <td><span class="fapi fapi--std">UseStandardPrice</span></td>
+                  <td>—</td>
+                  <td><span class="ftype">Standard</span></td>
+                  <td></td>
+                  <td>
+                    
+                    
+                    
+                    
+                  </td>
+                </tr>
+            </tbody>
+          </table>
+        </div>
+      </details>
+      <details class="obj">
+        <summary class="obj__head" style="list-style: none;">
+          <div>
+            <span class="obj__title">客服 Case</span>
+            <span class="obj__api">Case</span>
+            <span class="obj__badge obj__badge--std">Standard</span>
+          </div>
+          <div class="obj__stats">
+            <div>欄位 <strong>12</strong></div>
+            <div>資料 <strong>49</strong> 筆</div>
+            <span class="toggle">▸ 展開</span>
+          </div>
+        </summary>
+        <div class="obj__purpose">消費者回饋 / 諮詢 / 退換貨 / 客訴 · CSV: <code style="color: var(--wine);">cases.csv</code></div>
+        <div class="obj__fields">
+          <table>
+            <thead><tr>
+              <th style="width: 26%;">API Name</th>
+              <th style="width: 18%;">Label / 用途</th>
+              <th style="width: 12%;">型別</th>
+              <th style="width: 8%;">必填</th>
+              <th style="width: 36%;">參照 / Picklist / 備註</th>
+            </tr></thead>
+            <tbody>
+              
+                <tr>
+                  <td><span class="fapi ">External_ID__c</span></td>
+                  <td>External ID</td>
+                  <td><span class="ftype">Text</span></td>
+                  <td></td>
+                  <td>
+                    
+                    
+                    <span style="color: var(--wine); font-weight: 700; font-size: 11px;">External ID</span>
+                    <span class="ftype">Length: 32</span>
+                  </td>
+                </tr>
+                <tr>
+                  <td><span class="fapi ">Account.External_ID__c</span></td>
+                  <td>—</td>
+                  <td><span class="ftype">Lookup</span></td>
+                  <td></td>
+                  <td>
+                    
+                    
+                    
+                    
+                  </td>
+                </tr>
+                <tr>
+                  <td><span class="fapi fapi--std">Subject</span></td>
+                  <td>—</td>
+                  <td><span class="ftype">Standard</span></td>
+                  <td></td>
+                  <td>
+                    
+                    
+                    
+                    
+                  </td>
+                </tr>
+                <tr>
+                  <td><span class="fapi fapi--std">Type</span></td>
+                  <td>—</td>
+                  <td><span class="ftype">Standard</span></td>
+                  <td></td>
+                  <td>
+                    
+                    
+                    
+                    
+                  </td>
+                </tr>
+                <tr>
+                  <td><span class="fapi fapi--std">Origin</span></td>
+                  <td>—</td>
+                  <td><span class="ftype">Standard</span></td>
+                  <td></td>
+                  <td>
+                    
+                    
+                    
+                    
+                  </td>
+                </tr>
+                <tr>
+                  <td><span class="fapi fapi--std">Status</span></td>
+                  <td>—</td>
+                  <td><span class="ftype">Standard</span></td>
+                  <td></td>
+                  <td>
+                    
+                    
+                    
+                    
+                  </td>
+                </tr>
+                <tr>
+                  <td><span class="fapi fapi--std">Priority</span></td>
+                  <td>—</td>
+                  <td><span class="ftype">Standard</span></td>
+                  <td></td>
+                  <td>
+                    
+                    
+                    
+                    
+                  </td>
+                </tr>
+                <tr>
+                  <td><span class="fapi fapi--std">Description</span></td>
+                  <td>—</td>
+                  <td><span class="ftype">Standard</span></td>
+                  <td></td>
+                  <td>
+                    
+                    
+                    
+                    
+                  </td>
+                </tr>
+                <tr>
+                  <td><span class="fapi ">AI_Summary__c</span></td>
+                  <td>AI 摘要</td>
+                  <td><span class="ftype">LongTextArea</span></td>
+                  <td></td>
+                  <td>
+                    
+                    
+                    
+                    <span class="ftype">Length: 32768</span>
+                  </td>
+                </tr>
+                <tr>
+                  <td><span class="fapi ">AI_Suggested_Response__c</span></td>
+                  <td>AI 建議回覆</td>
+                  <td><span class="ftype">LongTextArea</span></td>
+                  <td></td>
+                  <td>
+                    
+                    
+                    
+                    <span class="ftype">Length: 32768</span>
+                  </td>
+                </tr>
+                <tr>
+                  <td><span class="fapi ">Sentiment__c</span></td>
+                  <td>情緒</td>
+                  <td><span class="ftype">Picklist</span></td>
+                  <td></td>
+                  <td>
+                    
+                    <div class="fpl">正面 · 中性 · 負面 · 憤怒</div>
+                    
+                    
+                  </td>
+                </tr>
+                <tr>
+                  <td><span class="fapi ">Related_Product__r.External_ID__c</span></td>
+                  <td>—</td>
+                  <td><span class="ftype">Lookup</span></td>
+                  <td></td>
+                  <td>
+                    
+                    
+                    
+                    
+                  </td>
+                </tr>
+                <tr>
+                  <td><span class="fapi ">Related_Product__c</span></td>
+                  <td>相關商品</td>
+                  <td><span class="ftype">Lookup</span></td>
+                  <td></td>
+                  <td>
+                    <span class="fref">→ Product2</span>
+                    
+                    
+                    
+                  </td>
+                </tr>
+            </tbody>
+          </table>
+        </div>
+      </details>
+      <details class="obj">
+        <summary class="obj__head" style="list-style: none;">
+          <div>
+            <span class="obj__title">品牌聲量</span>
+            <span class="obj__api">Brand_Voice__c</span>
+            <span class="obj__badge obj__badge--cus">Custom</span>
+          </div>
+          <div class="obj__stats">
+            <div>欄位 <strong>11</strong></div>
+            <div>資料 <strong>41</strong> 筆</div>
+            <span class="toggle">▸ 展開</span>
+          </div>
+        </summary>
+        <div class="obj__purpose">Dcard / PTT / FB 社群輿論監聽 · CSV: <code style="color: var(--wine);">brand_voices.csv</code></div>
+        <div class="obj__fields">
+          <table>
+            <thead><tr>
+              <th style="width: 26%;">API Name</th>
+              <th style="width: 18%;">Label / 用途</th>
+              <th style="width: 12%;">型別</th>
+              <th style="width: 8%;">必填</th>
+              <th style="width: 36%;">參照 / Picklist / 備註</th>
+            </tr></thead>
+            <tbody>
+              
+                <tr>
+                  <td><span class="fapi ">External_ID__c</span></td>
+                  <td>External ID</td>
+                  <td><span class="ftype">Text</span></td>
+                  <td></td>
+                  <td>
+                    
+                    
+                    <span style="color: var(--wine); font-weight: 700; font-size: 11px;">External ID</span>
+                    <span class="ftype">Length: 32</span>
+                  </td>
+                </tr>
+                <tr>
+                  <td><span class="fapi ">Source__c</span></td>
+                  <td>來源平台</td>
+                  <td><span class="ftype">Picklist</span></td>
+                  <td></td>
+                  <td>
+                    
+                    <div class="fpl">Dcard · PTT · FB社團 · IG · Threads · Google Review · 蝦皮商品評論 · YouTube</div>
+                    
+                    
+                  </td>
+                </tr>
+                <tr>
+                  <td><span class="fapi ">Author_Handle__c</span></td>
+                  <td>發文者</td>
+                  <td><span class="ftype">Text</span></td>
+                  <td></td>
+                  <td>
+                    
+                    
+                    
+                    <span class="ftype">Length: 100</span>
+                  </td>
+                </tr>
+                <tr>
+                  <td><span class="fapi ">Content__c</span></td>
+                  <td>內容</td>
+                  <td><span class="ftype">LongTextArea</span></td>
+                  <td></td>
+                  <td>
+                    
+                    
+                    
+                    <span class="ftype">Length: 32768</span>
+                  </td>
+                </tr>
+                <tr>
+                  <td><span class="fapi ">Sentiment__c</span></td>
+                  <td>情緒</td>
+                  <td><span class="ftype">Picklist</span></td>
+                  <td></td>
+                  <td>
+                    
+                    <div class="fpl">正面 · 中性 · 負面 · 憤怒</div>
+                    
+                    
+                  </td>
+                </tr>
+                <tr>
+                  <td><span class="fapi ">Post_Datetime__c</span></td>
+                  <td>發文時間</td>
+                  <td><span class="ftype">DateTime</span></td>
+                  <td></td>
+                  <td>
+                    
+                    
+                    
+                    
+                  </td>
+                </tr>
+                <tr>
+                  <td><span class="fapi ">URL__c</span></td>
+                  <td>原文連結</td>
+                  <td><span class="ftype">Url</span></td>
+                  <td></td>
+                  <td>
+                    
+                    
+                    
+                    
+                  </td>
+                </tr>
+                <tr>
+                  <td><span class="fapi ">Related_Product__r.External_ID__c</span></td>
+                  <td>—</td>
+                  <td><span class="ftype">Lookup</span></td>
+                  <td></td>
+                  <td>
+                    
+                    
+                    
+                    
+                  </td>
+                </tr>
+                <tr>
+                  <td><span class="fapi ">Related_Contact__r.External_ID__c</span></td>
+                  <td>—</td>
+                  <td><span class="ftype">Lookup</span></td>
+                  <td></td>
+                  <td>
+                    
+                    
+                    
+                    
+                  </td>
+                </tr>
+                <tr>
+                  <td><span class="fapi ">Reach_Estimate__c</span></td>
+                  <td>預估觸及人數</td>
+                  <td><span class="ftype">Number</span></td>
+                  <td></td>
+                  <td>
+                    
+                    
+                    
+                    
+                  </td>
+                </tr>
+                <tr>
+                  <td><span class="fapi ">Status__c</span></td>
+                  <td>處理狀態</td>
+                  <td><span class="ftype">Picklist</span></td>
+                  <td></td>
+                  <td>
+                    
+                    <div class="fpl">未處理 · 已回應 · 已升級 · 忽略</div>
+                    
+                    
+                  </td>
+                </tr>
+                <tr>
+                  <td><span class="fapi ">Related_Contact__c</span></td>
+                  <td>相關客戶</td>
+                  <td><span class="ftype">Lookup</span></td>
+                  <td></td>
+                  <td>
+                    <span class="fref">→ Account</span>
+                    
+                    
+                    
+                  </td>
+                </tr>
+                <tr>
+                  <td><span class="fapi ">Related_Product__c</span></td>
+                  <td>相關商品</td>
+                  <td><span class="ftype">Lookup</span></td>
+                  <td></td>
+                  <td>
+                    <span class="fref">→ Product2</span>
+                    
+                    
+                    
+                  </td>
+                </tr>
+            </tbody>
+          </table>
+        </div>
+      </details>
+      <details class="obj">
+        <summary class="obj__head" style="list-style: none;">
+          <div>
+            <span class="obj__title">通路互動</span>
+            <span class="obj__api">Channel_Interaction__c</span>
+            <span class="obj__badge obj__badge--cus">Custom</span>
+          </div>
+          <div class="obj__stats">
+            <div>欄位 <strong>9</strong></div>
+            <div>資料 <strong>2186</strong> 筆</div>
+            <span class="toggle">▸ 展開</span>
+          </div>
+        </summary>
+        <div class="obj__purpose">廣告點擊 / 商品瀏覽 / LINE 對話 / 加入購物車 / 放棄購物車 · CSV: <code style="color: var(--wine);">channel_interactions.csv</code></div>
+        <div class="obj__fields">
+          <table>
+            <thead><tr>
+              <th style="width: 26%;">API Name</th>
+              <th style="width: 18%;">Label / 用途</th>
+              <th style="width: 12%;">型別</th>
+              <th style="width: 8%;">必填</th>
+              <th style="width: 36%;">參照 / Picklist / 備註</th>
+            </tr></thead>
+            <tbody>
+              
+                <tr>
+                  <td><span class="fapi ">External_ID__c</span></td>
+                  <td>External ID</td>
+                  <td><span class="ftype">Text</span></td>
+                  <td></td>
+                  <td>
+                    
+                    
+                    <span style="color: var(--wine); font-weight: 700; font-size: 11px;">External ID</span>
+                    <span class="ftype">Length: 32</span>
+                  </td>
+                </tr>
+                <tr>
+                  <td><span class="fapi ">Contact__r.External_ID__c</span></td>
+                  <td>—</td>
+                  <td><span class="ftype">Lookup</span></td>
+                  <td></td>
+                  <td>
+                    
+                    
+                    
+                    
+                  </td>
+                </tr>
+                <tr>
+                  <td><span class="fapi ">Channel__c</span></td>
+                  <td>渠道</td>
+                  <td><span class="ftype">Picklist</span></td>
+                  <td></td>
+                  <td>
+                    
+                    <div class="fpl">官網 · 蝦皮 · LINE OA · EDM · FB廣告 · Google廣告 · IG · 電話</div>
+                    
+                    
+                  </td>
+                </tr>
+                <tr>
+                  <td><span class="fapi ">Interaction_Type__c</span></td>
+                  <td>互動類型</td>
+                  <td><span class="ftype">Picklist</span></td>
+                  <td></td>
+                  <td>
+                    
+                    <div class="fpl">瀏覽商品 · 加入購物車 · 放棄購物車 · 搜尋 · 完成結帳 · 蝦皮商品瀏覽 · 蝦皮訊息 · 蝦皮下單 · 關注賣場 · LINE訊息 · LINE貼圖回應 · LINE點擊圖文選單 · LINE推播開啟 · EDM開信 · EDM點擊 · 廣告點擊 · 廣告曝光 · IG貼文互動 · 限動點擊 · 客服對話</div>
+                    
+                    
+                  </td>
+                </tr>
+                <tr>
+                  <td><span class="fapi ">Interaction_Datetime__c</span></td>
+                  <td>互動時間</td>
+                  <td><span class="ftype">DateTime</span></td>
+                  <td></td>
+                  <td>
+                    
+                    
+                    
+                    
+                  </td>
+                </tr>
+                <tr>
+                  <td><span class="fapi ">Related_Product__r.External_ID__c</span></td>
+                  <td>—</td>
+                  <td><span class="ftype">Lookup</span></td>
+                  <td></td>
+                  <td>
+                    
+                    
+                    
+                    
+                  </td>
+                </tr>
+                <tr>
+                  <td><span class="fapi ">Session_Duration_Sec__c</span></td>
+                  <td>停留秒數</td>
+                  <td><span class="ftype">Number</span></td>
+                  <td></td>
+                  <td>
+                    
+                    
+                    
+                    
+                  </td>
+                </tr>
+                <tr>
+                  <td><span class="fapi ">Details__c</span></td>
+                  <td>互動內容</td>
+                  <td><span class="ftype">LongTextArea</span></td>
+                  <td></td>
+                  <td>
+                    
+                    
+                    
+                    <span class="ftype">Length: 32768</span>
+                  </td>
+                </tr>
+                <tr>
+                  <td><span class="fapi ">Source_URL__c</span></td>
+                  <td>來源 URL</td>
+                  <td><span class="ftype">Url</span></td>
+                  <td></td>
+                  <td>
+                    
+                    
+                    
+                    
+                  </td>
+                </tr>
+                <tr>
+                  <td><span class="fapi ">Contact__c</span></td>
+                  <td>客戶</td>
+                  <td><span class="ftype">Lookup</span></td>
+                  <td></td>
+                  <td>
+                    <span class="fref">→ Account</span>
+                    
+                    
+                    
+                  </td>
+                </tr>
+                <tr>
+                  <td><span class="fapi ">Related_Product__c</span></td>
+                  <td>相關商品</td>
+                  <td><span class="ftype">Lookup</span></td>
+                  <td></td>
+                  <td>
+                    <span class="fref">→ Product2</span>
+                    
+                    
+                    
+                  </td>
+                </tr>
+            </tbody>
+          </table>
+        </div>
+      </details>
+      <details class="obj">
+        <summary class="obj__head" style="list-style: none;">
+          <div>
+            <span class="obj__title">商品消耗記錄</span>
+            <span class="obj__api">Product_Consumption__c</span>
+            <span class="obj__badge obj__badge--cus">Custom</span>
+          </div>
+          <div class="obj__stats">
+            <div>欄位 <strong>10</strong></div>
+            <div>資料 <strong>901</strong> 筆</div>
+            <span class="toggle">▸ 展開</span>
+          </div>
+        </summary>
+        <div class="obj__purpose">斷貨預測與回購雷達 · 每個 OrderItem 一筆 · CSV: <code style="color: var(--wine);">product_consumptions.csv</code></div>
+        <div class="obj__fields">
+          <table>
+            <thead><tr>
+              <th style="width: 26%;">API Name</th>
+              <th style="width: 18%;">Label / 用途</th>
+              <th style="width: 12%;">型別</th>
+              <th style="width: 8%;">必填</th>
+              <th style="width: 36%;">參照 / Picklist / 備註</th>
+            </tr></thead>
+            <tbody>
+              
+                <tr>
+                  <td><span class="fapi ">External_ID__c</span></td>
+                  <td>External ID</td>
+                  <td><span class="ftype">Text</span></td>
+                  <td></td>
+                  <td>
+                    
+                    
+                    <span style="color: var(--wine); font-weight: 700; font-size: 11px;">External ID</span>
+                    <span class="ftype">Length: 32</span>
+                  </td>
+                </tr>
+                <tr>
+                  <td><span class="fapi ">Contact__r.External_ID__c</span></td>
+                  <td>—</td>
+                  <td><span class="ftype">Lookup</span></td>
+                  <td></td>
+                  <td>
+                    
+                    
+                    
+                    
+                  </td>
+                </tr>
+                <tr>
+                  <td><span class="fapi ">Product__r.External_ID__c</span></td>
+                  <td>—</td>
+                  <td><span class="ftype">Lookup</span></td>
+                  <td></td>
+                  <td>
+                    
+                    
+                    
+                    
+                  </td>
+                </tr>
+                <tr>
+                  <td><span class="fapi ">Order__r.External_ID__c</span></td>
+                  <td>—</td>
+                  <td><span class="ftype">Lookup</span></td>
+                  <td></td>
+                  <td>
+                    
+                    
+                    
+                    
+                  </td>
+                </tr>
+                <tr>
+                  <td><span class="fapi ">Purchased_Date__c</span></td>
+                  <td>購買日</td>
+                  <td><span class="ftype">Date</span></td>
+                  <td></td>
+                  <td>
+                    
+                    
+                    
+                    
+                  </td>
+                </tr>
+                <tr>
+                  <td><span class="fapi ">Quantity_Boxes__c</span></td>
+                  <td>購買盒數</td>
+                  <td><span class="ftype">Number</span></td>
+                  <td></td>
+                  <td>
+                    
+                    
+                    
+                    
+                  </td>
+                </tr>
+                <tr>
+                  <td><span class="fapi ">Days_Per_Box__c</span></td>
+                  <td>每盒天數</td>
+                  <td><span class="ftype">Number</span></td>
+                  <td></td>
+                  <td>
+                    
+                    
+                    
+                    
+                  </td>
+                </tr>
+                <tr>
+                  <td><span class="fapi ">Contact__c</span></td>
+                  <td>客戶</td>
+                  <td><span class="ftype">Lookup</span></td>
+                  <td></td>
+                  <td>
+                    <span class="fref">→ Account</span>
+                    
+                    
+                    
+                  </td>
+                </tr>
+                <tr>
+                  <td><span class="fapi ">Days_Until_Depletion__c</span></td>
+                  <td>距離斷貨天數</td>
+                  <td><span class="ftype">Number</span></td>
+                  <td></td>
+                  <td>
+                    
+                    
+                    
+                    
+                  </td>
+                </tr>
+                <tr>
+                  <td><span class="fapi ">Estimated_Depletion_Date__c</span></td>
+                  <td>預估斷貨日</td>
+                  <td><span class="ftype">Date</span></td>
+                  <td></td>
+                  <td>
+                    
+                    
+                    
+                    
+                  </td>
+                </tr>
+                <tr>
+                  <td><span class="fapi ">Order__c</span></td>
+                  <td>訂單</td>
+                  <td><span class="ftype">Lookup</span></td>
+                  <td></td>
+                  <td>
+                    <span class="fref">→ Order</span>
+                    
+                    
+                    
+                  </td>
+                </tr>
+                <tr>
+                  <td><span class="fapi ">Product__c</span></td>
+                  <td>商品</td>
+                  <td><span class="ftype">Lookup</span></td>
+                  <td></td>
+                  <td>
+                    <span class="fref">→ Product2</span>
+                    
+                    
+                    
+                  </td>
+                </tr>
+                <tr>
+                  <td><span class="fapi ">Reorder_Status__c</span></td>
+                  <td>回購狀態</td>
+                  <td><span class="ftype">Text</span></td>
+                  <td></td>
+                  <td>
+                    
+                    
+                    
+                    
+                  </td>
+                </tr>
+            </tbody>
+          </table>
+        </div>
+      </details>
+    </div>
+  </section>
+
+  <!-- ============ LWC ============ -->
+  <section>
+    <h2>10 個 LWC · UI 組件</h2>
+    <div class="sub">每個組件都對應到一個 App Page，透過 HealthFormulaController 取資料</div>
+    <div class="lwc-grid">
+
+      <div class="lwc">
+        <span class="lwc__idx">1</span>
+        <span class="lwc__title">客戶 360 Console</span>
+        <span class="lwc__api">customer360Console</span>
+        <div class="lwc__desc">單客戶完整檔案：訂單 / Case / 互動 / 消耗 / 品牌聲量 + AI 客戶簡報 + 建議行動</div>
+      </div>
+      <div class="lwc">
+        <span class="lwc__idx">2</span>
+        <span class="lwc__title">Home Page KPI</span>
+        <span class="lwc__api">hfHomeKpi</span>
+        <div class="lwc__desc">首頁高階指標：總客戶 / VIP / 流失風險 / LTV / 未結 Case / in-flight Orders / 回購 Alert</div>
+      </div>
+      <div class="lwc">
+        <span class="lwc__idx">3</span>
+        <span class="lwc__title">主管儀表板</span>
+        <span class="lwc__api">hfExecutiveDashboard</span>
+        <div class="lwc__desc">Executive Stats：GMV / AOV / YoY / MoM / Customer Health / Revenue Analysis / Service KPI / Brand Health</div>
+      </div>
+      <div class="lwc">
+        <span class="lwc__idx">4</span>
+        <span class="lwc__title">售前 · 行銷漏斗</span>
+        <span class="lwc__api">preSaleFunnelBoard</span>
+        <div class="lwc__desc">瀏覽 → 加購 → 放棄 → 結帳 漏斗 + 首購觀察 + 放棄購物車列表 + 廣告點擊追蹤</div>
+      </div>
+      <div class="lwc">
+        <span class="lwc__idx">5</span>
+        <span class="lwc__title">售中 · 配送控制台</span>
+        <span class="lwc__api">midSaleFulfillmentBoard</span>
+        <div class="lwc__desc">Kanban 三欄（待出貨/已出貨/配送中）+ 滯留訂單 alert + 物流商績效</div>
+      </div>
+      <div class="lwc">
+        <span class="lwc__idx">6</span>
+        <span class="lwc__title">售後 · 客服 + 回購</span>
+        <span class="lwc__api">postSaleServiceBoard</span>
+        <div class="lwc__desc">Case Queue（依優先級）+ 回購雷達（14 天內斷貨）+ Case 類型分布 + 進線來源</div>
+      </div>
+      <div class="lwc">
+        <span class="lwc__idx">7</span>
+        <span class="lwc__title">品牌聲量監聽</span>
+        <span class="lwc__api">brandVoiceMonitor</span>
+        <div class="lwc__desc">正/中/負面聲量比例 + 來源 (Dcard/PTT/FB) + 商品負評熱點 + 觸及數</div>
+      </div>
+      <div class="lwc">
+        <span class="lwc__idx">8</span>
+        <span class="lwc__title">LINE OA 對話</span>
+        <span class="lwc__api">hfLineOaChat</span>
+        <div class="lwc__desc">單一客戶 LINE 訊息時序：訊息內容 + 時間 + 對話時長</div>
+      </div>
+      <div class="lwc">
+        <span class="lwc__idx">9</span>
+        <span class="lwc__title">Slack Swarm 戰情室</span>
+        <span class="lwc__api">hfSlackWarRoom</span>
+        <div class="lwc__desc">負面聲量 / VIP Case 觸發的 Slack alert · 跨部門 @mention · 已回應狀態</div>
+      </div>
+      <div class="lwc">
+        <span class="lwc__idx">10</span>
+        <span class="lwc__title">Insider Segment</span>
+        <span class="lwc__api">hfInsiderSegment</span>
+        <div class="lwc__desc">從 Case + Channel_Interaction 自動抽取行銷分眾（食用不適 / 物流不滿 / 折扣敏感…）· 匯出至 Insider Architect</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ Apex ============ -->
+  <section>
+    <h2>Apex Controller · HealthFormulaController</h2>
+    <div class="sub">Care Cloud 唯一的資料入口 · 全部 <code style="background: var(--wine-lt); color: var(--wine-dk); padding: 1px 6px; border-radius: 4px; font-family: monospace;">@AuraEnabled(cacheable=true)</code></div>
+    <table class="apex-table">
+      <thead><tr>
+        <th style="width: 30%;">Method</th>
+        <th style="width: 8%;">Cache</th>
+        <th>用途</th>
+      </tr></thead>
+      <tbody>
+
+        <tr>
+          <td><code>getCustomer360(Id recordId)</code></td>
+          <td style="text-align: center; color: var(--ok); font-weight: 700;">✓</td>
+          <td>取得單一客戶完整檔案：帳戶 / 訂單 / Case / 互動 / 消耗 / 聲量 + 分數 + AI Briefing + 建議行動</td>
+        </tr>
+        <tr>
+          <td><code>getHomeStats()</code></td>
+          <td style="text-align: center; color: var(--ok); font-weight: 700;">✓</td>
+          <td>首頁高階 KPI · 客戶分層 / LTV / 未結 Case / in-flight 訂單 / 回購 Alert</td>
+        </tr>
+        <tr>
+          <td><code>getExecutiveStats()</code></td>
+          <td style="text-align: center; color: var(--ok); font-weight: 700;">✓</td>
+          <td>主管儀表板：GMV / YoY / MoM 差異 / Customer Health / Revenue Analysis / Service / Brand</td>
+        </tr>
+        <tr>
+          <td><code>getPreSaleData()</code></td>
+          <td style="text-align: center; color: var(--ok); font-weight: 700;">✓</td>
+          <td>售前漏斗：瀏覽 / 加購 / 放棄 / 結帳 (含業界標準轉換率補算) + 首購名單 + 放棄清單 + 廣告點擊</td>
+        </tr>
+        <tr>
+          <td><code>getMidSaleData()</code></td>
+          <td style="text-align: center; color: var(--ok); font-weight: 700;">✓</td>
+          <td>售中控制台：待出/已出/配送中/近7日已達/滯留 · Kanban 資料 · 物流商績效</td>
+        </tr>
+        <tr>
+          <td><code>getPostSaleData()</code></td>
+          <td style="text-align: center; color: var(--ok); font-weight: 700;">✓</td>
+          <td>售後：未結 Case Queue / 回購雷達 / Case Type &amp; Origin 分布</td>
+        </tr>
+        <tr>
+          <td><code>getBrandVoice()</code></td>
+          <td style="text-align: center; color: var(--ok); font-weight: 700;">✓</td>
+          <td>品牌聲量：近 30 筆 · 情緒分布 · 來源分布 · 商品負評熱點</td>
+        </tr>
+        <tr>
+          <td><code>getSlackAlerts()</code></td>
+          <td style="text-align: center; color: var(--ok); font-weight: 700;">✓</td>
+          <td>Slack 戰情室 alert：負面聲量 / VIP Case · 跨部門 @mention · 對話回覆</td>
+        </tr>
+        <tr>
+          <td><code>getInsiderSegments()</code></td>
+          <td style="text-align: center; color: var(--ok); font-weight: 700;">✓</td>
+          <td>關鍵字掃描 Cases + Interactions → 自動分眾 (7 類：食用不適 / 大包裝需求 / 破損 / 物流慢 / 正面 / 藥物疑慮 / 折扣敏感)</td>
+        </tr>
+        <tr>
+          <td><code>getLineMessages(Id contactId)</code></td>
+          <td style="text-align: center; color: var(--ok); font-weight: 700;">✓</td>
+          <td>單一客戶 LINE OA 訊息時序</td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- ============ ✨ Einstein Prompt Builder ============ -->
+  <section>
+    <h2>✦ Einstein Prompt Builder · AI 生成升級</h2>
+    <div class="sub">在 Customer 360 Console 的 AI 客戶洞察 加上「重新生成」icon · 每次按下依當下最新 CRM 資料由 Prompt Template 重新生成</div>
+    <div class="pillars">
+      <div class="pillar">
+        <div class="pillar__num">TRIGGER</div>
+        <div class="pillar__title">✨ 重新生成 icon</div>
+        <div class="pillar__solve">
+          位置：customer360Console · AI 卡片 header 右側<br>
+          手勢：click → 1.2 秒 thinking 動畫 → 新內容淡入<br>
+          UI：漸層酒紅按鈕 + spin loader · 「Einstein 正在拉取最新資料…」
+        </div>
+      </div>
+      <div class="pillar">
+        <div class="pillar__num">GROUNDING</div>
+        <div class="pillar__title">🔗 六段結構 · 全用真實資料</div>
+        <div class="pillar__solve">
+          <strong>§1 客戶輪廓</strong> Tier / Segment / LTV / 慣用通路<br>
+          <strong>§2 近 30 天動態</strong> 訂單筆數金額 · 最新訂單狀態 · 未結 Case<br>
+          <strong>§3 消耗與斷貨風險</strong> 每項商品剩幾天 (🔴/🟡/⛔)<br>
+          <strong>§4 品牌聲量</strong> 近期 Dcard/PTT 評論摘錄<br>
+          <strong>§5 Agentforce 建議</strong> High/Medium/Low 三級 · 依 tier + 消耗 + case<br>
+          <strong>§6 風險評估</strong> 沉睡天數 / 高優 case / 滯留訂單
+        </div>
+      </div>
+      <div class="pillar">
+        <div class="pillar__num">TECH</div>
+        <div class="pillar__title">🔌 兩層 fallback</div>
+        <div class="pillar__solve">
+          <strong>優先</strong> <code style="background: var(--wine-lt); color: var(--wine-dk); padding: 1px 6px; border-radius: 4px;">ConnectApi.EinsteinLLM.generateMessagesForPromptTemplate</code><br>
+          <strong>Template</strong> <code style="background: var(--wine-lt); color: var(--wine-dk); padding: 1px 6px; border-radius: 4px;">HealthFormula_Customer_Briefing_v2</code><br>
+          <strong>Model</strong> <code style="background: var(--wine-lt); color: var(--wine-dk); padding: 1px 6px; border-radius: 4px;">sfdc_ai__DefaultOpenAIGPT4Omni</code><br>
+          <strong>Fallback</strong> Einstein 未啟用時走本地 grounded template · 敘事一致
+        </div>
+      </div>
+    </div>
+
+    <!-- Meta bar mockup -->
+    <div style="margin-top: 20px; background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 20px;">
+      <div style="font-weight: 800; color: var(--wine-dk); margin-bottom: 12px;">⚙ Generation Metadata（每次呼叫都會回傳）</div>
+      <div style="display: flex; flex-wrap: wrap; gap: 6px 10px; padding: 8px 10px; background: rgba(184,57,92,0.05); border-radius: 6px; font-size: 11px; font-family: 'SF Mono', Consolas, monospace; color: var(--mut);">
+        <span style="background: var(--wine); color: #fff; padding: 2px 8px; border-radius: 999px; font-weight: 700;">🤖 Einstein GPT-4o · Prompt Builder</span>
+        <span><strong style="color: var(--wine);">Model:</strong> sfdc_ai__DefaultOpenAIGPT4Omni</span>
+        <span><strong style="color: var(--wine);">Template:</strong> HealthFormula_Customer_Briefing_v2</span>
+        <span><strong style="color: var(--wine);">Tokens:</strong> ~348</span>
+        <span><strong style="color: var(--wine);">Latency:</strong> 1247ms</span>
+        <span style="margin-left: auto;">⏱ 2026-07-07 14:23:15</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 💬 Slack Live Integration ============ -->
+  <section>
+    <h2>💬 Slack Swarm · 真的觸發</h2>
+    <div class="sub">從 UI mockup 進化到真實 Incoming Webhook · Case + Brand Voice 高風險事件即時推播</div>
+    <table class="apex-table">
+      <thead><tr>
+        <th style="width: 22%;">觸發源 · Trigger</th>
+        <th style="width: 26%;">條件</th>
+        <th style="width: 20%;">目標 Channel</th>
+        <th>Slack Payload</th>
+      </tr></thead>
+      <tbody>
+        <tr>
+          <td><code>CaseSlackTrigger</code><br><span style="font-size: 11px; color: var(--mut);">after insert · after update</span></td>
+          <td>Priority IN (High, Critical) OR Sentiment = 憤怒</td>
+          <td>Tier=高價值 → <strong>#hf-vip-swarm</strong><br>否則 → <strong>#hf-service-alert</strong></td>
+          <td>🚨 Case Alert · [reason]<br>Case: [number] — [subject]<br>客戶: [name] 【[tier]】<br>類型/來源/情緒</td>
+        </tr>
+        <tr>
+          <td><code>BrandVoiceSlackTrigger</code><br><span style="font-size: 11px; color: var(--mut);">after insert · after update</span></td>
+          <td>Sentiment IN (負面, 憤怒) AND Reach ≥ 500</td>
+          <td>Reach ≥ 2000 → <strong>#hf-vip-swarm</strong><br>否則 → <strong>#hf-brand-alert</strong></td>
+          <td>⚠️ [source] 負面聲量<br>&gt; [content 200 字內]<br>觸及 [n] 人 · @[handle]</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div style="margin-top: 20px; background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 22px;">
+      <div style="font-weight: 800; color: var(--wine-dk); margin-bottom: 12px;">🔌 部署後最後一哩：填入真實 Webhook URL</div>
+      <ol style="font-size: 13px; line-height: 1.8; color: var(--ink); margin: 0; padding-left: 20px;">
+        <li>Slack workspace → Apps → Search "Incoming Webhooks" → Install</li>
+        <li>選 channel (e.g. <code style="background: var(--wine-lt); color: var(--wine-dk); padding: 1px 6px; border-radius: 4px;">#hf-vip-swarm</code>) → Add Incoming Webhooks Integration → Copy Webhook URL</li>
+        <li>CBUSDO Setup → Custom Labels → <code style="background: var(--wine-lt); color: var(--wine-dk); padding: 1px 6px; border-radius: 4px;">HF_Slack_Webhook_URL</code> → 貼上 URL</li>
+        <li>Setup → Remote Site Settings → 確認 <code style="background: var(--wine-lt); color: var(--wine-dk); padding: 1px 6px; border-radius: 4px;">Slack_Webhook</code> · Endpoint = https://hooks.slack.com · Active ✓</li>
+        <li>Demo：改一筆 Case Priority=High → 3 秒內 Slack 顯示 alert</li>
+      </ol>
+    </div>
+  </section>
+
+  <!-- ============ ⏱ Service SLA ============ -->
+  <section>
+    <h2>⏱ Service Cloud SLA · 自動計算 + 視覺化</h2>
+    <div class="sub">Case 建立/更新時 · 依 Priority 自動填入 SLA 截止時間 · postSaleServiceBoard 顯示 Breach / AtRisk badge</div>
+
+    <div class="pillars" style="margin-bottom: 20px;">
+      <div class="pillar">
+        <div class="pillar__num">FIELDS</div>
+        <div class="pillar__title">3 個新 Case 欄位</div>
+        <div class="pillar__solve">
+          <code style="background: var(--wine-lt); color: var(--wine-dk); padding: 1px 6px; border-radius: 4px;">SLA_Response_Due__c</code> DateTime · 首次回覆截止<br>
+          <code style="background: var(--wine-lt); color: var(--wine-dk); padding: 1px 6px; border-radius: 4px;">SLA_Resolve_Due__c</code> DateTime · 解決截止<br>
+          <code style="background: var(--wine-lt); color: var(--wine-dk); padding: 1px 6px; border-radius: 4px;">SLA_Status__c</code> Picklist · OnTrack / AtRisk / Breached / Met
+        </div>
+      </div>
+      <div class="pillar">
+        <div class="pillar__num">TRIGGER</div>
+        <div class="pillar__title">CaseSlaTrigger (before)</div>
+        <div class="pillar__solve">
+          Case Insert / Priority 改變時自動計算<br>
+          用 <code style="background: var(--wine-lt); color: var(--wine-dk); padding: 1px 6px; border-radius: 4px;">CreatedDate + N hours</code> 標記截止<br>
+          AtRisk 條件：剩 &lt; 25% 總視窗
+        </div>
+      </div>
+      <div class="pillar">
+        <div class="pillar__num">UI</div>
+        <div class="pillar__title">Post-Sale Board 視覺化</div>
+        <div class="pillar__solve">
+          Case row 加 SLA badge (pill)<br>
+          Breached：深酒紅實心<br>
+          AtRisk：淺酒紅 + pulse 動畫<br>
+          Header 加「SLA 已超時」「SLA 即將超時」KPI
+        </div>
+      </div>
+    </div>
+
+    <table class="apex-table">
+      <thead><tr>
+        <th style="width: 20%;">Priority</th>
+        <th style="width: 30%;">首次回覆 (Response Due)</th>
+        <th style="width: 30%;">解決 (Resolve Due)</th>
+        <th>示意</th>
+      </tr></thead>
+      <tbody>
+        <tr><td><span style="background: #FEE2E2; color: #991B1B; padding: 3px 10px; border-radius: 999px; font-weight: 700; font-size: 12px;">Critical</span></td><td>1 小時</td><td>4 小時</td><td>爆炸性 P0 · 客訴上社群前必解</td></tr>
+        <tr><td><span style="background: #FEE2E2; color: var(--danger); padding: 3px 10px; border-radius: 999px; font-weight: 700; font-size: 12px;">High</span></td><td>2 小時</td><td>8 小時</td><td>當日內解決</td></tr>
+        <tr><td><span style="background: #FEF3C7; color: #B45309; padding: 3px 10px; border-radius: 999px; font-weight: 700; font-size: 12px;">Medium</span></td><td>8 小時</td><td>24 小時</td><td>下一工作天前</td></tr>
+        <tr><td><span style="background: #DBEAFE; color: #1D4ED8; padding: 3px 10px; border-radius: 999px; font-weight: 700; font-size: 12px;">Low</span></td><td>24 小時</td><td>72 小時</td><td>週內處理</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- ============ 🎯 Omni-Channel ============ -->
+  <section>
+    <h2>🎯 Omni-Channel · Case 自動分派</h2>
+    <div class="sub">Setup UI 15 分鐘完成配置 · 詳見 <a href="omni-channel-setup-guide.md" style="color: var(--wine); font-weight: 700;">📘 Omni-Channel Setup Guide</a></div>
+    <div class="journey" style="grid-template-columns: repeat(3, 1fr);">
+      <div class="journey__step">
+        <div class="journey__icon">📞</div>
+        <div class="journey__ttl">Service Channel</div>
+        <div class="journey__sub">1 個 <code>Case_Channel</code> · 綁 Case 主 Object · 支援 Account / Contact 相關實體</div>
+      </div>
+      <div class="journey__step">
+        <div class="journey__icon">👥</div>
+        <div class="journey__ttl">3 個 Queue + Assignment Rules</div>
+        <div class="journey__sub">HF·商品諮詢（成分/商品）· HF·物流問題（物流/退換）· HF·一般客服（其他）· Case Assignment Rule by Type</div>
+      </div>
+      <div class="journey__step">
+        <div class="journey__icon">🚦</div>
+        <div class="journey__ttl">Routing Config + Presence</div>
+        <div class="journey__sub">Routing Model: Most Available · Capacity 5 · Auto-Accept · Available / Busy / Away 三種在線狀態</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ Demo Journey ============ -->
+  <section>
+    <h2>Demo 敘事流程</h2>
+    <div class="sub">五段式 · 從個人視角到全局 · 從即時到策略</div>
+    <div class="journey">
+      <div class="journey__step">
+        <div class="journey__icon">1</div>
+        <div class="journey__ttl">Home KPI</div>
+        <div class="journey__sub">主管一眼看到品牌健康度：50 客戶 / 500 訂單 / 未結 Case / 回購 Alert / 品牌聲量負面比例</div>
+      </div>
+      <div class="journey__step">
+        <div class="journey__icon">2</div>
+        <div class="journey__ttl">客戶 360</div>
+        <div class="journey__sub">點進單一客戶 → 一個畫面看到 Shopline + 蝦皮 + LINE + 廣告 + Case + 消耗 · AI 客戶簡報 · 建議行動</div>
+      </div>
+      <div class="journey__step">
+        <div class="journey__icon">3</div>
+        <div class="journey__ttl">售前 / 售中 / 售後</div>
+        <div class="journey__sub">三段生命週期控制台：漏斗 · 配送 Kanban + 滯留 Alert · Case Queue + 回購雷達</div>
+      </div>
+      <div class="journey__step">
+        <div class="journey__icon">4</div>
+        <div class="journey__ttl">Slack Swarm</div>
+        <div class="journey__sub">負面聲量觸及 2000+ 觸發 alert → 拉行銷 + 產品研發 + 客服 進 #hf-vip-swarm 頻道即時 debate</div>
+      </div>
+      <div class="journey__step">
+        <div class="journey__icon">5</div>
+        <div class="journey__ttl">Insider 分眾</div>
+        <div class="journey__sub">從售後回饋自動抽取 7 大分眾，一鍵匯出至 Insider Architect 做行銷追擊</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ Environment ============ -->
+  <section>
+    <h2>環境 & 部署</h2>
+    <div class="pillars">
+      <div class="pillar">
+        <div class="pillar__num">TARGET ORG</div>
+        <div class="pillar__title">CBUSDO</div>
+        <div class="pillar__solve">
+          <div><strong>Alias:</strong> CBUSDO (default)</div>
+          <div><strong>Edition:</strong> Enterprise + Person Account 已啟用</div>
+          <div><strong>Instance:</strong> AP60</div>
+          <div><strong>Username:</strong> trailsignup.f2a6d413753a2c@salesforce.com</div>
+        </div>
+      </div>
+      <div class="pillar">
+        <div class="pillar__num">METADATA</div>
+        <div class="pillar__title">部署範圍</div>
+        <div class="pillar__solve">
+          <div>82 個 Metadata Component</div>
+          <div>10 個 Objects + 71 個自訂欄位</div>
+          <div>10 個 LWC · 5 個 FlexiPage</div>
+          <div>HealthFormulaController + SlackNotifier</div>
+          <div>Permission Set: HealthFormula_Care_Cloud</div>
+        </div>
+      </div>
+      <div class="pillar">
+        <div class="pillar__num">GIT / VERSION</div>
+        <div class="pillar__title">ana-sf Repo</div>
+        <div class="pillar__solve">
+          <div><strong>GitHub:</strong> sf-jason-tsai/ana-sf</div>
+          <div><strong>本機路徑:</strong> C:\Users\bingyan.tsai\Desktop\ana-sf</div>
+          <div>CBUSDO 所有變更同步到 ana-sf 管理版控</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<footer>
+  <div>配方時代 · Health Formula Care Cloud Demo · 生成於 2026/7/7 上午10:57:38</div>
+  <div style="margin-top: 6px;">
+    <a href="配方時代-Object-Schema-v2.xlsx">📊 完整 Excel Schema</a> ·
+    <a href="data-model-spec.md">📄 資料模型規格</a> ·
+    <a href="demo-scenarios.md">🎬 Demo 情境</a> ·
+    <a href="service-cloud-features.md">🛠 Service Cloud 功能</a>
+  </div>
+</footer>
+
+<script>
+  // Toggle expand/collapse indicator
+  document.querySelectorAll('.obj').forEach(o => {
+    o.addEventListener('toggle', () => {
+      const t = o.querySelector('.toggle');
+      t.textContent = o.open ? '▾ 收合' : '▸ 展開';
+    });
+  });
+</script>
+
+</body>
+</html>

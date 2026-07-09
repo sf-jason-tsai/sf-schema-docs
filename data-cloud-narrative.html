@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Data Cloud · 客戶 360 統一資料層 · 配方時代</title>
+<style>
+:root {
+    --wine: #B8395C; --wine-dk: #7A2440; --wine-lt: #FAE7EC;
+    --ink: #1E293B; --mut: #64748B; --bg: #F8FAFC; --card: #fff; --border: #E2E8F0;
+    --shopline: #00C4B8; --shopee: #EE4D2D; --line: #06C755; --edm: #7B61FF; --ads: #4285F4;
+}
+* { box-sizing: border-box; }
+body {
+    margin: 0; font-family: -apple-system, "Segoe UI", "Noto Sans TC", sans-serif;
+    background: var(--bg); color: var(--ink); -webkit-font-smoothing: antialiased;
+}
+.hero {
+    background: linear-gradient(135deg, var(--wine-dk), var(--wine));
+    color: #fff; padding: 50px 40px; position: relative; overflow: hidden;
+}
+.hero__inner { max-width: 1200px; margin: 0 auto; position: relative; z-index: 1; }
+.hero__tag { display: inline-block; padding: 4px 12px; background: rgba(255,255,255,0.15); border-radius: 999px; font-size: 12px; letter-spacing: 2px; }
+.hero__title { font-size: 36px; font-weight: 900; margin: 12px 0 8px; }
+.hero__sub { font-size: 15px; opacity: 0.90; max-width: 720px; line-height: 1.6; }
+
+.container { max-width: 1200px; margin: 0 auto; padding: 40px 30px; }
+section { margin-bottom: 50px; }
+h2 {
+    font-size: 22px; font-weight: 800; margin: 0 0 8px;
+    color: var(--wine-dk); display: flex; align-items: center; gap: 10px;
+}
+h2::before { content: ""; width: 4px; height: 20px; background: var(--wine); border-radius: 2px; }
+.sub { font-size: 13px; color: var(--mut); margin-bottom: 20px; line-height: 1.6; }
+
+/* ────── Pain vs Solution ────── */
+.problem {
+    background: #FEF3F5; border-left: 4px solid var(--wine); border-radius: 8px;
+    padding: 18px 22px; margin-bottom: 14px;
+}
+.problem__label { font-size: 11px; color: var(--wine); font-weight: 700; letter-spacing: 2px; }
+.problem__body { margin-top: 6px; font-size: 14px; line-height: 1.7; }
+
+/* ────── Data Cloud Diagram ────── */
+.dc-diagram {
+    background: var(--card); border: 1px solid var(--border); border-radius: 14px;
+    padding: 32px 22px; overflow-x: auto;
+}
+.dc-diagram svg { display: block; margin: 0 auto; min-width: 900px; }
+
+/* ────── DMO cards ────── */
+.dmo-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+@media (max-width: 1000px) { .dmo-grid { grid-template-columns: 1fr; } }
+.dmo {
+    background: var(--card); border: 1px solid var(--border); border-radius: 12px;
+    padding: 20px; transition: all 0.2s;
+}
+.dmo:hover { border-color: var(--wine); box-shadow: 0 6px 20px rgba(184,57,92,0.10); }
+.dmo__type {
+    display: inline-block; font-size: 10px; padding: 2px 8px; border-radius: 999px;
+    background: var(--wine-lt); color: var(--wine-dk); font-weight: 700; letter-spacing: 1.5px;
+}
+.dmo__title { font-size: 16px; font-weight: 800; margin: 8px 0 10px; }
+.dmo__api {
+    font-family: "SF Mono", Consolas, monospace; font-size: 11px;
+    color: var(--mut); margin-bottom: 12px;
+}
+.dmo__fields { display: flex; flex-direction: column; gap: 4px; }
+.dmo__field {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 6px 10px; background: #FAFBFC; border-radius: 6px;
+    font-size: 12px;
+}
+.dmo__field-name { color: var(--ink); font-family: "SF Mono", Consolas, monospace; }
+.dmo__field-type { color: var(--wine); font-weight: 700; font-size: 10px; letter-spacing: 1px; }
+
+/* ────── Insights ────── */
+.insights { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; }
+@media (max-width: 900px) { .insights { grid-template-columns: 1fr; } }
+.insight {
+    background: linear-gradient(135deg, var(--wine-lt), #FAF6FC);
+    border: 1px solid rgba(184,57,92,0.20); border-radius: 12px;
+    padding: 18px;
+}
+.insight__title {
+    font-size: 14px; font-weight: 800; color: var(--wine-dk);
+    display: flex; align-items: center; gap: 8px; margin-bottom: 10px;
+}
+.insight__formula {
+    background: rgba(255,255,255,0.7); padding: 10px 12px; border-radius: 6px;
+    font-family: "SF Mono", Consolas, monospace; font-size: 12px;
+    color: var(--wine-dk); line-height: 1.6;
+}
+.insight__desc { margin-top: 8px; font-size: 12px; color: var(--mut); line-height: 1.5; }
+
+/* ────── Table ────── */
+.tbl { width: 100%; background: var(--card); border: 1px solid var(--border); border-radius: 10px; overflow: hidden; border-collapse: collapse; }
+.tbl th {
+    background: linear-gradient(90deg, var(--wine-dk), var(--wine));
+    color: #fff; padding: 12px 16px; text-align: left; font-size: 12px; letter-spacing: 1px;
+}
+.tbl td { padding: 11px 16px; border-top: 1px solid var(--border); font-size: 13px; vertical-align: top; }
+.tbl tr:nth-child(even) td { background: #FAFBFC; }
+
+/* ────── Journey path ────── */
+.path {
+    display: flex; align-items: center; justify-content: space-between;
+    background: var(--card); border: 1px solid var(--border); border-radius: 12px;
+    padding: 22px; gap: 12px; flex-wrap: wrap;
+}
+.path__step {
+    flex: 1; min-width: 140px; text-align: center;
+    padding: 12px 8px;
+}
+.path__icon {
+    width: 44px; height: 44px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    background: linear-gradient(135deg, var(--wine-dk), var(--wine)); color: #fff;
+    margin: 0 auto 8px; font-size: 20px; font-weight: 800;
+    box-shadow: 0 2px 8px rgba(184,57,92,0.25);
+}
+.path__ttl { font-size: 13px; font-weight: 800; margin-bottom: 4px; }
+.path__desc { font-size: 11px; color: var(--mut); line-height: 1.4; }
+.path__arrow { font-size: 20px; color: var(--wine); }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="hero__inner">
+    <span class="hero__tag">SALESFORCE DATA CLOUD · UNIFIED INDIVIDUAL</span>
+    <h1 class="hero__title">配方時代 · Data Cloud 客戶統一資料層</h1>
+    <div class="hero__sub">
+      客戶問：「Shopline / 蝦皮 / LINE / EDM / 廣告 資料真的在哪？如何做到跨通路 360 度？」<br>
+      答：透過 Data Cloud 建立 Unified Individual DMO，即時聚合 5 大源系統，餵給 Customer 360 Console 與 Agentforce。
+    </div>
+  </div>
+</div>
+
+<div class="container">
+
+  <!-- ─── Problem statement ─── -->
+  <section>
+    <h2>現況痛點</h2>
+    <div class="problem">
+      <div class="problem__label">CURRENT STATE</div>
+      <div class="problem__body">
+        配方時代目前每個通路的客戶資料都是<strong>各自為政</strong>：
+        Shopline 有一組會員 ID、蝦皮買家帳號另一組、LINE User ID 又另一組、EDM 訂閱名單放在 Mailchimp、
+        FB / Google 廣告 CDP 又是另一份。行銷部要撈「近 30 天在蝦皮下單且開過我們 EDM 的客戶」時，
+        <strong>需要人工 join 三份 CSV</strong>，每次 2-3 天，時效已死。
+      </div>
+    </div>
+    <div class="problem" style="background: #E6F7ED; border-left-color: #16A34A;">
+      <div class="problem__label" style="color: #15803D;">DATA CLOUD 解</div>
+      <div class="problem__body">
+        Data Cloud 用 <strong>Identity Resolution Ruleset</strong>（Email + Phone + LINE_User_ID）
+        自動把 5 個源系統的同一位客戶合成 1 個 <strong>Unified Individual</strong>，
+        並用 <strong>Calculated Insights</strong> 即時算出 LTV、活躍度、通路偏好，
+        透過 <strong>Data Action</strong> 反向寫入 Salesforce Person Account，
+        供 Customer 360 Console + Agentforce Prompt Template 讀取。
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── Diagram ─── -->
+  <section>
+    <h2>資料流動架構圖</h2>
+    <div class="sub">5 源系統 → Data Streams → Identity Resolution → Unified Individual → Insights DMO → CRM / Agentforce</div>
+    <div class="dc-diagram">
+      <svg width="1080" height="520" viewBox="0 0 1080 520" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <linearGradient id="wineGrad" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0" stop-color="#7A2440"/>
+            <stop offset="1" stop-color="#B8395C"/>
+          </linearGradient>
+          <marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+            <path d="M0,0 L10,5 L0,10 z" fill="#B8395C"/>
+          </marker>
+        </defs>
+
+        <!-- Row 1: Source systems -->
+        <text x="10" y="26" font-size="11" font-weight="700" fill="#64748B" letter-spacing="2">SOURCE SYSTEMS</text>
+        <g><rect x="10" y="40" width="180" height="72" rx="8" fill="#fff" stroke="#00C4B8" stroke-width="2"/>
+          <text x="100" y="66" fill="#00C4B8" font-size="14" font-weight="800" text-anchor="middle">🛒 Shopline</text>
+          <text x="100" y="86" fill="#64748B" font-size="11" text-anchor="middle">會員 · 訂單 · 商品瀏覽</text>
+          <text x="100" y="102" fill="#94A3B8" font-size="10" text-anchor="middle">Ingestion API · 每 15 min</text>
+        </g>
+        <g><rect x="210" y="40" width="180" height="72" rx="8" fill="#fff" stroke="#EE4D2D" stroke-width="2"/>
+          <text x="300" y="66" fill="#EE4D2D" font-size="14" font-weight="800" text-anchor="middle">🛍 蝦皮</text>
+          <text x="300" y="86" fill="#64748B" font-size="11" text-anchor="middle">買家 · 訂單 · 訊息</text>
+          <text x="300" y="102" fill="#94A3B8" font-size="10" text-anchor="middle">CSV Nightly Batch</text>
+        </g>
+        <g><rect x="410" y="40" width="180" height="72" rx="8" fill="#fff" stroke="#06C755" stroke-width="2"/>
+          <text x="500" y="66" fill="#06C755" font-size="14" font-weight="800" text-anchor="middle">💬 LINE OA</text>
+          <text x="500" y="86" fill="#64748B" font-size="11" text-anchor="middle">User ID · 訊息 · Rich Menu</text>
+          <text x="500" y="102" fill="#94A3B8" font-size="10" text-anchor="middle">Webhook 即時</text>
+        </g>
+        <g><rect x="610" y="40" width="180" height="72" rx="8" fill="#fff" stroke="#7B61FF" stroke-width="2"/>
+          <text x="700" y="66" fill="#7B61FF" font-size="14" font-weight="800" text-anchor="middle">✉️ EDM (Mailchimp)</text>
+          <text x="700" y="86" fill="#64748B" font-size="11" text-anchor="middle">訂閱名單 · 開信 · 點擊</text>
+          <text x="700" y="102" fill="#94A3B8" font-size="10" text-anchor="middle">Mailchimp Connector</text>
+        </g>
+        <g><rect x="810" y="40" width="180" height="72" rx="8" fill="#fff" stroke="#4285F4" stroke-width="2"/>
+          <text x="900" y="66" fill="#4285F4" font-size="14" font-weight="800" text-anchor="middle">📱 FB / Google Ads</text>
+          <text x="900" y="86" fill="#64748B" font-size="11" text-anchor="middle">曝光 · 點擊 · 轉換</text>
+          <text x="900" y="102" fill="#94A3B8" font-size="10" text-anchor="middle">Marketing Cloud CDP</text>
+        </g>
+
+        <!-- Arrows to Data Streams -->
+        <line x1="100" y1="112" x2="100" y2="150" stroke="#B8395C" stroke-width="1.5" marker-end="url(#ar)"/>
+        <line x1="300" y1="112" x2="300" y2="150" stroke="#B8395C" stroke-width="1.5" marker-end="url(#ar)"/>
+        <line x1="500" y1="112" x2="500" y2="150" stroke="#B8395C" stroke-width="1.5" marker-end="url(#ar)"/>
+        <line x1="700" y1="112" x2="700" y2="150" stroke="#B8395C" stroke-width="1.5" marker-end="url(#ar)"/>
+        <line x1="900" y1="112" x2="900" y2="150" stroke="#B8395C" stroke-width="1.5" marker-end="url(#ar)"/>
+
+        <!-- Row 2: Data Streams -->
+        <text x="10" y="176" font-size="11" font-weight="700" fill="#64748B" letter-spacing="2">DATA STREAMS · DLO (Data Lake Objects)</text>
+        <rect x="10" y="188" width="980" height="52" rx="8" fill="#FAE7EC" stroke="#B8395C" stroke-dasharray="4,3"/>
+        <text x="500" y="212" fill="#7A2440" font-size="13" font-weight="800" text-anchor="middle">Shopline_Customer · Shopee_Order · LINE_Interaction · EDM_Engagement · Ad_Click</text>
+        <text x="500" y="230" fill="#7A2440" font-size="11" text-anchor="middle" opacity="0.75">Raw ingestion · 保留原始欄位 · 每個源系統一個 DLO</text>
+
+        <!-- Arrow to identity resolution -->
+        <line x1="500" y1="240" x2="500" y2="270" stroke="#B8395C" stroke-width="2" marker-end="url(#ar)"/>
+
+        <!-- Row 3: Identity Resolution -->
+        <rect x="240" y="278" width="520" height="60" rx="30" fill="url(#wineGrad)"/>
+        <text x="500" y="304" fill="#fff" font-size="15" font-weight="800" text-anchor="middle">🎯 Identity Resolution Ruleset</text>
+        <text x="500" y="322" fill="#fff" font-size="11" text-anchor="middle" opacity="0.90">Email 精確比對 · Phone 標準化比對 · LINE_User_ID 精確 · 姓+手機 fuzzy</text>
+
+        <!-- Arrow down -->
+        <line x1="500" y1="338" x2="500" y2="368" stroke="#B8395C" stroke-width="2" marker-end="url(#ar)"/>
+
+        <!-- Row 4: Unified Individual -->
+        <text x="10" y="380" font-size="11" font-weight="700" fill="#64748B" letter-spacing="2">UNIFIED PROFILE · UDMO</text>
+        <rect x="240" y="392" width="520" height="80" rx="10" fill="#B8395C"/>
+        <text x="500" y="418" fill="#fff" font-size="17" font-weight="800" text-anchor="middle">👤 Unified Individual</text>
+        <text x="500" y="440" fill="#fff" font-size="12" text-anchor="middle" opacity="0.95">1 位客戶 · 5 源合一 · Global ID</text>
+        <text x="500" y="458" fill="#fff" font-size="10" text-anchor="middle" opacity="0.75">Email · Phone · LINE_User_ID · Shopline_ID · Shopee_ID · Ad_ID · 姓名 · 生日</text>
+
+        <!-- Bottom arrows fan out -->
+        <line x1="380" y1="472" x2="200" y2="505" stroke="#B8395C" stroke-width="1.5" marker-end="url(#ar)"/>
+        <line x1="500" y1="472" x2="500" y2="505" stroke="#B8395C" stroke-width="1.5" marker-end="url(#ar)"/>
+        <line x1="620" y1="472" x2="800" y2="505" stroke="#B8395C" stroke-width="1.5" marker-end="url(#ar)"/>
+
+        <!-- Row 5: Consumers -->
+        <g><rect x="30" y="507" width="240" height="6" rx="3" fill="none"/>
+          <text x="150" y="512" font-size="11" fill="#64748B" text-anchor="middle" font-weight="700">→ Person Account (SF Core)</text>
+        </g>
+        <g><rect x="380" y="507" width="240" height="6" rx="3" fill="none"/>
+          <text x="500" y="512" font-size="11" fill="#64748B" text-anchor="middle" font-weight="700">→ Agentforce Prompt Template</text>
+        </g>
+        <g><rect x="700" y="507" width="240" height="6" rx="3" fill="none"/>
+          <text x="820" y="512" font-size="11" fill="#64748B" text-anchor="middle" font-weight="700">→ Marketing Cloud Journeys</text>
+        </g>
+      </svg>
+    </div>
+  </section>
+
+  <!-- ─── DMOs ─── -->
+  <section>
+    <h2>核心 DMO (Data Model Objects)</h2>
+    <div class="sub">5 個關鍵 DMO，對應 Data Cloud 資料模型 · 每個都有 API 名稱、關鍵欄位、Identity Key</div>
+    <div class="dmo-grid">
+      <div class="dmo">
+        <span class="dmo__type">PROFILE</span>
+        <div class="dmo__title">👤 Unified Individual</div>
+        <div class="dmo__api">Individual__dmo</div>
+        <div class="dmo__fields">
+          <div class="dmo__field"><span class="dmo__field-name">Global_Party_Id__c</span><span class="dmo__field-type">Text · PK</span></div>
+          <div class="dmo__field"><span class="dmo__field-name">Email__c</span><span class="dmo__field-type">Email · IDR</span></div>
+          <div class="dmo__field"><span class="dmo__field-name">Phone__c</span><span class="dmo__field-type">Phone · IDR</span></div>
+          <div class="dmo__field"><span class="dmo__field-name">LINE_User_Id__c</span><span class="dmo__field-type">Text · IDR</span></div>
+          <div class="dmo__field"><span class="dmo__field-name">Shopline_Customer_Id__c</span><span class="dmo__field-type">Text · Cross-ref</span></div>
+          <div class="dmo__field"><span class="dmo__field-name">Shopee_Buyer_Id__c</span><span class="dmo__field-type">Text · Cross-ref</span></div>
+          <div class="dmo__field"><span class="dmo__field-name">Birthdate__c</span><span class="dmo__field-type">Date</span></div>
+        </div>
+      </div>
+      <div class="dmo">
+        <span class="dmo__type">ENGAGEMENT</span>
+        <div class="dmo__title">🛒 Sales Order (Unified)</div>
+        <div class="dmo__api">Sales_Order__dmo</div>
+        <div class="dmo__fields">
+          <div class="dmo__field"><span class="dmo__field-name">Order_Id__c</span><span class="dmo__field-type">Text · PK</span></div>
+          <div class="dmo__field"><span class="dmo__field-name">Individual_Id__c</span><span class="dmo__field-type">Lookup → Individual</span></div>
+          <div class="dmo__field"><span class="dmo__field-name">Source_Channel__c</span><span class="dmo__field-type">Picklist</span></div>
+          <div class="dmo__field"><span class="dmo__field-name">Order_Amount__c</span><span class="dmo__field-type">Currency</span></div>
+          <div class="dmo__field"><span class="dmo__field-name">Order_Date__c</span><span class="dmo__field-type">Date</span></div>
+          <div class="dmo__field"><span class="dmo__field-name">Product_Ids__c</span><span class="dmo__field-type">Multi</span></div>
+        </div>
+      </div>
+      <div class="dmo">
+        <span class="dmo__type">ENGAGEMENT</span>
+        <div class="dmo__title">💬 Interaction Event</div>
+        <div class="dmo__api">Interaction_Event__dmo</div>
+        <div class="dmo__fields">
+          <div class="dmo__field"><span class="dmo__field-name">Event_Id__c</span><span class="dmo__field-type">Text · PK</span></div>
+          <div class="dmo__field"><span class="dmo__field-name">Individual_Id__c</span><span class="dmo__field-type">Lookup</span></div>
+          <div class="dmo__field"><span class="dmo__field-name">Channel__c</span><span class="dmo__field-type">Picklist</span></div>
+          <div class="dmo__field"><span class="dmo__field-name">Event_Type__c</span><span class="dmo__field-type">Picklist</span></div>
+          <div class="dmo__field"><span class="dmo__field-name">Event_Datetime__c</span><span class="dmo__field-type">DateTime</span></div>
+          <div class="dmo__field"><span class="dmo__field-name">Session_Duration__c</span><span class="dmo__field-type">Number</span></div>
+        </div>
+      </div>
+      <div class="dmo">
+        <span class="dmo__type">CALCULATED INSIGHT</span>
+        <div class="dmo__title">💎 Customer Insights</div>
+        <div class="dmo__api">Customer_Insights__cio</div>
+        <div class="dmo__fields">
+          <div class="dmo__field"><span class="dmo__field-name">Individual_Id__c</span><span class="dmo__field-type">Lookup</span></div>
+          <div class="dmo__field"><span class="dmo__field-name">LTV_L365__c</span><span class="dmo__field-type">Currency · Calc</span></div>
+          <div class="dmo__field"><span class="dmo__field-name">Order_Count_L90__c</span><span class="dmo__field-type">Number · Calc</span></div>
+          <div class="dmo__field"><span class="dmo__field-name">Churn_Score__c</span><span class="dmo__field-type">Number · ML</span></div>
+          <div class="dmo__field"><span class="dmo__field-name">Preferred_Channel__c</span><span class="dmo__field-type">Text · Calc</span></div>
+          <div class="dmo__field"><span class="dmo__field-name">Days_Since_Last_Purchase__c</span><span class="dmo__field-type">Number · Calc</span></div>
+        </div>
+      </div>
+      <div class="dmo">
+        <span class="dmo__type">SEGMENTATION</span>
+        <div class="dmo__title">🎯 Marketing Segment</div>
+        <div class="dmo__api">Marketing_Segment__dmo</div>
+        <div class="dmo__fields">
+          <div class="dmo__field"><span class="dmo__field-name">Segment_Id__c</span><span class="dmo__field-type">Text · PK</span></div>
+          <div class="dmo__field"><span class="dmo__field-name">Segment_Name__c</span><span class="dmo__field-type">Text</span></div>
+          <div class="dmo__field"><span class="dmo__field-name">Criteria__c</span><span class="dmo__field-type">LongText</span></div>
+          <div class="dmo__field"><span class="dmo__field-name">Population__c</span><span class="dmo__field-type">Number</span></div>
+          <div class="dmo__field"><span class="dmo__field-name">Refresh_Cadence__c</span><span class="dmo__field-type">Picklist</span></div>
+        </div>
+      </div>
+      <div class="dmo">
+        <span class="dmo__type">ACTIVATION</span>
+        <div class="dmo__title">⚡ Data Action</div>
+        <div class="dmo__api">Data_Action__meta</div>
+        <div class="dmo__fields">
+          <div class="dmo__field"><span class="dmo__field-name">Trigger__c</span><span class="dmo__field-type">Event</span></div>
+          <div class="dmo__field"><span class="dmo__field-name">Target_System__c</span><span class="dmo__field-type">Picklist</span></div>
+          <div class="dmo__field"><span class="dmo__field-name">Payload_Mapping__c</span><span class="dmo__field-type">JSON</span></div>
+          <div class="dmo__field"><span class="dmo__field-name">Status__c</span><span class="dmo__field-type">Picklist</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── Calculated Insights ─── -->
+  <section>
+    <h2>3 個關鍵 Calculated Insights (SQL / SAQL)</h2>
+    <div class="sub">Data Cloud 特色：CRM 端不用寫 Apex，用 SAQL 直接在資料層跑 · 每 15 min 或 nightly refresh</div>
+    <div class="insights">
+      <div class="insight">
+        <div class="insight__title">💰 LTV_L365</div>
+        <div class="insight__formula">
+          SELECT<br>
+          &nbsp;&nbsp;i.Individual_Id__c,<br>
+          &nbsp;&nbsp;SUM(o.Order_Amount__c) AS LTV_L365__c<br>
+          FROM Sales_Order__dmo o<br>
+          JOIN Individual__dmo i<br>
+          WHERE o.Order_Date__c &gt;= today - 365<br>
+          GROUP BY i.Individual_Id__c
+        </div>
+        <div class="insight__desc">近 12 個月的累積消費金額 · 客戶分層計算的主要依據</div>
+      </div>
+      <div class="insight">
+        <div class="insight__title">📉 Churn Score</div>
+        <div class="insight__formula">
+          CASE<br>
+          &nbsp;&nbsp;WHEN Days_Since_Last_Purchase &gt; 180 THEN 90<br>
+          &nbsp;&nbsp;WHEN Days_Since_Last_Purchase &gt; 90 THEN 60<br>
+          &nbsp;&nbsp;WHEN Interaction_Count_L30 &lt; 2 THEN 40<br>
+          &nbsp;&nbsp;ELSE 10<br>
+          END AS Churn_Score__c
+        </div>
+        <div class="insight__desc">流失預測分數 · 大於 60 → Customer_Tier__pc = 流失風險</div>
+      </div>
+      <div class="insight">
+        <div class="insight__title">📡 Preferred Channel</div>
+        <div class="insight__formula">
+          SELECT Individual_Id__c,<br>
+          &nbsp;&nbsp;MODE(Channel__c) AS Preferred_Channel__c<br>
+          FROM Interaction_Event__dmo<br>
+          WHERE Event_Datetime__c &gt;= today - 90<br>
+          GROUP BY Individual_Id__c
+        </div>
+        <div class="insight__desc">近 90 天最常互動的通路 · 用來決定送 LINE 還是 EDM</div>
+      </div>
+      <div class="insight">
+        <div class="insight__title">🎯 Reorder Signal</div>
+        <div class="insight__formula">
+          SELECT Individual_Id__c, Product_Id__c,<br>
+          &nbsp;&nbsp;(Purchased_Date + Suggested_Days) - today<br>
+          &nbsp;&nbsp;AS Days_Until_Depletion__c<br>
+          FROM Sales_Order_Item__dmo x Product__dmo
+        </div>
+        <div class="insight__desc">依購買日 + 商品建議服用天數，反推斷貨日 · &lt; 14 天觸發回購 alert</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── Data flow to SF core ─── -->
+  <section>
+    <h2>回填 Salesforce · Data Action 映射</h2>
+    <div class="sub">Data Cloud 算完後，透過 Data Action 把 Insights 反向寫回 Person Account · 供 Customer 360 Console 讀取</div>
+    <table class="tbl">
+      <thead><tr>
+        <th style="width: 30%;">Data Cloud DMO 欄位</th>
+        <th style="width: 10%;">→</th>
+        <th style="width: 30%;">Salesforce Person Account 欄位</th>
+        <th>更新頻率</th>
+      </tr></thead>
+      <tbody>
+        <tr><td><code>Customer_Insights__cio.LTV_L365__c</code></td><td style="text-align:center; color: var(--wine); font-weight: 700;">→</td><td><code>Account.Lifetime_Value__pc</code></td><td>每 15 min</td></tr>
+        <tr><td><code>Customer_Insights__cio.Order_Count_L90__c</code></td><td style="text-align:center; color: var(--wine); font-weight: 700;">→</td><td><code>Account.Order_Count__pc</code></td><td>每 15 min</td></tr>
+        <tr><td><code>Customer_Insights__cio.Churn_Score__c &gt; 60</code></td><td style="text-align:center; color: var(--wine); font-weight: 700;">→</td><td><code>Account.Customer_Tier__pc = '流失風險'</code></td><td>Nightly</td></tr>
+        <tr><td><code>Customer_Insights__cio.Preferred_Channel__c</code></td><td style="text-align:center; color: var(--wine); font-weight: 700;">→</td><td><code>Account.Preferred_Channel__pc</code></td><td>每小時</td></tr>
+        <tr><td><code>Individual__dmo.LINE_User_Id__c</code></td><td style="text-align:center; color: var(--wine); font-weight: 700;">→</td><td><code>Account.LINE_User_ID__pc</code></td><td>Real-time</td></tr>
+        <tr><td><code>Sales_Order__dmo</code> 最新一筆</td><td style="text-align:center; color: var(--wine); font-weight: 700;">→</td><td><code>Account.Last_Purchase_Date__pc</code></td><td>每 15 min</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- ─── Journey ─── -->
+  <section>
+    <h2>Demo 敘事 · 一次講清楚 5 分鐘</h2>
+    <div class="path">
+      <div class="path__step">
+        <div class="path__icon">1</div>
+        <div class="path__ttl">配方時代現況</div>
+        <div class="path__desc">「5 個系統 5 份客戶資料 · 撈名單要 3 天」</div>
+      </div>
+      <div class="path__arrow">→</div>
+      <div class="path__step">
+        <div class="path__icon">2</div>
+        <div class="path__ttl">Data Streams</div>
+        <div class="path__desc">各系統 raw data 進 DLO · 保留原始欄位</div>
+      </div>
+      <div class="path__arrow">→</div>
+      <div class="path__step">
+        <div class="path__icon">3</div>
+        <div class="path__ttl">Identity Resolution</div>
+        <div class="path__desc">Email + Phone + LINE_ID 合成 1 位 Unified Individual</div>
+      </div>
+      <div class="path__arrow">→</div>
+      <div class="path__step">
+        <div class="path__icon">4</div>
+        <div class="path__ttl">Calculated Insights</div>
+        <div class="path__desc">SAQL 算 LTV / Churn / 通路偏好</div>
+      </div>
+      <div class="path__arrow">→</div>
+      <div class="path__step">
+        <div class="path__icon">5</div>
+        <div class="path__ttl">Data Action</div>
+        <div class="path__desc">回填 SF · Customer 360 立即讀到</div>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<footer style="padding: 30px; text-align: center; color: var(--mut); font-size: 12px; border-top: 1px solid var(--border); background: var(--card);">
+  配方時代 · Data Cloud Unified Individual 敘事層 · <a href="配方時代-專案說明.html" style="color: var(--wine); text-decoration: none;">← 回專案首頁</a>
+</footer>
+
+</body>
+</html>
