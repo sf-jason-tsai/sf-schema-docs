@@ -1,0 +1,950 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Salesforce 6 大雲 · Object & Schema 全覽</title>
+<style>
+:root {
+    --blue: #2167dd;
+    --blue-dark: #1a52b8;
+    --blue-light: #a1c1f6;
+    --green: #4ab2a8;
+    --green-light: #95d4ce;
+    --ink: #1a1a1a;
+    --mid: #4a4a4a;
+    --gray: #8a8a8a;
+    --divider: #d0d0d0;
+    --bg-light: #f5f5f5;
+    --white: #ffffff;
+    --font-zh: "微軟正黑體", "Microsoft JhengHei", "Noto Sans TC", sans-serif;
+    --font-mono: Consolas, "Courier New", monospace;
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+    margin: 0;
+    font-family: var(--font-zh);
+    color: var(--ink);
+    background: var(--white);
+    line-height: 1.6;
+    font-size: 14.5px;
+    -webkit-font-smoothing: antialiased;
+}
+
+/* ─── HERO ─────────────────────────────── */
+.hero {
+    background: linear-gradient(135deg, var(--blue-dark) 0%, var(--blue) 100%);
+    color: var(--white);
+    padding: 64px 32px 56px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+}
+.hero::before {
+    content: '';
+    position: absolute;
+    right: -80px; top: -80px;
+    width: 300px; height: 300px;
+    background: radial-gradient(circle, rgba(255,255,255,0.08), transparent 70%);
+    pointer-events: none;
+}
+.hero__eyebrow {
+    display: inline-block;
+    padding: 4px 12px;
+    background: rgba(255,255,255,0.15);
+    border: 1px solid rgba(255,255,255,0.3);
+    border-radius: 4px;
+    font-size: 11px;
+    letter-spacing: 2px;
+    margin-bottom: 18px;
+    text-transform: uppercase;
+    font-weight: 600;
+}
+.hero__title {
+    font-size: 36px;
+    font-weight: 900;
+    letter-spacing: -0.5px;
+    margin: 0 0 12px;
+}
+.hero__sub {
+    font-size: 15.5px;
+    opacity: 0.92;
+    max-width: 740px;
+    margin: 0 auto;
+    line-height: 1.7;
+}
+.hero__stats {
+    display: inline-flex;
+    gap: 36px;
+    margin-top: 28px;
+    padding: 14px 32px;
+    background: rgba(255,255,255,0.1);
+    border-radius: 999px;
+    font-size: 13px;
+    backdrop-filter: blur(8px);
+}
+.hero__stats strong { font-size: 20px; display: block; font-weight: 800; }
+.hero__stats span { display: block; opacity: 0.85; margin-top: 2px; }
+
+/* ─── STICKY NAV ────────────────────────── */
+.nav {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: var(--white);
+    border-bottom: 1px solid var(--divider);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+}
+.nav__inner {
+    max-width: 1180px;
+    margin: 0 auto;
+    display: flex;
+    overflow-x: auto;
+    scrollbar-width: none;
+}
+.nav__inner::-webkit-scrollbar { display: none; }
+.nav a {
+    flex: 1 0 auto;
+    padding: 16px 20px;
+    color: var(--mid);
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 600;
+    border-bottom: 3px solid transparent;
+    transition: all 0.2s;
+    text-align: center;
+    white-space: nowrap;
+}
+.nav a:hover {
+    color: var(--blue);
+    background: var(--bg-light);
+}
+.nav a.active {
+    color: var(--blue);
+    border-bottom-color: var(--blue);
+}
+.nav__icon { font-size: 15px; margin-right: 4px; }
+
+/* ─── CONTAINER ─────────────────────────── */
+.container {
+    max-width: 1180px;
+    margin: 0 auto;
+    padding: 48px 32px 80px;
+}
+
+/* ─── CLOUD SECTION ─────────────────────── */
+.cloud {
+    scroll-margin-top: 80px;
+    padding-bottom: 56px;
+    margin-bottom: 56px;
+    border-bottom: 1px solid var(--divider);
+}
+.cloud:last-child { border-bottom: none; }
+
+.cloud__head {
+    display: flex;
+    align-items: flex-start;
+    gap: 20px;
+    margin-bottom: 24px;
+}
+.cloud__icon {
+    flex-shrink: 0;
+    width: 64px; height: 64px;
+    background: var(--blue);
+    color: var(--white);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 32px;
+    box-shadow: 0 4px 12px rgba(33,103,221,0.25);
+}
+.cloud__icon--green { background: var(--green); box-shadow: 0 4px 12px rgba(74,178,168,0.3); }
+
+.cloud__title-wrap { flex: 1; }
+.cloud__title {
+    font-size: 26px;
+    font-weight: 800;
+    color: var(--ink);
+    margin: 0 0 6px;
+    letter-spacing: -0.3px;
+}
+.cloud__title-en {
+    color: var(--gray);
+    font-weight: 500;
+    font-size: 15px;
+    margin-left: 8px;
+}
+.cloud__tagline {
+    color: var(--mid);
+    font-size: 14.5px;
+    margin: 0;
+    line-height: 1.65;
+}
+
+/* ─── CAPABILITY GRID ───────────────────── */
+.caps {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 12px;
+    margin: 20px 0 28px;
+}
+.cap {
+    background: var(--bg-light);
+    border-left: 3px solid var(--blue);
+    padding: 12px 14px;
+    border-radius: 4px;
+    font-size: 13.5px;
+    color: var(--mid);
+}
+.cap strong {
+    display: block;
+    color: var(--ink);
+    font-weight: 700;
+    margin-bottom: 3px;
+    font-size: 14px;
+}
+.cap--green { border-left-color: var(--green); }
+
+/* ─── OBJECT TABLE ──────────────────────── */
+.section-label {
+    display: inline-block;
+    padding: 4px 10px;
+    background: var(--blue);
+    color: var(--white);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    border-radius: 3px;
+    margin: 12px 0 14px;
+    text-transform: uppercase;
+}
+.section-label--green { background: var(--green); }
+
+.tbl-wrap { overflow-x: auto; margin-bottom: 20px; }
+table {
+    width: 100%;
+    border-collapse: collapse;
+    background: var(--white);
+    font-size: 13.5px;
+}
+th {
+    background: var(--blue);
+    color: var(--white);
+    padding: 10px 12px;
+    text-align: left;
+    font-weight: 700;
+    font-size: 13px;
+    letter-spacing: 0.3px;
+    white-space: nowrap;
+}
+th:first-child { border-top-left-radius: 6px; }
+th:last-child { border-top-right-radius: 6px; }
+td {
+    padding: 9px 12px;
+    border: 1px solid var(--divider);
+    color: var(--ink);
+    vertical-align: top;
+}
+tr:nth-child(even) td { background: var(--bg-light); }
+tr:hover td { background: #e8f0fd; }
+
+td.api {
+    font-family: var(--font-mono);
+    font-size: 12.5px;
+    color: var(--blue);
+    font-weight: 600;
+    white-space: nowrap;
+}
+td.rel {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--mid);
+}
+td.rel code {
+    background: rgba(33,103,221,0.08);
+    padding: 1px 5px;
+    border-radius: 3px;
+    color: var(--blue);
+}
+
+/* ─── FLOW BOXES ────────────────────────── */
+.flow {
+    background: linear-gradient(135deg, #f8faff, #ffffff);
+    border: 1px solid var(--blue-light);
+    border-radius: 8px;
+    padding: 18px 20px;
+    margin: 8px 0 20px;
+}
+.flow__title {
+    font-weight: 700;
+    color: var(--blue);
+    font-size: 14px;
+    margin-bottom: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+.flow__chain {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+}
+.flow__node {
+    padding: 6px 12px;
+    background: var(--white);
+    border: 1.5px solid var(--blue);
+    border-radius: 6px;
+    color: var(--blue);
+    font-weight: 600;
+    font-family: var(--font-mono);
+    font-size: 12.5px;
+    white-space: nowrap;
+}
+.flow__node--green { border-color: var(--green); color: var(--green); }
+.flow__node--filled { background: var(--blue); color: var(--white); }
+.flow__arrow {
+    color: var(--gray);
+    font-weight: 700;
+    font-size: 14px;
+}
+
+/* ─── FOOTER ────────────────────────────── */
+.foot {
+    background: var(--bg-light);
+    padding: 32px;
+    text-align: center;
+    color: var(--gray);
+    font-size: 13px;
+    border-top: 1px solid var(--divider);
+}
+.foot a {
+    color: var(--blue);
+    text-decoration: none;
+    font-weight: 600;
+}
+.foot a:hover { text-decoration: underline; }
+
+/* ─── UTILS ─────────────────────────────── */
+.note {
+    background: rgba(33,103,221,0.06);
+    border-left: 3px solid var(--blue);
+    padding: 10px 14px;
+    margin: 14px 0;
+    font-size: 13.5px;
+    color: var(--mid);
+    border-radius: 4px;
+}
+.note--green {
+    background: rgba(74,178,168,0.08);
+    border-left-color: var(--green);
+}
+.note strong { color: var(--ink); }
+
+.tag {
+    display: inline-block;
+    padding: 2px 7px;
+    background: var(--blue-light);
+    color: var(--blue-dark);
+    border-radius: 3px;
+    font-size: 11px;
+    font-weight: 600;
+    margin-right: 4px;
+}
+.tag--green {
+    background: var(--green-light);
+    color: #2e6f68;
+}
+.tag--gray {
+    background: #e5e5e5;
+    color: var(--mid);
+}
+
+/* ─── RESPONSIVE ─────────────────────── */
+@media (max-width: 768px) {
+    .hero__title { font-size: 26px; }
+    .hero__stats { gap: 20px; padding: 12px 20px; }
+    .container { padding: 32px 16px 60px; }
+    .cloud__head { flex-direction: column; gap: 12px; }
+    .cloud__icon { width: 52px; height: 52px; font-size: 26px; }
+    .cloud__title { font-size: 22px; }
+    th, td { padding: 8px 8px; font-size: 12.5px; }
+}
+</style>
+</head>
+<body>
+
+<!-- ─── HERO ─────────────────────────── -->
+<header class="hero">
+    <div class="hero__eyebrow">Salesforce Cloud Overview</div>
+    <h1 class="hero__title">Salesforce 6 大雲 · Object & Schema 全覽</h1>
+    <p class="hero__sub">
+        Service · Sales · Revenue · Commerce · Manufacturing · Marketing<br>
+        每一朵雲的定位、核心能力、資料模型與物件關聯，一頁看完。
+    </p>
+    <div class="hero__stats">
+        <div><strong>6</strong><span>Clouds</span></div>
+        <div><strong>130+</strong><span>Objects</span></div>
+        <div><strong>1</strong><span>Platform</span></div>
+    </div>
+</header>
+
+<!-- ─── STICKY NAV ───────────────────── -->
+<nav class="nav">
+    <div class="nav__inner">
+        <a href="#service"><span class="nav__icon">🎧</span>Service</a>
+        <a href="#sales"><span class="nav__icon">💼</span>Sales</a>
+        <a href="#revenue"><span class="nav__icon">💰</span>Revenue</a>
+        <a href="#commerce"><span class="nav__icon">🛒</span>Commerce</a>
+        <a href="#manufacturing"><span class="nav__icon">🏭</span>Manufacturing</a>
+        <a href="#marketing"><span class="nav__icon">📣</span>Marketing</a>
+    </div>
+</nav>
+
+<div class="container">
+
+<!-- ═══ SERVICE CLOUD ══════════════════════════════════ -->
+<section class="cloud" id="service">
+    <div class="cloud__head">
+        <div class="cloud__icon">🎧</div>
+        <div class="cloud__title-wrap">
+            <h2 class="cloud__title">Service Cloud<span class="cloud__title-en">客戶服務雲</span></h2>
+            <p class="cloud__tagline">
+                以 <strong>Case</strong> 為核心的全通路客服平台。整合 Email、電話、Live Chat、Messaging、社群、Field Service，
+                加上 Knowledge、Entitlement/SLA、Omni-Channel 派工，是 SFDC 最成熟的產品線。
+            </p>
+        </div>
+    </div>
+
+    <div class="caps">
+        <div class="cap"><strong>案件管理</strong>Case、Queue、Assignment Rule、Escalation</div>
+        <div class="cap"><strong>知識管理</strong>Lightning Knowledge、Article Types、Data Categories</div>
+        <div class="cap"><strong>SLA & 授權</strong>Entitlement Process、Milestone、Service Contract</div>
+        <div class="cap"><strong>Omni-Channel</strong>Presence、Skill-based Routing、Supervisor</div>
+        <div class="cap"><strong>Field Service</strong>Work Order、Service Appointment、Resource Scheduling</div>
+        <div class="cap"><strong>Digital Engagement</strong>Live Chat、Messaging、Social、In-App</div>
+    </div>
+
+    <div class="flow">
+        <div class="flow__title">典型案件生命週期</div>
+        <div class="flow__chain">
+            <span class="flow__node">Contact / Web Form</span>
+            <span class="flow__arrow">→</span>
+            <span class="flow__node flow__node--filled">Case</span>
+            <span class="flow__arrow">→</span>
+            <span class="flow__node">Entitlement + Milestone</span>
+            <span class="flow__arrow">→</span>
+            <span class="flow__node">CaseComment / Knowledge</span>
+            <span class="flow__arrow">→</span>
+            <span class="flow__node">Work Order (可選)</span>
+            <span class="flow__arrow">→</span>
+            <span class="flow__node">Closed</span>
+        </div>
+    </div>
+
+    <div class="section-label">核心物件</div>
+    <div class="tbl-wrap">
+    <table>
+        <thead><tr><th style="width:18%">API Name</th><th style="width:14%">Label</th><th style="width:34%">說明</th><th style="width:34%">關鍵關聯</th></tr></thead>
+        <tbody>
+        <tr><td class="api">Case</td><td>案件</td><td>服務請求主檔：客訴、諮詢、故障、退貨等</td><td class="rel"><code>AccountId</code> → Account · <code>ContactId</code> → Contact · <code>OwnerId</code> → User/Queue</td></tr>
+        <tr><td class="api">CaseComment</td><td>案件註解</td><td>對話與內部備註（新版建議用 CaseFeed）</td><td class="rel"><code>ParentId</code> → Case</td></tr>
+        <tr><td class="api">CaseFeed</td><td>案件動態</td><td>Chatter feed（Email / Publisher / Content）</td><td class="rel"><code>ParentId</code> → Case</td></tr>
+        <tr><td class="api">CaseHistory</td><td>案件歷史</td><td>欄位變更追蹤（自動產生）</td><td class="rel"><code>CaseId</code> → Case</td></tr>
+        <tr><td class="api">Account</td><td>客戶</td><td>企業客戶或家戶（B2C 用 Person Account）</td><td class="rel"><code>ParentId</code> → Account（階層）</td></tr>
+        <tr><td class="api">Contact</td><td>聯絡人</td><td>客戶端個人</td><td class="rel"><code>AccountId</code> → Account</td></tr>
+        <tr><td class="api">Knowledge__kav</td><td>知識文章</td><td>KB 條目（KnowledgeArticleVersion）</td><td class="rel"><code>KnowledgeArticleId</code> → KnowledgeArticle</td></tr>
+        <tr><td class="api">CaseArticle</td><td>案件關聯文章</td><td>Case 引用的 KB 文章</td><td class="rel"><code>CaseId</code> · <code>KnowledgeArticleId</code></td></tr>
+        <tr><td class="api">Entitlement</td><td>服務資格</td><td>合約級 SLA 定義（誰能享受什麼服務）</td><td class="rel"><code>AccountId</code> · <code>ContactId</code> · <code>ServiceContractId</code></td></tr>
+        <tr><td class="api">EntitlementProcess</td><td>服務流程</td><td>Milestone 集合（SLA 檢查點模型）</td><td class="rel">— 設定物件</td></tr>
+        <tr><td class="api">Milestone</td><td>里程碑</td><td>SLA 檢查點實例（First Response、Resolve Time）</td><td class="rel"><code>CaseId</code> → Case</td></tr>
+        <tr><td class="api">ServiceContract</td><td>服務合約</td><td>支援合約主檔</td><td class="rel"><code>AccountId</code></td></tr>
+        <tr><td class="api">ContractLineItem</td><td>合約項目</td><td>合約中的產品/服務項</td><td class="rel"><code>ServiceContractId</code> · <code>Product2Id</code></td></tr>
+        <tr><td class="api">WorkOrder</td><td>工單</td><td>Field Service 派工單</td><td class="rel"><code>AccountId</code> · <code>AssetId</code> · <code>CaseId</code></td></tr>
+        <tr><td class="api">WorkOrderLineItem</td><td>工單項目</td><td>工單細項（Task / Product）</td><td class="rel"><code>WorkOrderId</code> · <code>Product2Id</code></td></tr>
+        <tr><td class="api">ServiceAppointment</td><td>服務預約</td><td>派工時段（可派給 Resource）</td><td class="rel"><code>ParentRecordId</code>（WorkOrder / WOLineItem）</td></tr>
+        <tr><td class="api">ServiceResource</td><td>服務資源</td><td>可派工人員 / 設備</td><td class="rel"><code>RelatedRecordId</code> → User</td></tr>
+        <tr><td class="api">ServiceTerritory</td><td>服務區域</td><td>派工地區主檔</td><td class="rel"><code>ParentTerritoryId</code>（階層）</td></tr>
+        <tr><td class="api">Asset</td><td>資產</td><td>客戶端已交付產品實例</td><td class="rel"><code>AccountId</code> · <code>ContactId</code> · <code>Product2Id</code></td></tr>
+        <tr><td class="api">LiveChatTranscript</td><td>Chat 逐字稿</td><td>Live Agent 對話紀錄</td><td class="rel"><code>ContactId</code> · <code>CaseId</code></td></tr>
+        <tr><td class="api">MessagingSession</td><td>訊息對話</td><td>SMS / WhatsApp / FB Messenger session</td><td class="rel"><code>MessagingEndUserId</code> · <code>CaseId</code></td></tr>
+        <tr><td class="api">SocialPost</td><td>社群貼文</td><td>FB/X/IG 監聽到的貼文</td><td class="rel"><code>ParentId</code> → Case</td></tr>
+        </tbody>
+    </table>
+    </div>
+
+    <div class="note">
+        <strong>Person Account 差異：</strong>啟用後 <code>Account</code> 與 <code>Contact</code> 合為一筆記錄，B2C 客服（例如零售、保險、Consumer Goods）幾乎都會用。
+    </div>
+</section>
+
+
+<!-- ═══ SALES CLOUD ══════════════════════════════════ -->
+<section class="cloud" id="sales">
+    <div class="cloud__head">
+        <div class="cloud__icon">💼</div>
+        <div class="cloud__title-wrap">
+            <h2 class="cloud__title">Sales Cloud<span class="cloud__title-en">銷售雲</span></h2>
+            <p class="cloud__tagline">
+                從 <strong>Lead → Opportunity → Close</strong> 的完整銷售管線。含 Account 360、產品/報價/合約、預測、活動記錄，
+                是 Salesforce 的招牌產品，也是所有其他雲的資料骨幹。
+            </p>
+        </div>
+    </div>
+
+    <div class="caps">
+        <div class="cap"><strong>Lead 管理</strong>Web-to-Lead、Assignment、Conversion</div>
+        <div class="cap"><strong>Account & Contact</strong>Account Hierarchy、Team、Related Contacts</div>
+        <div class="cap"><strong>Opportunity</strong>Stage、Products、Team、Path</div>
+        <div class="cap"><strong>Products & Pricebook</strong>Standard + Custom Pricebooks、Multi-currency</div>
+        <div class="cap"><strong>Quote & Contract</strong>報價 PDF、合約管理</div>
+        <div class="cap"><strong>Forecast & Territory</strong>Collaborative Forecast、Enterprise Territory</div>
+    </div>
+
+    <div class="flow">
+        <div class="flow__title">銷售管線</div>
+        <div class="flow__chain">
+            <span class="flow__node">Campaign</span>
+            <span class="flow__arrow">→</span>
+            <span class="flow__node">Lead</span>
+            <span class="flow__arrow">→</span>
+            <span class="flow__node flow__node--filled">Account + Contact + Opportunity</span>
+            <span class="flow__arrow">→</span>
+            <span class="flow__node">Quote → QuoteLineItem</span>
+            <span class="flow__arrow">→</span>
+            <span class="flow__node">Contract → Order</span>
+        </div>
+    </div>
+
+    <div class="section-label">核心物件</div>
+    <div class="tbl-wrap">
+    <table>
+        <thead><tr><th style="width:18%">API Name</th><th style="width:14%">Label</th><th style="width:34%">說明</th><th style="width:34%">關鍵關聯</th></tr></thead>
+        <tbody>
+        <tr><td class="api">Lead</td><td>潛在客戶</td><td>未確認商機的接觸點（可轉為 Account/Contact/Opp）</td><td class="rel"><code>ConvertedAccountId</code> · <code>ConvertedContactId</code> · <code>ConvertedOpportunityId</code></td></tr>
+        <tr><td class="api">Account</td><td>客戶</td><td>公司或家戶</td><td class="rel"><code>ParentId</code>（階層） · <code>OwnerId</code></td></tr>
+        <tr><td class="api">AccountContactRelation</td><td>Account-Contact 關係</td><td>多對多關係（一個 Contact 可屬多 Account）</td><td class="rel"><code>AccountId</code> · <code>ContactId</code></td></tr>
+        <tr><td class="api">AccountTeamMember</td><td>Account 團隊</td><td>共享 Account 的銷售團隊</td><td class="rel"><code>AccountId</code> · <code>UserId</code></td></tr>
+        <tr><td class="api">Contact</td><td>聯絡人</td><td>客戶端個人</td><td class="rel"><code>AccountId</code> · <code>ReportsToId</code>（上司）</td></tr>
+        <tr><td class="api">Opportunity</td><td>商機</td><td>銷售機會（Amount + Stage + Close Date）</td><td class="rel"><code>AccountId</code> · <code>Pricebook2Id</code> · <code>CampaignId</code></td></tr>
+        <tr><td class="api">OpportunityLineItem</td><td>商機項目</td><td>商機報價中的產品明細</td><td class="rel"><code>OpportunityId</code> · <code>PricebookEntryId</code></td></tr>
+        <tr><td class="api">OpportunityContactRole</td><td>商機聯絡人角色</td><td>Decision Maker / Influencer 等角色</td><td class="rel"><code>OpportunityId</code> · <code>ContactId</code></td></tr>
+        <tr><td class="api">OpportunityTeamMember</td><td>商機團隊</td><td>共同銷售角色</td><td class="rel"><code>OpportunityId</code> · <code>UserId</code></td></tr>
+        <tr><td class="api">OpportunityHistory</td><td>商機歷史</td><td>Stage/Amount 變更軌跡（自動）</td><td class="rel"><code>OpportunityId</code></td></tr>
+        <tr><td class="api">Product2</td><td>產品</td><td>產品主檔（可作 Bundle 父）</td><td class="rel">— 主檔</td></tr>
+        <tr><td class="api">Pricebook2</td><td>價目表</td><td>Standard + Custom Pricebooks</td><td class="rel">— 主檔</td></tr>
+        <tr><td class="api">PricebookEntry</td><td>價目表項目</td><td>產品 × 價目表 × 幣別 = 價格</td><td class="rel"><code>Pricebook2Id</code> · <code>Product2Id</code></td></tr>
+        <tr><td class="api">Quote</td><td>報價單</td><td>正式對外報價（可產 PDF）</td><td class="rel"><code>OpportunityId</code> · <code>Pricebook2Id</code></td></tr>
+        <tr><td class="api">QuoteLineItem</td><td>報價項目</td><td>報價細項</td><td class="rel"><code>QuoteId</code> · <code>PricebookEntryId</code></td></tr>
+        <tr><td class="api">Contract</td><td>合約</td><td>銷售合約主檔</td><td class="rel"><code>AccountId</code> · <code>OpportunityId</code></td></tr>
+        <tr><td class="api">Order</td><td>訂單</td><td>合約下的實際訂單</td><td class="rel"><code>AccountId</code> · <code>ContractId</code></td></tr>
+        <tr><td class="api">OrderItem</td><td>訂單項目</td><td>訂單細項</td><td class="rel"><code>OrderId</code> · <code>PricebookEntryId</code></td></tr>
+        <tr><td class="api">Campaign</td><td>行銷活動</td><td>行銷活動主檔（含層級）</td><td class="rel"><code>ParentId</code> → Campaign</td></tr>
+        <tr><td class="api">CampaignMember</td><td>活動成員</td><td>Lead 或 Contact 加入 Campaign</td><td class="rel"><code>CampaignId</code> · <code>LeadId</code> 或 <code>ContactId</code></td></tr>
+        <tr><td class="api">Forecast / ForecastingItem</td><td>業績預測</td><td>Collaborative Forecast 明細</td><td class="rel"><code>OwnerId</code> · <code>Period</code></td></tr>
+        <tr><td class="api">Task / Event</td><td>待辦 / 行事曆</td><td>Activity 通用物件</td><td class="rel"><code>WhoId</code>（Lead/Contact） · <code>WhatId</code>（Account/Opp/...）</td></tr>
+        <tr><td class="api">Territory2 / UserTerritory</td><td>銷售區域</td><td>Enterprise Territory Management</td><td class="rel"><code>ParentTerritory2Id</code>（階層）</td></tr>
+        </tbody>
+    </table>
+    </div>
+
+    <div class="note">
+        <strong>WhoId vs WhatId：</strong>Activity（Task/Event）用 WhoId 指人（Lead/Contact）、WhatId 指業務物件（Account/Opp/Case 等），是 SFDC 少數 polymorphic 欄位。
+    </div>
+</section>
+
+
+<!-- ═══ REVENUE CLOUD ══════════════════════════════════ -->
+<section class="cloud" id="revenue">
+    <div class="cloud__head">
+        <div class="cloud__icon cloud__icon--green">💰</div>
+        <div class="cloud__title-wrap">
+            <h2 class="cloud__title">Revenue Cloud<span class="cloud__title-en">營收雲 · CPQ + Billing</span></h2>
+            <p class="cloud__tagline">
+                承接 Sales Cloud 之後的<strong> Configure-Price-Quote → Order → Billing → Revenue Recognition</strong> 完整營收流。
+                含複雜 Bundle、Subscription、Usage-based billing、多幣別發票，是 Enterprise 銷售的必要模組。
+            </p>
+        </div>
+    </div>
+
+    <div class="caps">
+        <div class="cap cap--green"><strong>CPQ</strong>Configure Bundle、Guided Selling、Pricing Rule</div>
+        <div class="cap cap--green"><strong>Subscription</strong>Recurring / Usage-based / Evergreen</div>
+        <div class="cap cap--green"><strong>Contract Lifecycle</strong>Renewal、Amendment、Cancellation</div>
+        <div class="cap cap--green"><strong>Billing</strong>BillingSchedule、Prorate、Consolidated Invoice</div>
+        <div class="cap cap--green"><strong>Payment & AR</strong>Payment Gateway、Credit Memo、Refund</div>
+        <div class="cap cap--green"><strong>Rev Rec</strong>Revenue Schedule、ASC 606 / IFRS 15</div>
+    </div>
+
+    <div class="flow">
+        <div class="flow__title">Quote-to-Cash 流程</div>
+        <div class="flow__chain">
+            <span class="flow__node flow__node--green">Product Bundle</span>
+            <span class="flow__arrow">→</span>
+            <span class="flow__node flow__node--green">Quote → QuoteLine</span>
+            <span class="flow__arrow">→</span>
+            <span class="flow__node flow__node--green">Contract</span>
+            <span class="flow__arrow">→</span>
+            <span class="flow__node flow__node--green">Order</span>
+            <span class="flow__arrow">→</span>
+            <span class="flow__node flow__node--green">Asset / Subscription</span>
+            <span class="flow__arrow">→</span>
+            <span class="flow__node flow__node--green">BillingSchedule → Invoice</span>
+            <span class="flow__arrow">→</span>
+            <span class="flow__node flow__node--green">Payment</span>
+        </div>
+    </div>
+
+    <div class="section-label section-label--green">核心物件</div>
+    <div class="tbl-wrap">
+    <table>
+        <thead><tr><th style="width:22%">API Name</th><th style="width:14%">Label</th><th style="width:32%">說明</th><th style="width:32%">關鍵關聯</th></tr></thead>
+        <tbody>
+        <tr><td class="api">Product2</td><td>產品</td><td>共用主檔 · Rev Cloud 支援 Bundle 父/子結構</td><td class="rel"><code>ProductClassificationId</code></td></tr>
+        <tr><td class="api">ProductClassification</td><td>產品分類</td><td>產品類別主檔（Attribute Schema 掛在此）</td><td class="rel">— 主檔</td></tr>
+        <tr><td class="api">ProductAttributeDefinition</td><td>產品屬性定義</td><td>Bundle Configuration Attributes（例如硬碟大小）</td><td class="rel"><code>ProductClassificationId</code></td></tr>
+        <tr><td class="api">ProductRelatedComponent</td><td>產品組件</td><td>Bundle 父子關係（Parent 拆解為 Children）</td><td class="rel"><code>ParentProductId</code> · <code>ChildProductId</code></td></tr>
+        <tr><td class="api">ProductSellingModel</td><td>銷售模式</td><td>One-time / Term Subscription / Usage / Evergreen</td><td class="rel"><code>Product2Id</code></td></tr>
+        <tr><td class="api">Pricebook2 / PricebookEntry</td><td>價目表</td><td>與 Sales Cloud 共用</td><td class="rel"><code>Product2Id</code></td></tr>
+        <tr><td class="api">PriceAdjustmentSchedule</td><td>折扣排程</td><td>Volume-based / Tiered discount</td><td class="rel"><code>PricebookEntryId</code></td></tr>
+        <tr><td class="api">Quote</td><td>報價單</td><td>Rev Cloud 版 Quote（支援 Bundle）</td><td class="rel"><code>OpportunityId</code> · <code>AccountId</code></td></tr>
+        <tr><td class="api">QuoteLineItem</td><td>報價項目</td><td>Bundle 展開後每一項</td><td class="rel"><code>QuoteId</code> · <code>Product2Id</code> · <code>ParentQuoteLineItemId</code>（Bundle 結構）</td></tr>
+        <tr><td class="api">Contract</td><td>合約</td><td>正式生效的合約</td><td class="rel"><code>AccountId</code> · <code>OpportunityId</code></td></tr>
+        <tr><td class="api">ContractLineItem</td><td>合約項目</td><td>合約中的訂閱項</td><td class="rel"><code>ContractId</code> · <code>Product2Id</code></td></tr>
+        <tr><td class="api">Order</td><td>訂單</td><td>合約下的可執行訂單（New / Amendment / Renewal）</td><td class="rel"><code>AccountId</code> · <code>ContractId</code></td></tr>
+        <tr><td class="api">OrderItem</td><td>訂單項目</td><td>訂單細項</td><td class="rel"><code>OrderId</code> · <code>Product2Id</code></td></tr>
+        <tr><td class="api">Asset</td><td>資產</td><td>已交付/生效的訂購（Subscription 的載體）</td><td class="rel"><code>AccountId</code> · <code>Product2Id</code> · <code>ParentId</code>（Bundle）</td></tr>
+        <tr><td class="api">AssetContract</td><td>資產合約關聯</td><td>Asset ↔ Contract 追蹤</td><td class="rel"><code>AssetId</code> · <code>ContractId</code></td></tr>
+        <tr><td class="api">SubscriptionUsage</td><td>訂閱使用量</td><td>Usage-based billing 的計費依據</td><td class="rel"><code>AssetId</code></td></tr>
+        <tr><td class="api">BillingSchedule</td><td>帳單排程</td><td>何時開立發票的排程</td><td class="rel"><code>OrderItemId</code> · <code>AssetId</code></td></tr>
+        <tr><td class="api">BillingScheduleGroup</td><td>帳單排程群組</td><td>合併多項為單張發票</td><td class="rel"><code>OrderId</code></td></tr>
+        <tr><td class="api">Invoice</td><td>發票</td><td>正式發票</td><td class="rel"><code>AccountId</code> · <code>BillToContactId</code></td></tr>
+        <tr><td class="api">InvoiceLine</td><td>發票項目</td><td>發票細項（含期間、金額）</td><td class="rel"><code>InvoiceId</code> · <code>OrderItemId</code></td></tr>
+        <tr><td class="api">Payment</td><td>付款</td><td>付款紀錄</td><td class="rel"><code>InvoiceId</code> · <code>AccountId</code></td></tr>
+        <tr><td class="api">CreditMemo / Refund</td><td>貸項 / 退款</td><td>沖抵與退款</td><td class="rel"><code>InvoiceId</code></td></tr>
+        <tr><td class="api">RevenueRecognition</td><td>營收認列</td><td>ASC 606 分期認列</td><td class="rel"><code>OrderItemId</code> · <code>Period</code></td></tr>
+        </tbody>
+    </table>
+    </div>
+
+    <div class="note note--green">
+        <strong>Rev Cloud 新舊版本：</strong>2024+ 主推的 <em>Revenue Lifecycle Management (RLM)</em> 是原生 Core 版本，取代舊 SFDC CPQ (Steelbrick) 和 Salesforce Billing 兩個 Managed Package。物件命名貼近 Core（Product2、Order、Asset），較新的 Product Bundling 是核心亮點。
+    </div>
+</section>
+
+
+<!-- ═══ COMMERCE CLOUD ══════════════════════════════════ -->
+<section class="cloud" id="commerce">
+    <div class="cloud__head">
+        <div class="cloud__icon">🛒</div>
+        <div class="cloud__title-wrap">
+            <h2 class="cloud__title">Commerce Cloud<span class="cloud__title-en">電商雲 · B2B / B2C / D2C</span></h2>
+            <p class="cloud__tagline">
+                原生於 Salesforce Platform 的電商站台（<strong>B2B Commerce</strong> / <strong>B2C Commerce on Core</strong>）。
+                資料模型與 CRM / Service 共用同一份 Account/Product/Order，是 Unified Commerce 的最大優勢。
+                注意：SFCC（B2C Commerce Cloud, 舊 Demandware）是另一套 SaaS 平台，資料模型不同。
+            </p>
+        </div>
+    </div>
+
+    <div class="caps">
+        <div class="cap"><strong>Storefront</strong>WebStore、Themes、CMS、LWR Site</div>
+        <div class="cap"><strong>Catalog</strong>ProductCategory、Attributes、Media</div>
+        <div class="cap"><strong>Buyer Experience</strong>Buyer Account / Group、Entitlement Policy</div>
+        <div class="cap"><strong>Cart & Checkout</strong>WebCart、Delivery Group、Tax</div>
+        <div class="cap"><strong>Promotion</strong>Promotion、Coupon、Segment 目標</div>
+        <div class="cap"><strong>Order Management</strong>OMS、Fulfillment、Payment Auth/Capture</div>
+    </div>
+
+    <div class="flow">
+        <div class="flow__title">B2B 購物流程</div>
+        <div class="flow__chain">
+            <span class="flow__node">BuyerAccount 登入 WebStore</span>
+            <span class="flow__arrow">→</span>
+            <span class="flow__node">EntitlementPolicy 過濾可見 Product</span>
+            <span class="flow__arrow">→</span>
+            <span class="flow__node flow__node--filled">WebCart → CartItem</span>
+            <span class="flow__arrow">→</span>
+            <span class="flow__node">Checkout（Delivery + Payment）</span>
+            <span class="flow__arrow">→</span>
+            <span class="flow__node">WebOrder → OrderSummary</span>
+            <span class="flow__arrow">→</span>
+            <span class="flow__node">Fulfillment</span>
+        </div>
+    </div>
+
+    <div class="section-label">核心物件</div>
+    <div class="tbl-wrap">
+    <table>
+        <thead><tr><th style="width:22%">API Name</th><th style="width:14%">Label</th><th style="width:32%">說明</th><th style="width:32%">關鍵關聯</th></tr></thead>
+        <tbody>
+        <tr><td class="api">WebStore</td><td>商店</td><td>電商站台（一個 org 可多個 store）</td><td class="rel">— 主檔</td></tr>
+        <tr><td class="api">WebStoreCatalog</td><td>商店目錄</td><td>Store 使用的 Catalog</td><td class="rel"><code>WebStoreId</code></td></tr>
+        <tr><td class="api">WebStoreCategory</td><td>商店類別</td><td>Store 的類別（樹狀）</td><td class="rel"><code>WebStoreId</code> · <code>ProductCategoryId</code></td></tr>
+        <tr><td class="api">ProductCategory</td><td>產品類別</td><td>類別主檔（可跨 Store 共用）</td><td class="rel"><code>ParentCategoryId</code>（階層）</td></tr>
+        <tr><td class="api">ProductCategoryProduct</td><td>類別×產品</td><td>M:N 掛載</td><td class="rel"><code>ProductCategoryId</code> · <code>Product2Id</code></td></tr>
+        <tr><td class="api">Product2</td><td>產品</td><td>與 CRM 共用主檔</td><td class="rel"><code>Type</code>（Simple / Variation / VariationParent / Bundle）</td></tr>
+        <tr><td class="api">ProductAttribute</td><td>產品屬性</td><td>顏色、尺寸等 Variation 屬性</td><td class="rel"><code>Product2Id</code></td></tr>
+        <tr><td class="api">ProductAttributeSet</td><td>屬性集合</td><td>可套用到多產品的屬性群</td><td class="rel">— 主檔</td></tr>
+        <tr><td class="api">ProductMedia</td><td>產品媒體</td><td>圖片 / 影片 / 說明檔</td><td class="rel"><code>Product2Id</code></td></tr>
+        <tr><td class="api">BuyerAccount</td><td>買家帳號</td><td>B2B 買方（延伸自 Account）</td><td class="rel"><code>BuyerId</code> → Account</td></tr>
+        <tr><td class="api">BuyerGroup</td><td>買家群組</td><td>可套用同一組 Pricebook/Entitlement</td><td class="rel">— 主檔</td></tr>
+        <tr><td class="api">BuyerGroupMember</td><td>群組成員</td><td>BuyerAccount 加入 Group</td><td class="rel"><code>BuyerGroupId</code> · <code>BuyerId</code></td></tr>
+        <tr><td class="api">CommerceEntitlementPolicy</td><td>授權策略</td><td>誰能看/買什麼</td><td class="rel"><code>WebStoreId</code> · <code>BuyerGroupId</code></td></tr>
+        <tr><td class="api">WebCart</td><td>購物車</td><td>Session 級購物車</td><td class="rel"><code>AccountId</code> · <code>WebStoreId</code></td></tr>
+        <tr><td class="api">CartItem</td><td>購物車項目</td><td>加入車的產品</td><td class="rel"><code>CartId</code> · <code>Product2Id</code></td></tr>
+        <tr><td class="api">CartDeliveryGroup</td><td>出貨群組</td><td>拆單出貨</td><td class="rel"><code>CartId</code></td></tr>
+        <tr><td class="api">WebOrder / OrderSummary</td><td>訂單</td><td>Checkout 後產出</td><td class="rel"><code>AccountId</code> · <code>WebStoreId</code></td></tr>
+        <tr><td class="api">Promotion</td><td>促銷</td><td>折扣主檔</td><td class="rel">— 主檔</td></tr>
+        <tr><td class="api">PromotionMarketSegment</td><td>促銷×客群</td><td>綁定 Data Cloud Segment 為目標客群</td><td class="rel"><code>PromotionId</code> · <code>MarketSegmentId</code></td></tr>
+        <tr><td class="api">CouponCode</td><td>折扣碼</td><td>可分發的優惠券</td><td class="rel"><code>PromotionId</code></td></tr>
+        <tr><td class="api">CartTax / CartRelatedItem</td><td>稅金 / 附加</td><td>結帳期間動態計算項</td><td class="rel"><code>CartId</code></td></tr>
+        </tbody>
+    </table>
+    </div>
+
+    <div class="note">
+        <strong>三種 Commerce 產品要分清楚：</strong>
+        <span class="tag">B2B Commerce（原生 Core）</span>
+        <span class="tag">B2C Commerce on Core</span>
+        <span class="tag tag--gray">SFCC / Demandware（獨立平台）</span>
+        本頁指的是「on Core」版本，資料模型和 Sales/Service 相通。
+    </div>
+</section>
+
+
+<!-- ═══ MANUFACTURING CLOUD ══════════════════════════════════ -->
+<section class="cloud" id="manufacturing">
+    <div class="cloud__head">
+        <div class="cloud__icon cloud__icon--green">🏭</div>
+        <div class="cloud__title-wrap">
+            <h2 class="cloud__title">Manufacturing Cloud<span class="cloud__title-en">製造雲</span></h2>
+            <p class="cloud__tagline">
+                為製造業設計的 industry cloud，核心是<strong> Sales Agreement（長期銷售協議）</strong>與 <strong>Account-based Forecast</strong>。
+                延伸出 Rebate、Warranty、Product Service Campaign（召回/預防性維修）、Field Service 等能力。
+            </p>
+        </div>
+    </div>
+
+    <div class="caps">
+        <div class="cap cap--green"><strong>Sales Agreement</strong>長期承諾量、逐期追蹤 planned vs actual</div>
+        <div class="cap cap--green"><strong>Account Forecast</strong>客戶級需求預測 · 可 rollup 到區域</div>
+        <div class="cap cap--green"><strong>Rebate Management</strong>回饋計畫、payout 計算</div>
+        <div class="cap cap--green"><strong>Warranty Lifecycle</strong>WarrantyTerm、AssetWarranty、Claim</div>
+        <div class="cap cap--green"><strong>Service Campaign</strong>召回 / 大規模維修</div>
+        <div class="cap cap--green"><strong>Asset & Maintenance</strong>Asset、MaintenancePlan、Preventive</div>
+    </div>
+
+    <div class="flow">
+        <div class="flow__title">長約 → 預測 → 訂單 對照</div>
+        <div class="flow__chain">
+            <span class="flow__node flow__node--green">SalesAgreement</span>
+            <span class="flow__arrow">→</span>
+            <span class="flow__node flow__node--green">SalesAgreementProductSchedule（承諾量/期）</span>
+            <span class="flow__arrow">→</span>
+            <span class="flow__node flow__node--green">AccountForecast（實需/預測）</span>
+            <span class="flow__arrow">↔</span>
+            <span class="flow__node flow__node--green">Order / Actual Sales</span>
+        </div>
+    </div>
+
+    <div class="section-label section-label--green">核心物件</div>
+    <div class="tbl-wrap">
+    <table>
+        <thead><tr><th style="width:24%">API Name</th><th style="width:16%">Label</th><th style="width:32%">說明</th><th style="width:28%">關鍵關聯</th></tr></thead>
+        <tbody>
+        <tr><td class="api">Account</td><td>客戶</td><td>Manufacturing 版含 industry-specific 欄位（Sub-industry、Annual Sales）</td><td class="rel"><code>ParentId</code></td></tr>
+        <tr><td class="api">SalesAgreement</td><td>銷售長約</td><td>與 Distributor / OEM 客戶的長期銷售協議</td><td class="rel"><code>AccountId</code> · <code>Pricebook2Id</code></td></tr>
+        <tr><td class="api">SalesAgreementProduct</td><td>長約產品</td><td>長約中承諾的產品</td><td class="rel"><code>SalesAgreementId</code> · <code>Product2Id</code></td></tr>
+        <tr><td class="api">SalesAgreementProductSchedule</td><td>長約產品排程</td><td>逐期（月/季）承諾量 vs 實際量</td><td class="rel"><code>SalesAgreementProductId</code></td></tr>
+        <tr><td class="api">AccountForecast</td><td>客戶預測</td><td>Account-level demand forecast</td><td class="rel"><code>AccountId</code></td></tr>
+        <tr><td class="api">AccountForecastPeriodMetric</td><td>預測期間指標</td><td>各期間的實際 / 預測 / 調整值</td><td class="rel"><code>AccountForecastId</code></td></tr>
+        <tr><td class="api">AccountForecastAdjustment</td><td>預測調整</td><td>手動 override</td><td class="rel"><code>AccountForecastPeriodMetricId</code></td></tr>
+        <tr><td class="api">Asset</td><td>資產</td><td>客戶端裝備 / 車輛 / 機台</td><td class="rel"><code>AccountId</code> · <code>Product2Id</code></td></tr>
+        <tr><td class="api">WarrantyTerm</td><td>保固條款</td><td>保固主檔（期間、涵蓋範圍）</td><td class="rel">— 主檔</td></tr>
+        <tr><td class="api">ProductWarrantyTerm</td><td>產品保固</td><td>綁定 Product2 的預設保固</td><td class="rel"><code>Product2Id</code> · <code>WarrantyTermId</code></td></tr>
+        <tr><td class="api">AssetWarranty</td><td>資產保固</td><td>Asset 的保固實例（真實生效那份）</td><td class="rel"><code>AssetId</code> · <code>WarrantyTermId</code></td></tr>
+        <tr><td class="api">WarrantyClaim / ClaimItem</td><td>保固索賠</td><td>客戶請保固維修</td><td class="rel"><code>AssetId</code> · <code>AccountId</code></td></tr>
+        <tr><td class="api">ProductServiceCampaign</td><td>產品服務活動</td><td>召回、預防性維修、Retrofit</td><td class="rel"><code>Product2Id</code></td></tr>
+        <tr><td class="api">ProductServiceCampaignItem</td><td>活動項目</td><td>對應到具體 Asset</td><td class="rel"><code>ProductServiceCampaignId</code> · <code>AssetId</code></td></tr>
+        <tr><td class="api">MaintenancePlan</td><td>維護計畫</td><td>定期保養排程主檔</td><td class="rel"><code>ServiceContractId</code>（可選）</td></tr>
+        <tr><td class="api">MaintenanceAsset</td><td>維護資產</td><td>納入計畫的 Asset</td><td class="rel"><code>MaintenancePlanId</code> · <code>AssetId</code></td></tr>
+        <tr><td class="api">MaintenanceWorkRule</td><td>維護規則</td><td>頻率 / 里程數觸發條件</td><td class="rel"><code>MaintenancePlanId</code></td></tr>
+        <tr><td class="api">RebateProgram</td><td>Rebate 專案</td><td>回饋計畫主檔</td><td class="rel">— 主檔</td></tr>
+        <tr><td class="api">RebateType</td><td>Rebate 類型</td><td>累進 / 定額 / 客製規則</td><td class="rel"><code>RebateProgramId</code></td></tr>
+        <tr><td class="api">RebateProgramMember</td><td>參與者</td><td>Account 加入 program</td><td class="rel"><code>RebateProgramId</code> · <code>AccountId</code></td></tr>
+        <tr><td class="api">RebateProgramPayout</td><td>Rebate 撥付</td><td>實際發放紀錄</td><td class="rel"><code>RebateProgramMemberId</code></td></tr>
+        <tr><td class="api">VehicleDefinition / VehicleAsset</td><td>車輛定義</td><td>Automotive Cloud 延伸</td><td class="rel"><code>Product2Id</code></td></tr>
+        </tbody>
+    </table>
+    </div>
+
+    <div class="note note--green">
+        <strong>與 Auto/Consumer Goods Cloud 的關係：</strong>Manufacturing Cloud 是母集合，Automotive Cloud 加了 VehicleDefinition/Household 等，Consumer Goods Cloud 加了 Trade Promotion、Retail Store Visit 等。三者共用 Rebate、Warranty、Asset 基礎。
+    </div>
+</section>
+
+
+<!-- ═══ MARKETING CLOUD ══════════════════════════════════ -->
+<section class="cloud" id="marketing">
+    <div class="cloud__head">
+        <div class="cloud__icon">📣</div>
+        <div class="cloud__title-wrap">
+            <h2 class="cloud__title">Marketing Cloud<span class="cloud__title-en">行銷雲</span></h2>
+            <p class="cloud__tagline">
+                目前有兩條產品線：<strong>Marketing Cloud Engagement (SFMC)</strong>—— 傳統獨立 SaaS 平台；
+                <strong>Marketing Cloud Growth / Advanced (on Core)</strong>—— 建構在 Core Platform + Data Cloud 之上的新產品。
+                本頁涵蓋兩者的核心物件。
+            </p>
+        </div>
+    </div>
+
+    <div class="caps">
+        <div class="cap"><strong>Journey Builder</strong>視覺化多步驟旅程 · 分流 / 等待 / 決策</div>
+        <div class="cap"><strong>Email Studio</strong>Batch / Triggered Send · Personalization Strings</div>
+        <div class="cap"><strong>Content Builder</strong>Asset / Template / Block 三層架構</div>
+        <div class="cap"><strong>Automation Studio</strong>SQL / Script / Import / File Transfer</div>
+        <div class="cap"><strong>MobileConnect / MobilePush</strong>SMS · WhatsApp · Push Notification</div>
+        <div class="cap"><strong>Data Cloud 整合</strong>Unified Individual · Segment · Activation</div>
+    </div>
+
+    <div class="flow">
+        <div class="flow__title">MC Engagement · 資料模型</div>
+        <div class="flow__chain">
+            <span class="flow__node">Contact / Subscriber (email key)</span>
+            <span class="flow__arrow">→</span>
+            <span class="flow__node">List / DataExtension</span>
+            <span class="flow__arrow">→</span>
+            <span class="flow__node flow__node--filled">Journey</span>
+            <span class="flow__arrow">→</span>
+            <span class="flow__node">EmailSend / TriggeredSend</span>
+            <span class="flow__arrow">→</span>
+            <span class="flow__node">Tracking (Open/Click/Bounce)</span>
+        </div>
+    </div>
+
+    <div class="section-label">Marketing Cloud Engagement · 核心物件（SFMC）</div>
+    <div class="tbl-wrap">
+    <table>
+        <thead><tr><th style="width:22%">物件 / 概念</th><th style="width:14%">類型</th><th style="width:32%">說明</th><th style="width:32%">關鍵屬性 / 關聯</th></tr></thead>
+        <tbody>
+        <tr><td class="api">Subscriber</td><td>Core</td><td>MC 的主體 · 以 <em>Subscriber Key</em>（通常是 email）識別</td><td class="rel"><code>SubscriberKey</code> · <code>EmailAddress</code> · <code>Status</code></td></tr>
+        <tr><td class="api">Contact</td><td>Core</td><td>Contact Builder 中的統一 Contact（跨 Channel）</td><td class="rel"><code>ContactKey</code> · attributes</td></tr>
+        <tr><td class="api">List</td><td>訂閱管理</td><td>傳統訂閱清單（Publication List）</td><td class="rel">List Membership</td></tr>
+        <tr><td class="api">DataExtension</td><td>資料表</td><td>客製化寬表（取代 List 的主流方式）</td><td class="rel">Field Schema 自訂</td></tr>
+        <tr><td class="api">Email (Content Builder)</td><td>Asset</td><td>Email 內容資產（HTML / Template）</td><td class="rel"><code>CategoryID</code>（資料夾）</td></tr>
+        <tr><td class="api">EmailSendDefinition</td><td>發送設定</td><td>把 Email 綁到 Audience（List / DE）</td><td class="rel"><code>EmailID</code> · <code>SendClassificationID</code></td></tr>
+        <tr><td class="api">Send</td><td>發送紀錄</td><td>每次 Batch Send 的記錄</td><td class="rel"><code>EmailSendDefinitionID</code></td></tr>
+        <tr><td class="api">TriggeredSend / TriggeredSendDefinition</td><td>觸發式</td><td>API 觸發的即時 Email</td><td class="rel"><code>EmailID</code></td></tr>
+        <tr><td class="api">Journey</td><td>Journey Builder</td><td>視覺化 Journey 主檔</td><td class="rel">Version 支援</td></tr>
+        <tr><td class="api">Journey Activity</td><td>Journey 節點</td><td>Entry / Wait / Decision / Email / SMS...</td><td class="rel"><code>JourneyID</code></td></tr>
+        <tr><td class="api">Automation</td><td>Automation Studio</td><td>排程自動化流程</td><td class="rel">Automation Activity 序列</td></tr>
+        <tr><td class="api">Sent / Opened / Clicked / Bounced / Unsubscribed</td><td>Tracking</td><td>行為事件表（讀取 Data Views）</td><td class="rel"><code>JobID</code> · <code>SubscriberKey</code></td></tr>
+        <tr><td class="api">Business Unit (BU)</td><td>組織單位</td><td>MC Enterprise 2.0 的資料隔離層</td><td class="rel">Parent-Child BU</td></tr>
+        <tr><td class="api">MobileConnect (SMS)</td><td>SMS Channel</td><td>SMS 訂閱 / 發送</td><td class="rel">MobileNumber Attribute</td></tr>
+        <tr><td class="api">MobilePush</td><td>App Push</td><td>App 內推播</td><td class="rel">DeviceID</td></tr>
+        </tbody>
+    </table>
+    </div>
+
+    <div class="section-label section-label--green">Marketing Cloud Growth / Advanced (on Core) · 核心物件</div>
+    <div class="tbl-wrap">
+    <table>
+        <thead><tr><th style="width:26%">API Name</th><th style="width:14%">來源</th><th style="width:32%">說明</th><th style="width:28%">關鍵關聯</th></tr></thead>
+        <tbody>
+        <tr><td class="api">Campaign</td><td>Core</td><td>標準 Salesforce Campaign · MC on Core 直接沿用</td><td class="rel"><code>ParentId</code>（階層）</td></tr>
+        <tr><td class="api">CampaignMember</td><td>Core</td><td>Lead/Contact 加入 Campaign</td><td class="rel"><code>CampaignId</code> · <code>LeadId</code>/<code>ContactId</code></td></tr>
+        <tr><td class="api">Individual</td><td>Core</td><td>Salesforce Privacy Preferences 主體（隱私中心）</td><td class="rel"><code>Individual</code> ← <code>Contact.IndividualId</code></td></tr>
+        <tr><td class="api">MarketingAppExtension</td><td>Marketing App</td><td>MC on Core 內部設定</td><td class="rel">— 設定</td></tr>
+        <tr><td class="api">MarketingEmail</td><td>Marketing App</td><td>Email 內容資產（新版）</td><td class="rel"><code>TemplateId</code></td></tr>
+        <tr><td class="api">MarketingJourney / Flow</td><td>Marketing App</td><td>用 Salesforce Flow 建的 Journey</td><td class="rel">— Flow 主檔</td></tr>
+        <tr><td class="api">UnifiedIndividual</td><td>Data Cloud DMO</td><td>Data Cloud 統一個人（跨系統合併後）</td><td class="rel">Identity Resolution 產出</td></tr>
+        <tr><td class="api">UnifiedContactPointEmail</td><td>Data Cloud DMO</td><td>統一 Email 聯絡點</td><td class="rel"><code>UnifiedIndividualId</code></td></tr>
+        <tr><td class="api">UnifiedContactPointPhone</td><td>Data Cloud DMO</td><td>統一電話聯絡點</td><td class="rel"><code>UnifiedIndividualId</code></td></tr>
+        <tr><td class="api">MarketSegment</td><td>Data Cloud</td><td>受眾定義（SQL / UI 條件）</td><td class="rel">Publishes to Activation Target</td></tr>
+        <tr><td class="api">MarketSegmentActivation</td><td>Data Cloud</td><td>Segment → Activation Target 綁定</td><td class="rel"><code>MarketSegmentId</code> · Activation Platform</td></tr>
+        <tr><td class="api">DataStream / DataLakeObject / DataModelObject</td><td>Data Cloud</td><td>Data Cloud 三層資料模型（DLO → DMO）</td><td class="rel">Mapping / Transform</td></tr>
+        <tr><td class="api">CalculatedInsight</td><td>Data Cloud</td><td>SAQL 產出的指標（e.g. LTV）</td><td class="rel">based on DMO</td></tr>
+        <tr><td class="api">Prospect / ProspectAccount</td><td>Account Engagement</td><td>Pardot（現稱 Marketing Cloud Account Engagement / MCAE）主體</td><td class="rel"><code>Contact</code> Sync</td></tr>
+        </tbody>
+    </table>
+    </div>
+
+    <div class="note">
+        <strong>MC Engagement vs MC Growth：</strong>
+        <span class="tag">Engagement（SFMC）</span>：獨立 SaaS · SOAP/REST API · DataExtension / AMPScript / SSJS · 適合大量 Email/SMS
+        <br>
+        <span class="tag tag--green">Growth / Advanced (on Core)</span>：Core + Data Cloud · Salesforce Flow 建 Journey · 適合已有 CRM 想擴展行銷 · 中小型或想統一資料模型
+    </div>
+</section>
+
+
+<!-- ═══ 跨雲共用物件 ══════════════════════════════════ -->
+<section class="cloud">
+    <div class="cloud__head">
+        <div class="cloud__icon" style="background: var(--mid);">🔗</div>
+        <div class="cloud__title-wrap">
+            <h2 class="cloud__title">跨雲共用物件<span class="cloud__title-en">Shared Backbone</span></h2>
+            <p class="cloud__tagline">
+                這些物件不屬於特定雲，但幾乎每朵雲都會用到。理解它們是理解 Salesforce 資料模型的基礎。
+            </p>
+        </div>
+    </div>
+
+    <div class="tbl-wrap">
+    <table>
+        <thead><tr><th style="width:22%">API Name</th><th style="width:32%">說明</th><th style="width:46%">哪些雲用到</th></tr></thead>
+        <tbody>
+        <tr><td class="api">Account</td><td>客戶主檔（B2B）/ 家戶（Person Account）</td><td>Service · Sales · Revenue · Commerce · Manufacturing · Marketing</td></tr>
+        <tr><td class="api">Contact</td><td>個人聯絡人</td><td>幾乎所有雲</td></tr>
+        <tr><td class="api">Product2 / Pricebook2 / PricebookEntry</td><td>產品 + 價目表</td><td>Sales · Revenue · Commerce · Service（合約項）· Manufacturing</td></tr>
+        <tr><td class="api">Order / OrderItem</td><td>訂單</td><td>Sales · Revenue · Commerce · Manufacturing</td></tr>
+        <tr><td class="api">Asset</td><td>客戶端已交付產品 / 訂閱實例</td><td>Service · Revenue · Manufacturing · IoT</td></tr>
+        <tr><td class="api">Campaign / CampaignMember</td><td>行銷活動與名單</td><td>Sales · Marketing</td></tr>
+        <tr><td class="api">Case</td><td>案件</td><td>Service（主軸）· Commerce（退換貨）· Manufacturing（客訴）</td></tr>
+        <tr><td class="api">User / Profile / PermissionSet</td><td>使用者與權限</td><td>全部</td></tr>
+        <tr><td class="api">Task / Event / Activity</td><td>行事曆 + 待辦</td><td>全部</td></tr>
+        <tr><td class="api">EmailMessage</td><td>Email 紀錄</td><td>Service · Sales · Marketing</td></tr>
+        <tr><td class="api">Attachment / ContentDocument / ContentVersion</td><td>檔案</td><td>全部</td></tr>
+        <tr><td class="api">Individual</td><td>隱私偏好中心主體（GDPR）</td><td>Marketing · Service · Sales</td></tr>
+        </tbody>
+    </table>
+    </div>
+</section>
+
+</div>
+
+<!-- ─── FOOTER ─────────────────────── -->
+<div class="foot">
+    <div style="margin-bottom: 8px;">
+        Salesforce SE Reference · 資料整理自 Salesforce Developer Docs (SOAP/REST API Object Reference) · 版本 Winter '26
+    </div>
+    <div>
+        <a href="../index.html">← 回首頁</a>
+        &nbsp;·&nbsp;
+        <a href="https://developer.salesforce.com/docs/atlas.en-us.object_reference.meta/object_reference/">Salesforce Object Reference</a>
+        &nbsp;·&nbsp;
+        <a href="https://github.com/sf-jason-tsai/sf-schema-docs">GitHub Repo</a>
+    </div>
+</div>
+
+<script>
+// Sticky nav active-section highlighting
+const sections = document.querySelectorAll('.cloud[id]');
+const navLinks = document.querySelectorAll('.nav a');
+const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+        if (entry.isIntersecting) {
+            navLinks.forEach(a => a.classList.remove('active'));
+            const active = document.querySelector(`.nav a[href="#${entry.target.id}"]`);
+            if (active) active.classList.add('active');
+        }
+    });
+}, { rootMargin: '-40% 0px -55% 0px' });
+sections.forEach(s => observer.observe(s));
+</script>
+
+</body>
+</html>

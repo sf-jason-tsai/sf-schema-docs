@@ -53,6 +53,12 @@ const PAGES = [
         dest: 'ycc/demo-script.html',
         title: '有你共創 · 20 分鐘 Demo Script'
     },
+    // ─── Salesforce 6 大雲 Overview ───
+    {
+        src: 'C:/Users/bingyan.tsai/Desktop/Claude/salesforce-clouds/index.html',
+        dest: 'salesforce-clouds/index.html',
+        title: 'Salesforce 6 大雲 · Object & Schema 全覽'
+    },
     // ↑ 加新頁時只需在這裡插入 { src, dest, title }
 ];
 
