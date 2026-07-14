@@ -2,486 +2,169 @@
 <html lang="zh-Hant">
 <head>
 <meta charset="utf-8">
-<title>THERMOS · AI 功能總覽（誠實版）</title>
+<title>THERMOS APP · 各 Tab 的 AI 功能</title>
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <style>
   :root{
-    --ink:#181818;--sub:#706E6B;--mute:#B0AFAE;--line:#DDDBDA;--tint:#F3F2F2;--bg:#FAFAF9;
+    --ink:#181818;--sub:#706E6B;--mute:#B0AFAE;--line:#DDDBDA;--tint:#F3F2F2;
     --brand:#E4002B;--brand-dk:#3D0F1B;--brand-tint:#FDF6F7;
-    --blue:#0176D3;--green:#2E844A;--orange:#B65C00;--amber:#B99400;--red:#BA0517;
+    --green:#2E844A;--amber:#B99400;
   }
   *{box-sizing:border-box}
   html,body{margin:0;padding:0;background:#F1EFED;font-family:"Salesforce Sans",-apple-system,"PingFang TC","Microsoft JhengHei",sans-serif;color:var(--ink);line-height:1.55}
-  .wrap{max-width:1160px;margin:0 auto;padding:32px 32px 60px}
+  .wrap{max-width:1000px;margin:0 auto;padding:32px 32px 48px}
 
   .tag{font-size:11px;letter-spacing:2px;color:var(--sub);text-transform:uppercase;font-weight:600}
-  h1{font-size:28px;letter-spacing:-0.5px;margin:6px 0 8px;color:var(--brand-dk)}
-  .lede{font-size:14px;color:var(--sub);line-height:1.7;max-width:820px}
+  h1{font-size:26px;letter-spacing:-0.5px;margin:6px 0 10px;color:var(--brand-dk)}
+  .lede{font-size:14px;color:var(--sub);line-height:1.7;max-width:760px}
 
-  h2{font-size:18px;margin:32px 0 12px;padding-bottom:8px;border-bottom:2px solid var(--brand-dk);letter-spacing:-0.3px;display:flex;align-items:center;gap:8px}
-  h3{font-size:15px;margin:14px 0 6px;color:var(--brand-dk);font-weight:700}
+  h2{font-size:16px;margin:24px 0 10px;padding-bottom:6px;border-bottom:2px solid var(--brand-dk);letter-spacing:-0.3px}
 
-  .card{background:#fff;border:1px solid var(--line);border-radius:8px;padding:18px 22px;margin-bottom:12px}
-  .card.tight{padding:14px 18px}
-  .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:12px 0}
-  .grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:12px 0}
-  .grid-4{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:12px 0}
-
-  .kpi{background:#fff;border:1px solid var(--line);border-radius:8px;padding:14px 16px;text-align:center}
-  .kpi-num{font-size:28px;font-weight:700;color:var(--brand-dk);letter-spacing:-0.5px}
-  .kpi-lbl{font-size:11px;color:var(--sub);letter-spacing:.5px;text-transform:uppercase;font-weight:600;margin-top:4px}
-
-  table{width:100%;border-collapse:collapse;font-size:13px;margin:8px 0 12px;background:#fff}
-  th,td{border:1px solid var(--line);padding:8px 12px;text-align:left;vertical-align:top}
+  table{width:100%;border-collapse:collapse;font-size:14px;background:#fff;margin:12px 0}
+  th,td{border:1px solid var(--line);padding:12px 14px;text-align:left;vertical-align:top}
   th{background:var(--tint);font-weight:600;font-size:12px;letter-spacing:.3px;color:var(--brand-dk)}
-  code{background:var(--tint);padding:1px 6px;border-radius:3px;font-size:12px;font-family:Consolas,monospace;color:var(--brand)}
-  .path{font-family:Consolas,monospace;font-size:11.5px;color:var(--sub)}
+  td.tab{font-weight:700;color:var(--brand-dk);white-space:nowrap;width:150px}
+  td.feat{width:200px}
+  code{background:var(--tint);padding:1px 6px;border-radius:3px;font-size:12.5px;font-family:Consolas,monospace;color:var(--brand)}
 
-  .ok{color:var(--green);font-weight:600}
-  .warn{color:var(--amber);font-weight:600}
-  .no{color:var(--red);font-weight:600}
-
-  .badge{display:inline-block;font-size:10.5px;padding:2px 8px;border-radius:10px;letter-spacing:.4px;font-weight:600;vertical-align:middle}
+  .badge{display:inline-block;font-size:10.5px;padding:2px 8px;border-radius:10px;letter-spacing:.4px;font-weight:600}
   .b-real{background:#E7F2E7;color:var(--green);border:1px solid #C4E3C4}
-  .b-rule{background:#FEF3E4;color:var(--amber);border:1px solid #F5DBB4}
-  .b-none{background:#FDECEC;color:var(--red);border:1px solid #F5C4C4}
+  .b-none{background:#FDECEC;color:var(--brand);border:1px solid #F5C4C4}
 
-  .row-flex{display:flex;gap:12px;align-items:flex-start;margin:8px 0}
-  .row-flex .icon{width:32px;height:32px;flex-shrink:0;border-radius:6px;background:var(--brand-tint);color:var(--brand-dk);display:flex;align-items:center;justify-content:center;font-weight:700}
+  .card{background:#fff;border:1px solid var(--line);border-radius:8px;padding:16px 20px;margin:12px 0}
+  .foot{margin-top:32px;padding-top:14px;border-top:1px solid var(--line);font-size:11.5px;color:var(--sub);line-height:1.6}
 
-  .quote{background:var(--tint);border-left:3px solid var(--brand-dk);padding:10px 14px;border-radius:4px;font-size:13px;color:var(--ink);margin:8px 0;font-family:"PingFang TC","Microsoft JhengHei",sans-serif;line-height:1.65;white-space:pre-wrap}
-
-  .flow{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin:10px 0;font-size:12px}
-  .flow .step{background:#fff;border:1px solid var(--line);border-radius:4px;padding:6px 10px}
-  .flow .arw{color:var(--mute)}
-
-  .note{font-size:12px;color:var(--sub);margin-top:4px;line-height:1.55}
-
-  .tocbar{background:#fff;border:1px solid var(--line);border-radius:8px;padding:12px 18px;margin:12px 0 20px;display:flex;gap:16px;flex-wrap:wrap;font-size:13px}
-  .tocbar a{color:var(--brand-dk);text-decoration:none;padding:2px 4px;border-bottom:1px dotted var(--line)}
-  .tocbar a:hover{color:var(--brand);border-bottom-color:var(--brand)}
-
-  .foot{margin-top:40px;padding-top:16px;border-top:1px solid var(--line);font-size:11.5px;color:var(--sub);line-height:1.6}
+  ul.clean{margin:6px 0 0;padding-left:20px;font-size:13.5px;line-height:1.7}
+  ul.clean li{margin:3px 0}
 </style>
 </head>
 <body>
 <div class="wrap">
 
-<div class="tag">CBUSDO · THERMOS 膳魔師 · Sales + Service Cloud Demo</div>
-<h1>Thermos APP — 用了哪些 AI 功能？（誠實對照版）</h1>
+<div class="tag">CBUSDO · THERMOS 膳魔師</div>
+<h1>Thermos APP 各 Tab 的 AI 功能</h1>
 <p class="lede">
-  這頁把 Thermos APP 裡「AI」相關的功能一項一項對照：實際跑什麼 API、寫在哪個 Apex 檔案、對應 org 上哪張欄位或哪筆資料。
-  <b>凡是規則式（keyword scoring / template）都會標</b> <span class="badge b-rule">規則式</span>，
-  <b>真的呼叫 LLM 才會標</b> <span class="badge b-real">Einstein LLM</span>，
-  <b>Salesforce 官方 metadata 沒實際用到</b>會標 <span class="badge b-none">未使用</span>。
+  依 Thermos APP 導覽列由左到右列出。有 AI 的 tab 標 <span class="badge b-real">有 AI</span>，其餘為原生 Salesforce 功能。
 </p>
 
-<div class="tocbar">
-  <a href="#tldr">TL;DR 對照表</a>
-  <a href="#core">核心引擎 · EinsteinService</a>
-  <a href="#case-ai">Case 頁 · 8 個 AI 功能</a>
-  <a href="#chat">Chat Agent · 2 個對話功能</a>
-  <a href="#rule">規則式（非 LLM）</a>
-  <a href="#not-used">沒用到的 AI 功能</a>
-  <a href="#evidence">Org 端佐證</a>
-</div>
-
-<!-- ==================== TL;DR ==================== -->
-<h2 id="tldr">TL;DR — 一表對照</h2>
+<h2>Thermos APP 導覽列 × AI 功能</h2>
 
 <table>
   <thead>
     <tr>
-      <th style="width:26%">功能</th>
-      <th style="width:16%">類型</th>
-      <th style="width:26%">底層</th>
-      <th>寫在哪</th>
+      <th>Tab</th>
+      <th>AI 功能</th>
+      <th>說明</th>
     </tr>
   </thead>
   <tbody>
-    <tr><td><b>Case AI 摘要</b>（問題／狀態／情緒 3 段）</td><td><span class="badge b-real">Einstein LLM</span></td><td>ConnectApi.EinsteinLLM · OpenAI · Trust Layer</td><td><code>ThermosCase360Controller.analyzeCase</code></td></tr>
-    <tr><td><b>Case 情緒偵測</b>（生氣／困擾／平靜／滿意）</td><td><span class="badge b-real">Einstein LLM</span></td><td>同上（跟摘要一起產出）</td><td><code>analyzeCase</code> → <code>THERMOS_Sentiment__c</code></td></tr>
-    <tr><td><b>Case 加權優先度評分 + 一句話建議</b></td><td><span class="badge b-real">Einstein LLM</span> ＋ 規則</td><td>規則式評分（5 因子加權）→ Einstein 生成一句話</td><td><code>scoreCasePriority</code></td></tr>
-    <tr><td><b>Case 自動分類 + 路由建議</b>（7 類）</td><td><span class="badge b-real">Einstein LLM</span></td><td>結構化 prompt（CATEGORY/CONFIDENCE/REASON/ALT）</td><td><code>classifyCase</code></td></tr>
-    <tr><td><b>Case AI 回覆草稿</b>（RAG：Case + KM + 購買歷史）</td><td><span class="badge b-real">Einstein LLM</span></td><td>Knowledge__kav SOSL → 餵 prompt → 生 150-220 字</td><td><code>generateAiReply</code> → <code>THERMOS_AI_Draft__c</code></td></tr>
-    <tr><td><b>Reply 3 段語氣建議</b>（專業／致歉／友善）</td><td><span class="badge b-real">Einstein LLM</span></td><td>三次 LLM 呼叫，每次不同 tone prompt</td><td><code>getReplyRecommendations</code></td></tr>
-    <tr><td><b>Customer 360 對話（單一客戶問答）</b></td><td><span class="badge b-real">Einstein LLM</span></td><td>Account 完整 context + history → LLM chat</td><td><code>ThermosCustomerChat.sendMessage</code></td></tr>
-    <tr><td><b>Business Chat（Home 頁面向老闆的營運問答）</b></td><td><span class="badge b-real">Einstein LLM</span></td><td>全體會員／訂單 aggregate → 餵 prompt</td><td><code>ThermosBusinessChat.sendMessage</code></td></tr>
-    <tr><td colspan="4" style="background:#FAFAF9;font-weight:600;color:var(--sub);text-align:center">↑ 以上 8 個功能，統一走 <code>EinsteinService.generate()</code> 這個 wrapper ↑</td></tr>
-    <tr><td><b>Knowledge Agent（客服 KM 搜尋）</b></td><td><span class="badge b-rule">規則式</span></td><td>Keyword 加權評分（title +40 / keywords +25 / body +10）</td><td><code>ThermosKnowledgeAgent.search</code></td></tr>
-    <tr><td><b>Insight Panel（Account 洞察面板）</b></td><td><span class="badge b-rule">規則式</span></td><td>Description tag 解析＋購買歷史規則</td><td><code>THERMOSInsightService.getInsight</code></td></tr>
-    <tr><td>Native Knowledge（Knowledge__kav）</td><td><span class="badge b-real">Salesforce OOTB</span></td><td>SOSL FIND ... IN ALL FIELDS</td><td><code>searchKnowledge</code> · 供 RAG 用</td></tr>
-    <tr><td>Prompt Builder（GenAiPromptTemplate）</td><td><span class="badge b-none">未使用</span></td><td>—</td><td>所有 prompt 直接寫在 Apex 內</td></tr>
-    <tr><td>Agentforce（Bot / GenAiPlanner）</td><td><span class="badge b-none">未使用</span></td><td>—</td><td>Thermos 沒有自建 Bot / Planner metadata</td></tr>
-    <tr><td>Einstein Copilot Studio Actions</td><td><span class="badge b-none">未使用</span></td><td>—</td><td>Actions 用 Apex 直接改 Case/Account，不走 Copilot Action</td></tr>
+
+    <tr>
+      <td class="tab">1. 首頁<br><span style="font-weight:normal;color:var(--sub);font-size:12px">Thermos Home</span></td>
+      <td class="feat"><span class="badge b-real">有 AI</span><br><b style="font-size:13px">Business Chat</b></td>
+      <td>老闆／經理可以直接對整個 org 資料問問題。<br>
+        例：「這個月哪個通路成長最快？」「AI 對加購貢獻多少？」<br>
+        會即時去撈全體會員、訂單、通路、案件 aggregate 給 Einstein，用中文回答。</td>
+    </tr>
+
+    <tr>
+      <td class="tab">2. Knowledge Agent<br><span style="font-weight:normal;color:var(--sub);font-size:12px">客服 KM 中心</span></td>
+      <td class="feat"><span class="badge b-real">有 AI（搜尋）</span><br><b style="font-size:13px">關鍵字加權搜尋</b></td>
+      <td>客服輸入問題 → 秒查文章 + 相關商品／零件 + 建議動作。<br>
+        <b>底層是關鍵字加權評分（非 LLM）</b>，速度快、可預測；要生成完整回覆的話走 Case 頁的 AI 回覆草稿。</td>
+    </tr>
+
+    <tr>
+      <td class="tab">3. Account<br><span style="font-weight:normal;color:var(--sub);font-size:12px">會員 360</span></td>
+      <td class="feat"><span class="badge b-real">有 AI</span><br><b style="font-size:13px">Customer 360 Chat</b></td>
+      <td>打開任一位客戶，右側對話框可對這位客戶問問題：<br>
+        例：「這位客戶最有可能加購什麼？」「上次購買後怎麼再接觸？」<br>
+        Einstein 會拉這位客戶的訂單、通路偏好、Case 紀錄一起回答。</td>
+    </tr>
+
+    <tr>
+      <td class="tab">4. Contact</td>
+      <td class="feat"><span class="badge b-none">無</span></td>
+      <td>原生聯絡人管理（B2C 主流走 Person Account）。</td>
+    </tr>
+
+    <tr>
+      <td class="tab">5. Case<br><span style="font-weight:normal;color:var(--sub);font-size:12px">客服案件</span></td>
+      <td class="feat"><span class="badge b-real">有 AI</span><br><b style="font-size:13px">整頁 6 個 AI 功能</b></td>
+      <td>Case 頁是 AI 密度最高的地方，客服打開一筆案件就有：
+        <ul class="clean">
+          <li><b>AI 摘要</b>：把案件分成「問題／狀態／情緒」三段給客服一眼看懂</li>
+          <li><b>情緒偵測</b>：判定客戶是生氣／困擾／平靜／滿意</li>
+          <li><b>優先度評分</b>：依會員等級、LTV、情緒、關鍵字、案件類型加權出 0-100 分，AI 給一句處理建議</li>
+          <li><b>自動分類</b>：自動歸類到 7 大類，並建議該路由到哪個隊列／專員</li>
+          <li><b>AI 回覆草稿</b>：依案件 + 知識庫 + 客戶購買歷史，生成 150 字個人化回覆</li>
+          <li><b>三段語氣建議</b>：專業／致歉／友善三種版本讓客服挑</li>
+        </ul>
+      </td>
+    </tr>
+
+    <tr>
+      <td class="tab">6. Order<br><span style="font-weight:normal;color:var(--sub);font-size:12px">訂單</span></td>
+      <td class="feat"><span class="badge b-none">無</span></td>
+      <td>原生訂單管理。訂單資料會被上面的 AI 功能拿去用（例如 Case 生成回覆時會參考購買歷史）。</td>
+    </tr>
+
+    <tr>
+      <td class="tab">7. Product<br><span style="font-weight:normal;color:var(--sub);font-size:12px">商品／零件</span></td>
+      <td class="feat"><span class="badge b-none">無</span></td>
+      <td>原生商品管理（30 商品 + 零件）。同樣是 AI 功能的資料來源。</td>
+    </tr>
+
+    <tr>
+      <td class="tab">8. Thermos KB<br><span style="font-weight:normal;color:var(--sub);font-size:12px">知識庫內容</span></td>
+      <td class="feat"><span class="badge b-none">無</span></td>
+      <td>原生 CRUD 管理 KM 文章。文章會被 Knowledge Agent（第 2 項）＋ Case AI 回覆（第 5 項）讀取。</td>
+    </tr>
+
+    <tr>
+      <td class="tab">9. Thermos Store<br><span style="font-weight:normal;color:var(--sub);font-size:12px">門市</span></td>
+      <td class="feat"><span class="badge b-none">無</span></td>
+      <td>20 個實體門市清單管理。</td>
+    </tr>
+
+    <tr>
+      <td class="tab">10. Thermos Touch<br><span style="font-weight:normal;color:var(--sub);font-size:12px">接觸記錄</span></td>
+      <td class="feat"><span class="badge b-none">無</span></td>
+      <td>會員接觸記錄。同樣是 Customer 360 Chat 的資料來源。</td>
+    </tr>
+
+    <tr>
+      <td class="tab">11. Report<br><span style="font-weight:normal;color:var(--sub);font-size:12px">報表</span></td>
+      <td class="feat"><span class="badge b-none">無</span></td>
+      <td>3 張原生 Report。</td>
+    </tr>
+
+    <tr>
+      <td class="tab">12. Dashboard<br><span style="font-weight:normal;color:var(--sub);font-size:12px">儀表板</span></td>
+      <td class="feat"><span class="badge b-none">無</span></td>
+      <td>1 個原生 Dashboard，彙整營運指標。</td>
+    </tr>
+
   </tbody>
 </table>
 
-<div class="card tight" style="background:var(--brand-tint);border-color:#F0D6DA">
-  <b style="color:var(--brand-dk)">為什麼架構長這樣？</b>
-  <div class="note" style="color:var(--ink);margin-top:6px">
-    Thermos demo 需要「Steven 一鍵展示所有 AI 能力」，所以走 <b>ConnectApi.EinsteinLLM 直接 wrap</b> 而不是 Prompt Builder / Agentforce Bot：
-    <br>1) demo org 保證跑得動（不用等 licence 佈署）
-    <br>2) prompt 可以在 Apex 裡即時 tune，同一份程式 org 之間搬移
-    <br>3) 走 Einstein Trust Layer（applicationName = <code>PromptBuilderPreview</code>），Zero Data Retention 一樣受保護
-    <br>4) 功能上等於「自建的 Agentforce for Service」——LLM ＋ RAG（KM/Order/Account）＋ 8 個真動作。
-  </div>
-</div>
-
-<!-- ==================== CORE ==================== -->
-<h2 id="core">核心引擎 · EinsteinService（Trust Layer wrapper）</h2>
-
+<h2>一句話總結</h2>
 <div class="card">
-  <h3>統一封裝：<code>EinsteinService.generate(prompt)</code></h3>
-  <div class="path">force-app/main/default/classes/EinsteinService.cls</div>
-  <p class="note" style="margin-top:8px">
-    整包 Thermos 的生成式 AI 只有一個進出點。Apex 端呼叫 <code>ConnectApi.EinsteinLLM.generateMessages</code>，走 Salesforce 官方 Einstein Trust Layer。
-  </p>
-  <div class="flow">
-    <div class="step">Apex prompt string</div><div class="arw">→</div>
-    <div class="step"><code>ConnectApi.EinsteinLlmGenerationsInput</code></div><div class="arw">→</div>
-    <div class="step">provider = <b>OpenAI</b></div><div class="arw">→</div>
-    <div class="step">applicationName = <b>PromptBuilderPreview</b></div><div class="arw">→</div>
-    <div class="step">Einstein Trust Layer</div><div class="arw">→</div>
-    <div class="step"><code>LLMResult{ text, model, latencyMs, requestId, isReal }</code></div>
-  </div>
-  <div class="grid-3">
-    <div class="kpi"><div class="kpi-num">1</div><div class="kpi-lbl">Apex 進出點</div></div>
-    <div class="kpi"><div class="kpi-num">8</div><div class="kpi-lbl">功能透過此 wrapper 呼叫</div></div>
-    <div class="kpi"><div class="kpi-num">18</div><div class="kpi-lbl">Apex 檔案內出現次數</div></div>
-  </div>
-  <div class="note">
-    <b>降級策略：</b>若 LLM 失敗（licence 未 enable / callout 逾時 / prompt block），<code>LLMResult.isReal=false</code>，上層自動 fallback 到 rule-based template，UI 顯示 <b>Preview Mode</b> 標籤，客服看到的仍是可用內容，只是不是 LLM 生成。這也是為什麼 Case 頁 8 個 AI 功能在任何 org 上都不會白屏。
-  </div>
+  Thermos APP 共 <b>12 個 Tab</b>，其中 <b>3 個 Tab 有生成式 AI</b>（首頁 Business Chat／Account Customer Chat／Case 6 個 AI 功能），<b>1 個 Tab 有搜尋型 AI</b>（Knowledge Agent 關鍵字加權），其餘 8 個為原生 Salesforce 功能，作為 AI 的資料來源。
 </div>
 
-<!-- ==================== CASE AI ==================== -->
-<h2 id="case-ai">Case Record Page · 8 個 AI 功能（真的呼叫 Einstein）</h2>
-
-<p class="note">
-  以下功能全在 <code>ThermosCase360Controller.cls</code>（2,374 行）。每個功能都有：（1）真 SOQL 拉 case + account + order 資料當 context，（2）組 prompt 呼叫 Einstein，（3）失敗時 fallback，（4）成功時 <b>把結果寫回 Case 自訂欄位</b> 並 <b>留 CaseComment audit trail</b>，（5）計入 <code>THERMOS_Agent_Credits_Used__c</code>。
-</p>
-
+<h2>底層技術（給有興趣的技術窗口）</h2>
 <div class="card">
-  <div class="row-flex">
-    <div class="icon">01</div>
-    <div style="flex:1">
-      <h3 style="margin-top:0">Case AI 摘要（3 段結構化：問題／狀態／情緒）</h3>
-      <div class="path">ThermosCase360Controller.analyzeCase() · 呼叫 EinsteinService.generate</div>
-    </div>
-  </div>
-  <p>把 Case 主旨、描述、通路、狀態、優先度、客戶等級、近 3 則 CaseComment 全打包成 context，要求 Einstein <b>用嚴格三段格式輸出</b>：</p>
-  <div class="quote">【問題】客戶要解決什麼（40 字）
-【狀態】目前處理進度 ＋ 已用資源（40 字）
-【情緒】客戶情緒判斷（平靜／困擾／生氣／滿意）＋ 依據（40 字）</div>
-  <p>結果寫回自訂欄位、在 UI 分三格顯示。以下是 CBUSDO 上抓出來的一筆真資料：</p>
-  <div class="quote">【問題】吳 淑芬於 電話 反映零件詢問相關問題。
-【狀態】案件為「Closed」，AI 已加權評分並比對 KM。
-【情緒】生氣 — 依主旨與描述關鍵字判斷。</div>
-  <table>
-    <tr><th>寫回欄位</th><th>用途</th></tr>
-    <tr><td><code>THERMOS_AI_Summary__c</code>（LongTextArea）</td><td>Case 頁 AI Summary Card 三欄顯示</td></tr>
-    <tr><td><code>THERMOS_AI_Summary_Short__c</code>（Text 255）</td><td>Case List View hover / Related List 用</td></tr>
-    <tr><td><code>THERMOS_Sentiment__c</code>（Picklist）</td><td>Case 頁 Hero + Priority Score 因子輸入</td></tr>
-  </table>
-</div>
-
-<div class="card">
-  <div class="row-flex">
-    <div class="icon">02</div>
-    <div style="flex:1">
-      <h3 style="margin-top:0">Case 情緒偵測</h3>
-      <div class="path">同上 analyzeCase() · sentiment 從摘要抽出 / fallback keyword rule</div>
-    </div>
-  </div>
-  <p>Einstein 產出摘要後，同一份文字裡抽出「生氣／困擾／平靜／滿意」四值，寫入 <code>THERMOS_Sentiment__c</code>。UI 上以 SLDS <code>utility:priority / frown / smiley_and_people / emoji</code> icon 對應。</p>
-  <div class="note">
-    <b>為什麼不用 Einstein Case Classification (OOTB)：</b>OOTB 的 Case Classification 需要歷史資料訓練，SDO 上沒足夠標記樣本；LLM 走 zero-shot prompt 效果更好，且產出「情緒 + 依據」比 OOTB 只給類別更有 demo 說服力。
-  </div>
-</div>
-
-<div class="card">
-  <div class="row-flex">
-    <div class="icon">03</div>
-    <div style="flex:1">
-      <h3 style="margin-top:0">Case 加權優先度評分（Priority Score）</h3>
-      <div class="path">scoreCasePriority() · 5 因子加權 + Einstein 一句話建議</div>
-    </div>
-  </div>
-  <p>先跑 <b>規則式加權</b>（會員等級 30% + LTV 20% + 情緒 25% + 緊急關鍵字 15% + 案件類型 10%），得 0-100 分，衍生 High / Medium / Low。</p>
-  <p>再把「總分 + 因子明細」餵給 Einstein，讓它生 40 字內的一句話建議：</p>
-  <div class="quote">你是 THERMOS 客服 Priority Advisor。以下為案件加權評分結果，請用繁體中文 40 字內給客服代理人一句處理建議：
-案件：JNL-352 保溫瓶墊圈相容詢問（零件詢問）
-客戶：白金會員 · LTV NT$ 82,400
-情緒：困擾
-總分：61/100 · 建議 Priority：High</div>
-  <p>然後 <b>真的 UPDATE Case.Priority + Case.THERMOS_AI_Rating__c（1-5 星）</b>、記 credit、在 CaseComment 留 audit：</p>
-  <div class="quote">[Agentforce Priority Score] 總分 61/100 · Medium → High。因子：會員 22 / LTV 12 / 情緒 12 / 緊急 0 / 類型 4。建議：30 分鐘內回覆 · 主動致電白金會員。</div>
-</div>
-
-<div class="card">
-  <div class="row-flex">
-    <div class="icon">04</div>
-    <div style="flex:1">
-      <h3 style="margin-top:0">Case 自動分類 + 路由建議</h3>
-      <div class="path">classifyCase() · 7 類 + 8 隊列/專員路由表</div>
-    </div>
-  </div>
-  <p>用結構化 prompt 強制 LLM 用 4 行輸出：</p>
-  <div class="quote">CATEGORY: &lt;零件詢問｜商品諮詢｜退換貨｜保固維修｜使用教學｜會員/點數｜訂單問題&gt;
-CONFIDENCE: &lt;0-100&gt;
-REASON: &lt;15 字內判斷理由&gt;
-ALT: &lt;其他可能類別，最多 2 個&gt;</div>
-  <p>解析後：（1）寫回 <code>THERMOS_Case_Category__c</code>；（2）依 category 查路由表建議 Queue + Owner；（3）留 CaseComment audit：</p>
-  <div class="quote">[Agentforce Classification] 自動分類為「零件詢問」（信心 92%）· 建議路由至：零件專家隊列 / Steven Wang（MIS）。判斷依據：主旨提到墊圈料號。</div>
-  <p class="note">Fallback：LLM 失敗時走 <code>ruleClassify</code> 關鍵字比對（信心固定 78%）。</p>
-</div>
-
-<div class="card">
-  <div class="row-flex">
-    <div class="icon">05</div>
-    <div style="flex:1">
-      <h3 style="margin-top:0">Case AI 回覆草稿（RAG：KM + 購買歷史）</h3>
-      <div class="path">generateAiReply(caseId, kbIds[]) · 這是 Thermos 最完整的 RAG 範例</div>
-    </div>
-  </div>
-  <p>Prompt 組成三塊：</p>
-  <ol style="font-size:13px;line-height:1.75;margin:6px 0 10px">
-    <li><b>案件資訊：</b>客戶名、會員等級、案件類型、通路、主旨、詳情、詢問商品、保固狀態</li>
-    <li><b>客戶購買歷史：</b>SOQL 拉最近 5 筆已 Activated 訂單，含 OrderItem 商品名、類別，作為個人化依據</li>
-    <li><b>知識庫參考：</b>從 <code>Knowledge__kav</code>（SOSL 搜出的 KB 文章 Title + Summary）</li>
-  </ol>
-  <p>要求生 150-220 字繁中回覆、抬頭稱呼、依購買歷史自然帶入升級建議、結尾留聯絡方式。以下是 CBUSDO Case 500J200000NIuE1 的實際生成內容：</p>
-  <div class="quote">感謝您透過官網聯繫我們，並感謝您作為白金會員對 THERMOS 的支持！針對您詢問 JNL-352 保溫瓶墊圈的問題，JNL 系列的墊圈確實為通用設計，您可於官網直接搜尋「JNL 墊圈組」進行購買，單價約為 NT$80-180。建議您確認目前墊圈的狀況，若已使用超過 12 個月，建議更換以確保瓶身密封效果。
-
-另外，我們也提供專用清潔刷，能有效清潔瓶內及配件，延長使用壽命。若有需要，您可一併選購，享受更完善的使用體驗！
-
-如需協助下單或有其他疑問，歡迎隨時透過官網或撥打客服專線與我們聯繫（0800-XXX-XXX）。再次感謝您的支持，祝您使用愉快！
-
-此致
-THERMOS 客服中心 敬上</div>
-  <p class="note">
-    ↑ 這段是真的 LLM 生的，不是寫死的樣板。可以在 <code>Case.THERMOS_AI_Draft__c</code> 查得到。「白金會員 / JNL-352 / 建議更換 12 個月」都是從 Case + Order data 拉出來個人化，不是預先寫在程式碼裡。
-  </p>
-</div>
-
-<div class="card">
-  <div class="row-flex">
-    <div class="icon">06</div>
-    <div style="flex:1">
-      <h3 style="margin-top:0">Reply Recommendations — 3 段不同語氣</h3>
-      <div class="path">getReplyRecommendations() · 一鍵生 3 個候選回覆</div>
-    </div>
-  </div>
-  <p>對同一份 KB 命中結果分別呼叫 Einstein 三次，每次 tone 不同：</p>
-  <table>
-    <tr><th>Tone</th><th>指令</th></tr>
-    <tr><td><b>Formal</b>（專業直接）</td><td>先致謝 → 直接說明處理方式 → 提供後續聯絡方式</td></tr>
-    <tr><td><b>Apology</b>（致歉補償）</td><td>主動致歉 → 說明處理 → 提供補償建議（100 點紅利）</td></tr>
-    <tr><td><b>Friendly</b>（友善關懷）</td><td>語氣親切 → 提供解決方案 → 表達持續關心</td></tr>
-  </table>
-  <p class="note">客服在 UI 上直接挑一段套用，或看完再叫 <code>generateAiReply</code> 生完整版。這是 Steven demo 常用的「AI 也能挑腔調」段。</p>
-</div>
-
-<div class="card">
-  <div class="row-flex">
-    <div class="icon">07</div>
-    <div style="flex:1">
-      <h3 style="margin-top:0">Case 頁 Service Assistant 對話（Get help resolving this record）</h3>
-      <div class="path">AssistantAnswer askAssistant() · intent-aware RAG chat</div>
-    </div>
-  </div>
-  <p>Case 頁右下角對話框，客服可以直接問問題。做了 <b>intent detection</b>（parts / spec / order / warranty / case general）決定要 RAG 哪些資料源：</p>
-  <table>
-    <tr><th>Intent</th><th>觸發詞</th><th>拉的資料</th></tr>
-    <tr><td>parts</td><td>零件／料號／墊圈／杯蓋／相容</td><td>Product2 相容型號 + 現貨 + 售價</td></tr>
-    <tr><td>spec</td><td>容量／材質／保溫／尺寸／規格</td><td>Product2 Description 標籤 tag</td></tr>
-    <tr><td>order</td><td>購買／訂單／紀錄／歷史</td><td>近 5 筆 Order + OrderItem</td></tr>
-    <tr><td>warranty</td><td>保固</td><td>Case + Product2 保固狀態</td></tr>
-    <tr><td>case</td><td>其他</td><td>Case + KM 命中結果</td></tr>
-  </table>
-  <p class="note">回應同時附 <b>AgentSource[]</b> 引用（Product / Knowledge / Order）→ UI 顯示「這個回答依據哪筆資料」，消除 hallucination 疑慮。</p>
-</div>
-
-<div class="card">
-  <div class="row-flex">
-    <div class="icon">08</div>
-    <div style="flex:1">
-      <h3 style="margin-top:0">executeAgentAction — 8 個一鍵 AI 動作</h3>
-      <div class="path">executeAgentAction(caseId, actionKey) · 「Agentforce for Service」等價</div>
-    </div>
-  </div>
-  <p>這裡就是「自建的 Agentforce Actions」——8 個動作全是真操作 org 資料，不是 mock：</p>
-  <table>
-    <tr><th>Action</th><th>做什麼</th><th>真動到什麼</th></tr>
-    <tr><td>QUOTE_PART</td><td>零件報價（依 Case 主旨關鍵字找相容零件）</td><td>回三筆 Product2 + PricebookEntry 價格</td></tr>
-    <tr><td>REISSUE_COUPON</td><td>補發折扣券</td><td>產生確定性 coupon code + 30 天效期</td></tr>
-    <tr><td>OPEN_RMA</td><td>開退換單</td><td>產 RMA 單號 + 排明日取件</td></tr>
-    <tr><td>SEND_APOLOGY_POINTS</td><td>加值 100 點紅利</td><td><b>真的 UPDATE</b> <code>Account.THERMOS_Points__c</code></td></tr>
-    <tr><td>CROSS_SELL</td><td>加購推薦</td><td>寫 <code>Case.THERMOS_Recommended_Product__c</code></td></tr>
-    <tr><td>SCHEDULE_LOGISTICS</td><td>排物流</td><td>產 booking id + 預約明日 09-12 到府</td></tr>
-    <tr><td>SEND_KM</td><td>推送 KM</td><td>拉 Knowledge__kav 標題 + 文章編號</td></tr>
-    <tr><td>ESCALATE</td><td>升級案件</td><td><b>真的 UPDATE</b> <code>Case.Priority = High, Status = Escalated</code></td></tr>
-  </table>
-  <p class="note">每次執行都留 <code>[Agentforce · &lt;ACTION&gt;]</code> 開頭的 CaseComment + 累計 <code>THERMOS_Agent_Credits_Used__c</code>，客戶可在 Timeline 追蹤到 AI 動了什麼。</p>
-</div>
-
-<!-- ==================== CHAT ==================== -->
-<h2 id="chat">Chat Agent · 2 個對話功能</h2>
-
-<div class="grid-2">
-  <div class="card">
-    <h3>Customer 360 Chat</h3>
-    <div class="path">ThermosCustomerChat.cls · Account 頁</div>
-    <p>對「這位客戶」問問題。SOQL 打包 Account + 訂單 aggregate + 通路分布 + Case 數 + Touch 記錄 → prompt。</p>
-    <p class="note">用途：業務／老闆看客戶時，直接問 <i>「這位客戶最有可能加購什麼？」</i>「上次購買後怎麼再接觸？」</p>
-    <div class="quote" style="font-size:12px">Q: 這位客戶的購買偏好？
-A: 楊小姐為白金會員，累計消費 NT$ 82,400，主要購買 alfi 保溫瓶（占訂單金額 52%）及 THERMOS 食物罐。慣用 LINE OA 通路（占 6 成訂單），已綁定 LINE，近 30 天內尚無新訂單，建議在 LINE 推播 alfi 新色以再度啟動。</div>
-  </div>
-
-  <div class="card">
-    <h3>Business Chat（Home 頁）</h3>
-    <div class="path">ThermosBusinessChat.cls · Home 頁</div>
-    <p>面向 Liam ／ 董事長。跑全體 aggregate：會員數、VIP 數、LINE 綁定率、通路營收占比、Tier 分布、品牌品項、案件量、AI 加購命中數 → prompt。</p>
-    <p class="note">用途：老闆問 <i>「這個月哪個通路成長最快？」</i>「AI 對加購貢獻多少？」</p>
-    <div class="quote" style="font-size:12px">Q: 現在最值得投資的通路？
-A: 官網通路貢獻 NT$ 1.4M（占 38%），LINE OA 佔比 24%，但 LINE 綁定率僅 42%。建議先把 LINE 綁定推到 60%，預估可再帶 NT$ 400K/季。</div>
-  </div>
-</div>
-
-<!-- ==================== RULE ==================== -->
-<h2 id="rule">誠實揭露 · 這幾個 UI 看起來像 AI，其實是規則式</h2>
-
-<div class="card">
-  <h3>Knowledge Agent（客服 KM 搜尋頁）<span class="badge b-rule" style="margin-left:8px">規則式</span></h3>
-  <div class="path">ThermosKnowledgeAgent.search()</div>
-  <p>Case 頁旁邊那個「AI Knowledge Agent」——它 UI 上寫「AI 搜尋」，但底層 <b>沒呼叫 LLM</b>：</p>
-  <ul style="font-size:13px;line-height:1.7">
-    <li>抽 <code>[A-Z]{2,4}-\d{2,4}</code> 型號 token（JNL-504、SK-3020）</li>
-    <li>比對中英文關鍵字清單（保溫瓶／燜燒鍋／墊圈／THERMOS／alfi ...）</li>
-    <li>加權評分：title +40、keywords +25、product code +25、body +10、熱門度加成 +5</li>
-    <li>組合 aiAnswer 是 <b>字串拼接的模板</b>：<i>「偵測到商品型號【JNL-504】，依知識庫最新版本，建議回覆：「...」」</i></li>
+  <ul class="clean" style="font-size:13px">
+    <li>生成式 AI 統一走 <b>Salesforce Einstein Trust Layer</b>（<code>ConnectApi.EinsteinLLM.generateMessages</code>，OpenAI provider）</li>
+    <li>受 <b>Zero Data Retention</b> 保護，資料不會被拿去訓練模型</li>
+    <li>AI 產出會寫回 Case 自訂欄位（<code>THERMOS_AI_Summary__c</code> / <code>THERMOS_Sentiment__c</code> / <code>THERMOS_AI_Draft__c</code>），並在 CaseComment 留 audit trail，可事後追溯</li>
+    <li>當 LLM 不可用（licence 未開通 / callout timeout）會自動 fallback 到規則式模板，UI 顯示 Preview Mode，功能不會白屏</li>
   </ul>
-  <p class="note">
-    <b>為什麼這樣做？</b>demo 現場延遲重要，keyword scoring 是 &lt;100ms、可控且可預測；LLM 呼叫是 1-3 秒且會受 licence 影響。真正需要 LLM 精緻回覆的場景，用戶會走 Case 頁 <code>generateAiReply</code>（第 5 項），不是這個搜尋頁。<b>寫給客戶時建議標「Einstein Search 風格 keyword scoring」而不是「生成式 AI」。</b>
-  </p>
 </div>
-
-<div class="card">
-  <h3>Insight Panel（客戶 360 洞察面板）<span class="badge b-rule" style="margin-left:8px">規則式</span></h3>
-  <div class="path">THERMOSInsightService.getInsight()</div>
-  <p>Account 頁那個「AI 洞察 3 條」——也是規則式：</p>
-  <table>
-    <tr><th>洞察</th><th>怎麼算</th></tr>
-    <tr><td>消費輪廓</td><td>SOQL aggregate 出 topBrand / topCategory / totalSpend</td></tr>
-    <tr><td>流失風險</td><td><code>daysSinceLastOrder &gt; 180 → 高</code>；<code>&gt; 90 → 中</code>；<code>否則 → 低</code></td></tr>
-    <tr><td>通路偏好</td><td>從 Account.Description tag 抽「慣用通路」＋ LINE 綁定狀態</td></tr>
-  </table>
-  <p class="note">
-    <b>要換成 LLM 也很快</b>：<code>ThermosCustomerChat.regenerateInsight(recordId, angle)</code> 已經接好 EinsteinService，UI 側加個「重新用 AI 生成」按鈕就是了。目前規則式已能給穩定的敘述給老闆看，故 demo 預設走規則。
-  </p>
-</div>
-
-<!-- ==================== NOT USED ==================== -->
-<h2 id="not-used">誠實揭露 · 這些 Salesforce 官方 AI feature「沒」實際用</h2>
-
-<table>
-  <thead>
-    <tr><th style="width:30%">功能</th><th>狀態</th><th>為什麼沒用</th></tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td><b>Agentforce for Service</b>（Bot / GenAiPlanner metadata）</td>
-      <td><span class="badge b-none">未使用</span></td>
-      <td>CBUSDO 有 8 個 <b>OOTB</b> Bot（Copilot for Salesforce、Sunny、Luna 等），但 <b>Thermos APP 沒有自建 Bot</b>。功能上我們自己在 Apex 拼「LLM + RAG + 8 個 Action」，等價於 Agentforce 但不走 Bot metadata。</td>
-    </tr>
-    <tr>
-      <td><b>Prompt Builder</b>（GenAiPromptTemplate）</td>
-      <td><span class="badge b-none">未使用</span></td>
-      <td>Org 上沒有 GenAiPromptTemplate metadata。所有 prompt 都以 String 動態組在 Apex（<code>ThermosCase360Controller</code>、<code>ThermosCustomerChat</code>、<code>ThermosBusinessChat</code>）。<br>好處：客戶能真的看到 prompt 內容並改；壞處：拿不到 Prompt Builder 的 Grounding UI。</td>
-    </tr>
-    <tr>
-      <td><b>Einstein Case Classification</b>（OOTB）</td>
-      <td><span class="badge b-none">未使用</span></td>
-      <td>需要歷史標記資料訓練，SDO 沒有足夠樣本。改用 LLM zero-shot（第 4 項）。</td>
-    </tr>
-    <tr>
-      <td><b>Einstein Reply Recommendations</b>（OOTB）</td>
-      <td><span class="badge b-none">未使用</span></td>
-      <td>OOTB 版需要 Digital Engagement channel 資料。我們自己實作三段語氣版（第 6 項）。</td>
-    </tr>
-    <tr>
-      <td><b>Einstein Service Analytics（Tableau）</b></td>
-      <td><span class="badge b-none">未使用</span></td>
-      <td>demo 有 3 張 Report + 1 個 Dashboard（<code>THERMOS_Dashboards</code>），用原生 Report Builder，未接 Tableau。</td>
-    </tr>
-    <tr>
-      <td><b>Copilot Studio Actions</b>（Invocable + Copilot config）</td>
-      <td><span class="badge b-none">未使用</span></td>
-      <td>8 個 Agent Action（executeAgentAction）以 <code>@AuraEnabled</code> 供 LWC 呼叫，沒登記成 Copilot Action。</td>
-    </tr>
-    <tr>
-      <td><b>Data Cloud / Einstein Predictive AI</b></td>
-      <td><span class="badge b-none">未使用</span></td>
-      <td>Thermos 是純 Sales+Service Cloud demo，不涉及 Data 360／預測模型。若要延伸，會另建 uniicreative 或配方時代那類 demo。</td>
-    </tr>
-  </tbody>
-</table>
-
-<div class="card tight" style="background:var(--brand-tint);border-color:#F0D6DA;margin-top:16px">
-  <b style="color:var(--brand-dk)">結論一句話：</b>
-  <div class="note" style="color:var(--ink);margin-top:6px">
-    Thermos APP 的 AI ＝ <b>Einstein LLM（Trust Layer）＋ RAG（Knowledge__kav + Order + Account）＋ 8 個真操作 Case/Account 的 Action</b>。功能上等於 Agentforce for Service，但實作走 Apex ConnectApi 而不是 Bot / GenAiPlanner metadata。Prompt Builder、Einstein OOTB feature 都沒用到。
-  </div>
-</div>
-
-<!-- ==================== EVIDENCE ==================== -->
-<h2 id="evidence">Org 端佐證 · 可以 SOQL 查得到的證據</h2>
-
-<div class="grid-3">
-  <div class="kpi"><div class="kpi-num">28</div><div class="kpi-lbl">Case (THRM-CASE-*)</div></div>
-  <div class="kpi"><div class="kpi-num">98</div><div class="kpi-lbl">單一案件最高 AI credits</div></div>
-  <div class="kpi"><div class="kpi-num">7</div><div class="kpi-lbl">Case AI 自訂欄位</div></div>
-</div>
-
-<h3>AI 相關 Case 自訂欄位</h3>
-<table>
-  <thead>
-    <tr><th>API Name</th><th>型別</th><th>誰寫入</th><th>幹嘛用</th></tr>
-  </thead>
-  <tbody>
-    <tr><td><code>THERMOS_AI_Summary__c</code></td><td>LongTextArea</td><td>analyzeCase</td><td>結構化摘要（【問題】【狀態】【情緒】）</td></tr>
-    <tr><td><code>THERMOS_AI_Summary_Short__c</code></td><td>Text(255)</td><td>analyzeCase</td><td>列表 hover 用（第一段截 255）</td></tr>
-    <tr><td><code>THERMOS_Sentiment__c</code></td><td>Picklist</td><td>analyzeCase</td><td>生氣／困擾／平靜／滿意</td></tr>
-    <tr><td><code>THERMOS_AI_Draft__c</code></td><td>LongTextArea</td><td>generateAiReply</td><td>LLM 產出的完整回覆草稿</td></tr>
-    <tr><td><code>THERMOS_AI_Rating__c</code></td><td>Number(1-5)</td><td>scoreCasePriority</td><td>Priority score 換算的星等</td></tr>
-    <tr><td><code>THERMOS_Deflection_Minutes__c</code></td><td>Number</td><td>analyzeCase</td><td>AI 預估省下的處理分鐘（同類 case avg × priority factor）</td></tr>
-    <tr><td><code>THERMOS_Recommended_Product__c</code></td><td>Lookup(Product2)</td><td>CROSS_SELL action</td><td>Agent 推的加購商品</td></tr>
-    <tr><td><code>THERMOS_Agent_Credits_Used__c</code></td><td>Number</td><td>所有 Agent action</td><td>Credit 計費 audit</td></tr>
-  </tbody>
-</table>
-
-<h3>驗證 SOQL（貼進 Developer Console 可跑）</h3>
-<div class="quote" style="font-family:Consolas,monospace;font-size:12px">-- 有多少 case 真的跑過 AI 摘要（credits &gt; 0）
-SELECT COUNT(Id) FROM Case
-WHERE THERMOS_Ref__c LIKE 'THRM-CASE-%'
-  AND THERMOS_Agent_Credits_Used__c &gt; 0
-
--- 看一筆真的被 LLM 寫過的 draft
-SELECT CaseNumber, Subject, THERMOS_AI_Summary__c, THERMOS_Sentiment__c, THERMOS_AI_Draft__c
-FROM Case
-WHERE THERMOS_Ref__c LIKE 'THRM-CASE-%'
-  AND THERMOS_AI_Rating__c &gt;= 3
-ORDER BY THERMOS_Agent_Credits_Used__c DESC LIMIT 5
-
--- Audit trail：CaseComment 裡搜「Agentforce」開頭的 AI 記錄
-SELECT ParentId, CommentBody, CreatedDate FROM CaseComment
-WHERE CommentBody LIKE '[Agentforce%'
-ORDER BY CreatedDate DESC LIMIT 20</div>
 
 <div class="foot">
-  Thermos AI 功能對照 · 依 CBUSDO org 2026-07-14 狀態撰寫 · <code>force-app/main/default/classes/EinsteinService.cls</code> · <code>ThermosCase360Controller.cls</code>（2,374 行）· <code>ThermosCustomerChat.cls</code> · <code>ThermosBusinessChat.cls</code> · <code>ThermosKnowledgeAgent.cls</code>（規則式）· <code>THERMOSInsightService.cls</code>（規則式）。
-  <br>凡 <span class="badge b-real">Einstein LLM</span> 標籤者，均透過 <code>ConnectApi.EinsteinLLM.generateMessages</code> 走 Salesforce Einstein Trust Layer，Zero Data Retention。
+  Thermos APP AI 功能總覽 · 依 CBUSDO org 2026-07-14 狀態撰寫
 </div>
 
 </div>
