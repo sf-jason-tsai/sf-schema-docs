@@ -59,6 +59,17 @@ const PAGES = [
         dest: 'salesforce-clouds/index.html',
         title: 'Salesforce 6 大雲 · Object & Schema 全覽'
     },
+    // ─── THERMOS 膳魔師 ───
+    {
+        src: 'C:/Users/bingyan.tsai/Desktop/Claude/thermos-demo/THERMOS_Case_Page_Delivery.html',
+        dest: 'thermos/case-page-delivery.html',
+        title: 'THERMOS · Case Record Page 客製化交付報告'
+    },
+    {
+        src: 'C:/Users/bingyan.tsai/Desktop/Claude/thermos-demo/mockup/thermosCase360_mockup.html',
+        dest: 'thermos/case-page-mockup.html',
+        title: 'THERMOS · Case Page v1 Mockup'
+    },
     // ↑ 加新頁時只需在這裡插入 { src, dest, title }
 ];
 

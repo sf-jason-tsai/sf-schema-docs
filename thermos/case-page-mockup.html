@@ -1,0 +1,627 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<title>THERMOS · Case Record Page (LWC 客製化 v1 mockup)</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
+<style>
+  /* THERMOS 設計系統 — 對齊 thermosCustomer360 */
+  :root{
+    --ink:#181818; --sub:#706E6B; --mute:#B0AFAE; --line:#DDDBDA; --tint:#F3F2F2; --bg:#FAFAF9;
+    --brand:#E4002B; --brand-dk:#3D0F1B; --brand-tint:#FDF6F7;
+    --blue:#0176D3; --green:#2E844A; --orange:#B65C00; --purple:#5867E8;
+    --amber:#B99400;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0;background:#F1EFED;font-family:"Salesforce Sans",Inter,-apple-system,"PingFang TC","Microsoft JhengHei",sans-serif;color:var(--ink)}
+  .page-wrap{max-width:1440px;margin:0 auto;padding:20px 24px 40px}
+
+  .frame-tag{font-size:11px;letter-spacing:1.5px;color:var(--sub);padding:8px 0 4px;text-transform:uppercase}
+  .frame-title{font-size:16px;font-weight:700;color:var(--ink);margin-bottom:14px;display:flex;align-items:center;gap:10px}
+  .frame-title small{font-size:12px;color:var(--sub);font-weight:500}
+
+  /* Utility icons (inline SVG mimic SLDS utility icons) */
+  .ico{display:inline-block;width:14px;height:14px;flex-shrink:0;vertical-align:middle}
+  .ico svg{width:100%;height:100%;fill:currentColor}
+  .ico-lg{width:18px;height:18px}
+  .ico-sm{width:12px;height:12px}
+
+  /* container */
+  .thm-case{padding:0;background:var(--bg);border:1px solid var(--line);border-radius:10px;overflow:hidden}
+  .thm-row{display:grid;gap:12px;padding:12px 14px}
+  .thm-row + .thm-row{padding-top:0}
+
+  /* ============ Hero band ============ */
+  .thm-hero{background:linear-gradient(90deg, var(--brand-dk) 0%, #4D1520 60%, #5B1A28 100%);color:#fff;
+    border-radius:8px;padding:16px 20px;display:grid;grid-template-columns: minmax(280px,1.3fr) minmax(520px,2fr) minmax(240px,1fr);gap:20px;align-items:center;position:relative;overflow:hidden}
+  .thm-hero::before,.thm-hero::after{content:"";position:absolute;border:1px solid rgba(255,255,255,.06);border-radius:50%;pointer-events:none}
+  .thm-hero::before{right:-70px;top:-70px;width:220px;height:220px}
+  .thm-hero::after{right:30px;top:-40px;width:120px;height:120px}
+  .hero-left{position:relative;z-index:1}
+  .hero-tag{font-size:10px;letter-spacing:2px;color:rgba(255,255,255,.55);font-weight:600;text-transform:uppercase}
+  .hero-num{font-size:22px;font-weight:700;margin:6px 0 4px;letter-spacing:.5px}
+  .hero-num .ref{font-size:11px;letter-spacing:1px;color:rgba(255,255,255,.5);margin-left:8px;font-weight:400}
+  .hero-subj{font-size:15px;color:rgba(255,255,255,.9);line-height:1.4;font-weight:500;max-width:360px}
+
+  /* Path */
+  .hero-path{position:relative;z-index:1;display:flex;align-items:center;justify-content:center;gap:0}
+  .path-step{position:relative;padding:8px 14px 8px 22px;background:rgba(255,255,255,.08);color:rgba(255,255,255,.65);font-size:12px;font-weight:600;letter-spacing:.4px;
+    clip-path: polygon(0 0, calc(100% - 10px) 0, 100% 50%, calc(100% - 10px) 100%, 0 100%, 10px 50%);margin-right:-6px;transition:.15s}
+  .path-step:first-child{padding-left:16px;clip-path: polygon(0 0, calc(100% - 10px) 0, 100% 50%, calc(100% - 10px) 100%, 0 100%)}
+  .path-step:last-child{padding-right:18px}
+  .path-step.done{background:rgba(255,255,255,.18);color:rgba(255,255,255,.9)}
+  .path-step.current{background:#fff;color:var(--brand-dk);font-weight:700}
+  .path-step.done .path-check{display:inline-block}
+  .path-check{display:none;margin-right:4px;color:#fff}
+  .path-current-tag{position:absolute;top:-16px;left:50%;transform:translateX(-50%);font-size:9px;color:rgba(255,255,255,.7);letter-spacing:1.5px;white-space:nowrap}
+
+  .hero-right{position:relative;z-index:1;display:flex;flex-direction:column;gap:8px;align-items:flex-end}
+  .hero-badges{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end}
+  .h-badge{display:inline-flex;align-items:center;gap:5px;padding:5px 10px;font-size:11px;font-weight:600;border-radius:12px;background:rgba(255,255,255,.14);color:#fff;border:1px solid rgba(255,255,255,.12);letter-spacing:.3px}
+  .h-badge.pri-high{background:rgba(228,0,43,.9);border-color:transparent}
+  .h-badge.pri-med{background:rgba(185,148,0,.85)}
+  .h-badge.pri-low{background:rgba(46,132,74,.85)}
+  .h-badge.wrn{background:rgba(46,132,74,.85);border-color:transparent}
+  .hero-time{font-size:11px;color:rgba(255,255,255,.65);display:flex;align-items:center;gap:5px}
+
+  /* ============ Card generic ============ */
+  .thm-card{background:#fff;border:1px solid var(--line);border-radius:8px;padding:14px 18px;display:flex;flex-direction:column;min-height:0}
+  .thm-card-hd{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;margin-bottom:12px;padding-bottom:8px;border-bottom:1px solid var(--tint)}
+  .thm-card-title{font-size:14px;font-weight:700;letter-spacing:-0.1px;display:flex;align-items:center;gap:6px}
+  .thm-card-sub{font-size:11px;color:var(--sub);margin-top:3px;letter-spacing:.2px}
+  .thm-card-act{font-size:11px;color:var(--blue);cursor:pointer;font-weight:600;background:none;border:0;padding:0;display:flex;align-items:center;gap:3px}
+  .thm-card-act:hover{text-decoration:underline}
+
+  /* ============ Row layouts ============ */
+  .thm-row-3{grid-template-columns: minmax(280px,1fr) minmax(320px,1.15fr) minmax(320px,1fr)}
+
+  /* ============ Details card ============ */
+  .dtl-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px 16px}
+  .dtl-item{display:flex;flex-direction:column;gap:3px;padding:6px 8px;border-radius:6px;cursor:pointer;transition:.12s}
+  .dtl-item:hover{background:var(--tint)}
+  .dtl-k{font-size:10px;color:var(--sub);letter-spacing:.5px;font-weight:600;text-transform:uppercase;display:flex;align-items:center;gap:4px}
+  .dtl-v{font-size:13px;color:var(--ink);font-weight:500}
+  .dtl-v.link{color:var(--blue);cursor:pointer}
+  .dtl-v.link:hover{text-decoration:underline}
+  .dtl-pill{display:inline-flex;align-items:center;gap:4px;padding:2px 8px;font-size:11px;font-weight:600;border-radius:10px;background:var(--tint);color:var(--ink)}
+  .dtl-pill.on{background:#E7F5EC;color:var(--green)}
+  .dtl-pill.warn{background:#FFF6E5;color:var(--amber)}
+  .dtl-pill.off{background:#FDE7EB;color:var(--brand)}
+  .dtl-edit{margin-left:auto;color:var(--mute);opacity:0;transition:.15s}
+  .dtl-item:hover .dtl-edit{opacity:1;color:var(--blue)}
+
+  .dtl-sep{grid-column:1/-1;height:1px;background:var(--tint);margin:2px 0}
+  .dtl-product{grid-column:1/-1;display:flex;gap:12px;align-items:center;background:var(--tint);padding:10px 12px;border-radius:6px}
+  .dtl-prod-thumb{width:44px;height:44px;background:#fff;border:1px solid var(--line);border-radius:6px;display:flex;align-items:center;justify-content:center;color:var(--brand)}
+  .dtl-prod-body{flex:1}
+  .dtl-prod-name{font-size:13px;font-weight:600}
+  .dtl-prod-sku{font-size:11px;color:var(--sub)}
+  .dtl-prod-warranty{font-size:11px;color:var(--green);font-weight:600;display:flex;align-items:center;gap:3px}
+
+  /* ============ AI card ============ */
+  .thm-ai{background:linear-gradient(180deg,#FFFDFA 0%,#FFF9EF 100%);border:1px solid #F0E4C4}
+  .ai-hd{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
+  .ai-title{display:flex;align-items:center;gap:6px;font-size:13px;font-weight:700;color:var(--brand-dk)}
+  .ai-tag{font-size:10px;letter-spacing:1.5px;padding:2px 8px;background:var(--brand-dk);color:#fff;border-radius:10px;font-weight:600}
+
+  .ai-section-hd{display:flex;justify-content:space-between;align-items:center;margin:12px 0 6px}
+  .ai-section-title{font-size:11px;letter-spacing:1px;font-weight:700;color:var(--brand-dk);text-transform:uppercase}
+  .ai-conf{font-size:10px;color:var(--sub);display:flex;align-items:center;gap:4px}
+  .ai-conf-dot{width:6px;height:6px;border-radius:50%;background:var(--green)}
+
+  .ai-km{background:#fff;border:1px solid #EAE5D0;border-radius:6px;padding:10px 12px;margin-bottom:8px;display:flex;gap:10px;cursor:pointer;transition:.15s}
+  .ai-km:hover{background:#FFFBF2}
+  .ai-km-icon{width:32px;height:32px;flex-shrink:0;background:var(--brand-tint);color:var(--brand);border-radius:6px;display:flex;align-items:center;justify-content:center}
+  .ai-km-body{flex:1;min-width:0}
+  .ai-km-title{font-size:12px;font-weight:600;color:var(--ink);line-height:1.4}
+  .ai-km-meta{font-size:10px;color:var(--sub);margin-top:2px;display:flex;gap:8px;align-items:center}
+  .ai-km-score{font-size:10px;color:var(--green);font-weight:700}
+
+  .ai-draft{background:#fff;border:1px solid #EAE5D0;border-radius:6px;padding:12px}
+  .ai-draft-text{font-size:12px;color:var(--ink);line-height:1.65;white-space:pre-wrap}
+  .ai-draft-actions{display:flex;gap:6px;margin-top:10px;padding-top:10px;border-top:1px solid var(--tint)}
+  .ai-btn{font-size:11px;padding:5px 10px;border-radius:4px;border:1px solid var(--line);background:#fff;cursor:pointer;font-weight:600;color:var(--ink);display:inline-flex;align-items:center;gap:4px;transition:.15s}
+  .ai-btn:hover{background:var(--tint)}
+  .ai-btn.primary{background:var(--brand-dk);color:#fff;border-color:var(--brand-dk)}
+  .ai-btn.primary:hover{background:var(--brand)}
+
+  .ai-rec-title{font-size:11px;letter-spacing:1px;font-weight:700;color:var(--brand-dk);text-transform:uppercase;margin-top:12px;margin-bottom:6px}
+  .ai-rec{background:#fff;border:1px solid #EAE5D0;border-radius:6px;padding:10px 12px;display:flex;gap:10px;align-items:center}
+  .ai-rec-thumb{width:44px;height:44px;background:var(--brand-tint);color:var(--brand);border-radius:6px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+  .ai-rec-body{flex:1;min-width:0}
+  .ai-rec-name{font-size:12px;font-weight:600}
+  .ai-rec-reason{font-size:10px;color:var(--sub);line-height:1.4;margin-top:2px}
+  .ai-rec-price{font-size:13px;font-weight:700;color:var(--brand)}
+
+  /* ============ Timeline ============ */
+  .tl-scroll{max-height:640px;overflow-y:auto;margin:-4px -4px 0;padding:4px}
+  .tl-scroll::-webkit-scrollbar{width:6px}
+  .tl-scroll::-webkit-scrollbar-track{background:var(--tint);border-radius:3px}
+  .tl-scroll::-webkit-scrollbar-thumb{background:var(--mute);border-radius:3px}
+
+  .tl-group{margin-bottom:12px}
+  .tl-day{font-size:10px;font-weight:700;color:var(--sub);letter-spacing:1.5px;text-transform:uppercase;padding:6px 4px;position:sticky;top:0;background:#fff;z-index:2}
+
+  .tl-item{position:relative;display:grid;grid-template-columns:32px 1fr;gap:10px;padding:8px 8px 8px 0}
+  .tl-item + .tl-item::before{content:"";position:absolute;left:15px;top:-6px;width:2px;height:14px;background:var(--line)}
+  .tl-ico{width:30px;height:30px;border-radius:50%;background:#fff;border:2px solid var(--line);display:flex;align-items:center;justify-content:center;color:var(--sub);z-index:1}
+  .tl-ico.status{background:var(--brand-tint);border-color:var(--brand);color:var(--brand)}
+  .tl-ico.email{background:#EEF3FD;border-color:var(--blue);color:var(--blue)}
+  .tl-ico.line{background:#E7F5EC;border-color:var(--green);color:var(--green)}
+  .tl-ico.call{background:#F3E7FD;border-color:var(--purple);color:var(--purple)}
+  .tl-ico.comment{background:#FFF6E5;border-color:var(--amber);color:var(--amber)}
+  .tl-ico.km{background:#FDF6F7;border-color:var(--brand);color:var(--brand)}
+  .tl-ico.ai{background:#FFFBF2;border-color:var(--amber);color:var(--amber)}
+  .tl-body{background:var(--tint);border-radius:6px;padding:10px 12px}
+  .tl-title{font-size:12px;font-weight:600;color:var(--ink);display:flex;justify-content:space-between;align-items:baseline;gap:8px}
+  .tl-time{font-size:10px;color:var(--sub);white-space:nowrap;font-weight:500}
+  .tl-author{font-size:10px;color:var(--sub);margin-top:2px}
+  .tl-content{font-size:12px;color:var(--ink);line-height:1.55;margin-top:6px;white-space:pre-wrap}
+  .tl-content .quote{background:#fff;border-left:2px solid var(--brand);padding:6px 10px;font-size:11px;color:var(--sub);margin-top:4px;border-radius:0 4px 4px 0}
+  .tl-badge{display:inline-block;padding:1px 6px;font-size:10px;background:#fff;border-radius:8px;color:var(--sub);border:1px solid var(--line);margin-right:4px}
+  .tl-badge.internal{background:#FFF6E5;color:var(--amber);border-color:#F0E4C4}
+
+  .tl-composer{background:#fff;border:1px solid var(--line);border-radius:6px;padding:10px;margin-bottom:12px}
+  .tl-comp-hd{display:flex;gap:4px;margin-bottom:6px}
+  .tl-comp-tab{font-size:11px;padding:4px 10px;border-radius:4px;color:var(--sub);cursor:pointer;font-weight:600}
+  .tl-comp-tab.on{background:var(--tint);color:var(--ink)}
+  .tl-comp-txt{width:100%;min-height:60px;border:1px solid var(--line);border-radius:4px;padding:8px 10px;font-size:12px;font-family:inherit;color:var(--ink);resize:vertical}
+  .tl-comp-txt:focus{outline:0;border-color:var(--blue)}
+  .tl-comp-foot{display:flex;justify-content:space-between;align-items:center;margin-top:8px}
+  .tl-comp-hint{font-size:10px;color:var(--sub)}
+
+  /* ============ Row 3 : Related ============ */
+  .rel-row{display:grid;grid-template-columns: 1.4fr 1fr;gap:12px;padding:0 14px 12px}
+  .rel-list{max-height:320px;overflow-y:auto}
+  .rel-item{display:grid;grid-template-columns: 32px 1fr auto;gap:10px;align-items:center;padding:10px 8px;border-radius:6px;cursor:pointer;border-bottom:1px solid var(--tint)}
+  .rel-item:hover{background:var(--tint)}
+  .rel-item:last-child{border-bottom:0}
+  .rel-ico{width:30px;height:30px;background:var(--tint);border-radius:6px;display:flex;align-items:center;justify-content:center;color:var(--sub)}
+  .rel-num{font-size:11px;color:var(--blue);font-weight:600}
+  .rel-subj{font-size:12px;color:var(--ink);margin-top:2px;font-weight:500}
+  .rel-meta{font-size:10px;color:var(--sub);margin-top:2px}
+  .rel-status{font-size:11px;padding:3px 8px;border-radius:10px;font-weight:600}
+  .rel-status.on{background:#E7F5EC;color:var(--green)}
+  .rel-status.open{background:#FFF6E5;color:var(--amber)}
+  .rel-status.closed{background:var(--tint);color:var(--sub)}
+
+  .stat-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+  .stat-tile{background:#FAFAF9;border:1px solid var(--tint);border-radius:6px;padding:10px 12px}
+  .stat-lbl{font-size:10px;color:var(--sub);letter-spacing:.5px;text-transform:uppercase;font-weight:600}
+  .stat-num{font-size:20px;font-weight:700;color:var(--ink);margin-top:2px;letter-spacing:-0.5px}
+  .stat-sub{font-size:10px;color:var(--sub);margin-top:2px}
+  .stat-trend{font-size:11px;color:var(--green);font-weight:600;display:flex;align-items:center;gap:2px}
+  .stat-trend.down{color:var(--brand)}
+
+  /* Footer note */
+  .note{background:#FFF9EF;border:1px solid #F0E4C4;border-radius:6px;padding:10px 14px;font-size:11px;color:var(--sub);margin-top:14px;line-height:1.6}
+  .note b{color:var(--ink)}
+</style>
+</head>
+<body>
+
+<div class="page-wrap">
+
+  <div class="frame-tag">THERMOS · CBUSDO · LWC v1 MOCKUP</div>
+  <div class="frame-title">
+    Case Record Page（客製化）
+    <small>對齊 Account Record Page (thermosCustomer360) 設計語言 · 使用真實 case 資料 · 送 review 版</small>
+  </div>
+
+  <div class="thm-case">
+
+    <!-- ============ Row 1 : Hero + Status Path ============ -->
+    <div class="thm-row">
+      <div class="thm-hero">
+        <div class="hero-left">
+          <div class="hero-tag">CASE</div>
+          <div class="hero-num">00001605 <span class="ref">THRM-CASE-20028</span></div>
+          <div class="hero-subj">THERMOS · 線上遊戲活動點數兌換錯誤</div>
+        </div>
+
+        <div class="hero-path">
+          <div class="path-step done">
+            <svg class="ico path-check" viewBox="0 0 24 24"><path d="M9 16.2L4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4z"/></svg>新案件
+          </div>
+          <div class="path-step done">
+            <svg class="ico path-check" viewBox="0 0 24 24"><path d="M9 16.2L4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4z"/></svg>案件分派
+          </div>
+          <div class="path-step current">
+            <span class="path-current-tag">目前階段</span>
+            處理中
+          </div>
+          <div class="path-step">待客戶回覆</div>
+          <div class="path-step">已結案</div>
+        </div>
+
+        <div class="hero-right">
+          <div class="hero-badges">
+            <span class="h-badge pri-med">
+              <svg class="ico" viewBox="0 0 24 24" fill="#fff"><path d="M12 2L2 22h20L12 2zm0 6l6.5 12h-13L12 8z"/></svg>Medium
+            </span>
+            <span class="h-badge">
+              <svg class="ico" viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>Web · 線上遊戲活動
+            </span>
+            <span class="h-badge wrn">
+              <svg class="ico" viewBox="0 0 24 24"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"/></svg>不適用
+            </span>
+          </div>
+          <div class="hero-time">
+            <svg class="ico ico-sm" viewBox="0 0 24 24" fill="rgba(255,255,255,.6)"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.2 14.2L11 13V7h1.5v5.2l4.5 2.7-.8 1.3z"/></svg>
+            開案 2 天 · 距 SLA 5 天
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============ Row 2 : Details | AI | Timeline ============ -->
+    <div class="thm-row thm-row-3">
+
+      <!-- Details -->
+      <div class="thm-card">
+        <div class="thm-card-hd">
+          <div>
+            <div class="thm-card-title">
+              <svg class="ico ico-lg" viewBox="0 0 24 24" fill="#181818"><path d="M4 4h16v2H4zm0 5h16v2H4zm0 5h16v2H4zm0 5h10v2H4z"/></svg>
+              案件詳情
+            </div>
+            <div class="thm-card-sub">Owner · 王 敏權 Steven（MIS 兼客服支援）</div>
+          </div>
+          <button class="thm-card-act">
+            <svg class="ico ico-sm" viewBox="0 0 24 24" fill="#0176D3"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg>
+            編輯
+          </button>
+        </div>
+
+        <div class="dtl-grid">
+          <div class="dtl-item">
+            <div class="dtl-k">案件類型</div>
+            <div class="dtl-v"><span class="dtl-pill">會員/點數</span></div>
+          </div>
+          <div class="dtl-item">
+            <div class="dtl-k">來源通路</div>
+            <div class="dtl-v">
+              <span class="dtl-pill">
+                <svg class="ico ico-sm" viewBox="0 0 24 24" fill="#706E6B"><path d="M5 5h14v14H5z" opacity=".3"/><path d="M12 6l-6 4v8h4v-4h4v4h4v-8z"/></svg>
+                線上遊戲活動
+              </span>
+            </div>
+          </div>
+          <div class="dtl-item">
+            <div class="dtl-k">優先順序</div>
+            <div class="dtl-v"><span class="dtl-pill warn">Medium</span></div>
+          </div>
+          <div class="dtl-item">
+            <div class="dtl-k">保固狀態</div>
+            <div class="dtl-v"><span class="dtl-pill">不適用</span></div>
+          </div>
+
+          <div class="dtl-sep"></div>
+
+          <div class="dtl-item">
+            <div class="dtl-k">客戶</div>
+            <div class="dtl-v link">張 建宏</div>
+          </div>
+          <div class="dtl-item">
+            <div class="dtl-k">會員等級</div>
+            <div class="dtl-v">
+              <span class="dtl-pill on">白金會員</span>
+              <span style="font-size:10px;color:var(--sub);margin-left:4px">累積 NT$ 128,400</span>
+            </div>
+          </div>
+          <div class="dtl-item">
+            <div class="dtl-k">聯絡電話</div>
+            <div class="dtl-v">0912-345-678</div>
+          </div>
+          <div class="dtl-item">
+            <div class="dtl-k">LINE 綁定</div>
+            <div class="dtl-v"><span class="dtl-pill on">已綁定</span></div>
+          </div>
+
+          <div class="dtl-sep"></div>
+
+          <div class="dtl-product">
+            <div class="dtl-prod-thumb">
+              <svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor"><path d="M8 2h8l1 6H7zm-1 8h10l-1 12H8z"/></svg>
+            </div>
+            <div class="dtl-prod-body">
+              <div class="dtl-prod-name">FGB-1000 不鏽鋼真空保溫瓶 1L</div>
+              <div class="dtl-prod-sku">SKU: THM-FGB1000-BK · NT$ 2,180</div>
+            </div>
+            <div class="dtl-prod-warranty">
+              <svg class="ico ico-sm" viewBox="0 0 24 24" fill="#2E844A"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm-2 16l-4-4 1.4-1.4L10 14.2l6.6-6.6L18 9l-8 8z"/></svg>
+              保固內 · 剩 8 個月
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- AI Panel -->
+      <div class="thm-card thm-ai">
+        <div class="ai-hd">
+          <div class="ai-title">
+            <svg class="ico ico-lg" viewBox="0 0 24 24" fill="#3D0F1B"><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10 10-4.5 10-10S17.5 2 12 2zm-1 15h2v-2h-2v2zm2-3.75V13c0-1.65 1.35-3 3-3 1.65 0 3-1.35 3-3s-1.35-3-3-3-3 1.35-3 3h-2c0-2.76 2.24-5 5-5s5 2.24 5 5c0 2.4-1.68 4.4-3.93 4.9L13 12.5V13c0 .55-.45 1-1 1s-1-.45-1-1z"/></svg>
+            AI 客服助手
+          </div>
+          <span class="ai-tag">EINSTEIN</span>
+        </div>
+
+        <!-- KM 推薦 -->
+        <div class="ai-section-hd">
+          <div class="ai-section-title">知識庫比對 · TOP 2</div>
+          <div class="ai-conf"><span class="ai-conf-dot"></span>信心 92%</div>
+        </div>
+
+        <div class="ai-km">
+          <div class="ai-km-icon">
+            <svg class="ico ico-lg" viewBox="0 0 24 24" fill="currentColor"><path d="M4 4h13l3 3v13H4z" opacity=".2"/><path d="M14 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6zm-1 7V3.5L18.5 9H13z"/></svg>
+          </div>
+          <div class="ai-km-body">
+            <div class="ai-km-title">THERMOS · 線上遊戲活動 · 點數兌換異常處理 SOP</div>
+            <div class="ai-km-meta">
+              <span>KB-2024-0813</span>·<span>更新 2026/05/12</span>·<span class="ai-km-score">相符 96%</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="ai-km">
+          <div class="ai-km-icon">
+            <svg class="ico ico-lg" viewBox="0 0 24 24" fill="currentColor"><path d="M4 4h13l3 3v13H4z" opacity=".2"/><path d="M14 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6zm-1 7V3.5L18.5 9H13z"/></svg>
+          </div>
+          <div class="ai-km-body">
+            <div class="ai-km-title">THERMOS · 會員點數兌換規則 & 常見問題（FAQ）</div>
+            <div class="ai-km-meta">
+              <span>KB-2023-0421</span>·<span>更新 2026/06/28</span>·<span class="ai-km-score">相符 78%</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- AI 初步回覆 -->
+        <div class="ai-section-hd">
+          <div class="ai-section-title">AI 初步回覆草稿</div>
+          <div class="ai-conf">依 KM-0813 + 客戶紀錄</div>
+        </div>
+
+        <div class="ai-draft">
+          <div class="ai-draft-text">建宏 您好，感謝您與 THERMOS 聯繫。
+
+已為您查閱本次活動點數紀錄，於 7/12 系統延遲導致 200 點兌換扣點但未發送兌換碼。已即刻補發兌換碼至您綁定的 LINE，並額外補償 100 點以致歉意。
+
+因您為白金會員，本次案件優先處理，若 30 分鐘內未收到兌換碼請直接回覆此對話。</div>
+          <div class="ai-draft-actions">
+            <button class="ai-btn primary">
+              <svg class="ico ico-sm" viewBox="0 0 24 24" fill="#fff"><path d="M2 21l21-9L2 3v7l15 2-15 2z"/></svg>
+              採用並回覆
+            </button>
+            <button class="ai-btn">
+              <svg class="ico ico-sm" viewBox="0 0 24 24" fill="#181818"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25z"/></svg>
+              編輯後回覆
+            </button>
+            <button class="ai-btn">
+              <svg class="ico ico-sm" viewBox="0 0 24 24" fill="#181818"><path d="M17.65 6.35A7.958 7.958 0 0012 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08A5.99 5.99 0 016 12c0-3.31 2.69-6 6-6 1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/></svg>
+              重新生成
+            </button>
+          </div>
+        </div>
+
+        <!-- 加購商品 -->
+        <div class="ai-rec-title">建議加購 · 提高客單價</div>
+        <div class="ai-rec">
+          <div class="ai-rec-thumb">
+            <svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor"><path d="M8 2h8l1 6H7zm-1 8h10l-1 12H8z"/></svg>
+          </div>
+          <div class="ai-rec-body">
+            <div class="ai-rec-name">FGB-500ml 兒童保溫瓶（配色新品）</div>
+            <div class="ai-rec-reason">建宏近半年購買家庭型商品 · 家中有小孩（依過往訂單推論）</div>
+          </div>
+          <div class="ai-rec-price">NT$ 1,480</div>
+        </div>
+      </div>
+
+      <!-- Timeline -->
+      <div class="thm-card">
+        <div class="thm-card-hd">
+          <div>
+            <div class="thm-card-title">
+              <svg class="ico ico-lg" viewBox="0 0 24 24" fill="#181818"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.2 14.2L11 13V7h1.5v5.2l4.5 2.7-.8 1.3z"/></svg>
+              處理時間軸
+            </div>
+            <div class="thm-card-sub">回覆 · 狀態變更 · 內部備註 依時序</div>
+          </div>
+          <button class="thm-card-act">全部展開</button>
+        </div>
+
+        <!-- Composer -->
+        <div class="tl-composer">
+          <div class="tl-comp-hd">
+            <div class="tl-comp-tab on">案件回覆</div>
+            <div class="tl-comp-tab">內部備註</div>
+            <div class="tl-comp-tab">狀態變更</div>
+          </div>
+          <textarea class="tl-comp-txt" placeholder="輸入回覆內容，或按上方「採用 AI 草稿」直接帶入…"></textarea>
+          <div class="tl-comp-foot">
+            <div class="tl-comp-hint">Enter 送出 · Shift+Enter 換行 · 送出後同步至 LINE OA</div>
+            <button class="ai-btn primary">送出回覆</button>
+          </div>
+        </div>
+
+        <div class="tl-scroll">
+
+          <div class="tl-group">
+            <div class="tl-day">今天 · 7/14</div>
+
+            <div class="tl-item">
+              <div class="tl-ico status">
+                <svg class="ico ico-sm" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10 10-4.5 10-10S17.5 2 12 2zm0 18c-4.4 0-8-3.6-8-8s3.6-8 8-8 8 3.6 8 8-3.6 8-8 8z"/></svg>
+              </div>
+              <div class="tl-body">
+                <div class="tl-title">狀態：新案件 → 處理中<span class="tl-time">14:32</span></div>
+                <div class="tl-author">Steven Wang（王 敏權）· MIS</div>
+              </div>
+            </div>
+
+            <div class="tl-item">
+              <div class="tl-ico km">
+                <svg class="ico ico-sm" viewBox="0 0 24 24" fill="currentColor"><path d="M14 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6z"/></svg>
+              </div>
+              <div class="tl-body">
+                <div class="tl-title">Einstein 建議 · 比對 KM-2024-0813<span class="tl-time">14:33</span></div>
+                <div class="tl-author">AI · 信心 96%</div>
+                <div class="tl-content">套用 SOP：「線上遊戲活動 · 點數兌換異常處理」。建議動作：查系統延遲紀錄 → 補發兌換碼 → 額外補償 100 點</div>
+              </div>
+            </div>
+
+            <div class="tl-item">
+              <div class="tl-ico line">
+                <svg class="ico ico-sm" viewBox="0 0 24 24" fill="currentColor"><path d="M4 4h16v12H5l-1 4V4z"/></svg>
+              </div>
+              <div class="tl-body">
+                <div class="tl-title"><span><span class="tl-badge">LINE OA</span>回覆客戶</span><span class="tl-time">14:41</span></div>
+                <div class="tl-author">Momoco Chou（周 庭如）· 會員專員</div>
+                <div class="tl-content">建宏您好，感謝您與 THERMOS 聯繫。已為您查閱本次活動點數紀錄，於 7/12 系統延遲導致 200 點兌換扣點但未發送兌換碼…</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="tl-group">
+            <div class="tl-day">昨天 · 7/13</div>
+
+            <div class="tl-item">
+              <div class="tl-ico comment">
+                <svg class="ico ico-sm" viewBox="0 0 24 24" fill="currentColor"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/></svg>
+              </div>
+              <div class="tl-body">
+                <div class="tl-title"><span><span class="tl-badge internal">內部備註</span>指派給 Momoco</span><span class="tl-time">18:20</span></div>
+                <div class="tl-author">Steven Wang · MIS</div>
+                <div class="tl-content">請 Momoco 明早優先處理，客戶白金會員 · LINE 已私訊過</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="tl-group">
+            <div class="tl-day">7/12 · 案件建立</div>
+
+            <div class="tl-item">
+              <div class="tl-ico line">
+                <svg class="ico ico-sm" viewBox="0 0 24 24" fill="currentColor"><path d="M4 4h16v12H5l-1 4V4z"/></svg>
+              </div>
+              <div class="tl-body">
+                <div class="tl-title"><span><span class="tl-badge">LINE OA</span>客戶原始訊息</span><span class="tl-time">09:15</span></div>
+                <div class="tl-author">張 建宏（客戶）</div>
+                <div class="tl-content">你們線上遊戲的點數兌換不能用啦！我 200 點都被扣了兌換碼還沒收到，這是要我怎麼用？<div class="quote">附圖：兌換頁面截圖 x2</div></div>
+              </div>
+            </div>
+
+            <div class="tl-item">
+              <div class="tl-ico ai">
+                <svg class="ico ico-sm" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10 10-4.5 10-10S17.5 2 12 2z"/></svg>
+              </div>
+              <div class="tl-body">
+                <div class="tl-title">AI · 自動分類 & 建案<span class="tl-time">09:15</span></div>
+                <div class="tl-author">Einstein · Agentforce</div>
+                <div class="tl-content">類別：會員/點數 · 通路：線上遊戲活動 · 優先度：Medium（會員 VIP）</div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <!-- ============ Row 3 : Related + Stats ============ -->
+    <div class="rel-row">
+      <div class="thm-card" style="padding:12px 14px 8px">
+        <div class="thm-card-hd">
+          <div>
+            <div class="thm-card-title">
+              <svg class="ico ico-lg" viewBox="0 0 24 24" fill="#181818"><path d="M4 4h6v6H4zm10 0h6v6h-6zM4 14h6v6H4zm10 0h6v6h-6z"/></svg>
+              客戶其他案件
+            </div>
+            <div class="thm-card-sub">張 建宏 · 過去 12 個月共 3 筆案件</div>
+          </div>
+        </div>
+        <div class="rel-list">
+          <div class="rel-item">
+            <div class="rel-ico"><svg class="ico" viewBox="0 0 24 24" fill="currentColor"><path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2z"/></svg></div>
+            <div>
+              <div class="rel-num">00001458</div>
+              <div class="rel-subj">FGB-1000 上蓋密封圈磨損 · 保固內</div>
+              <div class="rel-meta">2026/04/22 · 保固維修 · 已寄回原廠</div>
+            </div>
+            <span class="rel-status closed">已結案</span>
+          </div>
+          <div class="rel-item">
+            <div class="rel-ico"><svg class="ico" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10 10-4.5 10-10S17.5 2 12 2z"/></svg></div>
+            <div>
+              <div class="rel-num">00001321</div>
+              <div class="rel-subj">兒童保溫瓶配色詢問（詢問商品）</div>
+              <div class="rel-meta">2026/02/08 · 商品諮詢 · 官網</div>
+            </div>
+            <span class="rel-status closed">已結案</span>
+          </div>
+          <div class="rel-item">
+            <div class="rel-ico"><svg class="ico" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10 10-4.5 10-10S17.5 2 12 2z"/></svg></div>
+            <div>
+              <div class="rel-num">00001108</div>
+              <div class="rel-subj">會員點數過期政策詢問</div>
+              <div class="rel-meta">2025/11/30 · 會員/點數 · LINE OA</div>
+            </div>
+            <span class="rel-status closed">已結案</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="thm-card">
+        <div class="thm-card-hd">
+          <div>
+            <div class="thm-card-title">
+              <svg class="ico ico-lg" viewBox="0 0 24 24" fill="#181818"><path d="M3 13h2v-2H3zm0 4h2v-2H3zm0-8h2V7H3zm4 4h14v-2H7zm0 4h14v-2H7zM7 7v2h14V7z"/></svg>
+              客戶服務指標
+            </div>
+            <div class="thm-card-sub">近 90 天 · 此客戶</div>
+          </div>
+        </div>
+        <div class="stat-grid">
+          <div class="stat-tile">
+            <div class="stat-lbl">首次回覆</div>
+            <div class="stat-num">18 <span style="font-size:12px;color:var(--sub);font-weight:500">分</span></div>
+            <div class="stat-trend">
+              <svg class="ico ico-sm" viewBox="0 0 24 24" fill="#2E844A"><path d="M7 14l5-5 5 5z"/></svg>
+              優於 SLA 2h
+            </div>
+          </div>
+          <div class="stat-tile">
+            <div class="stat-lbl">案件滿意度</div>
+            <div class="stat-num">4.8 <span style="font-size:12px;color:var(--sub);font-weight:500">/5</span></div>
+            <div class="stat-sub">近 3 筆 CSAT 平均</div>
+          </div>
+          <div class="stat-tile">
+            <div class="stat-lbl">案件解決率</div>
+            <div class="stat-num">100 <span style="font-size:12px;color:var(--sub);font-weight:500">%</span></div>
+            <div class="stat-sub">3/3 全部結案</div>
+          </div>
+          <div class="stat-tile">
+            <div class="stat-lbl">加購成交</div>
+            <div class="stat-num">1 <span style="font-size:12px;color:var(--sub);font-weight:500">筆</span></div>
+            <div class="stat-sub">02/08 商品諮詢後成交</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="note">
+    <b>設計原則說明：</b><br>
+    ① <b>Hero 深勃根地色帶 + Status Path</b> — 承 Account 頁 tier card 語彙，Status 使用 SLDS Path 樣式但簡化，可直接點擊切換階段。<br>
+    ② <b>案件詳情</b>（左）— 所有客製欄位（案件類型 / 來源通路 / 優先順序 / 保固狀態 / 詢問商品 / 客戶）inline editable；圖標與 pill 用 SLDS 原生色。<br>
+    ③ <b>AI 客服助手</b>（中）— 對應 Steven 提的「AI 初步回覆 + 過去數據推薦商品」+「消費者問零件 → 客服看 KM → 線上回覆」。KM 卡片有相似度分數、AI 草稿有「採用 / 編輯 / 重新生成」三動作、加購商品有 AI reasoning。<br>
+    ④ <b>處理時間軸</b>（右）— 顯示狀態變更、KM 比對、Line/Email 回覆、內部備註。Composer 有三 tab（回覆 / 內部備註 / 狀態變更）— 直接在頁面上更新最新處理狀況。<br>
+    ⑤ <b>底部客戶其他案件 + 服務指標</b> — 業務助理兼客服的情境下，讓 CS 快速看到「這位客戶好不好搞、有沒有加購潛力」。<br>
+    ⑥ 全頁走 SLDS 2 utility icons、禁 AI 感 emoji、白底細灰線、字體 Salesforce Sans / PingFang TC。
+  </div>
+
+</div>
+
+</body>
+</html>

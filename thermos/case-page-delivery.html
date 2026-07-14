@@ -1,0 +1,229 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<title>THERMOS · Case Record Page 客製化交付報告</title>
+<style>
+  :root{
+    --ink:#181818;--sub:#706E6B;--mute:#B0AFAE;--line:#DDDBDA;--tint:#F3F2F2;--bg:#FAFAF9;
+    --brand:#E4002B;--brand-dk:#3D0F1B;--brand-tint:#FDF6F7;
+    --blue:#0176D3;--green:#2E844A;--orange:#B65C00;--amber:#B99400;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0;background:#F1EFED;font-family:"Salesforce Sans",-apple-system,"PingFang TC","Microsoft JhengHei",sans-serif;color:var(--ink)}
+  .wrap{max-width:1160px;margin:0 auto;padding:32px 32px 60px}
+  .tag{font-size:11px;letter-spacing:2px;color:var(--sub);text-transform:uppercase;font-weight:600}
+  h1{font-size:28px;letter-spacing:-0.5px;margin:6px 0 8px;color:var(--brand-dk)}
+  .lede{font-size:14px;color:var(--sub);line-height:1.6;max-width:760px}
+
+  h2{font-size:18px;margin:32px 0 12px;padding-bottom:8px;border-bottom:2px solid var(--brand-dk);letter-spacing:-0.3px;display:flex;align-items:center;gap:8px}
+  h3{font-size:14px;margin:16px 0 8px;color:var(--brand-dk);font-weight:700}
+
+  .card{background:#fff;border:1px solid var(--line);border-radius:8px;padding:20px 24px;margin-bottom:12px}
+  .grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:12px 0}
+  .grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:12px 0}
+  .grid-4{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:12px 0}
+
+  .kpi{background:#fff;border:1px solid var(--line);border-radius:8px;padding:14px 16px;text-align:center}
+  .kpi-num{font-size:28px;font-weight:700;color:var(--brand-dk);letter-spacing:-0.5px}
+  .kpi-lbl{font-size:11px;color:var(--sub);letter-spacing:.5px;text-transform:uppercase;font-weight:600;margin-top:4px}
+
+  table{width:100%;border-collapse:collapse;font-size:13px;margin:8px 0 12px}
+  th,td{border:1px solid var(--line);padding:8px 12px;text-align:left;vertical-align:top}
+  th{background:var(--tint);font-weight:600;font-size:12px;letter-spacing:.3px}
+  code{background:var(--tint);padding:1px 6px;border-radius:3px;font-size:12px;font-family:Consolas,monospace;color:var(--brand)}
+
+  .step{padding:12px 16px;background:var(--tint);border-left:3px solid var(--brand-dk);border-radius:4px;margin:8px 0;font-size:13px;line-height:1.6}
+  .step b{color:var(--brand-dk)}
+
+  .ok{color:var(--green);font-weight:600}
+  .warn{color:var(--amber);font-weight:600}
+  .pill{display:inline-block;padding:2px 8px;font-size:11px;background:var(--tint);border-radius:10px;margin-right:4px;font-weight:600}
+  .pill.brand{background:var(--brand-tint);color:var(--brand)}
+  .pill.g{background:#E7F5EC;color:var(--green)}
+  .pill.b{background:#EEF3FD;color:var(--blue)}
+
+  ul.checkl{list-style:none;padding-left:0;margin:8px 0}
+  ul.checkl li{padding:6px 0 6px 24px;position:relative;font-size:13px;line-height:1.5}
+  ul.checkl li::before{content:"✓";position:absolute;left:0;top:6px;color:var(--green);font-weight:700}
+
+  .cta{background:var(--brand-dk);color:#fff;padding:16px 20px;border-radius:8px;margin:20px 0;line-height:1.6}
+  .cta b{color:#fff;font-size:16px}
+
+  .callout{background:#FFF9EF;border:1px solid #F0E4C4;border-radius:6px;padding:14px 18px;font-size:13px;line-height:1.6;color:var(--ink);margin:14px 0}
+  .callout b{color:var(--brand-dk)}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+
+  <div class="tag">THERMOS · CBUSDO · 交付報告</div>
+  <h1>Case Record Page 客製化 LWC · 上線交付</h1>
+  <p class="lede">為 THERMOS 膳魔師 Sales+Service Cloud demo 打造的 Case 案件記錄頁，全面對接 Einstein Trust Layer + native Knowledge，落地 Steven 提的「AI 初步回覆 + KM 支援 + 商品加購推薦」三大需求，目標推動 Agentforce for Service license 採購與 credits 消耗。</p>
+
+  <!-- ============ KPI Strip ============ -->
+  <div class="grid-4">
+    <div class="kpi"><div class="kpi-num">1</div><div class="kpi-lbl">LWC Component</div></div>
+    <div class="kpi"><div class="kpi-num">10</div><div class="kpi-lbl">Apex 方法</div></div>
+    <div class="kpi"><div class="kpi-num">12</div><div class="kpi-lbl">Knowledge 文章</div></div>
+    <div class="kpi"><div class="kpi-num">11/11</div><div class="kpi-lbl">Test Pass Rate</div></div>
+  </div>
+
+  <!-- ============ 交付摘要 ============ -->
+  <h2>1. 交付摘要</h2>
+
+  <div class="card">
+    <h3>核心功能</h3>
+    <ul class="checkl">
+      <li><b>Status Path（5 段可點擊）</b>：新案件 → 案件分派 → 處理中 → 待客戶回覆 → 已結案。點擊即時透過 Apex + LDS 更新 Case.Status。</li>
+      <li><b>案件詳情（inline 顯示）</b>：類型/通路/優先度/保固/客戶/會員等級/LINE 綁定/詢問商品，帶客戶 90 天服務指標。</li>
+      <li><b>AI 客服助手（Einstein LLM 真接）</b>：KM 相似度搜尋、AI 回覆草稿（可採用/重生）、下一步一鍵動作、加購商品推薦帶預估營收。</li>
+      <li><b>Composer（真寫 CaseComment）</b>：案件回覆 / 內部備註切換，送出真寫入 CaseComment。</li>
+      <li><b>處理時間軸</b>：即時彙整 CaseComment + EmailMessage + CaseHistory 狀態變更 + Chatter，依日期分組。</li>
+      <li><b>客戶其他案件</b>：顯示該客戶歷史案件與平均結案時間。</li>
+    </ul>
+
+    <h3>驅動客戶購買 Agentforce 的設計亮點</h3>
+    <ul class="checkl">
+      <li><b>Einstein Trust Layer 真串接</b>：Hero 上有 <code>Einstein · Live</code> / <code>Preview Mode</code> badge，`isReal=true` 時直接顯示是真的在跑（我們 smoke test 驗證了 `isReal=true`）。</li>
+      <li><b>Credits 累計器</b>：Hero 顯示 <code>Agent credits {n}</code>；每次 AI 動作即時 +N 顯示消耗，讓客戶感受「用一次收一次」的商業模式。</li>
+      <li><b>AI Deflection 時間預測</b>：Hero 顯示「AI 估 12 分鐘結案 · 同類 22 分鐘」，量化 AI 加速效益。</li>
+      <li><b>Sentiment 客戶情緒</b>：Hero 一目了然（生氣 / 困擾 / 平靜 / 滿意）— 客戶進頁 3 秒判斷風險。</li>
+      <li><b>一鍵 Agent Actions</b>：8 種預設動作（補發兌換碼、開 RMA、贈點道歉、加購推薦、物流通知、零件報價、推送 KM、升級 MIS），每個都標 credits 成本。</li>
+      <li><b>Cross-sell 營收預估</b>：加購商品直接標「預估潛在營收 +NT$ 617」— 直接對應 Steven 說的「提升收入」。</li>
+    </ul>
+  </div>
+
+  <!-- ============ 部署清單 ============ -->
+  <h2>2. 部署清單（CBUSDO）</h2>
+
+  <div class="card">
+    <h3>新增 metadata</h3>
+    <table>
+      <tr><th>類型</th><th>API Name</th><th>用途</th></tr>
+      <tr><td>LWC</td><td>c:thermosCase360</td><td>Case Record Page 主 component</td></tr>
+      <tr><td>Apex</td><td>ThermosCase360Controller</td><td>10 個 aura endpoint（getData / analyze / generateReply / searchKM / postComment / postEmail / updateStatus / executeAction / getTimeline / similar / productRecs）</td></tr>
+      <tr><td>Apex Test</td><td>ThermosCase360ControllerTest</td><td>11 test methods · 100% pass</td></tr>
+      <tr><td>FlexiPage</td><td>THERMOS_Case_Record_v1</td><td>Case Record Page，掛 thermosCase360 元件</td></tr>
+      <tr><td>Custom Field × 6</td><td>Case.THERMOS_AI_Summary__c / THERMOS_Sentiment__c / THERMOS_AI_Draft__c / THERMOS_Next_Best_Actions__c / THERMOS_Deflection_Minutes__c / THERMOS_Agent_Credits_Used__c</td><td>存 AI 生成結果 + credits 記帳</td></tr>
+    </table>
+
+    <h3>修改 metadata</h3>
+    <table>
+      <tr><th>類型</th><th>API Name</th><th>變更</th></tr>
+      <tr><td>PermissionSet</td><td>THERMOS_Demo</td><td>加 Case 物件 CRUD + 6 個新欄位 FLS + 6 個 Apex class access</td></tr>
+    </table>
+
+    <h3>資料層 seed</h3>
+    <ul class="checkl">
+      <li><b>12 篇 THERMOS 品牌 Knowledge__kav</b>（KCSArticle RT · Online 已 publish）— 覆蓋 7 種 case category（點數 / 商品 / 退換 / 保固 / 教學 / 零件 / 訂單）+ 高情緒客戶話術。</li>
+      <li><b>28 筆現存 Case 補 AI 欄位</b> — Summary / Sentiment / Deflection / Credits / Next Actions JSON。</li>
+      <li><b>9 則 CaseComment 補到最新 3 筆 case</b> — 讓 Timeline 有豐富內容可 demo。</li>
+    </ul>
+  </div>
+
+  <!-- ============ 客戶需求對應 ============ -->
+  <h2>3. Steven / Momoco 需求對應表</h2>
+
+  <div class="card">
+    <table>
+      <tr><th style="width:32%">客戶需求</th><th style="width:36%">對應功能</th><th style="width:32%">落地位置</th></tr>
+      <tr>
+        <td>Steven：「AI 初步回覆 + 過去數據推薦商品」<br>「消費者問零件 → AI 讀 KM → 生成回覆」</td>
+        <td>AI 客服助手區塊 · <span class="pill brand">Einstein Trust Layer</span> · <span class="pill g">isReal=true 驗證</span></td>
+        <td>中欄「AI 回覆草稿」+「重新生成」+「採用並回覆」</td>
+      </tr>
+      <tr>
+        <td>Steven：「知識庫 → 提高客服處理能力」</td>
+        <td>KM 搜尋 · SOSL 對 native Knowledge__kav · 相似度分數</td>
+        <td>中欄「知識庫比對」12 篇 THERMOS 品牌文章</td>
+      </tr>
+      <tr>
+        <td>Steven：「客服兼職業務，若能推薦商品提高購買率」</td>
+        <td>Cross-sell 商品推薦 · 依 Order history + 產品分類 · 帶預估營收</td>
+        <td>中欄「建議加購 · 提升客單價」</td>
+      </tr>
+      <tr>
+        <td>林董事長：「AI 快速拉報告，給沒想到的洞察」</td>
+        <td>案件級 AI 分析（sentiment / deflection / next-best-action）</td>
+        <td>Hero 上情緒 badge + 結案時間預測 + 建議動作</td>
+      </tr>
+      <tr>
+        <td>整體目標：減少成本 · 提升營收</td>
+        <td>Deflection 時間預測 + Cross-sell 營收預估 + Credit 記帳</td>
+        <td>Hero + 加購卡 + Agent Credits 計數器</td>
+      </tr>
+      <tr>
+        <td>價格敏感 / 實施難易度</td>
+        <td>LWC 走 org 現有 permset 架構 · 不動 profile · 保留 OOTB Case 精神</td>
+        <td>Permset 一 assign 即上線 · 無需改 Profile</td>
+      </tr>
+    </table>
+  </div>
+
+  <!-- ============ 驗證結果 ============ -->
+  <h2>4. 驗證結果（已跑）</h2>
+
+  <div class="card">
+    <table>
+      <tr><th>檢查項</th><th>結果</th></tr>
+      <tr><td>metadata deploy 到 CBUSDO</td><td class="ok">✔ 17/17 綠</td></tr>
+      <tr><td>Apex test (ThermosCase360ControllerTest)</td><td class="ok">✔ 11/11 pass, 100%</td></tr>
+      <tr><td>getData 讀 500J200000NIx4qIAD</td><td class="ok">✔ caseNumber=00001605 · 5-stage path</td></tr>
+      <tr><td>searchKnowledge SOSL</td><td class="ok">✔ 5 hits, top=「THERMOS · 會員點數兌換 SOP」score 96%</td></tr>
+      <tr><td>analyzeCase Einstein call</td><td class="ok">✔ isReal=true · sentiment=困擾 · deflection=12 分鐘</td></tr>
+      <tr><td>generateAiReply Einstein call</td><td class="ok">✔ isReal=true · draft 299 字</td></tr>
+      <tr><td>Timeline query</td><td class="ok">✔ 8 items（含 seed 的 CaseComment）</td></tr>
+      <tr><td>Product recommendations</td><td class="ok">✔ 3 items 帶預估營收</td></tr>
+      <tr><td>Permset 已 assign 到 running user</td><td class="ok">✔</td></tr>
+      <tr><td>12 篇 Knowledge 全 Online</td><td class="ok">✔</td></tr>
+    </table>
+
+    <div class="callout">
+      <b>亮點：</b>Einstein Trust Layer 在此 CBUSDO org **真的可用**。<code>analyzeCase</code> 與 <code>generateAiReply</code> 兩支呼叫回傳 `isReal=true`，代表這次 demo 可以完整走完「客戶送問題 → AI 讀 KM → 生成回覆」流程，而非 fallback template。要向客戶示範時直接秀給他們看 Einstein · Live badge。
+    </div>
+  </div>
+
+  <!-- ============ Demo 腳本 ============ -->
+  <h2>5. 建議 Demo 腳本</h2>
+
+  <div class="card">
+    <div class="step"><b>步驟 1 · 打開 case 00001605</b> — 客戶「張建宏」線上遊戲活動點數兌換錯誤。Hero 展示 AI 一句話摘要 + 客戶情緒（困擾）+ AI 估 12 分鐘結案 + Agent credits 已用 X。</div>
+
+    <div class="step"><b>步驟 2 · 點 Status Path「處理中」</b> — 即時切換階段（LDS updateRecord），Timeline 出現「狀態：Working → Reply Received」。</div>
+
+    <div class="step"><b>步驟 3 · 展示 AI 客服助手</b> — 中欄 KM 搜尋自動顯示 3 篇相符 KM（相符 96% / 90% / 84%）；點「生成 AI 回覆」→ Einstein Live 拉出 299 字客製回覆（帶客戶名 + 商品名 + 補償方案）。credits +12。</div>
+
+    <div class="step"><b>步驟 4 · 點「採用並回覆」</b> — 草稿塞進 Composer；直接點送出 → CaseComment 真被寫入 → Timeline 立即多一筆。credits +5。</div>
+
+    <div class="step"><b>步驟 5 · 點下一步建議「補發兌換碼」</b> — 執行 Agent Action，Timeline 立即出現 <code>[Agentforce]</code> 動作紀錄。credits +8。</div>
+
+    <div class="step"><b>步驟 6 · 點加購商品「FGB-500ml 兒童保溫瓶」</b> — 顯示預估潛在營收 +NT$ 617，回應 Steven「提升收入」訴求。</div>
+
+    <div class="step"><b>步驟 7 · 收尾</b> — Hero 秀 credits 累計，暗示「這是 Agentforce for Service 賣點：用多少收多少，你們可以先跑 30 天看 credits 消耗回推 ROI」。</div>
+  </div>
+
+  <!-- ============ 待辦手動步驟 ============ -->
+  <h2>6. 你需要在 CBUSDO 手動做的（一次）</h2>
+
+  <div class="card">
+    <div class="callout">
+      <b>Setup → Object Manager → Case → Lightning Record Pages</b><br>
+      找到 <code>THERMOS · Case Record v1</code>，點「Activation」→ 選 <b>Assign as Org Default</b>（App-specific：Thermos App）→ Save。<br>
+      沒設的話，客戶進 THERMOS App 看 case 還是舊版。
+    </div>
+
+    <div class="step"><b>可選：</b>如果要開放 <code>zh_TW</code> Knowledge：Setup → Knowledge Settings → Supported Languages → Add <code>Chinese (Taiwan)</code>。目前 12 篇文章走 <code>en_US</code> 但內容全繁中，SOSL 搜尋照樣命中。</div>
+  </div>
+
+  <!-- ============ CTA ============ -->
+  <div class="cta">
+    <b>THERMOS 案件頁客製化 · 全套上線</b><br>
+    Einstein Trust Layer · native Knowledge · CaseComment 真寫入 · 12 篇 THERMOS 品牌 KM · 28 筆 case AI 欄位 seed · 11/11 test pass。可直接對林董/Steven demo。
+  </div>
+
+</div>
+
+</body>
+</html>
