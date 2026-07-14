@@ -70,6 +70,11 @@ const PAGES = [
         dest: 'thermos/case-page-mockup.html',
         title: 'THERMOS · Case Page v1 Mockup'
     },
+    {
+        src: 'C:/Users/bingyan.tsai/Desktop/Claude/thermos-demo/specs/THERMOS_AI_Features.html',
+        dest: 'thermos/ai-features.html',
+        title: 'THERMOS · AI 功能總覽（誠實對照版）'
+    },
     // ↑ 加新頁時只需在這裡插入 { src, dest, title }
 ];
 
