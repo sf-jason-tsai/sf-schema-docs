@@ -1,0 +1,349 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<title>THERMOS · Agentforce Studio 設定指南</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<style>
+  :root{
+    --ink:#181818;--sub:#706E6B;--mute:#B0AFAE;--line:#DDDBDA;--tint:#F3F2F2;
+    --brand:#E4002B;--brand-dk:#3D0F1B;--brand-tint:#FDF6F7;
+    --ok:#2E844A;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0;background:#F1EFED;font-family:"Salesforce Sans",-apple-system,"PingFang TC","Microsoft JhengHei",sans-serif;color:var(--ink);line-height:1.65}
+  .wrap{max-width:1080px;margin:0 auto;padding:32px 32px 60px}
+
+  .tag{font-size:11px;letter-spacing:2px;color:var(--sub);text-transform:uppercase;font-weight:600}
+  h1{font-size:28px;letter-spacing:-0.5px;margin:6px 0 8px;color:var(--brand-dk)}
+  .lede{font-size:14px;color:var(--sub);line-height:1.7;max-width:820px}
+
+  .backlink{display:inline-flex;align-items:center;gap:6px;font-size:12px;color:var(--sub);text-decoration:none;margin-bottom:16px;padding:4px 10px;background:#fff;border:1px solid var(--line);border-radius:20px}
+  .backlink:hover{color:var(--brand-dk);border-color:var(--brand)}
+
+  h2{font-size:16px;margin:32px 0 12px;padding-bottom:8px;border-bottom:2px solid var(--brand-dk);letter-spacing:0.5px;text-transform:uppercase;color:var(--brand-dk)}
+  h3{font-size:14px;margin:20px 0 8px;color:var(--brand-dk);font-weight:700}
+
+  .card{background:#fff;border:1px solid var(--line);border-radius:8px;padding:18px 22px;margin-bottom:12px}
+  .card.tight{padding:14px 18px}
+
+  table{width:100%;border-collapse:collapse;font-size:13px;margin:12px 0;background:#fff}
+  th,td{border:1px solid var(--line);padding:10px 12px;text-align:left;vertical-align:top}
+  th{background:var(--tint);font-weight:700;font-size:12px;letter-spacing:.3px;color:var(--brand-dk)}
+  code{background:var(--tint);padding:1px 6px;border-radius:3px;font-size:12px;font-family:Consolas,monospace;color:var(--brand)}
+  .path{font-family:Consolas,monospace;font-size:11.5px;color:var(--sub)}
+
+  .step{display:flex;gap:14px;align-items:flex-start;margin:12px 0;padding:14px 16px;background:#fff;border:1px solid var(--line);border-left:3px solid var(--brand);border-radius:4px}
+  .step-num{width:28px;height:28px;border-radius:50%;background:var(--brand);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:13px;flex-shrink:0}
+  .step-body{flex:1}
+  .step-body h4{margin:0 0 4px;font-size:14px;color:var(--brand-dk)}
+  .step-body .note{font-size:12px;color:var(--sub);margin-top:6px;line-height:1.6}
+
+  .badge{display:inline-block;font-size:10.5px;padding:2px 8px;border-radius:10px;letter-spacing:.4px;font-weight:700}
+  .b-topic{background:var(--brand-tint);color:var(--brand-dk);border:1px solid var(--brand)}
+  .b-action{background:var(--tint);color:var(--ink);border:1px solid var(--line);font-family:Consolas,monospace}
+  .b-done{background:#E7F2E7;color:var(--ok);border:1px solid #C4E3C4}
+
+  .diagram{background:#fff;border:1px solid var(--line);border-radius:8px;padding:20px;text-align:center;margin:16px 0;font-family:Consolas,monospace;font-size:12px;line-height:1.9;white-space:pre;color:var(--ink);overflow-x:auto}
+
+  .quote{background:var(--brand-tint);border-left:3px solid var(--brand);padding:12px 16px;border-radius:4px;font-size:13px;line-height:1.7;margin:10px 0;font-family:"PingFang TC","Microsoft JhengHei",sans-serif}
+
+  .foot{margin-top:32px;padding-top:14px;border-top:1px solid var(--line);font-size:11.5px;color:var(--sub);line-height:1.6;text-align:center}
+
+  ul.clean{margin:6px 0;padding-left:20px;font-size:13px;line-height:1.75}
+  ul.clean li{margin:4px 0}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<a class="backlink" href="../">← 返回 sf-schema-docs</a>
+
+<div class="tag">CBUSDO · Thermos 膳魔師 · Agentforce Setup</div>
+<h1>Agentforce Studio 設定指南</h1>
+<p class="lede">
+  Apex 端 6 個 <code>@InvocableMethod</code> 已 <span class="badge b-done">已部署到 CBUSDO</span>。
+  接下來只要在 Setup UI 花 <b>10 分鐘</b> 建 1 個 Bot、3 個 Topic，掛好對應 Action，Thermos 就有一個**真正 Salesforce 官方 Agentforce**——同一組 Action，客製 LWC 用 · 官方 Bot 也用。
+</p>
+
+<!-- ============ 架構圖 ============ -->
+<h2>架構總覽</h2>
+
+<div class="diagram">╔══════════════════════════════════════════════════════════════════╗
+║   Agentforce Bot: "Thermos 客服 AI" (客戶用 UI 手動建 · 5 分鐘)     ║
+╠══════════════════════════════════════════════════════════════════╣
+║                                                                  ║
+║   ┌─ Topic 1 · 零件詢問 ────┐  ┌─ Topic 2 · 保固維修 ────┐        ║
+║   │ • SearchParts (Action)  │  │ • CheckWarranty         │        ║
+║   │ • QuoteParts   (Action) │  │ • OpenRma               │        ║
+║   └─────────────┬───────────┘  └────────────┬────────────┘        ║
+║                 │                           │                     ║
+║   ┌─ Topic 3 · 會員點數 ────┐               │                     ║
+║   │ • GetMember             │               │                     ║
+║   │ • AddPoints             │               │                     ║
+║   └─────────────┬───────────┘               │                     ║
+║                 │                           │                     ║
+║                 ▼            ▼              ▼                     ║
+║   ┌──────────────────────────────────────────────────────┐        ║
+║   │  Apex @InvocableMethod × 6 (已 deploy ✓)             │        ║
+║   │  ThermosAF_SearchParts / QuoteParts / CheckWarranty  │        ║
+║   │  ThermosAF_OpenRma / GetMember / AddPoints           │        ║
+║   └──────────────────┬───────────────────────────────────┘        ║
+║                      │                                            ║
+║                      ▼                                            ║
+║           真 Salesforce records (Product2/Case/Account/Order)     ║
+║                                                                  ║
+╚══════════════════════════════════════════════════════════════════╝
+                             │
+       (同一組 Action 也給 custom LWC / 首頁 Business Chat 等呼叫)</div>
+
+<!-- ============ 已部署 6 Actions ============ -->
+<h2>已部署 · 6 個 Agentforce Action</h2>
+
+<div class="card tight">
+  <p style="font-size:13px;color:var(--sub);margin:0 0 10px">
+    以下 6 個 Apex class 用 <code>@InvocableMethod</code> 註解，在 Agent Studio 建 Topic 時
+    可直接從「Add Action」下拉選單看到 <span style="color:var(--brand);font-weight:700">THERMOS · XXX</span> 選項。
+  </p>
+</div>
+
+<h3>Topic 1 · 零件詢問</h3>
+<table>
+  <thead>
+    <tr>
+      <th style="width:30%">Action Label</th>
+      <th style="width:22%">Apex Class</th>
+      <th>用途 / 商業場景</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><span class="badge b-action">THERMOS · 搜尋相容零件</span></td>
+      <td><code>ThermosAF_SearchParts</code></td>
+      <td>客戶問「JNL-504 的墊圈料號」→ Agent 從全部零件挑出相容項目 + 價格</td>
+    </tr>
+    <tr>
+      <td><span class="badge b-action">THERMOS · 建立零件報價</span></td>
+      <td><code>ThermosAF_QuoteParts</code></td>
+      <td>客戶同意加購 → Agent 開報價單 + 通知客戶（含在 Case Timeline 公開留言）</td>
+    </tr>
+  </tbody>
+</table>
+
+<h3>Topic 2 · 保固維修</h3>
+<table>
+  <thead>
+    <tr>
+      <th style="width:30%">Action Label</th>
+      <th style="width:22%">Apex Class</th>
+      <th>用途 / 商業場景</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><span class="badge b-action">THERMOS · 判定保固狀態</span></td>
+      <td><code>ThermosAF_CheckWarranty</code></td>
+      <td>客戶反映故障 → Agent 查該客戶購買日期 → 判定是否 1 年保固內</td>
+    </tr>
+    <tr>
+      <td><span class="badge b-action">THERMOS · 開立 RMA</span></td>
+      <td><code>ThermosAF_OpenRma</code></td>
+      <td>保固內故障 → Agent 開 RMA 單 + 排明日 09:00-12:00 物流到府收件</td>
+    </tr>
+  </tbody>
+</table>
+
+<h3>Topic 3 · 會員點數</h3>
+<table>
+  <thead>
+    <tr>
+      <th style="width:30%">Action Label</th>
+      <th style="width:22%">Apex Class</th>
+      <th>用途 / 商業場景</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><span class="badge b-action">THERMOS · 查詢會員檔案</span></td>
+      <td><code>ThermosAF_GetMember</code></td>
+      <td>Agent 決定補償幅度前，先查會員等級 / LTV / 點數 / LINE 綁定 / 通路偏好</td>
+    </tr>
+    <tr>
+      <td><span class="badge b-action">THERMOS · 加值道歉點數</span></td>
+      <td><code>ThermosAF_AddPoints</code></td>
+      <td>客訴補償 / SLA 逾時道歉 → Agent 加值紅利（預設 100 點），真的更新 Account.Points</td>
+    </tr>
+  </tbody>
+</table>
+
+<!-- ============ UI Setup 步驟 ============ -->
+<h2>Setup UI · 建 Agentforce Bot（10 分鐘）</h2>
+
+<div class="step">
+  <div class="step-num">1</div>
+  <div class="step-body">
+    <h4>Setup → Agentforce Studio → Agents → New Agent</h4>
+    <ul class="clean">
+      <li><b>Name</b>：<code>Thermos 客服 AI</code></li>
+      <li><b>Type</b>：<b>Service Agent</b>（會自動掛 case、KM 存取權）</li>
+      <li><b>Description</b>：處理 THERMOS 膳魔師客戶的零件詢問、保固維修、會員點數三大類客服案件</li>
+      <li><b>Company</b>：皇冠金屬工業（THERMOS 台灣總代理）</li>
+      <li><b>Language</b>：Chinese (Traditional)</li>
+    </ul>
+    <div class="note">Note：CBUSDO 若尚未看到「Agentforce Studio」，Setup 搜「Agent Builder」或「Einstein Copilot」也可以進去。SDO 通常已預先啟用。</div>
+  </div>
+</div>
+
+<div class="step">
+  <div class="step-num">2</div>
+  <div class="step-body">
+    <h4>建 Topic 1 · 零件詢問</h4>
+    <ul class="clean">
+      <li>Agent 頁面 → Topics tab → <b>New Topic</b></li>
+      <li><b>Name</b>：<code>零件詢問</code></li>
+      <li><b>Classification</b>：客戶詢問特定商品的相容零件、料號、單買方式、報價</li>
+      <li><b>Scope</b>：僅處理零件相關詢問，不涉及保固、退換或會員相關問題</li>
+      <li><b>Instructions</b>：「先用 SearchParts 找零件，若客戶同意加購再用 QuoteParts 建報價」</li>
+      <li>→ Actions section → <b>Add Action</b> → 選：
+        <ul class="clean">
+          <li><span class="badge b-action">THERMOS · 搜尋相容零件</span></li>
+          <li><span class="badge b-action">THERMOS · 建立零件報價</span></li>
+        </ul>
+      </li>
+    </ul>
+  </div>
+</div>
+
+<div class="step">
+  <div class="step-num">3</div>
+  <div class="step-body">
+    <h4>建 Topic 2 · 保固維修</h4>
+    <ul class="clean">
+      <li><b>Name</b>：<code>保固維修</code></li>
+      <li><b>Classification</b>：客戶反映商品故障、要求退換、詢問保固期、要求維修</li>
+      <li><b>Scope</b>：處理 1 年保固判定、RMA 開立、物流排程。不處理零件加購或會員點數</li>
+      <li><b>Instructions</b>：「先用 CheckWarranty 判定保固狀態，若保固內用 OpenRma 開單」</li>
+      <li>→ Add Actions：
+        <ul class="clean">
+          <li><span class="badge b-action">THERMOS · 判定保固狀態</span></li>
+          <li><span class="badge b-action">THERMOS · 開立 RMA</span></li>
+        </ul>
+      </li>
+    </ul>
+  </div>
+</div>
+
+<div class="step">
+  <div class="step-num">4</div>
+  <div class="step-body">
+    <h4>建 Topic 3 · 會員點數</h4>
+    <ul class="clean">
+      <li><b>Name</b>：<code>會員點數</code></li>
+      <li><b>Classification</b>：會員點數查詢、兌換碼異常、VIP 服務要求、要求補償點數</li>
+      <li><b>Scope</b>：處理會員檔案查詢與點數調整。不處理零件或維修</li>
+      <li><b>Instructions</b>：「加點數前先用 GetMember 確認會員身份，白金以上會員補償較高（150-200 點），一般會員 100 點」</li>
+      <li>→ Add Actions：
+        <ul class="clean">
+          <li><span class="badge b-action">THERMOS · 查詢會員檔案</span></li>
+          <li><span class="badge b-action">THERMOS · 加值道歉點數</span></li>
+        </ul>
+      </li>
+    </ul>
+  </div>
+</div>
+
+<div class="step">
+  <div class="step-num">5</div>
+  <div class="step-body">
+    <h4>Activate Bot + 加到 Utility Bar</h4>
+    <ul class="clean">
+      <li>Agent 頁面右上 → <b>Activate</b> → 選擇 <code>Thermos_Demo</code> permission set</li>
+      <li>Setup → App Manager → <b>Thermos</b> app → Edit → Utility Items</li>
+      <li><b>Add Utility Item</b> → <b>Einstein Copilot / Agentforce</b> → 選剛建的 Bot</li>
+      <li><b>Label</b>：<code>Agentforce Live</code>、Icon：<code>utility:einstein</code></li>
+      <li>Save → 到 Thermos app → 底部 utility bar 有 <b>Agentforce Live</b> 按鈕 → 點開就是官方 chat panel</li>
+    </ul>
+  </div>
+</div>
+
+<!-- ============ Demo 話術 ============ -->
+<h2>Demo 話術（給皇冠 · Steven / 董座聽）</h2>
+
+<div class="card">
+  <h3 style="margin-top:0">情境 1 · 對照展示（CustomLWC vs Agentforce）</h3>
+  <div class="quote">
+「Steven，我先展示我 <b>客製化</b> 為皇冠做的 AI 面板——[點首頁 Business Chat] 這是我用 Salesforce Einstein Trust Layer 為你們寫的。3 週前開發，跟 Thermos 業務邏輯緊密整合。
+
+現在我打開<b>官方 Agentforce Bot</b>——[點 utility bar 「Agentforce Live」] <b>同一組後端 Action</b>（零件搜尋、保固判定、加點數），Salesforce 官方框架就內建這種對話能力。您導入之後，客服不用等我們客製，<b>可以在 Agent Builder 用滑鼠拖拉</b>——加 Topic、換 prompt、串新 Action，全部 IT 自己搞定。」
+  </div>
+</div>
+
+<div class="card">
+  <h3 style="margin-top:0">情境 2 · 實測對話（讓客戶親眼看到 Agent 決策）</h3>
+  <div class="quote">
+輸入：<b>「我有一個 JNL-504 的保溫瓶，墊圈想單買」</b>
+
+Agent 內部推理（Setup 開 debug 可看）：
+<span style="color:var(--brand-dk);font-weight:700">
+1. Planner → 判斷屬於「零件詢問」Topic
+2. 選 Action：THERMOS · 搜尋相容零件
+3. 從訊息抽出 modelCode = "JNL-504"
+4. 呼叫 Apex → 回傳 4 個零件 + 價格
+5. 生成自然語言回覆 + 若客戶要加購再叫 QuoteParts
+</span>
+
+Agent 回覆客戶：<i>「JNL-504 系列有 4 款相容配件：JNL-504 專用墊圈（NT$ 80）、One-Touch 杯蓋（NT$ 220）、清潔刷組（NT$ 150）、專用吸管（NT$ 60）。全部加購 NT$ 510。要幫您開報價單嗎？」</i>
+  </div>
+</div>
+
+<div class="card">
+  <h3 style="margin-top:0">情境 3 · 商業價值收斂</h3>
+  <div class="quote">
+「Steven，這個 Bot 目前 <b>3 個 Topic × 2 Action</b>——**上線後你們 IT 可以無限延伸**。
+
+想加「電商訂單物流查詢」？寫一個 <code>@InvocableMethod</code> 查 Order + THL API，掛到新 Topic。<b>不用重寫 chat UI</b>，Salesforce 官方會幫你 handle 對話流。
+
+計費：<b>$0.10 per conversation</b>。你們現在客服 5K case/月，換算 <b>NT$ 15,000/月</b>——AI 接手 tier-1（零件詢問、會員點數這種標準流程）省下 6 個客服的 30% 工時，一個月省 <b>NT$ 72,000 人力成本</b>。<b>5 倍 ROI</b>。」
+  </div>
+</div>
+
+<!-- ============ 對照 ============ -->
+<h2>對照 · 客製 LWC vs 官方 Agentforce</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th style="width:24%">面向</th>
+      <th style="width:38%">現況（客製 LWC）</th>
+      <th>官方 Agentforce Bot</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr><td><b>UI 位置</b></td><td>首頁 fab / Account 頁 fab / Case 頁 8 panel</td><td>Utility bar 右下角 (統一)</td></tr>
+    <tr><td><b>Prompt 改動</b></td><td>要動 Apex code</td><td>UI 拖拉 · Prompt Builder 宣告式</td></tr>
+    <tr><td><b>Action 註冊</b></td><td>硬編在 LWC handleActionClick</td><td>Agent Builder Topic 掛 Apex Invocable</td></tr>
+    <tr><td><b>Planner 決策</b></td><td>沒有 · 每個 button 綁死一個 prompt</td><td>LLM 自主決策：判斷 Topic → 選 Action</td></tr>
+    <tr><td><b>對話上下文</b></td><td>要自己在 LWC 存 history</td><td>Bot 自動維持 conversation state</td></tr>
+    <tr><td><b>計費模式</b></td><td>Trust Layer credits</td><td>Per Conversation ($0.10 起)</td></tr>
+    <tr><td><b>擴充速度</b></td><td>新功能 1-2 天客製</td><td>新 Topic + Action 30 分鐘</td></tr>
+    <tr><td><b>Data Cloud 整合</b></td><td>SOQL 直接查</td><td>可掛 DMO Grounding</td></tr>
+  </tbody>
+</table>
+
+<div class="card tight" style="background:var(--brand-tint);border-color:var(--brand)">
+  <b style="color:var(--brand-dk)">一句話總結：</b>
+  <div style="font-size:13px;margin-top:6px">
+    <b>客製 LWC</b> = 為皇冠寫死的 demo，好看好懂但擴充要工程師。<br>
+    <b>Agentforce Bot</b> = 皇冠 IT 上線後可以自己一直加新能力的官方框架。<br>
+    <b>兩者共用同一組 Apex Action</b>——這是為什麼 Setup 只花 10 分鐘，因為後端已經幫你搭好了。
+  </div>
+</div>
+
+<div class="foot">
+  Thermos Agentforce Setup · Apex 6 Invocable Actions 已於 2026-07-15 部署至 CBUSDO ·
+  <a href="../" style="color:var(--brand-dk);text-decoration:none">← sf-schema-docs</a>
+</div>
+
+</div>
+</body>
+</html>

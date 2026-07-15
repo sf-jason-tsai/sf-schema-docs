@@ -66,6 +66,11 @@ const PAGES = [
         title: 'THERMOS 膳魔師 · Demo 文件集 Landing'
     },
     {
+        src: 'C:/Users/bingyan.tsai/Desktop/Claude/thermos-demo/specs/THERMOS_Agentforce_Setup.html',
+        dest: 'thermos/agentforce-setup.html',
+        title: 'THERMOS · Agentforce Studio 設定指南'
+    },
+    {
         src: 'C:/Users/bingyan.tsai/Desktop/Claude/thermos-demo/THERMOS_Case_Page_Delivery.html',
         dest: 'thermos/case-page-delivery.html',
         title: 'THERMOS · Case Record Page 客製化交付報告'
