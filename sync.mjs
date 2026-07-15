@@ -61,6 +61,11 @@ const PAGES = [
     },
     // ─── THERMOS 膳魔師 ───
     {
+        src: 'C:/Users/bingyan.tsai/Desktop/Claude/thermos-demo/specs/index.html',
+        dest: 'thermos/index.html',
+        title: 'THERMOS 膳魔師 · Demo 文件集 Landing'
+    },
+    {
         src: 'C:/Users/bingyan.tsai/Desktop/Claude/thermos-demo/THERMOS_Case_Page_Delivery.html',
         dest: 'thermos/case-page-delivery.html',
         title: 'THERMOS · Case Record Page 客製化交付報告'

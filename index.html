@@ -3,227 +3,423 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Salesforce Schema Docs · sf-jason-tsai</title>
+<title>Salesforce Demo Docs · sf-jason-tsai</title>
 <style>
 :root {
     --slds-blue:#0176D3; --slds-blue-dk:#014486;
-    --wine:#B8395C; --wine-dk:#7A2440;
-    --ink:#181818; --mut:#706E6B; --border:#DDDBDA; --bg:#F3F3F3; --card:#fff;
+    --ink:#181818; --mut:#706E6B; --border:#DDDBDA; --bg:#F1EFED; --card:#fff;
+    --tint:#F3F2F2;
+
+    /* Per-ORG color tokens */
+    --cbusdo-brand:#E4002B;      /* Thermos 紅 */
+    --cbusdo-brand-dk:#3D0F1B;
+    --cbusdo-brand-tint:#FDF6F7;
+
+    --firstsdo-brand:#5C1EAD;    /* Uniicreative 紫 */
+    --firstsdo-brand-dk:#3D0F70;
+    --firstsdo-brand-tint:#F1E7FE;
+
+    --ref-brand:#0176D3;         /* Reference · SLDS 藍 */
+    --ref-brand-dk:#014486;
+    --ref-brand-tint:#EEF4FF;
 }
 * { box-sizing:border-box; }
 body {
-    margin:0; font-family:'Salesforce Sans','SF Pro Text',-apple-system,"Segoe UI","Noto Sans TC",sans-serif;
+    margin:0;
+    font-family:'Salesforce Sans','SF Pro Text',-apple-system,"Segoe UI","Noto Sans TC",sans-serif;
     background:var(--bg); color:var(--ink); line-height:1.6; font-size:15px;
     -webkit-font-smoothing:antialiased;
 }
+
+/* ===== Hero ===== */
 .hero {
-    background:linear-gradient(135deg,var(--slds-blue-dk),var(--slds-blue));
-    color:#fff; padding:60px 32px 50px; text-align:center;
+    background:#181818;
+    color:#fff;
+    padding:56px 32px 40px;
+    text-align:center;
+    position:relative;
+    overflow:hidden;
 }
-.hero__cloud {
-    display:inline-flex; align-items:center; justify-content:center;
-    width:60px; height:60px; border-radius:14px;
-    background:rgba(255,255,255,0.15); backdrop-filter:blur(6px);
-    font-size:32px; margin-bottom:18px;
+.hero::before {
+    content:""; position:absolute; top:-100px; right:-100px;
+    width:300px; height:300px; border-radius:50%;
+    background:radial-gradient(circle, rgba(228,0,43,0.18), transparent 70%);
 }
+.hero::after {
+    content:""; position:absolute; bottom:-100px; left:-100px;
+    width:300px; height:300px; border-radius:50%;
+    background:radial-gradient(circle, rgba(92,30,173,0.15), transparent 70%);
+}
+.hero__inner { position:relative; z-index:1; }
 .hero__title {
-    font-size:34px; font-weight:900; margin:0 0 10px;
+    font-size:32px; font-weight:900; margin:0 0 10px;
     letter-spacing:-0.5px;
 }
 .hero__sub {
-    font-size:15px; opacity:0.92; max-width:720px; margin:0 auto;
-    line-height:1.65;
+    font-size:14px; color:rgba(255,255,255,0.7);
+    max-width:720px; margin:0 auto; line-height:1.7;
 }
 .hero__meta {
-    display:inline-flex; gap:14px; margin-top:24px; flex-wrap:wrap;
+    display:inline-flex; gap:10px; margin-top:22px; flex-wrap:wrap;
     justify-content:center;
 }
 .hero__chip {
-    padding:5px 14px; background:rgba(255,255,255,0.18);
-    border-radius:999px; font-size:12px; font-weight:600;
-    backdrop-filter:blur(4px);
+    padding:4px 12px; background:rgba(255,255,255,0.12);
+    border:1px solid rgba(255,255,255,0.2);
+    border-radius:999px; font-size:11px; font-weight:600;
+    color:#fff;
 }
+
+/* ===== Container ===== */
 .container {
-    max-width:1100px; margin:-30px auto 0; padding:0 24px 60px;
-    position:relative;
+    max-width:1120px; margin:0 auto; padding:0 24px 60px;
 }
+
+/* ===== Section ===== */
+.section {
+    margin-top:44px;
+}
+.section-hd {
+    display:flex; align-items:center; gap:12px;
+    padding-bottom:12px; margin-bottom:18px;
+    border-bottom:2px solid var(--ink);
+}
+.section-hd.cbusdo   { border-bottom-color:var(--cbusdo-brand); }
+.section-hd.firstsdo { border-bottom-color:var(--firstsdo-brand); }
+.section-hd.ref      { border-bottom-color:var(--ref-brand); }
+
+.section-org {
+    display:inline-flex; align-items:center; gap:6px;
+    padding:5px 12px;
+    border-radius:4px;
+    font-size:11px; font-weight:800;
+    letter-spacing:1.5px; text-transform:uppercase;
+    font-family:'SF Mono',Consolas,monospace;
+}
+.section-org.cbusdo   { background:var(--cbusdo-brand);    color:#fff; }
+.section-org.firstsdo { background:var(--firstsdo-brand);  color:#fff; }
+.section-org.ref      { background:var(--ref-brand);       color:#fff; }
+
+.section-title {
+    font-size:18px; font-weight:800; letter-spacing:-0.3px;
+    margin:0; color:var(--ink);
+}
+.section-sub {
+    font-size:12px; color:var(--mut); margin-left:auto;
+    display:flex; align-items:center; gap:5px;
+}
+.section-sub-count {
+    font-family:'SF Mono',Consolas,monospace;
+    background:var(--tint); padding:2px 8px; border-radius:3px;
+    font-weight:700; color:var(--ink);
+}
+
+.section-note {
+    font-size:12.5px; color:var(--mut);
+    margin:-8px 0 16px;
+    padding:8px 14px;
+    background:var(--tint);
+    border-left:3px solid var(--border);
+    border-radius:3px;
+    line-height:1.65;
+}
+.section-note.cbusdo   { border-left-color:var(--cbusdo-brand);   background:var(--cbusdo-brand-tint); }
+.section-note.firstsdo { border-left-color:var(--firstsdo-brand); background:var(--firstsdo-brand-tint); }
+.section-note.ref      { border-left-color:var(--ref-brand);      background:var(--ref-brand-tint); }
+
+/* ===== Cards Grid ===== */
 .cards {
-    display:grid; grid-template-columns:repeat(3,1fr); gap:18px;
+    display:grid; grid-template-columns:repeat(3,1fr); gap:16px;
 }
 @media (max-width:900px) { .cards { grid-template-columns:1fr; } }
+
 .card {
-    background:var(--card); border-radius:14px;
-    padding:26px 24px 22px;
-    box-shadow:0 6px 24px rgba(1,118,211,0.10), 0 1px 3px rgba(0,0,0,0.05);
+    background:var(--card);
     border:1px solid var(--border);
-    transition:transform 0.15s, box-shadow 0.15s;
+    border-left-width:3px;
+    border-radius:8px;
+    padding:22px 22px 16px;
     text-decoration:none; color:inherit;
     display:flex; flex-direction:column;
-    position:relative; overflow:hidden;
+    transition:all 0.15s ease;
+    position:relative;
 }
-.card::before {
-    content:""; position:absolute; top:-40px; right:-40px;
-    width:140px; height:140px; border-radius:50%;
-    background:radial-gradient(circle, rgba(1,118,211,0.06), transparent 70%);
-}
+.card.cbusdo   { border-left-color:var(--cbusdo-brand); }
+.card.firstsdo { border-left-color:var(--firstsdo-brand); }
+.card.ref      { border-left-color:var(--ref-brand); }
+
 .card:hover {
-    transform:translateY(-4px);
-    box-shadow:0 14px 40px rgba(1,118,211,0.18), 0 3px 8px rgba(0,0,0,0.08);
+    transform:translateY(-2px);
+    box-shadow:0 8px 24px rgba(0,0,0,0.08);
 }
+.card.cbusdo:hover   { border-color:var(--cbusdo-brand);   box-shadow:0 8px 24px rgba(228,0,43,0.14); }
+.card.firstsdo:hover { border-color:var(--firstsdo-brand); box-shadow:0 8px 24px rgba(92,30,173,0.14); }
+.card.ref:hover      { border-color:var(--ref-brand);      box-shadow:0 8px 24px rgba(1,118,211,0.14); }
+
 .card__badge {
     display:inline-block; padding:3px 10px;
-    border-radius:999px; font-size:10.5px; font-weight:700;
-    letter-spacing:1.2px; margin-bottom:12px;
-    background:#EEF4FF; color:var(--slds-blue);
+    border-radius:3px; font-size:10px; font-weight:800;
+    letter-spacing:1.4px; margin-bottom:12px;
+    width:fit-content;
+    text-transform:uppercase;
 }
-.card__badge--wine { background:#FAE7EC; color:var(--wine-dk); }
-.card__badge--purple { background:#F1E7FE; color:#5C1EAD; }
+.card.cbusdo   .card__badge { background:var(--cbusdo-brand-tint);   color:var(--cbusdo-brand-dk); }
+.card.firstsdo .card__badge { background:var(--firstsdo-brand-tint); color:var(--firstsdo-brand-dk); }
+.card.ref      .card__badge { background:var(--ref-brand-tint);      color:var(--ref-brand-dk); }
+
 .card__title {
-    font-size:19px; font-weight:800; margin:0 0 8px;
-    line-height:1.3;
+    font-size:17px; font-weight:800; margin:0 0 8px;
+    line-height:1.3; letter-spacing:-0.2px;
 }
 .card__desc {
-    font-size:13px; color:var(--mut); line-height:1.6;
+    font-size:12.5px; color:var(--mut); line-height:1.65;
     flex:1 1 auto;
+    margin:0 0 12px;
 }
 .card__stats {
-    display:flex; gap:12px; margin:14px 0 12px;
+    display:flex; gap:6px; margin:0 0 12px;
     flex-wrap:wrap;
 }
 .card__stat {
-    font-size:11px; color:var(--mut);
-    padding:3px 8px; background:#F8F8F7; border-radius:4px;
+    font-size:10.5px;
+    padding:2px 8px; background:var(--tint); border-radius:3px;
     border:1px solid var(--border);
     font-family:'SF Mono',Consolas,monospace;
+    font-weight:600;
+    color:var(--ink);
 }
-.card__stat strong { color:var(--slds-blue); font-weight:700; }
+.card__stat strong { font-weight:800; }
+.card.cbusdo   .card__stat strong { color:var(--cbusdo-brand-dk); }
+.card.firstsdo .card__stat strong { color:var(--firstsdo-brand-dk); }
+.card.ref      .card__stat strong { color:var(--ref-brand-dk); }
+
 .card__foot {
     display:flex; align-items:center; justify-content:space-between;
-    padding-top:14px; margin-top:auto;
+    padding-top:12px; margin-top:auto;
     border-top:1px solid var(--border);
+    font-size:12px;
 }
 .card__link {
-    color:var(--slds-blue); font-weight:700; font-size:13px;
+    font-weight:800; font-size:12.5px;
     display:inline-flex; align-items:center; gap:4px;
+}
+.card.cbusdo   .card__link { color:var(--cbusdo-brand); }
+.card.firstsdo .card__link { color:var(--firstsdo-brand); }
+.card.ref      .card__link { color:var(--ref-brand); }
+
+.card__meta {
+    font-family:'SF Mono',Consolas,monospace;
+    font-size:10.5px; color:var(--mut);
+    letter-spacing:0.3px;
 }
 .card__arrow { transition:transform 0.15s; }
 .card:hover .card__arrow { transform:translateX(4px); }
 
+/* ===== Foot ===== */
 .foot {
-    text-align:center; padding:30px 20px; color:var(--mut); font-size:12px;
+    text-align:center; padding:26px 20px; color:var(--mut); font-size:12px;
     background:var(--card); border-top:1px solid var(--border);
+    margin-top:40px;
 }
-.foot a { color:var(--slds-blue); text-decoration:none; }
+.foot a { color:var(--ink); text-decoration:none; font-weight:700; }
+.foot a:hover { color:var(--cbusdo-brand); }
 </style>
 </head>
 <body>
 
+<!-- ===== HERO ===== -->
 <div class="hero">
-    <div class="hero__cloud">☁</div>
-    <h1 class="hero__title">Salesforce Schema Docs</h1>
-    <p class="hero__sub">
-        Salesforce SE 帶客戶做 Demo 時的技術文檔集 · 涵蓋 Object Schema、Data Cloud 敘事、Care Cloud Demo 全紀錄
-    </p>
-    <div class="hero__meta">
-        <span class="hero__chip">🔍 互動式搜尋</span>
-        <span class="hero__chip">📊 302 個 Account 欄位</span>
-        <span class="hero__chip">🎨 SLDS 官方樣式</span>
-        <span class="hero__chip">🚀 完全 static · 零 backend</span>
+    <div class="hero__inner">
+        <h1 class="hero__title">Salesforce SE · Demo Docs</h1>
+        <p class="hero__sub">
+            按 Org 分類的 demo 專案文件集。涵蓋 CBUSDO（Thermos / 配方時代）、FirstSDO（有你共創）與跨 org 通用參考。
+        </p>
+        <div class="hero__meta">
+            <span class="hero__chip">2 Orgs</span>
+            <span class="hero__chip">3 Demo Projects</span>
+            <span class="hero__chip">Einstein Trust Layer</span>
+            <span class="hero__chip">Static · 零 backend</span>
+        </div>
     </div>
 </div>
 
 <div class="container">
-    <div class="cards">
-        <a href="account-schema.html" class="card">
-            <span class="card__badge">SCHEMA VIEWER</span>
-            <div class="card__title">Salesforce Account · Schema</div>
-            <p class="card__desc">
-                Account object 完整欄位表 · 標準 / 客製 / Person Account __pc 三分類 · 支援即時搜尋、篩選、必填/選填切換
-            </p>
-            <div class="card__stats">
-                <span class="card__stat"><strong>302</strong> fields</span>
-                <span class="card__stat"><strong>83</strong> __pc</span>
-                <span class="card__stat"><strong>103</strong> custom</span>
-            </div>
-            <div class="card__foot">
-                <span class="card__link">開啟 <span class="card__arrow">→</span></span>
-                <span class="card__stat">CBUSDO</span>
-            </div>
-        </a>
 
-        <a href="healthformula-project.html" class="card">
-            <span class="card__badge card__badge--wine">DEMO PROJECT</span>
-            <div class="card__title">配方時代 · Care Cloud Demo</div>
-            <p class="card__desc">
-                DTC 保健食品品牌 demo 專案完整文件 · Person Account + Service Cloud + Agentforce + Slack 全端整合 · Objects / LWCs / Apex / Journey
-            </p>
-            <div class="card__stats">
-                <span class="card__stat"><strong>10</strong> Objects</span>
-                <span class="card__stat"><strong>10</strong> LWCs</span>
-                <span class="card__stat"><strong>4,600+</strong> rows</span>
+    <!-- ============ SECTION 1 · CBUSDO ============ -->
+    <div class="section">
+        <div class="section-hd cbusdo">
+            <span class="section-org cbusdo">● CBUSDO</span>
+            <h2 class="section-title">B2C Sales + Service Cloud Demos</h2>
+            <div class="section-sub">
+                <span>Person Account · Einstein Trust Layer</span>
+                <span class="section-sub-count">2 專案</span>
             </div>
-            <div class="card__foot">
-                <span class="card__link">開啟 <span class="card__arrow">→</span></span>
-                <span class="card__stat">HealthFormula</span>
-            </div>
-        </a>
+        </div>
+        <div class="section-note cbusdo">
+            <b>CBUSDO 是 Salesforce Trailhead Enterprise Demo Org</b>，語言 zh_TW、Person Account 已啟用、多幣別、Einstein Trust Layer 可用。
+            本 org 上有兩個進行中的 B2C demo：<b>Thermos 膳魔師</b>（皇冠金屬工業，Sales+Service）與 <b>配方時代 HealthFormula</b>（DTC 保健食品，Care Cloud）。
+        </div>
 
-        <a href="data-cloud-narrative.html" class="card">
-            <span class="card__badge card__badge--purple">DATA CLOUD</span>
-            <div class="card__title">Data Cloud · Unified Individual</div>
-            <p class="card__desc">
-                Data Cloud 客戶統一資料層完整敘事 · 5 源系統 → DLO → Identity Resolution → UDMO → Data Action 回填 CRM · 含 SAQL 範例與資料流動 SVG 圖
-            </p>
-            <div class="card__stats">
-                <span class="card__stat"><strong>6</strong> DMOs</span>
-                <span class="card__stat"><strong>4</strong> Insights</span>
-                <span class="card__stat"><strong>5</strong> Sources</span>
-            </div>
-            <div class="card__foot">
-                <span class="card__link">開啟 <span class="card__arrow">→</span></span>
-                <span class="card__stat">Unified Data</span>
-            </div>
-        </a>
+        <div class="cards">
 
-        <a href="salesforce-clouds/" class="card">
-            <span class="card__badge" style="background:#DDE9FB; color:#2167DD;">6 CLOUDS OVERVIEW</span>
-            <div class="card__title">Salesforce 6 大雲 · Object & Schema</div>
-            <p class="card__desc">
-                Service · Sales · Revenue · Commerce · Manufacturing · Marketing · 每朵雲定位、核心能力、130+ 核心物件與關聯，一頁看完
-            </p>
-            <div class="card__stats">
-                <span class="card__stat"><strong>6</strong> Clouds</span>
-                <span class="card__stat"><strong>130+</strong> Objects</span>
-                <span class="card__stat"><strong>1</strong> Platform</span>
-            </div>
-            <div class="card__foot">
-                <span class="card__link">開啟 <span class="card__arrow">→</span></span>
-                <span class="card__stat">SE Reference</span>
-            </div>
-        </a>
+            <a href="thermos/" class="card cbusdo">
+                <span class="card__badge">THERMOS · SALES+SERVICE</span>
+                <div class="card__title">Thermos 膳魔師 · Agentforce Demo</div>
+                <p class="card__desc">
+                    皇冠金屬工業（B2C）· 30 會員／90 訂單／24 案件／30 商品／20 據點。已 upsell Agentforce + Einstein Trust Layer + 知識庫 Agent。
+                    首頁 Business Chat、Account Customer Chat、Case 6 個 AI panel 全走真 LLM，Action 建 Task/Email 真燒 token。
+                </p>
+                <div class="card__stats">
+                    <span class="card__stat"><strong>12</strong> Tabs</span>
+                    <span class="card__stat"><strong>8</strong> LLM Panels</span>
+                    <span class="card__stat"><strong>Real</strong> Records</span>
+                </div>
+                <div class="card__foot">
+                    <span class="card__link">開啟 <span class="card__arrow">→</span></span>
+                    <span class="card__meta">thermos/</span>
+                </div>
+            </a>
 
-        <a href="ycc/" class="card">
-            <span class="card__badge" style="background:#FFE7EA; color:#E14C5B;">YCC · MC ON CORE</span>
-            <div class="card__title">有你共創 · Marketing Cloud Growth</div>
-            <p class="card__desc">
-                IP 授權經銷 demo · Data Cloud + Marketing Cloud on Core · 1500 Members / 5000 Orders / 6 Segments / 6 Campaign Flows · Labubu/Disney/Sanrio 三大 IP
-            </p>
-            <div class="card__stats">
-                <span class="card__stat"><strong>5</strong> Objects</span>
-                <span class="card__stat"><strong>6</strong> LWCs</span>
-                <span class="card__stat"><strong>12.5K</strong> Items</span>
-            </div>
-            <div class="card__foot">
-                <span class="card__link">開啟 <span class="card__arrow">→</span></span>
-                <span class="card__stat">CBUSDO / MCoC</span>
-            </div>
-        </a>
+            <a href="healthformula-project.html" class="card cbusdo">
+                <span class="card__badge">配方時代 · CARE CLOUD</span>
+                <div class="card__title">配方時代 · Care Cloud Demo</div>
+                <p class="card__desc">
+                    DTC 保健食品品牌，Person Account + Service Cloud + Agentforce + Slack 全端整合。
+                    50 客戶／500 訂單／120 case／2500 channel interactions。含 Objects / LWCs / Apex / Journey 完整規格。
+                </p>
+                <div class="card__stats">
+                    <span class="card__stat"><strong>10</strong> Objects</span>
+                    <span class="card__stat"><strong>10</strong> LWCs</span>
+                    <span class="card__stat"><strong>4,600+</strong> rows</span>
+                </div>
+                <div class="card__foot">
+                    <span class="card__link">開啟 <span class="card__arrow">→</span></span>
+                    <span class="card__meta">HealthFormula</span>
+                </div>
+            </a>
+
+            <a href="account-schema.html" class="card cbusdo">
+                <span class="card__badge">SCHEMA VIEWER</span>
+                <div class="card__title">Account Schema · 302 Fields</div>
+                <p class="card__desc">
+                    CBUSDO 上 Account object 完整欄位表。標準 / 客製 / Person Account __pc 三分類，支援即時搜尋、篩選、必填/選填切換。
+                    給客戶 IT 窗口看資料 model 的入口。
+                </p>
+                <div class="card__stats">
+                    <span class="card__stat"><strong>302</strong> fields</span>
+                    <span class="card__stat"><strong>83</strong> __pc</span>
+                    <span class="card__stat"><strong>103</strong> custom</span>
+                </div>
+                <div class="card__foot">
+                    <span class="card__link">開啟 <span class="card__arrow">→</span></span>
+                    <span class="card__meta">Schema Ref</span>
+                </div>
+            </a>
+
+        </div>
     </div>
+
+    <!-- ============ SECTION 2 · FirstSDO ============ -->
+    <div class="section">
+        <div class="section-hd firstsdo">
+            <span class="section-org firstsdo">● FirstSDO</span>
+            <h2 class="section-title">Data 360 + Marketing Cloud on Core</h2>
+            <div class="section-sub">
+                <span>Unified Individual · Data Action</span>
+                <span class="section-sub-count">1 專案</span>
+            </div>
+        </div>
+        <div class="section-note firstsdo">
+            <b>FirstSDO 是 Salesforce 內部 Data Cloud + MC Advanced 專用 SDO</b>。目前放 <b>有你共創（Uniicreative）</b> demo：數位文創／IP 授權，決策者 Edgar 楊。
+            使用者（SE）負責 Data 360 + MC Advanced 部分；Partner 天新資訊負責 API / LINE / App。目標會員 80–100 萬，2027 Q1 上線。
+        </div>
+
+        <div class="cards">
+
+            <a href="ycc/" class="card firstsdo">
+                <span class="card__badge">YCC · MC ON CORE</span>
+                <div class="card__title">有你共創 · Marketing Cloud Growth</div>
+                <p class="card__desc">
+                    IP 授權經銷 demo · Data Cloud + Marketing Cloud on Core。
+                    1,500 Members / 5,000 Orders / 6 Segments / 6 Campaign Flows · Labubu/Disney/Sanrio 三大 IP。
+                    含 20 分鐘 Demo Script 與 Data Cloud 敘事。
+                </p>
+                <div class="card__stats">
+                    <span class="card__stat"><strong>5</strong> Objects</span>
+                    <span class="card__stat"><strong>6</strong> LWCs</span>
+                    <span class="card__stat"><strong>12.5K</strong> Items</span>
+                </div>
+                <div class="card__foot">
+                    <span class="card__link">開啟 <span class="card__arrow">→</span></span>
+                    <span class="card__meta">ycc/</span>
+                </div>
+            </a>
+
+        </div>
+    </div>
+
+    <!-- ============ SECTION 3 · Reference ============ -->
+    <div class="section">
+        <div class="section-hd ref">
+            <span class="section-org ref">● Reference</span>
+            <h2 class="section-title">跨 Org · 通用敘事與參考文件</h2>
+            <div class="section-sub">
+                <span>不綁定 org · 可跨案套用</span>
+                <span class="section-sub-count">2 文件</span>
+            </div>
+        </div>
+        <div class="section-note ref">
+            <b>不特定 org 的通用文件</b>，任何 demo 都可以引用。Data Cloud 敘事解釋 5 源系統→DLO→UDMO→Data Action 的資料流；
+            6 大雲 overview 給客戶 IT 窗口做 Salesforce ecosystem 定位。
+        </div>
+
+        <div class="cards">
+
+            <a href="data-cloud-narrative.html" class="card ref">
+                <span class="card__badge">DATA CLOUD</span>
+                <div class="card__title">Data 360 · Unified Individual</div>
+                <p class="card__desc">
+                    Data Cloud 客戶統一資料層完整敘事。5 源系統 → DLO → Identity Resolution → UDMO → Data Action 回填 CRM。
+                    含 SAQL 範例與資料流動 SVG 圖，適合客戶 IT / Data 團隊。
+                </p>
+                <div class="card__stats">
+                    <span class="card__stat"><strong>6</strong> DMOs</span>
+                    <span class="card__stat"><strong>4</strong> Insights</span>
+                    <span class="card__stat"><strong>5</strong> Sources</span>
+                </div>
+                <div class="card__foot">
+                    <span class="card__link">開啟 <span class="card__arrow">→</span></span>
+                    <span class="card__meta">Narrative</span>
+                </div>
+            </a>
+
+            <a href="salesforce-clouds/" class="card ref">
+                <span class="card__badge">6 CLOUDS OVERVIEW</span>
+                <div class="card__title">Salesforce 6 大雲 · Object 全覽</div>
+                <p class="card__desc">
+                    Service · Sales · Revenue · Commerce · Manufacturing · Marketing · 每朵雲定位、核心能力、130+ 核心物件與關聯，一頁看完。
+                    客戶第一次接觸 Salesforce 平台的定錨材料。
+                </p>
+                <div class="card__stats">
+                    <span class="card__stat"><strong>6</strong> Clouds</span>
+                    <span class="card__stat"><strong>130+</strong> Objects</span>
+                    <span class="card__stat"><strong>1</strong> Platform</span>
+                </div>
+                <div class="card__foot">
+                    <span class="card__link">開啟 <span class="card__arrow">→</span></span>
+                    <span class="card__meta">SE Reference</span>
+                </div>
+            </a>
+
+        </div>
+    </div>
+
 </div>
 
+<!-- ===== FOOT ===== -->
 <div class="foot">
-    Salesforce SE Demo Docs · Built with SLDS + vanilla HTML/JS ·
-    <a href="https://github.com/sf-jason-tsai/sf-schema-docs">GitHub</a>
+    Salesforce SE Demo Docs · Built with vanilla HTML/CSS · Zero backend ·
+    <a href="https://github.com/sf-jason-tsai/sf-schema-docs">GitHub Repo</a>
 </div>
 
 </body>

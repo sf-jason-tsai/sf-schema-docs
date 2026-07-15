@@ -1,0 +1,144 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<title>THERMOS 膳魔師 · Demo 文件集</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<style>
+  :root{
+    --ink:#181818;--sub:#706E6B;--mute:#B0AFAE;--line:#DDDBDA;--tint:#F3F2F2;
+    --brand:#E4002B;--brand-dk:#3D0F1B;--brand-tint:#FDF6F7;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0;background:#F1EFED;font-family:"Salesforce Sans",-apple-system,"PingFang TC","Microsoft JhengHei",sans-serif;color:var(--ink);line-height:1.6}
+  .wrap{max-width:1080px;margin:0 auto;padding:36px 32px 60px}
+
+  .tag{font-size:11px;letter-spacing:2px;color:var(--sub);text-transform:uppercase;font-weight:600}
+  h1{font-size:28px;letter-spacing:-0.5px;margin:6px 0 8px;color:var(--brand-dk)}
+  .lede{font-size:14px;color:var(--sub);line-height:1.7;max-width:760px}
+
+  .backlink{display:inline-flex;align-items:center;gap:6px;font-size:12px;color:var(--sub);text-decoration:none;margin-bottom:16px;padding:4px 10px;background:#fff;border:1px solid var(--line);border-radius:20px}
+  .backlink:hover{color:var(--brand-dk);border-color:var(--brand)}
+
+  h2{font-size:15px;margin:32px 0 12px;padding-bottom:8px;border-bottom:2px solid var(--brand-dk);letter-spacing:0.5px;text-transform:uppercase;color:var(--brand-dk)}
+
+  .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:16px}
+  @media (max-width:800px){.grid{grid-template-columns:1fr}}
+
+  .card{
+    background:#fff;border:1px solid var(--line);border-radius:8px;
+    padding:20px 22px;text-decoration:none;color:inherit;
+    display:flex;flex-direction:column;gap:8px;
+    transition:all 0.15s ease;position:relative;overflow:hidden;
+  }
+  .card:hover{border-color:var(--brand);box-shadow:0 6px 16px rgba(228,0,43,0.10);transform:translateY(-2px)}
+  .card::before{content:"";position:absolute;top:0;left:0;bottom:0;width:3px;background:var(--brand)}
+
+  .card-tag{font-size:10px;letter-spacing:1.4px;color:var(--brand-dk);font-weight:700;text-transform:uppercase;background:var(--brand-tint);padding:3px 8px;border-radius:3px;display:inline-block;width:fit-content}
+  .card-title{font-size:16px;font-weight:800;color:var(--ink);letter-spacing:-0.2px;line-height:1.35}
+  .card-desc{font-size:12.5px;color:var(--sub);line-height:1.6;flex:1}
+  .card-meta{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+  .card-meta span{font-size:10.5px;padding:2px 8px;background:var(--tint);color:var(--ink);border-radius:3px;font-family:Consolas,monospace;font-weight:600;letter-spacing:0.3px}
+  .card-foot{display:flex;align-items:center;justify-content:space-between;padding-top:12px;margin-top:8px;border-top:1px solid var(--line);font-size:11.5px}
+  .card-open{color:var(--brand);font-weight:700}
+  .card-status{color:var(--sub);font-size:10.5px}
+
+  .foot{margin-top:36px;padding-top:16px;border-top:1px solid var(--line);font-size:11px;color:var(--sub);line-height:1.6;text-align:center}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<a class="backlink" href="../">← 返回 sf-schema-docs</a>
+
+<div class="tag">CBUSDO · 皇冠金屬工業（THERMOS 膳魔師）</div>
+<h1>Thermos 膳魔師 Demo · 文件集</h1>
+<p class="lede">
+  B2C Sales + Service Cloud demo，Person Account 30 位會員／90 訂單／24 客服案件／30 商品／20 據點。
+  代理 6 大品牌：THERMOS、alfi、Lifefactory、BergHOFF、BEKA、THERMOcafe。已 upsell Agentforce + Einstein Trust Layer + 知識庫 Agent。
+</p>
+
+<h2>Agentforce & AI</h2>
+<div class="grid">
+
+  <a class="card" href="ai-features.html">
+    <span class="card-tag">AI 功能總覽</span>
+    <div class="card-title">Thermos APP · 各 Tab 的 AI 功能</div>
+    <div class="card-desc">
+      12 個 Tab × AI 功能對照表。誠實區分：真燒 token 的 8 個生成式 AI panel（首頁 Business Chat / Account Customer Chat / Case 6 個 AI）vs 規則式 KM 搜尋。附 Einstein Trust Layer 資料流佐證。
+    </div>
+    <div class="card-meta">
+      <span>12 Tabs</span>
+      <span>8 LLM</span>
+      <span>Trust Layer</span>
+    </div>
+    <div class="card-foot">
+      <span class="card-open">開啟 →</span>
+      <span class="card-status">誠實對照版</span>
+    </div>
+  </a>
+
+  <a class="card" href="THERMOS_AI_Features.html">
+    <span class="card-tag">AI Features Alt</span>
+    <div class="card-title">THERMOS AI Features · 完整版</div>
+    <div class="card-desc">
+      同上 AI 功能對照的完整技術版本，含 Apex 檔案路徑、行號對照、EinsteinService 資料流圖、SOQL 驗證範例。
+    </div>
+    <div class="card-meta">
+      <span>Technical</span>
+      <span>Apex refs</span>
+    </div>
+    <div class="card-foot">
+      <span class="card-open">開啟 →</span>
+      <span class="card-status">技術窗口版</span>
+    </div>
+  </a>
+
+</div>
+
+<h2>Case Record Page</h2>
+<div class="grid">
+
+  <a class="card" href="../thermos/case-page-delivery.html">
+    <span class="card-tag">Case Page Delivery</span>
+    <div class="card-title">Case Record Page · 交付報告</div>
+    <div class="card-desc">
+      Case 頁完整交付文件。Priority Score 加權評分、AI Case Summary（3 段結構化）、Einstein Case Classification、Reply Recommendations、Service Assistant chat 全數走 Einstein Trust Layer。含 Agent Actions 8 個動作規格與 audit trail。
+    </div>
+    <div class="card-meta">
+      <span>17 Panels</span>
+      <span>8 LLM funcs</span>
+      <span>Real Records</span>
+    </div>
+    <div class="card-foot">
+      <span class="card-open">開啟 →</span>
+      <span class="card-status">Production</span>
+    </div>
+  </a>
+
+  <a class="card" href="../thermos/case-page-mockup.html">
+    <span class="card-tag">Case Page Mockup</span>
+    <div class="card-title">Case Record Page · v1 Mockup</div>
+    <div class="card-desc">
+      早期設計稿。3 欄 Service Console 佈局：左欄客戶＋Proactive、中欄 Einstein AI 引擎（Priority Score / AI Summary / Work Summary）、右欄 Service Assistant chat（RAG + 引用來源）。
+    </div>
+    <div class="card-meta">
+      <span>3-Col Layout</span>
+      <span>Design Ref</span>
+    </div>
+    <div class="card-foot">
+      <span class="card-open">開啟 →</span>
+      <span class="card-status">v1 設計稿</span>
+    </div>
+  </a>
+
+</div>
+
+<div class="foot">
+  Thermos Demo · CBUSDO 部署狀態 2026-07-15 ·
+  <a href="../" style="color:var(--brand-dk);text-decoration:none">← sf-schema-docs</a>
+</div>
+
+</div>
+</body>
+</html>
