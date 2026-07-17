@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<title>建商-EE · Demo 文件集</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<style>
+  :root{
+    --ink:#181818;--sub:#706E6B;--mute:#B0AFAE;--line:#DDDBDA;--tint:#F3F2F2;
+    --brand:#009EDB;--brand-dk:#004C6B;--brand-tint:#EAF6FD;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0;background:#F1EFED;font-family:"Salesforce Sans",-apple-system,"PingFang TC","Microsoft JhengHei",sans-serif;color:var(--ink);line-height:1.6}
+  .wrap{max-width:1080px;margin:0 auto;padding:36px 32px 60px}
+  .tag{font-size:11px;letter-spacing:2px;color:var(--sub);text-transform:uppercase;font-weight:600}
+  h1{font-size:28px;letter-spacing:-0.5px;margin:6px 0 8px;color:var(--brand-dk)}
+  .lede{font-size:14px;color:var(--sub);line-height:1.7;max-width:760px}
+  .backlink{display:inline-flex;align-items:center;gap:6px;font-size:12px;color:var(--sub);text-decoration:none;margin-bottom:16px;padding:4px 10px;background:#fff;border:1px solid var(--line);border-radius:20px}
+  .backlink:hover{color:var(--brand-dk);border-color:var(--brand)}
+  h2{font-size:15px;margin:32px 0 12px;padding-bottom:8px;border-bottom:2px solid var(--brand-dk);letter-spacing:0.5px;text-transform:uppercase;color:var(--brand-dk)}
+  .grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;margin-top:16px}
+  @media (max-width:800px){.grid{grid-template-columns:1fr}}
+  .card{background:#fff;border:1px solid var(--line);border-radius:8px;padding:20px 22px;text-decoration:none;color:inherit;display:flex;flex-direction:column;gap:8px;transition:all 0.15s ease;position:relative;overflow:hidden}
+  .card:hover{border-color:var(--brand);box-shadow:0 6px 16px rgba(0,158,219,0.10);transform:translateY(-2px)}
+  .card::before{content:"";position:absolute;top:0;left:0;bottom:0;width:3px;background:var(--brand)}
+  .card-tag{font-size:10px;letter-spacing:1.4px;color:var(--brand-dk);font-weight:700;text-transform:uppercase;background:var(--brand-tint);padding:3px 8px;border-radius:3px;display:inline-block;width:fit-content}
+  .card-title{font-size:16px;font-weight:800;color:var(--ink);letter-spacing:-0.2px;line-height:1.35}
+  .card-desc{font-size:12.5px;color:var(--sub);line-height:1.6;flex:1}
+  .card-meta{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+  .card-meta span{font-size:10.5px;padding:2px 8px;background:var(--tint);color:var(--ink);border-radius:3px;font-family:Consolas,monospace;font-weight:600;letter-spacing:0.3px}
+  .card-foot{display:flex;align-items:center;justify-content:space-between;padding-top:12px;margin-top:8px;border-top:1px solid var(--line);font-size:11.5px}
+  .card-open{color:var(--brand);font-weight:700}
+  .card-status{color:var(--sub);font-size:10.5px}
+
+  .kpis{display:grid;grid-template-columns:repeat(6,1fr);gap:12px;margin:16px 0 8px}
+  @media (max-width:800px){.kpis{grid-template-columns:repeat(3,1fr)}}
+  .kpi{background:#fff;border:1px solid var(--line);border-radius:6px;padding:14px 12px;text-align:center}
+  .kpi__val{font-size:26px;font-weight:900;color:var(--brand-dk);letter-spacing:-0.5px}
+  .kpi__lbl{font-size:11px;color:var(--sub);margin-top:2px}
+  .foot{margin-top:36px;padding-top:16px;border-top:1px solid var(--line);font-size:11px;color:var(--sub);line-height:1.6;text-align:center}
+</style>
+</head>
+<body>
+<div class="wrap">
+<a class="backlink" href="../">← 返回 sf-schema-docs</a>
+<div class="tag">CBUSDO · Enterprise Edition Trial Clone</div>
+<h1>建商-EE Demo · 文件集</h1>
+<p class="lede">
+  從 EE trial org (<code>dd500000i36g1eab</code>) clone 到 CBUSDO 的建商 App。
+  完整標準物件資料 + 4 筆建案，前綴 <code>建商-EE ·</code>，跟同 org 內既有的「建商-ProSuite」共存不衝突。
+</p>
+
+<div class="kpis">
+  <div class="kpi"><div class="kpi__val">4</div><div class="kpi__lbl">建案</div></div>
+  <div class="kpi"><div class="kpi__val">141</div><div class="kpi__lbl">Account</div></div>
+  <div class="kpi"><div class="kpi__val">123</div><div class="kpi__lbl">Contact</div></div>
+  <div class="kpi"><div class="kpi__val">17</div><div class="kpi__lbl">Lead</div></div>
+  <div class="kpi"><div class="kpi__val">20</div><div class="kpi__lbl">Opportunity</div></div>
+  <div class="kpi"><div class="kpi__val">9</div><div class="kpi__lbl">Case</div></div>
+</div>
+
+<h2>文件</h2>
+<div class="grid">
+  <a class="card" href="app-guide.html">
+    <span class="card-tag">App 說明</span>
+    <div class="card-title">建商-EE App · 對客戶說明</div>
+    <div class="card-desc">
+      建商-EE App 的 Tabs、Custom Object「建案-EE」、List View、Dashboard、Home Page 完整介紹。
+      demo 時可直接開來 walkthrough。
+    </div>
+    <div class="card-meta"><span>App</span><span>Objects</span><span>Reports</span></div>
+    <div class="card-foot"><span class="card-open">開啟 →</span><span class="card-status">Customer-Facing</span></div>
+  </a>
+
+  <a class="card" href="migration-report.html">
+    <span class="card-tag">遷移報告</span>
+    <div class="card-title">建商-EE · Migration Report</div>
+    <div class="card-desc">
+      從 EE trial 到 CBUSDO 的完整 metadata + 資料遷移紀錄。
+      包含 metadata 清單、資料 count、遇到的坑（Duplicate Rule / IsConverted）、Home Page 綁定手動步驟。
+    </div>
+    <div class="card-meta"><span>Migration</span><span>Metadata</span><span>Data</span></div>
+    <div class="card-foot"><span class="card-open">開啟 →</span><span class="card-status">技術報告</span></div>
+  </a>
+</div>
+
+<div class="foot">
+  Cloned 2026-07-17 · Source: EE-Real-Estate trial (org id <code>00Dd500000I36g1EAB</code>) · Target: CBUSDO
+</div>
+</div>
+</body>
+</html>

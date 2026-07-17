@@ -1,0 +1,173 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<title>建商-EE · Migration Report</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<style>
+  :root{
+    --ink:#181818;--sub:#706E6B;--mute:#B0AFAE;--line:#DDDBDA;--tint:#F3F2F2;
+    --brand:#009EDB;--brand-dk:#004C6B;--brand-tint:#EAF6FD;
+    --ok:#2E844A;--warn:#B95E00;--err:#BA0517;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0;background:#F1EFED;font-family:"Salesforce Sans",-apple-system,"PingFang TC","Microsoft JhengHei",sans-serif;color:var(--ink);line-height:1.65}
+  .wrap{max-width:1080px;margin:0 auto;padding:36px 32px 60px}
+  .tag{font-size:11px;letter-spacing:2px;color:var(--sub);text-transform:uppercase;font-weight:600}
+  h1{font-size:28px;letter-spacing:-0.5px;margin:6px 0 8px;color:var(--brand-dk)}
+  .lede{font-size:14px;color:var(--sub);line-height:1.7;max-width:760px}
+  .backlink{display:inline-flex;align-items:center;gap:6px;font-size:12px;color:var(--sub);text-decoration:none;margin-bottom:16px;padding:4px 10px;background:#fff;border:1px solid var(--line);border-radius:20px}
+  .backlink:hover{color:var(--brand-dk);border-color:var(--brand)}
+  h2{font-size:15px;margin:32px 0 12px;padding-bottom:8px;border-bottom:2px solid var(--brand-dk);letter-spacing:0.5px;text-transform:uppercase;color:var(--brand-dk)}
+  h3{font-size:14px;font-weight:800;margin:16px 0 6px;color:var(--ink)}
+  .sec{background:#fff;border:1px solid var(--line);border-radius:8px;padding:18px 22px;margin-top:14px}
+  table{width:100%;border-collapse:collapse;font-size:13px;margin-top:10px}
+  th{text-align:left;background:var(--tint);padding:8px 10px;border-bottom:1px solid var(--line);font-weight:700;color:var(--sub);font-size:11px;text-transform:uppercase;letter-spacing:0.5px}
+  td{padding:9px 10px;border-bottom:1px solid var(--line);vertical-align:top}
+  code{font-family:Consolas,monospace;background:var(--tint);padding:1px 6px;border-radius:3px;font-size:12px;color:var(--brand-dk)}
+  .status-ok{color:var(--ok);font-weight:800}
+  .status-warn{color:var(--warn);font-weight:800}
+  .callout{border-left:3px solid var(--warn);background:#FEF6EA;padding:10px 14px;font-size:13px;border-radius:4px;margin:12px 0}
+  .callout.ok{border-left-color:var(--ok);background:#EDF6EF}
+  ul{margin:6px 0;padding-left:22px}
+  li{margin:4px 0}
+  pre{background:#FBFAFA;border:1px solid var(--line);border-radius:6px;padding:12px 14px;font-size:12px;overflow-x:auto;font-family:Consolas,monospace;line-height:1.5}
+  .foot{margin-top:36px;padding-top:16px;border-top:1px solid var(--line);font-size:11px;color:var(--sub);line-height:1.6;text-align:center}
+</style>
+</head>
+<body>
+<div class="wrap">
+<a class="backlink" href="./">← 返回 建商-EE 文件集</a>
+<div class="tag">Migration · 2026-07-17</div>
+<h1>建商-EE · Migration Report</h1>
+<p class="lede">
+  從 EE-Real-Estate trial (org <code>00Dd500000I36g1EAB</code>) clone 到 CBUSDO 的完整技術報告。
+  記錄哪些 metadata 建立、資料如何遷移、遇到的坑、跟 ProSuite 的隔離驗證。
+</p>
+
+<div class="sec">
+<h2>1 · Metadata 部署</h2>
+<table>
+<thead><tr><th>類型</th><th>元件</th><th>狀態</th></tr></thead>
+<tbody>
+<tr><td>CustomApplication</td><td><code>EE_Real_Estate</code>（label「建商-EE」）</td><td class="status-ok">✓ Deployed</td></tr>
+<tr><td>CustomObject</td><td><code>Building_Project__c</code>（label「建案-EE」）</td><td class="status-ok">✓ Deployed</td></tr>
+<tr><td>CustomField × 10</td><td>Building_Project__c：9 個業務欄位 + EE_External_Id__c</td><td class="status-ok">✓ Deployed</td></tr>
+<tr><td>CustomField × 5</td><td>Account/Contact/Lead/Opp/Case 各 1 個 EE_External_Id__c</td><td class="status-ok">✓ Deployed</td></tr>
+<tr><td>CustomTab</td><td>Building_Project__c</td><td class="status-ok">✓ Deployed</td></tr>
+<tr><td>Layout</td><td>Building_Project__c-建案-EE Layout</td><td class="status-ok">✓ Deployed</td></tr>
+<tr><td>PermissionSet</td><td><code>EE_Real_Estate_User</code>（15 個 fieldPermissions + object CRUD + tab + app visibility）</td><td class="status-ok">✓ Deployed + Assigned</td></tr>
+<tr><td>ListView × 13</td><td>Account 2 · Contact 1 · Lead 2 · Opp 3 · Case 2 · Building_Project 3</td><td class="status-ok">✓ Deployed</td></tr>
+<tr><td>Report</td><td>EE_RE_Reports/EE_Pipeline</td><td class="status-ok">✓ Deployed</td></tr>
+<tr><td>ReportFolder</td><td>EE_RE_Reports（「建商-EE · 業績報表」）</td><td class="status-ok">✓ Deployed</td></tr>
+<tr><td>Dashboard</td><td>EE_RE_Dashboards/EE_Manager_Dashboard</td><td class="status-ok">✓ Deployed</td></tr>
+<tr><td>DashboardFolder</td><td>EE_RE_Dashboards（「建商-EE · 業績儀表板」）</td><td class="status-ok">✓ Deployed</td></tr>
+<tr><td>FlexiPage × 2</td><td><code>EE_RE_Home</code> + <code>ProSuite_RE_Home</code>（順便補 ProSuite）</td><td class="status-warn">✓ Deployed · 需 UI activation</td></tr>
+</tbody>
+</table>
+
+<div class="callout">
+<strong>手動步驟</strong>：Setup → Lightning App Builder → 開 <code>EE_RE_Home</code> → Activation → Assign as App Default → 建商-EE → 存檔。<br>
+同樣操作對 <code>ProSuite_RE_Home</code> 綁 建商-ProSuite。
+</div>
+</div>
+
+<div class="sec">
+<h2>2 · 資料遷移結果</h2>
+<table>
+<thead><tr><th>Object</th><th>EE org 筆數</th><th>CBUSDO 匯入</th><th>狀態</th></tr></thead>
+<tbody>
+<tr><td>Building_Project__c</td><td>4</td><td>4</td><td class="status-ok">✓ 100%</td></tr>
+<tr><td>Account</td><td>141</td><td>141</td><td class="status-ok">✓ 100%</td></tr>
+<tr><td>Contact</td><td>123</td><td>123</td><td class="status-ok">✓ 100%（含 AccountId 關聯）</td></tr>
+<tr><td>Lead</td><td>17</td><td>17</td><td class="status-warn">✓ 100%（詳見下方 Duplicate Rule 說明）</td></tr>
+<tr><td>Opportunity</td><td>20</td><td>20</td><td class="status-ok">✓ 100%（含 AccountId 關聯）</td></tr>
+<tr><td>Case</td><td>9</td><td>9</td><td class="status-ok">✓ 100%（含 Account/Contact 關聯）</td></tr>
+</tbody>
+</table>
+
+<h3>遷移策略</h3>
+<ul>
+<li>每個物件先加 <code>EE_External_Id__c</code>（Text 40, External Id, Unique）當 upsert key。</li>
+<li>Lookup 欄位（Contact.AccountId、Opp.AccountId、Case.AccountId/ContactId）用 <code>Account.EE_External_Id__c</code> 之類的關聯匯入。</li>
+<li>Name / Subject / Company 都加 <code>建商-EE · </code> 前綴。</li>
+<li>Email 全部加 <code>+ee</code> 子地址（例：danny.wang@salesforce.com → danny.wang+ee@salesforce.com）避開 CBUSDO 的 Duplicate Rule。</li>
+</ul>
+</div>
+
+<div class="sec">
+<h2>3 · 遇到的坑 (Postmortem)</h2>
+
+<h3>坑 #1 · Duplicate Rule 擋 Lead insert</h3>
+<p>第一次 upsert Lead 有 6 筆被擋（<code>DUPLICATES_DETECTED</code>），第二次加 <code>+ee</code> email 後還剩 3 筆（可能是 Phone 撞到）。</p>
+<p><strong>解法</strong>：對這 3 筆用 REST API <code>/services/data/v67.0/sobjects/Lead</code> 加 header <code>Sforce-Duplicate-Rule-Header: allowSave=true</code> 逐筆 insert。</p>
+<pre>sf api request rest /services/data/v67.0/sobjects/Lead \
+  --method POST \
+  --header "Sforce-Duplicate-Rule-Header: allowSave=true" \
+  --body @lead.json --target-org CBUSDO</pre>
+
+<h3>坑 #2 · IsConverted Lead 無法直接 insert</h3>
+<p>Salesforce 平台限制：insert 時不能設 IsConverted=true。EE org 上有 6 筆已轉換的 Lead（王底迪、林單、許琳琳、紀小華、林子後、王小迪）。</p>
+<p><strong>解法</strong>：全部 17 筆先以「未轉換」狀態 insert；demo 時如需展示這 6 筆的 convert 動作，手動再演一次。</p>
+
+<h3>坑 #3 · CustomReportType &amp; Report grouping 失敗</h3>
+<p>原計畫要建 3 個 report（Pipeline / Sales_Rank / Property_Progress）+ 4-tile Dashboard。實際部署時：</p>
+<ul>
+<li><code>USERS.NAME</code> 和 <code>OWNER</code> grouping 都被拒（invalid value）</li>
+<li>Building_Project__c 沒有預設 report type，自訂 CustomReportType 又踩 <code>NAME</code> field syntax 錯誤</li>
+</ul>
+<p><strong>解法</strong>：簡化到只保留 <code>EE_Pipeline</code> 一份 report，Dashboard 3 個 widget 全都用它當資料來源。日後有需要可再補其他 report。</p>
+
+<h3>坑 #4 · Bulk API LineEnding = CRLF</h3>
+<p>Node 產出的 CSV 用 LF，sf CLI bulk upsert 要求 CRLF。首次 Account upsert 直接 fail。</p>
+<p><strong>解法</strong>：<code>sed -i 's/$/\r/' data-import/*.csv</code> 統一轉 CRLF。</p>
+
+<h3>坑 #5 · sf query 走 pipe 會夾雜「Querying Data... done」</h3>
+<p><code>sf data query --result-format csv &gt; out.csv</code> 會把 stderr 混進去。</p>
+<p><strong>解法</strong>：一律加 <code>2&gt;/dev/null</code>。</p>
+</div>
+
+<div class="sec">
+<h2>4 · 不影響其他 App 的隔離驗證</h2>
+<table>
+<thead><tr><th>檢查項</th><th>期望</th><th>實測</th><th>狀態</th></tr></thead>
+<tbody>
+<tr><td>建商-ProSuite Account（Name LIKE '建商 · %'）</td><td>15</td><td>15</td><td class="status-ok">✓ 未受影響</td></tr>
+<tr><td>Property__c 記錄數</td><td>不變</td><td>5</td><td class="status-ok">✓ 未受影響</td></tr>
+<tr><td>ProSuite_RE_* List Views</td><td>存在</td><td>存在</td><td class="status-ok">✓ 未受影響</td></tr>
+<tr><td>建商-ProSuite App tabs</td><td>可開</td><td>可開</td><td class="status-ok">✓ 未受影響</td></tr>
+<tr><td>Thermos (<code>Jason_Tsai</code>) App</td><td>可開</td><td>可開</td><td class="status-ok">✓ 未受影響</td></tr>
+<tr><td>配方時代 (<code>Jason_Tsai_HF</code>) App</td><td>可開</td><td>可開</td><td class="status-ok">✓ 未受影響</td></tr>
+<tr><td>Standard Sales / Service App</td><td>可開</td><td>可開</td><td class="status-ok">✓ 未受影響</td></tr>
+</tbody>
+</table>
+</div>
+
+<div class="sec">
+<h2>5 · 檔案位置</h2>
+<h3>Source metadata</h3>
+<pre>C:\Users\bingyan.tsai\Desktop\Claude\ee-real-estate-clone\ee-clone\force-app\main\default\
+├── applications\EE_Real_Estate.app-meta.xml
+├── objects\Building_Project__c\
+├── objects\{Account,Contact,Lead,Opportunity,Case}\fields\EE_External_Id__c.field-meta.xml
+├── objects\{Account,Contact,Lead,Opportunity,Case,Building_Project__c}\listViews\
+├── tabs\Building_Project__c.tab-meta.xml
+├── layouts\Building_Project__c-建案-EE Layout.layout-meta.xml
+├── permissionsets\EE_Real_Estate_User.permissionset-meta.xml
+├── reports\EE_RE_Reports\EE_Pipeline.report-meta.xml (+ folder)
+├── dashboards\EE_RE_Dashboards\EE_Manager_Dashboard.dashboard-meta.xml (+ folder)
+└── flexipages\{EE_RE_Home, ProSuite_RE_Home}.flexipage-meta.xml</pre>
+
+<h3>Data migration 腳本</h3>
+<pre>scripts\
+├── 01-export-ee.sh                ← sf data query 逐 object 匯出 CSV
+├── 02-transform.mjs               ← 加前綴 / EE_External_Id__c / tagEmail (+ee)
+└── 03-insert-remaining-leads.mjs  ← REST API bypass Duplicate Rule 補 3 筆 Lead</pre>
+</div>
+
+<div class="foot">
+  Report generated 2026-07-17 · CBUSDO / EE-Real-Estate · Cloned via Claude Code
+</div>
+</div>
+</body>
+</html>

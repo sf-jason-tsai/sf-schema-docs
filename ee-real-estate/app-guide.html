@@ -1,0 +1,169 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<title>建商-EE App · 對客戶說明</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<style>
+  :root{
+    --ink:#181818;--sub:#706E6B;--mute:#B0AFAE;--line:#DDDBDA;--tint:#F3F2F2;
+    --brand:#009EDB;--brand-dk:#004C6B;--brand-tint:#EAF6FD;
+    --ok:#2E844A;--warn:#B95E00;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0;background:#F1EFED;font-family:"Salesforce Sans",-apple-system,"PingFang TC","Microsoft JhengHei",sans-serif;color:var(--ink);line-height:1.65}
+  .wrap{max-width:1080px;margin:0 auto;padding:36px 32px 60px}
+  .tag{font-size:11px;letter-spacing:2px;color:var(--sub);text-transform:uppercase;font-weight:600}
+  h1{font-size:28px;letter-spacing:-0.5px;margin:6px 0 8px;color:var(--brand-dk)}
+  .lede{font-size:14px;color:var(--sub);line-height:1.7;max-width:760px}
+  .backlink{display:inline-flex;align-items:center;gap:6px;font-size:12px;color:var(--sub);text-decoration:none;margin-bottom:16px;padding:4px 10px;background:#fff;border:1px solid var(--line);border-radius:20px}
+  .backlink:hover{color:var(--brand-dk);border-color:var(--brand)}
+  h2{font-size:15px;margin:32px 0 12px;padding-bottom:8px;border-bottom:2px solid var(--brand-dk);letter-spacing:0.5px;text-transform:uppercase;color:var(--brand-dk)}
+  h3{font-size:15px;font-weight:800;margin:20px 0 8px;color:var(--ink)}
+  .sec{background:#fff;border:1px solid var(--line);border-radius:8px;padding:20px 24px;margin-top:14px}
+  table{width:100%;border-collapse:collapse;font-size:13px;margin-top:10px}
+  th{text-align:left;background:var(--tint);padding:8px 10px;border-bottom:1px solid var(--line);font-weight:700;color:var(--sub);font-size:11px;text-transform:uppercase;letter-spacing:0.5px}
+  td{padding:9px 10px;border-bottom:1px solid var(--line);vertical-align:top}
+  code{font-family:Consolas,monospace;background:var(--tint);padding:1px 6px;border-radius:3px;font-size:12px;color:var(--brand-dk)}
+  .badge{display:inline-block;font-size:10px;padding:2px 7px;border-radius:3px;font-weight:700;letter-spacing:0.3px}
+  .b-obj{background:var(--brand-tint);color:var(--brand-dk)}
+  .b-std{background:#EEF2F7;color:#33465C}
+  .b-cust{background:#FEF6EA;color:var(--warn)}
+  ul{margin:6px 0;padding-left:22px}
+  li{margin:4px 0}
+  .tree{font-family:Consolas,monospace;font-size:12.5px;line-height:1.8;color:var(--ink);background:#FBFAFA;border:1px solid var(--line);border-radius:6px;padding:14px 18px;white-space:pre}
+  .foot{margin-top:36px;padding-top:16px;border-top:1px solid var(--line);font-size:11px;color:var(--sub);line-height:1.6;text-align:center}
+</style>
+</head>
+<body>
+<div class="wrap">
+<a class="backlink" href="./">← 返回 建商-EE 文件集</a>
+<div class="tag">建商-EE · App Overview</div>
+<h1>建商-EE App · 對客戶說明</h1>
+<p class="lede">
+  建商-EE 是 CBUSDO 上第二套「建商」demo，跟既有的「建商-ProSuite」平行共存。
+  透過 <code>建商-EE ·</code> 前綴、專屬 List View / Report / Dashboard 完全隔離。
+</p>
+
+<div class="sec">
+<h2>App 結構</h2>
+<div class="tree">建商-EE (EE_Real_Estate)
+├── 🏠 Home                          ← 客製 Home Lightning Page (EE_RE_Home)
+├── 🏢 建案-EE (Building_Project__c)  ← Custom Object · 9 個欄位
+├── 👤 Lead                          ← Standard，過濾 建商-EE · %
+├── 💼 Opportunity                   ← Standard，過濾 建商-EE · %
+├── 🏛 Account                       ← Standard，過濾 建商-EE · %
+├── 👥 Contact                       ← Standard，依 Account 過濾
+├── 📋 Case                          ← Standard，過濾 建商-EE · %
+├── 📊 Reports                       ← EE_RE_Reports folder
+└── 📈 Dashboards                    ← EE_RE_Dashboards folder</div>
+</div>
+
+<div class="sec">
+<h2>Custom Object · 建案-EE (Building_Project__c)</h2>
+<p style="font-size:13px;color:var(--sub);margin:0 0 8px">記錄每一筆建案基本資料。4 筆示範資料：大大花園、愛家屋、真正讚、山哼歌。</p>
+<table>
+<thead><tr><th>API Name</th><th>Label</th><th>Type</th><th>用途</th></tr></thead>
+<tbody>
+<tr><td><code>Name</code></td><td>建案 Name</td><td>Text(80)</td><td>建案名稱（含前綴）</td></tr>
+<tr><td><code>address__c</code></td><td>建案地址</td><td>TextArea</td><td>建案完整地址</td></tr>
+<tr><td><code>total_room__c</code></td><td>總戶數</td><td>Number(18,0)</td><td>建案總戶數</td></tr>
+<tr><td><code>room_left__c</code></td><td>剩餘戶數</td><td>Number(18,0)</td><td>目前可售戶數</td></tr>
+<tr><td><code>room_size__c</code></td><td>坪數範圍</td><td>Text(100)</td><td>例：17 - 40</td></tr>
+<tr><td><code>price_range__c</code></td><td>售價範圍</td><td>Currency(18,0)</td><td>建案售價區間</td></tr>
+<tr><td><code>build_start_date__c</code></td><td>開工日期</td><td>Date</td><td>—</td></tr>
+<tr><td><code>build_end_date__c</code></td><td>預計完工日期</td><td>Date</td><td>—</td></tr>
+<tr><td><code>building_status__c</code></td><td>建案狀態</td><td>Picklist</td><td>預售中／銷售中／完銷／完工</td></tr>
+<tr><td><code>building_Photo__c</code></td><td>建案圖片連結</td><td>URL</td><td>建案外觀圖 URL</td></tr>
+<tr><td><code>EE_External_Id__c</code></td><td>EE External Id</td><td>Text(40) External</td><td>對應 EE org 原始 Id</td></tr>
+</tbody>
+</table>
+</div>
+
+<div class="sec">
+<h2>List Views · 每個 tab 都有專屬篩選</h2>
+<table>
+<thead><tr><th>Object</th><th>List View DevName</th><th>Label</th><th>條件</th></tr></thead>
+<tbody>
+<tr><td><span class="badge b-obj">建案</span></td><td><code>EE_RE_All_Projects</code></td><td>建商-EE · 所有建案</td><td>—</td></tr>
+<tr><td><span class="badge b-obj">建案</span></td><td><code>EE_RE_Selling</code></td><td>建商-EE · 銷售中建案</td><td>Status = 銷售中/預售中</td></tr>
+<tr><td><span class="badge b-obj">建案</span></td><td><code>EE_RE_Completed</code></td><td>建商-EE · 完工/完銷</td><td>Status = 完工/完銷</td></tr>
+<tr><td><span class="badge b-std">Account</span></td><td><code>EE_RE_All_Buyers</code></td><td>建商-EE · 所有買家</td><td>Name startsWith 建商-EE ·</td></tr>
+<tr><td><span class="badge b-std">Account</span></td><td><code>EE_RE_Recently_Active</code></td><td>建商-EE · 近期活躍</td><td>最近 30 天更新</td></tr>
+<tr><td><span class="badge b-std">Contact</span></td><td><code>EE_RE_All_Contacts</code></td><td>建商-EE · 所有聯絡人</td><td>Account.Name 帶前綴</td></tr>
+<tr><td><span class="badge b-std">Lead</span></td><td><code>EE_RE_All_Leads</code></td><td>建商-EE · 所有客戶</td><td>Company startsWith 前綴</td></tr>
+<tr><td><span class="badge b-std">Lead</span></td><td><code>EE_RE_Open_Leads</code></td><td>建商-EE · 未成交客戶</td><td>IsConverted = false</td></tr>
+<tr><td><span class="badge b-std">Opp</span></td><td><code>EE_RE_All_Opps</code></td><td>建商-EE · 所有機會</td><td>Name 帶前綴</td></tr>
+<tr><td><span class="badge b-std">Opp</span></td><td><code>EE_RE_Pipeline</code></td><td>建商-EE · 銷售中</td><td>Stage 非 Closed</td></tr>
+<tr><td><span class="badge b-std">Opp</span></td><td><code>EE_RE_Won</code></td><td>建商-EE · 已成交</td><td>Stage = Closed Won/已簽約</td></tr>
+<tr><td><span class="badge b-std">Case</span></td><td><code>EE_RE_All_Cases</code></td><td>建商-EE · 所有案件</td><td>Subject 帶前綴</td></tr>
+<tr><td><span class="badge b-std">Case</span></td><td><code>EE_RE_Open_Cases</code></td><td>建商-EE · 未結案</td><td>Status ≠ Closed</td></tr>
+</tbody>
+</table>
+</div>
+
+<div class="sec">
+<h2>Reports & Dashboard</h2>
+<h3>Report Folder · 建商-EE · 業績報表 (<code>EE_RE_Reports</code>)</h3>
+<ul>
+<li><code>EE_Pipeline</code> · <strong>建商-EE · Pipeline</strong>：Opportunity by StageName + Amount，過濾建商-EE · %</li>
+</ul>
+<h3>Dashboard Folder · 建商-EE · 業績儀表板 (<code>EE_RE_Dashboards</code>)</h3>
+<ul>
+<li><code>EE_Manager_Dashboard</code> · <strong>建商-EE · 主管業績總覽</strong>
+  <ul>
+    <li>Metric: Pipeline 業績</li>
+    <li>Metric: Pipeline 件數</li>
+    <li>Bar chart: Pipeline 各銷售階段分析</li>
+  </ul>
+</li>
+</ul>
+</div>
+
+<div class="sec">
+<h2>Home Page (Custom Lightning Page)</h2>
+<p style="font-size:13px">兩個 App 各自綁定一份專屬 Home：</p>
+<ul>
+<li><code>EE_RE_Home</code>（label「建商-EE Home」）— 綁 建商-EE</li>
+<li><code>ProSuite_RE_Home</code>（label「建商-ProSuite Home」）— 綁 建商-ProSuite（本次順便補回）</li>
+</ul>
+<p style="font-size:13px">兩個 Home Page 都有：Rich Text 歡迎語 + 嵌入專屬 Dashboard + Recent Records + Today's Task + Event Container。</p>
+<div style="background:var(--brand-tint);border-left:3px solid var(--brand);padding:12px 14px;border-radius:4px;margin-top:12px;font-size:12.5px">
+  <strong>⚠️ 手動步驟</strong>：Salesforce Metadata API 不支援用 script 綁 Home Page 到 App。請進 Setup → Lightning App Builder → 開 EE_RE_Home（或 ProSuite_RE_Home）→ Activation → Assign as App Default → 選對應 App → 存檔。約 30 秒。
+</div>
+</div>
+
+<div class="sec">
+<h2>Permission Set · EE_Real_Estate_User</h2>
+<ul>
+<li>App visibility: EE_Real_Estate = Visible</li>
+<li>Building_Project__c: 完整 CRUD + View All / Modify All</li>
+<li>Tab: Building_Project__c = Visible</li>
+<li><strong>Field Permissions：全部 9 個 custom field + 6 個 EE_External_Id__c 明確列出 readable/editable = true</strong>（避免 SOQL 「No such column」的 FLS 陷阱）</li>
+</ul>
+</div>
+
+<div class="sec">
+<h2>跟建商-ProSuite 的區隔對照</h2>
+<table>
+<thead><tr><th>維度</th><th>建商-ProSuite</th><th>建商-EE</th></tr></thead>
+<tbody>
+<tr><td>App DevName</td><td><code>ProSuite_Real_Estate</code></td><td><code>EE_Real_Estate</code></td></tr>
+<tr><td>App Label</td><td>建商-ProSuite</td><td>建商-EE</td></tr>
+<tr><td>Custom Object</td><td><code>Property__c</code>（建案資訊）</td><td><code>Building_Project__c</code>（建案-EE）</td></tr>
+<tr><td>資料前綴</td><td><code>建商 · XXX</code></td><td><code>建商-EE · XXX</code></td></tr>
+<tr><td>List View 前綴</td><td><code>ProSuite_RE_*</code></td><td><code>EE_RE_*</code></td></tr>
+<tr><td>Report Folder</td><td>ProSuite_Real_Estate_Reports</td><td>EE_RE_Reports</td></tr>
+<tr><td>Dashboard Folder</td><td>ProSuite_Real_Estate_Dashboards</td><td>EE_RE_Dashboards</td></tr>
+<tr><td>Home Page</td><td>ProSuite_RE_Home（本次順便補）</td><td>EE_RE_Home</td></tr>
+<tr><td>Email 標記</td><td>—</td><td>加 <code>+ee</code> 子地址避開 Duplicate Rule</td></tr>
+</tbody>
+</table>
+</div>
+
+<div class="foot">
+  Deployed to CBUSDO on 2026-07-17 · Alias EE-Real-Estate · Custom object <code>Building_Project__c</code>
+</div>
+</div>
+</body>
+</html>
