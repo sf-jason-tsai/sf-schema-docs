@@ -53,6 +53,11 @@ const PAGES = [
         dest: 'ycc/demo-script.html',
         title: '有你共創 · 20 分鐘 Demo Script'
     },
+    {
+        src: 'C:/Users/bingyan.tsai/Desktop/Claude/有你共創-demo-playbook-v2.html',
+        dest: 'ycc/playbook-v2.html',
+        title: '有你共創 · Demo Playbook v2 (2026-07-18)'
+    },
     // ─── Salesforce 6 大雲 Overview ───
     {
         src: 'C:/Users/bingyan.tsai/Desktop/Claude/salesforce-clouds/index.html',

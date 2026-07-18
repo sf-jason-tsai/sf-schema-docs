@@ -1,0 +1,500 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>有你共創 · Demo Playbook v2 · 2026-07-18</title>
+<style>
+  :root{
+    --sf-brand:#032D60;
+    --sf-brand-2:#0176D3;
+    --sf-success:#04844B;
+    --sf-warning:#B67D11;
+    --sf-error:#BA0517;
+    --sf-neutral-95:#F3F3F3;
+    --sf-neutral-90:#E5E5E5;
+    --sf-neutral-70:#B0ADAB;
+    --sf-neutral-50:#706E6B;
+    --sf-neutral-10:#181818;
+  }
+  *{box-sizing:border-box}
+  body{
+    font-family:'Salesforce Sans','Helvetica Neue',Arial,'PingFang TC','Noto Sans TC',sans-serif;
+    color:var(--sf-neutral-10);
+    line-height:1.6;
+    margin:0;
+    background:#FAFAFA;
+  }
+  .wrap{max-width:1120px;margin:0 auto;padding:32px 24px 80px}
+  header.top{
+    background:var(--sf-brand);
+    color:#fff;
+    padding:32px 40px;
+    border-radius:8px 8px 0 0;
+    margin:-32px -24px 0 -24px;
+  }
+  header.top .kicker{font-size:13px;letter-spacing:1px;opacity:0.85;text-transform:uppercase}
+  header.top h1{margin:6px 0 0 0;font-size:28px;font-weight:600}
+  header.top .meta{margin-top:12px;font-size:14px;opacity:0.9}
+  h2{
+    font-size:22px;
+    font-weight:600;
+    color:var(--sf-brand);
+    margin:40px 0 12px 0;
+    padding-bottom:8px;
+    border-bottom:2px solid var(--sf-brand);
+  }
+  h3{font-size:17px;margin:24px 0 8px 0;color:var(--sf-neutral-10)}
+  p{margin:8px 0 12px 0}
+  code{
+    font-family:ui-monospace,'Cascadia Code',Consolas,monospace;
+    background:var(--sf-neutral-95);
+    padding:2px 6px;
+    border-radius:3px;
+    font-size:0.9em;
+    color:var(--sf-brand);
+  }
+  pre{
+    background:var(--sf-neutral-10);
+    color:#e8e8e8;
+    padding:14px 16px;
+    border-radius:6px;
+    overflow-x:auto;
+    font-size:12.5px;
+  }
+  pre code{background:none;color:inherit;padding:0}
+  .card{
+    background:#fff;
+    border:1px solid var(--sf-neutral-90);
+    border-radius:6px;
+    padding:20px 24px;
+    margin:12px 0;
+  }
+  .status-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
+    gap:12px;
+    margin:16px 0;
+  }
+  .status{
+    background:#fff;
+    border:1px solid var(--sf-neutral-90);
+    border-radius:6px;
+    padding:14px 16px;
+    border-left:4px solid var(--sf-success);
+  }
+  .status.warn{border-left-color:var(--sf-warning)}
+  .status.info{border-left-color:var(--sf-brand-2)}
+  .status .label{font-size:12px;color:var(--sf-neutral-50);text-transform:uppercase;letter-spacing:0.5px}
+  .status .value{font-size:15px;font-weight:600;margin-top:4px}
+  .status .sub{font-size:13px;color:var(--sf-neutral-50);margin-top:4px}
+  table{
+    width:100%;
+    border-collapse:collapse;
+    margin:12px 0;
+    background:#fff;
+    border:1px solid var(--sf-neutral-90);
+    border-radius:6px;
+    overflow:hidden;
+  }
+  th{
+    background:var(--sf-neutral-95);
+    text-align:left;
+    padding:10px 14px;
+    font-size:13px;
+    color:var(--sf-neutral-50);
+    text-transform:uppercase;
+    letter-spacing:0.5px;
+    font-weight:600;
+    border-bottom:1px solid var(--sf-neutral-90);
+  }
+  td{
+    padding:12px 14px;
+    border-bottom:1px solid var(--sf-neutral-90);
+    font-size:14px;
+    vertical-align:top;
+  }
+  tr:last-child td{border-bottom:none}
+  .badge{
+    display:inline-block;
+    padding:2px 8px;
+    border-radius:10px;
+    font-size:11px;
+    font-weight:600;
+    letter-spacing:0.3px;
+  }
+  .badge-ok{background:#E5F5EB;color:var(--sf-success)}
+  .badge-todo{background:#FEF5E7;color:var(--sf-warning)}
+  .badge-info{background:#E5F0F9;color:var(--sf-brand-2)}
+  .step{
+    display:grid;
+    grid-template-columns:32px 1fr;
+    gap:12px;
+    margin:8px 0;
+    align-items:baseline;
+  }
+  .step .n{
+    background:var(--sf-brand-2);
+    color:#fff;
+    width:24px;
+    height:24px;
+    border-radius:50%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:12px;
+    font-weight:600;
+  }
+  .callout{
+    background:#E5F0F9;
+    border-left:4px solid var(--sf-brand-2);
+    padding:12px 16px;
+    margin:12px 0;
+    border-radius:0 4px 4px 0;
+    font-size:14px;
+  }
+  .callout.warn{background:#FEF5E7;border-left-color:var(--sf-warning)}
+  .callout strong{color:var(--sf-brand)}
+  .kv{display:grid;grid-template-columns:180px 1fr;gap:4px 16px;font-size:14px}
+  .kv dt{color:var(--sf-neutral-50)}
+  .kv dd{margin:0}
+  .icon-check::before{content:"✓ ";color:var(--sf-success);font-weight:700}
+  .icon-todo::before{content:"→ ";color:var(--sf-warning);font-weight:700}
+  .icon-warn::before{content:"! ";color:var(--sf-error);font-weight:700}
+  .flow-diagram{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    flex-wrap:wrap;
+    padding:16px;
+    background:#fff;
+    border:1px solid var(--sf-neutral-90);
+    border-radius:6px;
+    margin:12px 0;
+    font-size:14px;
+  }
+  .flow-diagram .box{
+    background:var(--sf-neutral-95);
+    padding:8px 14px;
+    border-radius:4px;
+    border:1px solid var(--sf-neutral-90);
+  }
+  .flow-diagram .arrow{color:var(--sf-neutral-70);font-weight:700}
+  .toc{
+    background:#fff;
+    border:1px solid var(--sf-neutral-90);
+    border-radius:6px;
+    padding:16px 20px;
+    margin:16px 0 32px 0;
+  }
+  .toc ol{margin:0;padding-left:20px;font-size:14px;column-count:2;column-gap:24px}
+  .toc li{margin:4px 0}
+  .toc a{color:var(--sf-brand-2);text-decoration:none}
+  .toc a:hover{text-decoration:underline}
+  .kbd{
+    display:inline-block;
+    padding:1px 6px;
+    background:#fff;
+    border:1px solid var(--sf-neutral-70);
+    border-radius:3px;
+    font-size:12px;
+    font-family:ui-monospace,monospace;
+    box-shadow:0 1px 0 var(--sf-neutral-90);
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+<header class="top">
+  <div class="kicker">UNIICREATIVE · SALESFORCE DEMO PLAYBOOK v2</div>
+  <h1>有你共創 · Data 360 + MC Advanced Demo</h1>
+  <div class="meta">FirstSDO org · 決策者 Edgar 楊 · 更新日期 2026-07-18</div>
+</header>
+
+<div class="toc">
+  <strong>目錄</strong>
+  <ol>
+    <li><a href="#state">今日部署狀態總覽</a></li>
+    <li><a href="#manual-ui">Demo 前的 5 個 UI 手動步驟</a></li>
+    <li><a href="#segment-activation">MarketSegment Activation（Data 360）</a></li>
+    <li><a href="#flow-activate">Flow / Journey 啟用</a></li>
+    <li><a href="#golden-path">3 分鐘 Golden Path</a></li>
+    <li><a href="#ai">AI-driven 差異化話術</a></li>
+    <li><a href="#scale">80 萬會員規模的視覺呈現</a></li>
+    <li><a href="#partner">Partner 分工話術</a></li>
+    <li><a href="#assets">Demo 資產清單</a></li>
+    <li><a href="#risk">風險 &amp; 已知限制</a></li>
+  </ol>
+</div>
+
+<h2 id="state">1. 今日部署狀態總覽</h2>
+<p>今日（2026-07-18）批次施工完成的組件 · 全部符合「先用 Salesforce OOTB builder」原則：</p>
+
+<div class="status-grid">
+  <div class="status">
+    <div class="label">CustomApplication</div>
+    <div class="value">有你共創 App</div>
+    <div class="sub">SLDS 品牌色 #032D60 · Lightning nav</div>
+  </div>
+  <div class="status">
+    <div class="label">FlexiPage (2)</div>
+    <div class="value">著陸頁擴充</div>
+    <div class="sub">c:uniicreativePortal LWC + OOTB desktopDashboards:embeddedDashboard 混合佈局</div>
+  </div>
+  <div class="status">
+    <div class="label">Dashboard (1)</div>
+    <div class="value">有你共創 · 會員 360 儀表板</div>
+    <div class="sub">3-column · Bar/Donut/Column，OOTB Dashboard Builder</div>
+  </div>
+  <div class="status">
+    <div class="label">Report (4)</div>
+    <div class="value">Uniicreative_Demo 資料夾</div>
+    <div class="sub">ContactList 標準 report type · 60 筆會員資料</div>
+  </div>
+  <div class="status">
+    <div class="label">EmailTemplate (4)</div>
+    <div class="value">OOTB Custom HTML</div>
+    <div class="sub">雙11預熱 · 生日壽星 · 沉睡喚回 · 快閃店開幕</div>
+  </div>
+  <div class="status">
+    <div class="label">MarketSegment (9)</div>
+    <div class="value">SegmentStatus = ACTIVE</div>
+    <div class="sub">Data Space: default · 待 Activation 綁定 Target</div>
+  </div>
+  <div class="status">
+    <div class="label">Flow (7)</div>
+    <div class="value">Draft · 已修正 startDate</div>
+    <div class="sub">Segment-triggered · 需 UI Activate (見 §4)</div>
+  </div>
+  <div class="status">
+    <div class="label">Campaign (10)</div>
+    <div class="value">有你共創 · 前綴</div>
+    <div class="sub">Event / Email / Other 三種類型混用</div>
+  </div>
+  <div class="status">
+    <div class="label">Guest User Perms</div>
+    <div class="value">已 assign</div>
+    <div class="sub">uDesign_Site_Access 完整覆蓋 uDesignSite1/2</div>
+  </div>
+  <div class="status">
+    <div class="label">PE Pipeline</div>
+    <div class="value">uDesign_Event__e 通</div>
+    <div class="sub">Publish OK · 3 Apex class Active</div>
+  </div>
+  <div class="status info">
+    <div class="label">Data</div>
+    <div class="value">60 筆 Contact</div>
+    <div class="sub">4 業務線 × 4 會員等級 · LTV 平均 25,679 · Points 平均 322</div>
+  </div>
+  <div class="status">
+    <div class="label">Digital Experience</div>
+    <div class="value">uDesign 4 個 site</div>
+    <div class="sub">udesign / udesign2 · Guest 可送 PE</div>
+  </div>
+</div>
+
+<h2 id="manual-ui">2. Demo 前 · 5 個必做的 UI 手動步驟</h2>
+<div class="callout"><strong>Why 手動？</strong> Data 360 / MC Advanced 有些關聯（dataSpace 綁定、Activation Target、Journey Segment triggering）只能在 UI 完成 —— metadata deploy 會被 Salesforce 拒絕。花 10-15 分鐘做完，demo 就滿血。</div>
+
+<table>
+  <thead><tr><th style="width:60px">#</th><th>動作</th><th>路徑</th><th>時間</th></tr></thead>
+  <tbody>
+    <tr><td><span class="badge badge-todo">UI</span></td><td>啟用 4-7 支 Journey Flow</td><td>Flow Builder → 有你共創 · 新會員灌溉歡迎 → Activate</td><td>3 分</td></tr>
+    <tr><td><span class="badge badge-todo">UI</span></td><td>Publish 4 個 MarketSegment</td><td>Data 360 → Segments → 白金 VIP → Publish Now</td><td>2 分</td></tr>
+    <tr><td><span class="badge badge-todo">UI</span></td><td>建 Activation：Segment → Data Action (Email/SMS)</td><td>Data 360 → Activations → New</td><td>5 分</td></tr>
+    <tr><td><span class="badge badge-info">Verify</span></td><td>開 有你共創 App 首頁 Dashboard 有渲染</td><td>App Launcher → 有你共創</td><td>1 分</td></tr>
+    <tr><td><span class="badge badge-info">Verify</span></td><td>uDesign Exp site 加購物車 → Dashboard 更新</td><td>udesign.force.com/s → cart</td><td>2 分</td></tr>
+  </tbody>
+</table>
+
+<h2 id="segment-activation">3. MarketSegment Activation 建立步驟（Data 360 UI）</h2>
+<div class="card">
+  <p><strong>目標</strong>：讓 9 個 Segment 能真的送到 Journey / EDM，不只是靜態名單。</p>
+  <div class="step"><div class="n">1</div><div>登入 FirstSDO → App Launcher → <strong>Data Cloud</strong>（對客戶介紹時說「Data 360」）</div></div>
+  <div class="step"><div class="n">2</div><div>左側導覽 → <strong>Segments</strong> → 選 <code>有你共創 · 白金 VIP</code></div></div>
+  <div class="step"><div class="n">3</div><div>頁面右上角 <strong>Publish Now</strong> → 等 30 秒完成 → 頁籤切到 <strong>Activations</strong></div></div>
+  <div class="step"><div class="n">4</div><div><strong>New Activation</strong> → 選 Activation Target：Marketing Cloud on Core（Email）</div></div>
+  <div class="step"><div class="n">5</div><div>Attribute mapping：勾選 FirstName / LastName / Email / MemberTier__c / PointsBalance__c → Save</div></div>
+  <div class="step"><div class="n">6</div><div>對 <code>沉睡會員</code>、<code>雙11生日壽星</code>、<code>千禧世代女性文創迷</code> 重複 —— 這 4 個是 demo 必用</div></div>
+</div>
+<div class="callout warn"><strong>順序重要</strong>：Segment 必須先 Publish 一次，Activation UI 才會出現該 Segment 的下拉選項。</div>
+
+<h2 id="flow-activate">4. Flow / Journey 啟用步驟（Flow Builder UI）</h2>
+<p>今日已用 metadata deploy 完成的：修正 7 支 flow 的過期 <code>startDate</code>（2026-07-15 → 2026-08-15），現在只差 UI 上按 Activate。</p>
+<table>
+  <thead><tr><th>Flow API Name</th><th>Label</th><th>綁定 Segment</th><th>綁定 Email</th></tr></thead>
+  <tbody>
+    <tr><td><code>uni_welcome_drip</code></td><td>新會員灌溉歡迎</td><td>白金 VIP（新註冊）</td><td>雙11預熱 EDM</td></tr>
+    <tr><td><code>uni_birthday_auto</code></td><td>雙11生日壽星自動化</td><td>雙11生日壽星</td><td>生日壽星 EDM</td></tr>
+    <tr><td><code>uni_winback_progressive</code></td><td>沉睡會員漸進喚回</td><td>沉睡會員</td><td>沉睡會員喚回</td></tr>
+    <tr><td><code>uni_popup_nurture</code></td><td>快閃店高潛客培養</td><td>快閃店高潛客</td><td>快閃店開幕</td></tr>
+    <tr><td><code>uni_abtest_millennial</code></td><td>千禧女性文創迷 A/B 測試</td><td>千禧世代女性文創迷</td><td>雙11預熱 EDM</td></tr>
+    <tr><td><code>uniicreative_1</code></td><td>雙11預熱 EDM</td><td>雙11生日壽星</td><td>雙11預熱 EDM</td></tr>
+    <tr><td><code>uniicreative_2</code></td><td>雙11預熱 EDM · 開信重發</td><td>雙11生日壽星</td><td>雙11預熱 EDM</td></tr>
+  </tbody>
+</table>
+<div class="callout"><strong>啟用步驟</strong>：Setup → Flows → 點選 flow → Version → 最新版本 → <strong>Activate</strong> · 若跳「請指定 dataSpace」→ 開 Flow Builder → Start 節點 → Data Space 下拉選 <code>default</code> → Save As New Version → Activate</div>
+
+<h2 id="golden-path">5. 3 分鐘 Golden Path 話術</h2>
+<div class="card">
+  <h3>設定：向 Edgar 展示「一筆會員資料如何 30 秒內走完 Data 360 → MC Advanced 全鏈路」</h3>
+  <div class="flow-diagram">
+    <div class="box">會員在 uDesign 網站加購物車</div>
+    <div class="arrow">→</div>
+    <div class="box">Guest User 觸發 Platform Event</div>
+    <div class="arrow">→</div>
+    <div class="box">Data 360 即時更新 CBI</div>
+    <div class="arrow">→</div>
+    <div class="box">Segment 重算</div>
+    <div class="arrow">→</div>
+    <div class="box">Journey 觸發</div>
+    <div class="arrow">→</div>
+    <div class="box">EDM 發送</div>
+  </div>
+  <h3>3 分鐘實際流程</h3>
+  <div class="step"><div class="n">1</div><div><strong>0:00-0:30</strong>　開 <code>udesign.force.com/s</code>，把 IP 聯名文創桌遊加入購物車。<br><em>話術：「這是有你共創官網，會員瀏覽跟加購都是即時事件。」</em></div></div>
+  <div class="step"><div class="n">2</div><div><strong>0:30-1:00</strong>　切到 <strong>有你共創 App</strong> 首頁 Dashboard。指著剛加入的商品筆數變化（LWC 卡片）。<br><em>話術：「Data 360 秒級更新，這裡看到的就是剛剛您加購那一筆。」</em></div></div>
+  <div class="step"><div class="n">3</div><div><strong>1:00-1:30</strong>　點 Data 360 App → Segments → <code>白金 VIP</code>。展示 6 筆會員名單，強調「屬性條件是 MemberTier__c = 白金VIP AND LastPurchaseDate__c &gt; 30 days ago」。<br><em>話術：「這樣的分眾，過去要 IT 隔天跑 SQL；現在您行銷同仁自己拖拉就出來。」</em></div></div>
+  <div class="step"><div class="n">4</div><div><strong>1:30-2:00</strong>　切到 Segment 的 <strong>Activations</strong> 頁籤，展示已綁定的 Journey <code>uni_welcome_drip</code>。<br><em>話術：「Segment 每次 refresh，符合條件的新會員自動進 Journey。」</em></div></div>
+  <div class="step"><div class="n">5</div><div><strong>2:00-2:30</strong>　開 Flow Builder → <code>uni_welcome_drip</code> 讓客戶看流程節點：Day 0 EDM → Day 3 wait → Day 7 EDM。點開 EDM node 展示 <code>有你共創 · 雙11預熱 EDM</code> 預覽。<br><em>話術：「這封 EDM 是 Content Builder 拉出來的，設計師改版不用工程師介入。」</em></div></div>
+  <div class="step"><div class="n">6</div><div><strong>2:30-3:00</strong>　回到 App 首頁 Dashboard，指沉睡會員清單。<br><em>話術：「180 天沒互動的名單依 LTV 排序，同一套 Journey 一鍵改 Segment 就是喚回劇本。這就是 Data 360 + MC Advanced 的價值：不是換工具，是把您行銷團隊的槓桿放大 10 倍。」</em></div></div>
+</div>
+
+<h2 id="ai">6. AI-driven 差異化話術（Einstein / Agentforce）</h2>
+<p>MC Advanced 的殺手鐧 = AI 加值。這場 demo 對決策者 Edgar，AI 是「你們比別家強在哪」的關鍵一段。</p>
+<div class="card">
+  <h3>可以帶到的三個 AI 話術點（不用做，只要講）</h3>
+  <table>
+    <thead><tr><th>能力</th><th>怎麼介紹</th><th>Edgar 會聽到什麼</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><strong>Einstein Segment Recommendations</strong></td>
+        <td>「我們平台會自動根據您的 60 萬會員行為，推薦『看起來像白金 VIP 但還沒消費過』的高潛客名單。」</td>
+        <td>不用資料科學家也能做 lookalike</td>
+      </tr>
+      <tr>
+        <td><strong>Einstein Send Time Optimization</strong></td>
+        <td>「這封雙 11 EDM，每個人收到的時間是 AI 算出來的最佳開信時段——同樣的內容，開信率會多 15-25%。」</td>
+        <td>直接影響轉換率的數字</td>
+      </tr>
+      <tr>
+        <td><strong>Agentforce Marketing Copilot</strong></td>
+        <td>「行銷同仁直接對 Agentforce 說：『幫我找上個月加購但沒結帳的女性會員，發封文創桌遊的 EDM』——它會自己建 Segment、生成 EDM 主旨、綁 Journey。」</td>
+        <td>把 3 天工作變 5 分鐘的路線圖預覽</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+<div class="callout warn"><strong>誠實原則</strong>：這 3 塊都是產品路線圖上的能力，不是這場 demo 現場能點出來給 Edgar 看的畫面。話術中用「路線圖預覽」帶過，不要現場 demo 導向 Einstein 頁面（會撲空）。</div>
+
+<h2 id="scale">7. 80 萬會員規模的視覺呈現</h2>
+<p>Demo 現場只有 60 筆真實資料，客戶目標是 80-100 萬會員。UI 上要處理：<strong>drill-down 可看到真實名單</strong>，同時<strong>大數字用示意規模</strong>，兩者用 SLDS info icon 分開說明（符合誠實原則）。</p>
+<div class="card">
+  <h3>uniicreativePortal LWC 的頂部大數字建議設計</h3>
+  <pre><code>┌─────────────────────────────────────────────────────────────┐
+│ 會員總數 802,431 ⓘ  ← info icon: "demo 資料放大顯示，       │
+│                        底層抽樣 60 筆真實 Contact"          │
+│                                                              │
+│ 白金 VIP  金卡    銀卡    一般會員                          │
+│  80,412   80,412  214,432 427,175                            │
+│                                                              │
+│ 上週活躍 154,802     沉睡會員 (180d) 121,065                │
+└─────────────────────────────────────────────────────────────┘</code></pre>
+  <p>比例保持 60 筆真實資料的分布（白金 10% / 金 10% / 銀 27% / 一般 53%），乘一個放大係數就好。這樣客戶點進 drill-down 名單，仍會看到跟大數字比例一致的真實會員。</p>
+</div>
+
+<h2 id="partner">8. Partner 分工話術（LINE / 發票 / 抽獎）</h2>
+<div class="callout"><strong>原則</strong>：這 3 塊是 天新資訊 負責。我方不做 proxy demo，用「一句話帶過」，讓 Edgar 知道「這塊有人做，Salesforce 這邊已經預留串接接口」。</div>
+<table>
+  <thead><tr><th>客戶需求</th><th>Partner 負責範圍</th><th>SF 端已預留</th><th>話術</th></tr></thead>
+  <tbody>
+    <tr>
+      <td>#4 LINE OA 會員綁定</td>
+      <td>天新做 LINE OA webhook + LIFF 頁面 + 帳號綁定流程</td>
+      <td>Contact.LINE_User_ID__c 欄位 · Data 360 收 LINE Ingest DLO</td>
+      <td>「LINE 這塊 API 由 天新資訊 負責串接，Salesforce 收到綁定事件後 Data 360 立刻更新 unified profile。」</td>
+    </tr>
+    <tr>
+      <td>#9 發票載具自動集點</td>
+      <td>天新對接電子發票 API，把載具號帶入積點系統</td>
+      <td>Contact.PointsBalance__c 欄位 · Loyalty API 已有 Custom Field 模擬</td>
+      <td>「發票載具是財政部規範，天新有現成 SDK，我們接收積點事件即可。」</td>
+    </tr>
+    <tr>
+      <td>#12 互動抽獎活動模組</td>
+      <td>天新做 pop-up store 互動 app 前端 + 抽獎邏輯</td>
+      <td>Contact.PopupStoreVisits__c 欄位 · Campaign Member 記錄參與</td>
+      <td>「快閃店現場的互動抽獎，天新做 app UI，Salesforce 記錄每個接觸點作為 Segment 條件之一。」</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="assets">9. Demo 資產清單</h2>
+<h3>Salesforce Metadata（已部署到 FirstSDO）</h3>
+<dl class="kv">
+  <dt>CustomApplication</dt><dd><code>Uniicreative</code> · Label：有你共創</dd>
+  <dt>Flexipage</dt><dd><code>Uniicreative_Marketing_Dashboard</code> · <code>Uniicreative_Portal_Home</code></dd>
+  <dt>Dashboard</dt><dd><code>Uniicreative_Demo/Uniicreative_Marketing_Dashboard</code></dd>
+  <dt>Reports</dt><dd>Members_by_BusinessLine · Members_by_MemberTier · Demographics_by_AgeGroup · Sleeping_Members</dd>
+  <dt>EmailTemplates</dt><dd>Double11_Preheat · Birthday_Auto · Winback_Sleeping · PopupStore_Opening</dd>
+  <dt>Flows</dt><dd>uni_welcome_drip · uni_birthday_auto · uni_popup_nurture · uni_winback_progressive · uni_abtest_millennial · uniicreative_1 · uniicreative_2</dd>
+  <dt>MarketSegment</dt><dd>9 支「有你共創」系列 · Data Space: default</dd>
+  <dt>Campaigns</dt><dd>10 支「有你共創」系列</dd>
+  <dt>LWC</dt><dd>uniicreativePortal · uniicreativeDashboard · uniicreativeListView</dd>
+  <dt>Apex</dt><dd>UdesignEventPublisher · UdesignIngestionService · UdesignData360Controller · UniicreativeDashboardCtrl</dd>
+  <dt>PermSet</dt><dd>Uniicreative_Demo_Admin · uDesign_Site_Access</dd>
+  <dt>Digital Exp</dt><dd>uDesignSite1/11/2/21 · 網站前綴 udesign</dd>
+</dl>
+
+<h3>本機檔案</h3>
+<dl class="kv">
+  <dt>SF Project</dt><dd><code>C:\Users\bingyan.tsai\Desktop\Claude\uniicreative-demo\</code></dd>
+  <dt>Web Demo</dt><dd><code>uniicreative-demo\web-demo\</code>（index/cart/checkout/member）</dd>
+  <dt>規劃書</dt><dd><code>有你共創-demo-plan.html</code></dd>
+  <dt>本 Playbook</dt><dd><code>有你共創-demo-playbook-v2.html</code>（此檔）</dd>
+  <dt>Exp Cloud Diag</dt><dd><code>uniicreative-demo\exp-cloud\_verify_pe.apex</code></dd>
+</dl>
+
+<h2 id="risk">10. 風險 &amp; 已知限制</h2>
+<table>
+  <thead><tr><th>風險</th><th>狀態</th><th>Mitigation</th></tr></thead>
+  <tbody>
+    <tr>
+      <td>Data Cloud Segment-triggered Flow 需 UI 綁 dataSpace</td>
+      <td><span class="badge badge-todo">Demo 前手動</span></td>
+      <td>照 §4 步驟做 · 15 分內完成 7 支</td>
+    </tr>
+    <tr>
+      <td>MarketSegment Activation 只能 UI 建，metadata 不支援</td>
+      <td><span class="badge badge-todo">Demo 前手動</span></td>
+      <td>照 §3 步驟做 4 個關鍵 Segment · 20 分</td>
+    </tr>
+    <tr>
+      <td>Campaign_Performance Report 因 CampaignList report type 欄位名衝突未部署</td>
+      <td><span class="badge badge-info">影響小</span></td>
+      <td>Campaign tab 有 OOTB report 可替代 · 或 UI 手建</td>
+    </tr>
+    <tr>
+      <td>60 筆真實資料 vs 80 萬會員規模差距</td>
+      <td><span class="badge badge-info">已規劃</span></td>
+      <td>§7 提供「示意規模 + info icon」誠實方案</td>
+    </tr>
+    <tr>
+      <td>AI/Einstein 現場不能點</td>
+      <td><span class="badge badge-info">話術處理</span></td>
+      <td>§6 用「路線圖預覽」措辭</td>
+    </tr>
+    <tr>
+      <td>LINE / 發票 / 抽獎 partner 三塊</td>
+      <td><span class="badge badge-ok">分工清楚</span></td>
+      <td>§8 話術一句話帶過</td>
+    </tr>
+  </tbody>
+</table>
+
+<div style="margin-top:60px;padding-top:20px;border-top:1px solid var(--sf-neutral-90);color:var(--sf-neutral-50);font-size:12px;text-align:center">
+  Playbook v2 · 生成於 2026-07-18 · FirstSDO org · storm.551efa95c64467@salesforce.com
+</div>
+</div>
+</body>
+</html>
