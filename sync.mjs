@@ -58,6 +58,11 @@ const PAGES = [
         dest: 'ycc/playbook-v2.html',
         title: '有你共創 · Demo Playbook v2 (2026-07-18)'
     },
+    {
+        src: 'C:/Users/bingyan.tsai/Desktop/Claude/有你共創-journey-playbook.html',
+        dest: 'ycc/journey-playbook.html',
+        title: '有.數據 · MC Advanced Journey Playbook (2026-07-18)'
+    },
     // ─── Salesforce 6 大雲 Overview ───
     {
         src: 'C:/Users/bingyan.tsai/Desktop/Claude/salesforce-clouds/index.html',

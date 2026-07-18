@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>有.數據 · MC Advanced Journey Playbook｜有你共創</title>
+<style>
+  :root{--navy:#032D60;--blue:#0176D3;--gold:#C6912E;--ink:#181818;--sub:#5f6368;--line:#e5e5e5;--mint:#eef4fb;--bg:#f3f3f3;}
+  *{box-sizing:border-box;}
+  body{margin:0;font-family:"Salesforce Sans",-apple-system,"Segoe UI","PingFang TC","Microsoft JhengHei",sans-serif;color:var(--ink);background:var(--bg);line-height:1.6;}
+  .hero{background:linear-gradient(135deg,var(--navy),var(--blue));color:#fff;padding:2.5rem 2rem;}
+  .hero .eyebrow{font-size:.72rem;letter-spacing:.18em;text-transform:uppercase;opacity:.85;}
+  .hero h1{margin:.4rem 0 .5rem;font-size:1.9rem;font-weight:700;}
+  .hero p{margin:0;opacity:.95;font-size:.95rem;max-width:60rem;}
+  .wrap{max-width:72rem;margin:0 auto;padding:1.5rem 1.25rem 3rem;}
+  .flow{display:flex;flex-wrap:wrap;gap:.5rem;align-items:center;background:#fff;border:1px solid var(--line);border-radius:.75rem;padding:1rem 1.25rem;margin:-1.5rem 0 1.5rem;position:relative;box-shadow:0 .4rem 1rem rgba(3,45,96,.08);}
+  .flow .step{font-weight:700;color:var(--navy);}
+  .flow .arrow{color:var(--gold);font-weight:700;}
+  .flow .note{color:var(--sub);font-size:.82rem;width:100%;margin-top:.35rem;}
+  h2.sec{font-size:.78rem;letter-spacing:.08em;text-transform:uppercase;color:var(--sub);font-weight:700;margin:2rem 0 .75rem;border-bottom:1px solid var(--line);padding-bottom:.4rem;}
+  .base{display:grid;grid-template-columns:repeat(auto-fit,minmax(9rem,1fr));gap:.75rem;}
+  .stat{background:#fff;border:1px solid var(--line);border-radius:.6rem;padding:.9rem 1rem;}
+  .stat b{display:block;font-size:1.5rem;color:var(--navy);line-height:1.1;}
+  .stat span{font-size:.75rem;color:var(--sub);}
+  .jcard{background:#fff;border:1px solid var(--line);border-radius:.85rem;overflow:hidden;margin-bottom:1.1rem;box-shadow:0 .25rem .7rem rgba(0,0,0,.04);}
+  .jhead{display:flex;align-items:flex-start;gap:.9rem;padding:1.1rem 1.25rem;border-bottom:1px solid var(--line);}
+  .jnum{flex:0 0 auto;width:2.2rem;height:2.2rem;border-radius:50%;background:var(--navy);color:#fff;display:grid;place-items:center;font-weight:700;}
+  .jtitle{font-size:1.15rem;font-weight:700;color:var(--navy);margin:0;}
+  .jtag{display:inline-flex;align-items:center;gap:.3rem;margin-top:.35rem;padding:.15rem .6rem;border-radius:999px;background:var(--mint);color:#1c4e80;font-size:.72rem;font-weight:600;}
+  .jaud{margin-left:auto;text-align:right;flex:0 0 auto;}
+  .jaud b{font-size:1.6rem;color:var(--gold);display:block;line-height:1;}
+  .jaud span{font-size:.7rem;color:var(--sub);}
+  .jbody{padding:1rem 1.25rem;display:grid;grid-template-columns:1fr 1fr;gap:1rem 1.5rem;}
+  @media(max-width:40rem){.jbody{grid-template-columns:1fr;}.jhead{flex-wrap:wrap;}.jaud{margin-left:0;text-align:left;}}
+  .field label{display:block;font-size:.68rem;letter-spacing:.05em;text-transform:uppercase;color:var(--sub);font-weight:700;margin-bottom:.2rem;}
+  .field div{font-size:.9rem;}
+  .field.full{grid-column:1/-1;}
+  .seg{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:.82rem;background:#f6f8fa;border:1px solid var(--line);border-radius:.4rem;padding:.5rem .7rem;color:#0b3d75;}
+  ol.steps{margin:.2rem 0 0;padding-left:1.1rem;}
+  ol.steps li{margin-bottom:.25rem;font-size:.88rem;}
+  .chan{display:inline-block;padding:.1rem .5rem;border-radius:.3rem;font-size:.72rem;font-weight:600;margin-right:.3rem;}
+  .c-line{background:#e7f7ed;color:#06774a;}.c-edm{background:#e8f1fb;color:#0b5cab;}.c-sms{background:#fff3d8;color:#7d5b00;}.c-app{background:#f0ebfd;color:#5b3ea8;}
+  .insight{grid-column:1/-1;background:#f3f8fd;border-left:3px solid var(--blue);border-radius:.4rem;padding:.7rem .9rem;font-size:.85rem;color:#24405a;}
+  .insight b{color:var(--navy);}
+  .kpi{grid-column:1/-1;font-size:.82rem;color:var(--sub);}
+  .howto{background:#fff;border:1px solid var(--line);border-radius:.75rem;padding:1.1rem 1.35rem;}
+  .howto ol{margin:.3rem 0 0;padding-left:1.2rem;}.howto li{margin-bottom:.35rem;font-size:.9rem;}
+  .foot{color:var(--sub);font-size:.78rem;text-align:center;margin-top:2rem;}
+  code{background:#f6f8fa;padding:.05rem .35rem;border-radius:.25rem;font-size:.82rem;}
+</style>
+</head>
+<body>
+  <div class="hero">
+    <div class="eyebrow">有.數據 · Customer 360 → Marketing Cloud on Core (Advanced)</div>
+    <h1>會員標籤分群 × Journey Playbook</h1>
+    <p>依有你共創真實業務（有.設計選物電商 · 有.國際 kibidango · 有.募資 · 有.IP授權 · 有.點市快閃 · 團購）設計。每一條 Journey 的分群條件都對應已落地的 <b>會員標籤（Uniicreative_Member_Tag__c）</b>，受眾人數皆為系統真實計算。</p>
+  </div>
+
+  <div class="wrap">
+    <div class="flow">
+      <span class="step">全通路 Ingest</span><span class="arrow">→</span>
+      <span class="step">會員貼標（Cust_Tag）</span><span class="arrow">→</span>
+      <span class="step">Segment 分群</span><span class="arrow">→</span>
+      <span class="step">MC Advanced Journey</span>
+      <div class="note">POS／EC／官網 Web 事件／LINE 綁定 → 動態運算標籤並落地 Member_Tag → 以 TagValue 建 Segment → 觸發跨通路旅程。</div>
+    </div>
+
+    <h2 class="sec">資料基礎（真實、可驗證）</h2>
+    <div class="base">
+      <div class="stat"><b>61</b><span>已建檔會員 Person Account</span></div>
+      <div class="stat"><b>1,527</b><span>已落地標籤數 Member_Tag</span></div>
+      <div class="stat"><b>71</b><span>不重複標籤值 TagValue</span></div>
+      <div class="stat"><b>NT$1.62M</b><span>會員累計價值 LTV</span></div>
+      <div class="stat"><b>43</b><span>LINE 可觸達（70%）</span></div>
+    </div>
+
+    <h2 class="sec">Journey 設計（9 條）</h2>
+
+    <!-- 1 -->
+    <div class="jcard">
+      <div class="jhead">
+        <div class="jnum">1</div>
+        <div><h3 class="jtitle">加購棄單即時挽回</h3><span class="jtag">行為標籤 · 加購棄單（待挽回）</span></div>
+        <div class="jaud"><b>5</b><span>目標會員</span></div>
+      </div>
+      <div class="jbody">
+        <div class="field full"><label>Segment 條件（Member_Tag）</label><div class="seg">Account 有 Member_Tag，TagValue = 「加購棄單（待挽回）」<br>（官網加入購物車、但無完成結帳／EC 訂單）</div></div>
+        <div class="field"><label>觸發</label><div>加入購物車後 24 小時未結帳（Web_Event 即時進 Data 360）</div></div>
+        <div class="field"><label>通路</label><div><span class="chan c-line">LINE OA</span><span class="chan c-sms">SMS</span></div></div>
+        <div class="field full"><label>訊息腳本</label><ol class="steps">
+          <li>D0：LINE 推播「您加入購物車的〔商品〕還在等您」＋庫存/限時優惠</li>
+          <li>D1 未開啟：改推 SMS 短連結</li>
+          <li>D2 已開啟未購：加碼免運/點數回饋，導回 uDesign 結帳頁</li></ol></div>
+        <div class="insight"><b>為何懂你：</b>有.設計選物電商的高關鍵漏斗是「加購→結帳」；官網 Web 事件已可辨識棄購者，用 LINE 即時挽回是提袋率最有效的一手。</div>
+        <div class="kpi">KPI：挽回轉換率、回訪率、每封挽回營收</div>
+      </div>
+    </div>
+
+    <!-- 2 -->
+    <div class="jcard">
+      <div class="jhead">
+        <div class="jnum">2</div>
+        <div><h3 class="jtitle">快閃店 VIP 優先預約</h3><span class="jtag">會員分群 · 快閃店高潛客 ∩ VIP</span></div>
+        <div class="jaud"><b>10</b><span>目標會員</span></div>
+      </div>
+      <div class="jbody">
+        <div class="field full"><label>Segment 條件（Member_Tag）</label><div class="seg">TagValue = 「快閃店高潛客」 AND TagValue = 「VIP 高價值客群」</div></div>
+        <div class="field"><label>觸發</label><div>新快閃檔期上架（IP 主題快閃店）</div></div>
+        <div class="field"><label>通路</label><div><span class="chan c-line">LINE OA</span><span class="chan c-app">App 推播</span></div></div>
+        <div class="field full"><label>訊息腳本</label><ol class="steps">
+          <li>開檔前 3 日：VIP 專屬「優先預約時段」連結</li>
+          <li>預約成功：到店 QR＋加碼限定週邊</li>
+          <li>開檔後未預約：D+1 提醒剩餘名額</li></ol></div>
+        <div class="insight"><b>為何懂你：</b>有你共創主辦 60+ 場 IP 快閃店；把「常造訪快閃 × 高價值」的 10 位鐵粉優先鎖定，衝開幕動能與話題。</div>
+        <div class="kpi">KPI：預約率、到店率、快閃店客單價</div>
+      </div>
+    </div>
+
+    <!-- 3 -->
+    <div class="jcard">
+      <div class="jhead">
+        <div class="jnum">3</div>
+        <div><h3 class="jtitle">跨境日本 IP 新品預告（有.國際）</h3><span class="jtag">通路市場 · 跨境日本客</span></div>
+        <div class="jaud"><b>4</b><span>目標會員</span></div>
+      </div>
+      <div class="jbody">
+        <div class="field full"><label>Segment 條件（Member_Tag）</label><div class="seg">TagValue = 「跨境日本客（有.國際）」<br>（曾於 kibidango 日本平台下單）</div></div>
+        <div class="field"><label>觸發</label><div>kibidango 日本新募資／新品上架</div></div>
+        <div class="field"><label>通路</label><div><span class="chan c-edm">EDM</span><span class="chan c-line">LINE OA</span></div></div>
+        <div class="field full"><label>訊息腳本</label><ol class="steps">
+          <li>日本限定 IP 新品/募資早鳥預告（雙語）</li>
+          <li>提供跨境集運/預購優惠</li>
+          <li>回應者導入「有.國際」預購名單</li></ol></div>
+        <div class="insight"><b>為何懂你：</b>有你共創已併購日本群募平台 kibidango；把跨境日本粉絲獨立經營，是「有.國際」變現的關鍵微分眾。</div>
+        <div class="kpi">KPI：跨境預購轉換、日本線營收占比</div>
+      </div>
+    </div>
+
+    <!-- 4 -->
+    <div class="jcard">
+      <div class="jhead">
+        <div class="jnum">4</div>
+        <div><h3 class="jtitle">募資早鳥再參與（有.募資）</h3><span class="jtag">通路市場 · 募資預購客</span></div>
+        <div class="jaud"><b>14</b><span>目標會員</span></div>
+      </div>
+      <div class="jbody">
+        <div class="field full"><label>Segment 條件（Member_Tag）</label><div class="seg">TagValue = 「募資預購客（有.募資）」<br>（曾於嘖嘖 zeczec 支持專案）</div></div>
+        <div class="field"><label>觸發</label><div>新募資案上線（早鳥開跑）</div></div>
+        <div class="field"><label>通路</label><div><span class="chan c-line">LINE OA</span><span class="chan c-edm">EDM</span></div></div>
+        <div class="field full"><label>訊息腳本</label><ol class="steps">
+          <li>「曾支持者專屬」早鳥限量席位</li>
+          <li>倒數提醒（早鳥截止前 24h）</li>
+          <li>達標通知＋追加方案</li></ol></div>
+        <div class="insight"><b>為何懂你：</b>有.募資 96% 成功率、每檔平均 380 萬；曾支持者是新案早鳥動能來源，開案就先催既有支持者最有效。</div>
+        <div class="kpi">KPI：早鳥達成時間、回訪支持率、平均支持金額</div>
+      </div>
+    </div>
+
+    <!-- 5 -->
+    <div class="jcard">
+      <div class="jhead">
+        <div class="jnum">5</div>
+        <div><h3 class="jtitle">IP 興趣個人化新品通知</h3><span class="jtag">興趣標籤 · 咒術迴戰／蠟筆小新／黃阿瑪…</span></div>
+        <div class="jaud"><b>依 IP</b><span>咒術14 · 蠟筆10 …</span></div>
+      </div>
+      <div class="jbody">
+        <div class="field full"><label>Segment 條件（Member_Tag）</label><div class="seg">TagValue = 〔IP 名稱〕（讀 Member_Interest 落地標籤）<br>例：咒術迴戰 = 14 人、蠟筆小新 = 10 人</div></div>
+        <div class="field"><label>觸發</label><div>對應 IP 新品／聯名／授權商品上架</div></div>
+        <div class="field"><label>通路</label><div><span class="chan c-line">LINE OA（動態內容）</span></div></div>
+        <div class="field full"><label>訊息腳本</label><ol class="steps">
+          <li>依會員 IP 興趣，推送「你追的〔IP〕出新品了」</li>
+          <li>限量/預購連結導 uDesign</li>
+          <li>加入收藏未購者 D+3 再提醒</li></ol></div>
+        <div class="insight"><b>為何懂你：</b>有.IP授權代理 50+ 全球 IP、累計 1 萬+ SKU；用會員的 IP 興趣做動態內容，一次活動打中每個粉絲的本命。</div>
+        <div class="kpi">KPI：IP 別開信/點擊、聯名商品轉換</div>
+      </div>
+    </div>
+
+    <!-- 6 -->
+    <div class="jcard">
+      <div class="jhead">
+        <div class="jnum">6</div>
+        <div><h3 class="jtitle">沉睡會員喚回 × 點數快到期</h3><span class="jtag">RFM · Recall／沉睡待喚回</span></div>
+        <div class="jaud"><b>14</b><span>目標會員</span></div>
+      </div>
+      <div class="jbody">
+        <div class="field full"><label>Segment 條件（Member_Tag）</label><div class="seg">TagValue = 「沉睡待喚回客群」 OR 「Recall 待喚回（曾高頻）」</div></div>
+        <div class="field"><label>觸發</label><div>逾 180 天未互動，或點數到期前 30 天</div></div>
+        <div class="field"><label>通路</label><div><span class="chan c-sms">SMS</span><span class="chan c-line">LINE OA</span></div></div>
+        <div class="field full"><label>訊息腳本</label><ol class="steps">
+          <li>「您有 〔X〕 點即將到期」＋回歸禮</li>
+          <li>推薦最近熱門 IP／快閃檔期</li>
+          <li>回訪者導入「回歸客」再行銷</li></ol></div>
+        <div class="insight"><b>為何懂你：</b>曾高頻但轉冷的會員（Recall）比全新客更值得救；用「有.點市」點數到期做急迫感，喚回成本最低。</div>
+        <div class="kpi">KPI：喚回率、點數使用率、回訪 30 日營收</div>
+      </div>
+    </div>
+
+    <!-- 7 -->
+    <div class="jcard">
+      <div class="jhead">
+        <div class="jnum">7</div>
+        <div><h3 class="jtitle">首購 → 二購黃金 7 日</h3><span class="jtag">價值增長 · 首購客</span></div>
+        <div class="jaud"><b>2</b><span>目標會員</span></div>
+      </div>
+      <div class="jbody">
+        <div class="field full"><label>Segment 條件（Member_Tag）</label><div class="seg">TagValue = 「首購客」（完成訂單數 = 1）</div></div>
+        <div class="field"><label>觸發</label><div>首次成交當下</div></div>
+        <div class="field"><label>通路</label><div><span class="chan c-line">LINE OA</span><span class="chan c-edm">EDM</span></div></div>
+        <div class="field full"><label>訊息腳本</label><ol class="steps">
+          <li>D0：感謝＋會員權益介紹＋出貨通知</li>
+          <li>D3：依購買品類推薦搭配選物</li>
+          <li>D7：二購限時券，推升回購</li></ol></div>
+        <div class="insight"><b>為何懂你：</b>選物電商決勝在「首購後 7 日」；用 welcome 旅程把新客養成回頭客，拉高 LTV 與提袋率。</div>
+        <div class="kpi">KPI：7 日二購率、新客 LTV 成長</div>
+      </div>
+    </div>
+
+    <!-- 8 -->
+    <div class="jcard">
+      <div class="jhead">
+        <div class="jnum">8</div>
+        <div><h3 class="jtitle">白金 VIP 尊榮經營</h3><span class="jtag">會員分群 · VIP 高價值客群</span></div>
+        <div class="jaud"><b>18</b><span>目標會員</span></div>
+      </div>
+      <div class="jbody">
+        <div class="field full"><label>Segment 條件（Member_Tag）</label><div class="seg">TagValue = 「VIP 高價值客群」（金卡／白金 VIP）</div></div>
+        <div class="field"><label>觸發</label><div>升等、生日月、新品/新快閃上架</div></div>
+        <div class="field"><label>通路</label><div><span class="chan c-line">LINE OA</span><span class="chan c-app">專屬顧問</span></div></div>
+        <div class="field full"><label>訊息腳本</label><ol class="steps">
+          <li>升等祝賀＋尊榮權益（優先預約/專屬客服）</li>
+          <li>生日月限定禮＋IP 限定商品試用</li>
+          <li>新品/新快閃 VIP 優先場</li></ol></div>
+        <div class="insight"><b>為何懂你：</b>18 位 VIP 貢獻不成比例的營收（白金平均 LTV 近 20 萬）；分層尊榮經營鞏固金字塔頂端。</div>
+        <div class="kpi">KPI：VIP 續留率、VIP 貢獻營收占比</div>
+      </div>
+    </div>
+
+    <!-- 9 -->
+    <div class="jcard">
+      <div class="jhead">
+        <div class="jnum">9</div>
+        <div><h3 class="jtitle">內容閱讀 → 轉購（內容×產品閉環）</h3><span class="jtag">行為標籤 · 內容閱讀者／收藏未購</span></div>
+        <div class="jaud"><b>29</b><span>目標會員</span></div>
+      </div>
+      <div class="jbody">
+        <div class="field full"><label>Segment 條件（Member_Tag）</label><div class="seg">TagValue = 「內容閱讀者」（點閱設計文章）<br>可再交集「收藏商品客」= 27 提高精準</div></div>
+        <div class="field"><label>觸發</label><div>閱讀設計文章／收藏商品但近期未購</div></div>
+        <div class="field"><label>通路</label><div><span class="chan c-line">LINE OA</span><span class="chan c-edm">EDM</span></div></div>
+        <div class="field full"><label>訊息腳本</label><ol class="steps">
+          <li>延伸該主題的策展選物＋設計師故事</li>
+          <li>收藏商品降價/回補通知</li>
+          <li>導 uDesign 主題頁完成轉換</li></ol></div>
+        <div class="insight"><b>為何懂你：</b>有.設計是「設計媒體 × 電商」；把內容閱讀行為接到商品，正是有你共創「內容×產品×數據×場域」閉環的變現點。</div>
+        <div class="kpi">KPI：內容輔助轉換率、收藏轉購率</div>
+      </div>
+    </div>
+
+    <h2 class="sec">在 MC Advanced 建立（3 步）</h2>
+    <div class="howto">
+      <ol>
+        <li><b>建 Segment</b>：Data 360／分群工具 → 篩選條件用 <code>Account</code> 關聯的 <code>會員標籤 (Uniicreative_Member_Tag__c)</code>，<code>標籤值 (TagValue__c)</code> 等於上表的標籤（可多條件 AND/OR）。受眾人數即上方數字。</li>
+        <li><b>建 Journey（Flow）</b>：以該 Segment 為進入條件，串 LINE OA／EDM／SMS 動作與等待/分歧節點，對應各 Journey 腳本。</li>
+        <li><b>啟用與衡量</b>：上線後回看 KPI；標籤每日重算（單一運算來源 <code>UniiCustomerProfileCtrl.computeMemberTags()</code>），受眾自動更新。</li>
+      </ol>
+    </div>
+
+    <p class="foot">有.數據 · 客戶 360 → MC on Core (Advanced) · 受眾數為系統真實計算（Uniicreative_Member_Tag__c）· 供內部提案／demo 使用</p>
+  </div>
+</body>
+</html>
