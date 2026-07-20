@@ -63,6 +63,11 @@ const PAGES = [
         dest: 'ycc/journey-playbook.html',
         title: '有.數據 · MC Advanced Journey Playbook (2026-07-18)'
     },
+    {
+        src: 'C:/Users/bingyan.tsai/Desktop/Claude/有你共創-EDM-pack.html',
+        dest: 'ycc/edm-pack.html',
+        title: '有.數據 · EDM 內容包 · 24 檔行銷活動 (2026-07-20)'
+    },
     // ─── Salesforce 6 大雲 Overview ───
     {
         src: 'C:/Users/bingyan.tsai/Desktop/Claude/salesforce-clouds/index.html',
