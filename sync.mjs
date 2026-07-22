@@ -68,6 +68,11 @@ const PAGES = [
         dest: 'ycc/edm-pack.html',
         title: '有.數據 · EDM 內容包 · 24 檔行銷活動 (2026-07-20)'
     },
+    {
+        src: 'C:/Users/bingyan.tsai/Desktop/Claude/ycc/specs/journey-map.html',
+        dest: 'ycc/journey-map.html',
+        title: '有.數據 · MC on Core 行銷旅程地圖 (2026-07-22)'
+    },
     // ─── Salesforce 6 大雲 Overview ───
     {
         src: 'C:/Users/bingyan.tsai/Desktop/Claude/salesforce-clouds/index.html',

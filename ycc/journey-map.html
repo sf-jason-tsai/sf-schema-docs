@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>有.數據 · MC on Core 行銷旅程地圖</title>
+<style>
+  :root{
+    --navy:#032D60; --blue:#0176D3; --gold:#C6912E; --green:#2E844A; --red:#B41F3A;
+    --ink:#181818; --sub:#5c5c5c; --line:#e5e5e5; --bg:#f7f8fa; --card:#fff;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  body{font-family:-apple-system,"Segoe UI","Microsoft JhengHei",sans-serif; background:var(--bg); color:var(--ink); line-height:1.6; padding:40px 20px;}
+  .wrap{max-width:1180px; margin:0 auto;}
+  header{border-bottom:2px solid var(--navy); padding-bottom:20px; margin-bottom:8px;}
+  .eyebrow{font-size:12px; letter-spacing:2px; color:var(--blue); font-weight:700; text-transform:uppercase;}
+  h1{font-size:28px; color:var(--navy); font-weight:800; margin-top:6px;}
+  .sub{color:var(--sub); font-size:14px; margin-top:8px;}
+  h2{font-size:13px; letter-spacing:1.5px; color:var(--sub); text-transform:uppercase; font-weight:700;
+     margin:40px 0 16px; padding-bottom:8px; border-bottom:1px solid var(--line);}
+  /* 資料基礎流程 */
+  .pipe{display:flex; align-items:stretch; gap:0; flex-wrap:wrap;}
+  .pipe .node{flex:1; min-width:150px; background:var(--card); border:1px solid var(--line); border-radius:10px; padding:16px; position:relative;}
+  .pipe .node .t{font-weight:800; color:var(--navy); font-size:14px;}
+  .pipe .node .d{font-size:12px; color:var(--sub); margin-top:6px;}
+  .pipe .arrow{display:flex; align-items:center; color:var(--blue); font-size:22px; padding:0 8px; font-weight:700;}
+  /* journey 卡 */
+  .grid{display:grid; grid-template-columns:repeat(auto-fill,minmax(340px,1fr)); gap:16px;}
+  .jcard{background:var(--card); border:1px solid var(--line); border-radius:12px; overflow:hidden; display:flex; flex-direction:column;}
+  .jcard .hd{padding:14px 16px; color:#fff; font-weight:800; font-size:15px; display:flex; justify-content:space-between; align-items:center;}
+  .jcard .bd{padding:16px; font-size:13px;}
+  .row{display:flex; gap:8px; margin-bottom:10px;}
+  .row .k{color:var(--sub); min-width:52px; font-weight:700; flex-shrink:0;}
+  .row .v{color:var(--ink);}
+  .badges{margin-top:12px; display:flex; gap:6px; flex-wrap:wrap;}
+  .badge{font-size:11px; font-weight:700; padding:3px 10px; border-radius:20px; color:#fff;}
+  .b-line{background:#06C755;} .b-edm{background:var(--blue);} .b-task{background:#8a8a8a;} .b-batch{background:var(--gold);}
+  .code{font-family:"SF Mono",Consolas,monospace; font-size:11px; color:var(--sub); background:#f4f6f9; padding:2px 6px; border-radius:4px;}
+  .trigger-tag{font-size:11px; background:rgba(255,255,255,.22); padding:2px 8px; border-radius:20px; font-weight:700;}
+  .note{background:#fff; border:1px solid var(--line); border-left:4px solid var(--gold); border-radius:8px; padding:16px 18px; font-size:13px; color:var(--sub); margin-top:12px;}
+  .note b{color:var(--ink);}
+  .foot{margin-top:40px; padding-top:16px; border-top:1px solid var(--line); font-size:12px; color:var(--sub); text-align:center;}
+  .legend{display:flex; gap:14px; flex-wrap:wrap; margin-top:10px; font-size:12px; color:var(--sub);}
+  .legend span{display:flex; align-items:center; gap:5px;}
+  .dot{width:10px; height:10px; border-radius:3px; display:inline-block;}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="eyebrow">有你共創數位 · 有.數據</div>
+    <h1>Data 360 + Marketing Cloud on Core · 行銷旅程地圖</h1>
+    <div class="sub">從全通路資料統一，到事件觸發的即時多通路自動化與主動行銷旅程 —— 每一條都真實運作、可即時發送 LINE / EDM。</div>
+    <div class="legend">
+      <span><i class="dot" style="background:#06C755"></i>LINE 推播</span>
+      <span><i class="dot" style="background:#0176D3"></i>品牌 EDM</span>
+      <span><i class="dot" style="background:#8a8a8a"></i>跟進任務</span>
+      <span><i class="dot" style="background:#C6912E"></i>批次 / 手動</span>
+    </div>
+  </header>
+
+  <!-- ========== 資料基礎 ========== -->
+  <h2>① 資料基礎 · Data 360 統一</h2>
+  <div class="pipe">
+    <div class="node"><div class="t">全通路來源</div><div class="d">官網(Exp Cloud)、ERP、POS、EC×7、LINE OA、Oracle 舊會員</div></div>
+    <div class="arrow">→</div>
+    <div class="node"><div class="t">即時落地</div><div class="d">站台行為 → Platform Event → Web Event；交易 → 各整合物件</div></div>
+    <div class="arrow">→</div>
+    <div class="node"><div class="t">Data 360 統一</div><div class="d">Contact_Home DLO → UnifiedIndividual DMO · Identity Resolution 歸戶</div></div>
+    <div class="arrow">→</div>
+    <div class="node"><div class="t">標籤 / 分群</div><div class="d">1,666 筆動態標籤（12 群）· 12 個 Data Cloud 區段</div></div>
+  </div>
+
+  <!-- ========== 即時事件旅程 ========== -->
+  <h2>② 即時事件旅程 · 記錄觸發（站台行為秒級觸發）</h2>
+  <div class="grid">
+
+    <div class="jcard">
+      <div class="hd" style="background:#0176D3">加購棄單挽回 <span class="trigger-tag">加入購物車</span></div>
+      <div class="bd">
+        <div class="row"><span class="k">觸發</span><span class="v">官網「加入購物車」事件（即時站台）</span></div>
+        <div class="row"><span class="k">動作</span><span class="v">LINE Flex 卡片挽回（<span class="code">@future</span> 秒級）+ 建跟進任務</span></div>
+        <div class="row"><span class="k">Flow</span><span class="v"><span class="code">UDesign_CartAbandon_Recover</span></span></div>
+        <div class="badges"><span class="badge b-line">LINE</span><span class="badge b-task">Task</span></div>
+      </div>
+    </div>
+
+    <div class="jcard">
+      <div class="hd" style="background:#C6912E">移出購物車挽留 <span class="trigger-tag">移出購物車</span></div>
+      <div class="bd">
+        <div class="row"><span class="k">觸發</span><span class="v">官網「移出購物車」事件（即時站台）</span></div>
+        <div class="row"><span class="k">動作</span><span class="v">LINE 關懷 + 品牌 EDM「商品還在等您」+ 任務</span></div>
+        <div class="row"><span class="k">Flow</span><span class="v"><span class="code">UDesign_CartRemove_Winback</span></span></div>
+        <div class="badges"><span class="badge b-line">LINE</span><span class="badge b-edm">EDM</span><span class="badge b-task">Task</span></div>
+      </div>
+    </div>
+
+    <div class="jcard">
+      <div class="hd" style="background:#0176D3">結帳感謝 <span class="trigger-tag">完成結帳</span></div>
+      <div class="bd">
+        <div class="row"><span class="k">觸發</span><span class="v">官網「完成結帳」事件（訂單去重）</span></div>
+        <div class="row"><span class="k">動作</span><span class="v">感謝 EDM；同步建 EC 訂單（真實金額）供高價值判斷</span></div>
+        <div class="row"><span class="k">Flow</span><span class="v"><span class="code">UDesign_Checkout_ThankYou</span></span></div>
+        <div class="badges"><span class="badge b-edm">EDM</span><span class="badge b-task">Task</span></div>
+      </div>
+    </div>
+
+    <div class="jcard">
+      <div class="hd" style="background:#032D60">高價值 VIP 關懷 <span class="trigger-tag">訂單 ≥ NT$3,000</span></div>
+      <div class="bd">
+        <div class="row"><span class="k">觸發</span><span class="v">EC 訂單金額 ≥ 3,000（真實金額分眾）</span></div>
+        <div class="row"><span class="k">動作</span><span class="v">LINE 尊榮卡片 + 金色 VIP 關懷 EDM + 高優先任務</span></div>
+        <div class="row"><span class="k">Flow</span><span class="v"><span class="code">UDesign_HighValue_VIPCare</span></span></div>
+        <div class="badges"><span class="badge b-line">LINE</span><span class="badge b-edm">EDM</span><span class="badge b-task">Task</span></div>
+      </div>
+    </div>
+
+    <div class="jcard">
+      <div class="hd" style="background:#2E844A">新會員歡迎 <span class="trigger-tag">註冊會員</span></div>
+      <div class="bd">
+        <div class="row"><span class="k">觸發</span><span class="v">官網「註冊會員」事件（1 分鐘去重）</span></div>
+        <div class="row"><span class="k">動作</span><span class="v">歡迎 EDM（含首購禮 WELCOME 碼）+ 任務</span></div>
+        <div class="row"><span class="k">Flow</span><span class="v"><span class="code">UDesign_Register_Welcome</span></span></div>
+        <div class="badges"><span class="badge b-edm">EDM</span><span class="badge b-task">Task</span></div>
+      </div>
+    </div>
+
+    <div class="jcard" style="border-style:dashed; opacity:.75">
+      <div class="hd" style="background:#8a8a8a">收藏商品追蹤 <span class="trigger-tag">已停用</span></div>
+      <div class="bd">
+        <div class="row"><span class="k">狀態</span><span class="v">網站尚無收藏功能，已停用（定義保留、隨時可還原）</span></div>
+        <div class="row"><span class="k">Flow</span><span class="v"><span class="code">UDesign_Wishlist_Followup</span></span></div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ========== 主動行銷旅程 ========== -->
+  <h2>③ 主動行銷旅程 · 畫面流程 + Agentforce（行銷人主動發動）</h2>
+  <div class="grid">
+
+    <div class="jcard">
+      <div class="hd" style="background:#2E844A">募資早鳥啟動 <span class="trigger-tag">畫面流程</span></div>
+      <div class="bd">
+        <div class="row"><span class="k">用途</span><span class="v">新募資案上線，對「募資預購客」標籤群批次建早鳥外呼任務</span></div>
+        <div class="row"><span class="k">Flow</span><span class="v"><span class="code">UDesign_Crowdfunding_EarlyBird</span></span></div>
+        <div class="badges"><span class="badge b-batch">批次</span><span class="badge b-task">Task</span></div>
+      </div>
+    </div>
+
+    <div class="jcard">
+      <div class="hd" style="background:#0176D3">發佈行銷區段 <span class="trigger-tag">Campaign 動作</span></div>
+      <div class="bd">
+        <div class="row"><span class="k">用途</span><span class="v">Campaign 上一鍵發佈 Data Cloud 區段（cdpPublishSegment）+ 對區段成員即時發對應 EDM/LINE</span></div>
+        <div class="row"><span class="k">Flow</span><span class="v"><span class="code">Uniicreative_Publish_Marketing_Segment</span> → <span class="code">UniiSegmentDispatch</span></span></div>
+        <div class="badges"><span class="badge b-line">LINE</span><span class="badge b-edm">EDM</span><span class="badge b-batch">區段</span></div>
+      </div>
+    </div>
+
+    <div class="jcard">
+      <div class="hd" style="background:#06C755">LINE 即席推播 <span class="trigger-tag">畫面流程</span></div>
+      <div class="bd">
+        <div class="row"><span class="k">用途</span><span class="v">行銷/客服人員手動對指定會員即時推播 LINE 訊息</span></div>
+        <div class="row"><span class="k">Flow</span><span class="v"><span class="code">UDesign_LINE_Push</span></span></div>
+        <div class="badges"><span class="badge b-line">LINE</span></div>
+      </div>
+    </div>
+
+    <div class="jcard">
+      <div class="hd" style="background:#032D60">Agentforce 會員關懷 Copilot <span class="trigger-tag">AI 對話</span></div>
+      <div class="bd">
+        <div class="row"><span class="k">用途</span><span class="v">用自然語言問「這位會員是誰／該怎麼經營」，agent 讀 360 資料回答並可直接發關懷</span></div>
+        <div class="row"><span class="k">Action</span><span class="v"><span class="code">UniiAgentAction</span>（查360）· <span class="code">UniiAgentCareAction</span>（發關懷）</span></div>
+        <div class="badges"><span class="badge b-line">LINE</span><span class="badge b-edm">EDM</span><span class="badge" style="background:#032D60">Agentforce</span></div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="note">
+    <b>技術可靠性註記（SE）：</b>
+    事件走 Platform Event 近即時；LINE 用 <span class="code">@future</span> callout 秒級送達；EDM 以 Org-Wide Email Address 寄送（解 Automated Process 寄信限制）。
+    完成結帳／註冊皆有去重（防站台重複事件）；VIP 分眾用<b>真實訂單金額</b>（站台 orderTotal 優先，否則商品定價表）。
+    所有旅程皆已端到端實測、真實送達 LINE 與 Email。
+  </div>
+
+  <div class="foot">有你共創數位 · 有.數據｜Data 360 + Marketing Cloud on Core · 行銷旅程地圖 · 2026</div>
+</div>
+</body>
+</html>
