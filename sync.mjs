@@ -116,6 +116,11 @@ const PAGES = [
         dest: 'lebio/etl-contact-report.html',
         title: 'LeBio · 聯絡人→Contact ETL 報告 (2026-07-27)'
     },
+    {
+        src: 'C:/Users/bingyan.tsai/Desktop/Claude/lebio-import/etl-lead-report.html',
+        dest: 'lebio/etl-lead-report.html',
+        title: 'LeBio · 商機→Lead(潛在客戶) ETL 報告 (2026-07-27)'
+    },
     // ─── 104 遠距藍海職缺分析 ───
     {
         src: 'C:/Users/bingyan.tsai/Desktop/Claude/job-crawler/out/report.html',

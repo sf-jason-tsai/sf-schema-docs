@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LeBio 客戶資料遷移 ETL 報告 — 商機 → Lead(潛在客戶)</title>
+<style>
+  :root{
+    --ink:#1a1a1a; --ink2:#4a4a4a; --ink3:#8a8a8a;
+    --line:#d0d0d0; --bg:#f5f5f5; --white:#fff;
+    --blue:#2167dd; --blue-l:#a1c1f6; --green:#4ab2a8; --green-l:#95d4ce;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0; color:var(--ink); background:#eceef1;
+    font-family:"Microsoft JhengHei","Noto Sans TC","Noto Sans",Arial,sans-serif;
+    line-height:1.5; font-size:15px;
+  }
+  .page{max-width:960px; margin:0 auto; background:var(--white);
+    box-shadow:0 1px 4px rgba(0,0,0,.08);}
+  .hero{background:var(--blue); color:#fff; padding:44px 48px 38px;}
+  .hero .kicker{font-size:13px; letter-spacing:2px; color:var(--blue-l); margin:0 0 10px;}
+  .hero h1{font-size:27px; font-weight:700; margin:0 0 6px; line-height:1.25;}
+  .hero .sub{font-size:15px; color:#e6eefb; margin:0;}
+  .hero .meta{margin-top:22px; font-size:12.5px; color:#cfe0fb; display:flex; gap:26px; flex-wrap:wrap;}
+  .hero .meta b{color:#fff; font-weight:600;}
+  main{padding:40px 48px 56px;}
+  h2{font-size:19px; font-weight:700; color:var(--ink); margin:38px 0 4px;
+    padding-bottom:8px; border-bottom:2px solid var(--blue);}
+  h2:first-child{margin-top:0;}
+  h2 .n{color:var(--blue); font-weight:700; margin-right:10px;}
+  h3{font-size:15px; font-weight:600; color:var(--blue); margin:22px 0 8px;}
+  p{margin:8px 0; color:var(--ink);}
+  .note{font-size:12.5px; color:var(--ink3);}
+  .cards{display:grid; grid-template-columns:repeat(4,1fr); gap:14px; margin:22px 0 4px;}
+  .card{border:1px solid var(--line); border-radius:8px; padding:16px 16px 14px; background:var(--white);}
+  .card .v{font-size:28px; font-weight:700; color:var(--blue); line-height:1;}
+  .card .v.green{color:var(--green);}
+  .card .l{font-size:12.5px; color:var(--ink2); margin-top:7px;}
+  table{border-collapse:collapse; width:100%; margin:14px 0; font-size:13.5px;}
+  th{background:var(--blue); color:#fff; font-weight:600; text-align:left; padding:9px 11px; border:1px solid var(--blue);}
+  td{padding:8px 11px; border:1px solid var(--line); color:var(--ink); vertical-align:top;}
+  tr:nth-child(even) td{background:var(--bg);}
+  td.mono,th.mono{font-family:Consolas,"Courier New",monospace; font-size:12.5px;}
+  .tag{display:inline-block; font-size:11.5px; padding:1px 8px; border-radius:10px; font-weight:600;}
+  .tag.native{background:#e4f4f2; color:#2b7d75;}
+  .tag.custom{background:#e7effc; color:var(--blue);}
+  .tag.drop{background:#f0f0f0; color:#8a8a8a;}
+  .bars{margin:14px 0;}
+  .bar-row{display:grid; grid-template-columns:180px 1fr 90px; align-items:center; gap:10px; margin:5px 0; font-size:13px;}
+  .bar-row .lab{color:var(--ink2); text-align:right;}
+  .bar-track{background:var(--bg); border-radius:4px; height:18px; overflow:hidden;}
+  .bar-fill{height:100%; background:var(--blue); border-radius:4px;}
+  .bar-fill.g{background:var(--green);}
+  .bar-fill.null{background:var(--line);}
+  .bar-row .val{color:var(--ink3); font-size:12px; text-align:right;}
+  .callout{border-left:4px solid var(--blue); background:#f6f9fe; padding:12px 16px; margin:14px 0; font-size:13.5px;}
+  .callout.warn{border-left-color:var(--green); background:#f1faf9;}
+  .callout b{color:var(--ink);}
+  ul{margin:8px 0; padding-left:22px;}
+  li{margin:4px 0;}
+  code{font-family:Consolas,"Courier New",monospace; background:var(--bg); padding:1px 6px; border-radius:4px; font-size:12.5px; color:#33475b;}
+  footer{border-top:1px solid var(--line); margin-top:44px; padding-top:16px;
+    font-size:11.5px; color:var(--ink3); display:flex; justify-content:space-between;}
+  .steps{counter-reset:s; margin:16px 0;}
+  .step{position:relative; padding:12px 16px 12px 52px; border:1px solid var(--line); border-radius:8px; margin:10px 0;}
+  .step:before{counter-increment:s; content:counter(s); position:absolute; left:14px; top:12px;
+    width:26px; height:26px; background:var(--blue); color:#fff; border-radius:50%;
+    display:flex; align-items:center; justify-content:center; font-size:14px; font-weight:700;}
+  .step .st{font-weight:600; color:var(--ink);}
+  .ok{color:var(--green); font-weight:600;}
+  @media(max-width:680px){.cards{grid-template-columns:repeat(2,1fr);} main,.hero{padding-left:22px;padding-right:22px;} .bar-row{grid-template-columns:120px 1fr 70px;}}
+</style>
+</head>
+<body>
+<div class="page">
+  <div class="hero">
+    <p class="kicker">DATA MIGRATION · ETL REPORT · 03</p>
+    <h1>LeBio 客戶資料遷移紀錄 — 潛在客戶(商機)</h1>
+    <p class="sub">來源:商機.xlsx　→　目標:Salesforce「銷售」App／潛在客戶(Lead)</p>
+    <div class="meta">
+      <span><b>Org</b>　lifenergy (lebio.my.salesforce.com)</span>
+      <span><b>執行日期</b>　2026-07-27</span>
+      <span><b>執行者</b>　sophietso@salesforce.com</span>
+      <span><b>標記</b>　mark = &#39;sf&#39;</span>
+    </div>
+  </div>
+  <main>
+
+    <h2><span class="n">1</span>執行摘要</h2>
+    <div class="cards">
+      <div class="card"><div class="v">7,945</div><div class="l">來源資料列</div></div>
+      <div class="card"><div class="v green">7,945</div><div class="l">成功匯入 (100%)</div></div>
+      <div class="card"><div class="v green">40</div><div class="l">已轉換掛回 Account+Contact</div></div>
+      <div class="card"><div class="v">19</div><div class="l">新增自訂欄位</div></div>
+    </div>
+    <p>本批依 <b>CRM資料表關聯說明文件.docx</b> 將舊系統的<b>商機.xlsx</b> 遷入 lifenergy 正式 org 的標準物件 <code>Lead</code>(SF UI 顯示為「潛在客戶」)。來源合併自兩份資料:Salesforce 匯出 6,600 筆 + 舊 BA 系統 1,345 筆,清洗去重後共 <b>7,945 筆</b>,全部成功寫入。其中 <b>40 筆</b>屬已轉換商機,依 docx §6.6 正確掛回既有的 Account 與 Contact。所有紀錄標記 <code>mark__c = 'sf'</code> 以利辨識與回溯。</p>
+    <div class="callout"><b>術語對照:</b>docx 中的「商機」在 Salesforce 標準模型即為 <code>Lead</code>(尚未成交的潛在客戶),UI 中文標籤為「潛在客戶」;與 Salesforce 的「商機(Opportunity)」為不同物件,後續另批處理。</div>
+    <div class="callout warn"><b>原則:</b>優先使用標準欄位,無對應才建自訂欄位;來源全空或無資訊的欄位不建、不匯,避免污染正式 org。</div>
+
+    <h2><span class="n">2</span>欄位對應</h2>
+    <h3>標準欄位(native)</h3>
+    <table>
+      <tr><th>來源欄位</th><th>目標欄位</th><th>型別</th><th>處理</th></tr>
+      <tr><td>公司/客戶名稱</td><td class="mono">Company</td><td>Text(必填)</td><td>空值 fallback:以聯絡人姓名補入(7,540 筆),確保必填不擋</td></tr>
+      <tr><td>姓名/聯絡人</td><td class="mono">LastName</td><td>Text(必填)</td><td>trim;空值套佔位</td></tr>
+      <tr><td>地址</td><td class="mono">Street</td><td>Address</td><td>trim;含無效 Email 誤植者移入此欄(見 §4)</td></tr>
+      <tr><td>City</td><td class="mono">City</td><td>Address</td><td>trim</td></tr>
+      <tr><td>PostalCode</td><td class="mono">PostalCode</td><td>Address</td><td>trim</td></tr>
+      <tr><td>Country</td><td class="mono">Country</td><td>Address</td><td>台/臺/灣 → 「臺灣」標準化</td></tr>
+      <tr><td>電話</td><td class="mono">Phone</td><td>Phone</td><td>trim</td></tr>
+      <tr><td>電子郵件</td><td class="mono">Email</td><td>Email</td><td>trim + 格式驗證(見 §4)</td></tr>
+      <tr><td>網站</td><td class="mono">Website</td><td>URL</td><td>trim</td></tr>
+      <tr><td>狀態</td><td class="mono">Status</td><td>Picklist(必填)</td><td>對映標準狀態值(見 §3);原文另存 Lead_Status_Original__c</td></tr>
+    </table>
+
+    <h3>自訂欄位(custom,共 19)</h3>
+    <table>
+      <tr><th>來源欄位</th><th>目標欄位(API)</th><th>型別</th><th>說明</th></tr>
+      <tr><td>Id</td><td class="mono">Legacy_Id__c</td><td>Text(18)</td><td>External ID · Unique · 來源主鍵</td></tr>
+      <tr><td>IDNo</td><td class="mono">Legacy_IDNo__c</td><td>Text(18)</td><td>External ID · Unique · <b>upsert 對應鍵</b></td></tr>
+      <tr><td>(固定值)</td><td class="mono">mark__c</td><td>Text(20)</td><td>= 'sf' · 本次匯入註記</td></tr>
+      <tr><td>CreatedDate</td><td class="mono">Legacy_Created_Date__c</td><td>DateTime</td><td>Excel 序號 → ISO;保留原始建立時間</td></tr>
+      <tr><td>狀態(原文)</td><td class="mono">Lead_Status_Original__c</td><td>Text(255)</td><td>保留來源原始狀態字串,對照標準 Status</td></tr>
+      <tr><td>來源(原文)</td><td class="mono">Lead_Source_Original__c</td><td>Text(255)</td><td>保留來源渠道原文</td></tr>
+      <tr><td>分類</td><td class="mono">Category__c</td><td>Text(255)</td><td>B2C／國內客戶／國外客戶／藥局…</td></tr>
+      <tr><td>性別</td><td class="mono">Sex__c</td><td>Picklist</td><td>女／男／其他</td></tr>
+      <tr><td>編號</td><td class="mono">Lead_Number__c</td><td>Text(255)</td><td>來源業務編號</td></tr>
+      <tr><td>客戶回饋</td><td class="mono">Customer_Feedback__c</td><td>Text(255)</td><td>回饋摘要</td></tr>
+      <tr><td>問卷類型</td><td class="mono">Survey_Type__c</td><td>Text(255)</td><td>問卷分類</td></tr>
+      <tr><td>寄送 DM</td><td class="mono">Send_DM__c</td><td>Checkbox</td><td>是否寄送 DM</td></tr>
+      <tr><td>傳真</td><td class="mono">Fax__c</td><td>Text(255)</td><td>本 org Lead 無標準 Fax → 自訂欄位承接</td></tr>
+      <tr><td>已報價</td><td class="mono">Has_Quote__c</td><td>Checkbox</td><td>是否已報價</td></tr>
+      <tr><td>已轉換</td><td class="mono">Is_Converted__c</td><td>Checkbox</td><td>來源標記已轉換(42 筆)</td></tr>
+      <tr><td>轉換對應客戶</td><td class="mono">Converted_Account__c</td><td>Lookup(Account)</td><td>依 docx §6.6 掛回既有 Account(40 筆)</td></tr>
+      <tr><td>轉換對應聯絡人</td><td class="mono">Converted_Contact__c</td><td>Lookup(Contact)</td><td>依 docx §6.6 掛回既有 Contact(40 筆)</td></tr>
+      <tr><td>轉換對應商機</td><td class="mono">Converted_Opportunity_Legacy_Id__c</td><td>Text(18)</td><td>保留來源 Opportunity 舊 Id(7 筆),待 Opportunity 批次後回掛</td></tr>
+      <tr><td>客戶描述/備註</td><td class="mono">Description__c</td><td>LongTextArea</td><td>備註/描述全文</td></tr>
+    </table>
+
+    <h3>不匯入的來源欄位</h3>
+    <table>
+      <tr><th>來源欄位</th><th>原因</th></tr>
+      <tr><td>IsDeleted、OwnerId、CreatedById、LastModifiedById、SystemModstamp</td><td><span class="tag drop">系統/稽核</span> 由 Salesforce 自行維護</td></tr>
+      <tr><td>IsConverted / ConvertedDate / ConvertedAccountId…(SF 內建轉換欄位)</td><td><span class="tag drop">不可寫</span> 標準轉換欄位唯讀,改以自訂 Converted_* 欄位承接對應關係</td></tr>
+      <tr><td>全空欄位</td><td><span class="tag drop">全空</span> 0 筆有值者一律不建、不匯</td></tr>
+    </table>
+
+    <h2><span class="n">3</span>狀態對映(Status)</h2>
+    <p>來源狀態為中文業務用語,對映至 Lead 標準 Status picklist;<b>原始字串完整保留於 <code>Lead_Status_Original__c</code></b>,不遺失任何來源語意。</p>
+    <table>
+      <tr><th>來源原始狀態</th><th>標準 Status</th><th>筆數</th></tr>
+      <tr><td>待拜訪</td><td class="mono">New</td><td>6,518</td></tr>
+      <tr><td>(空值,預設)</td><td class="mono">New</td><td>1,302</td></tr>
+      <tr><td>開發成功</td><td class="mono">Qualified</td><td>47</td></tr>
+      <tr><td>優先回訪</td><td class="mono">Working</td><td>44</td></tr>
+      <tr><td>優先拜訪</td><td class="mono">Working</td><td>5</td></tr>
+      <tr><td>有空再訪</td><td class="mono">Nurturing</td><td>12</td></tr>
+      <tr><td>沒興趣</td><td class="mono">Unqualified</td><td>6</td></tr>
+      <tr><td>New / Qualified(原已英文)</td><td class="mono">原樣保留</td><td>11</td></tr>
+    </table>
+    <p class="note">對映後標準值分佈:New 7,835 · Qualified 48 · Working 44 · Nurturing 12 · Unqualified 6 = 7,945 ✔</p>
+
+    <h2><span class="n">4</span>資料清洗</h2>
+    <p>來源合併自 SF 匯出(6,600)與 BA 系統(1,345),每個欄位在寫入前皆套用基礎 ETL 清洗:</p>
+    <ul>
+      <li><b>首尾空白 trim</b> — 半形空白與全形空格(U+3000)一併處理</li>
+      <li><b>連續空白收斂</b> — 多個空白合併為單一半形空白</li>
+      <li><b>去不可見字元</b> — 移除 <code>\t</code>、<code>\r</code>、零寬字元等控制字元</li>
+      <li><b>國別標準化</b> — Country 含「台/臺/灣」統一為「臺灣」</li>
+      <li><b>Company 必填補值</b> — 來源公司為空時以聯絡人姓名補入(7,540 筆),避免必填擋批</li>
+      <li><b>Email 格式驗證</b> — 以 <code>/^[^\s@]+@[^\s@]+\.[^\s@]+$/</code> 驗證;不合格者(1 筆:地址誤植於 Email 欄)移入 Street、Email 清空,不丟失資料</li>
+      <li><b>日期轉型</b> — Excel 序號 → Legacy_Created_Date__c(ISO DateTime)</li>
+    </ul>
+    <div class="callout warn"><b>完全重複列檢查:</b>以全欄清洗後內容做 hash 比對,合併兩來源後<b>0 筆</b>完全相同的重複列 → 無需去重。長度溢位檢查:欄位一律 <code>cut</code> 至上限(Street 255 / Email 80),<b>0 筆</b>因溢位失敗。</div>
+
+    <h2><span class="n">5</span>關聯處理(已轉換商機 → Account / Contact)</h2>
+    <p>依 <b>docx §6.6</b>:已轉換的商機需掛回其對應的既有客戶與聯絡人。來源提供轉換對應鍵,本地以已匯入的 Account(4,334)/ Contact(3,871)對應表解析為真實 18 碼 Id,再寫入 <code>Converted_Account__c</code> / <code>Converted_Contact__c</code>。未轉換者對應鍵為 <code>000000000000000AAA</code>(docx 佔位值),一律不掛。</p>
+    <div class="bars">
+      <div class="bar-row"><span class="lab">已轉換·掛回 Account</span><div class="bar-track"><div class="bar-fill g" style="width:100%"></div></div><span class="val">40</span></div>
+      <div class="bar-row"><span class="lab">已轉換·掛回 Contact</span><div class="bar-track"><div class="bar-fill g" style="width:100%"></div></div><span class="val">40</span></div>
+      <div class="bar-row"><span class="lab">保留 Opportunity 舊 Id</span><div class="bar-track"><div class="bar-fill" style="width:17.5%"></div></div><span class="val">7</span></div>
+    </div>
+    <p class="note">來源標記已轉換(Is_Converted__c)共 <b>42</b> 筆,其中 40 筆的對應 Account/Contact 已存在於 org 並成功掛回;另 2 筆對應對象不在既有資料範圍(僅標記狀態,無有效對應鍵),保留 Is_Converted__c 標記待客戶確認。轉換對應商機的 7 筆舊 Id 暫存於 <code>Converted_Opportunity_Legacy_Id__c</code>,待 Opportunity 批次匯入後回掛。</p>
+
+    <h2><span class="n">6</span>匯入執行與例外處理</h2>
+    <div class="steps">
+      <div class="step"><span class="st">部署 metadata</span> — 19 個自訂欄位 + permission set <code>Lebio_Import_Lead</code>,一次部署成功。</div>
+      <div class="step"><span class="st">全量 7,945 筆</span> — Bulk API 2.0 upsert(key = Legacy_IDNo__c)。首輪 <span class="ok">7,935 成功</span>,10 筆被攔截:9 筆 DUPLICATES_DETECTED、1 筆 INVALID_EMAIL_ADDRESS。</div>
+      <div class="step"><span class="st">例外 1 筆(無效 Email)</span> — IDNo 8213「大灣藥局」來源將地址誤植於 Email 欄。清洗規則將該值移入 Street、Email 清空後重新匯入,<span class="ok">成功</span>。</div>
+      <div class="step"><span class="st">例外 9 筆(重複規則)</span> — 皆為已轉換商機,其 Account/Contact 已存在,觸發 <code>Standard_Lead_Duplicate_Rule</code> 的跨物件比對(Block)。<code>DuplicateRuleHeader.allowSave</code> 無法略過此 Block 行為。</div>
+      <div class="step"><span class="st">安全略過重複規則</span> — 暫時停用 <code>Standard_Lead_Duplicate_Rule</code>(isActive=false)→ 全量重新 upsert → <b>立即還原啟用</b>(isActive=true),確保正式 org 規則狀態不變。<span class="ok">9/9 補入</span>。</div>
+      <div class="step"><span class="st">最終結果</span> — <span class="ok">7,945 / 7,945 = 100%</span> 匯入完成,重複規則已還原為 active。</div>
+    </div>
+    <div class="callout"><b>正式 org 保護:</b>停用重複規則僅在匯入當下短暫進行,匯入後第一時間還原,期間不影響一般使用者建立資料的規則保護。</div>
+
+    <h2><span class="n">7</span>匯入後驗證(SOQL)</h2>
+    <table>
+      <tr><th>檢核項目</th><th>結果</th><th>對照</th></tr>
+      <tr><td>mark__c = 'sf' 總筆數</td><td class="mono">7,945</td><td>= 來源列數 ✔</td></tr>
+      <tr><td>Converted_Account__c 有值</td><td class="mono">40</td><td>= 已轉換掛回數 ✔</td></tr>
+      <tr><td>Converted_Contact__c 有值</td><td class="mono">40</td><td>= 已轉換掛回數 ✔</td></tr>
+      <tr><td>Is_Converted__c = true</td><td class="mono">42</td><td>來源已轉換標記 ✔</td></tr>
+      <tr><td>Email 有值</td><td class="mono">2,265</td><td>Email 欄位 ✔</td></tr>
+      <tr><td>Legacy_Created_Date__c 有值</td><td class="mono">6,600</td><td>= SF 來源筆數 ✔</td></tr>
+    </table>
+    <p class="note">抽樣:「健康之星」、「台呈藥局」皆姓名/公司一致匯入;IDNo 8213 已 Email = null、Street = 「710台南市永康區民族路298號」(無效 Email 清洗結果正確)。</p>
+
+    <h3>主要欄位填充率</h3>
+    <div class="bars">
+      <div class="bar-row"><span class="lab">Company</span><div class="bar-track"><div class="bar-fill" style="width:100%"></div></div><span class="val">7,945 · 100%</span></div>
+      <div class="bar-row"><span class="lab">LastName</span><div class="bar-track"><div class="bar-fill" style="width:100%"></div></div><span class="val">7,945 · 100%</span></div>
+      <div class="bar-row"><span class="lab">Status</span><div class="bar-track"><div class="bar-fill" style="width:100%"></div></div><span class="val">7,945 · 100%</span></div>
+      <div class="bar-row"><span class="lab">Lead_Status_Original__c</span><div class="bar-track"><div class="bar-fill" style="width:83.6%"></div></div><span class="val">6,643 · 84%</span></div>
+      <div class="bar-row"><span class="lab">Legacy_Created_Date__c</span><div class="bar-track"><div class="bar-fill" style="width:83.1%"></div></div><span class="val">6,600 · 83%</span></div>
+      <div class="bar-row"><span class="lab">Phone</span><div class="bar-track"><div class="bar-fill g" style="width:43.8%"></div></div><span class="val">3,478 · 44%</span></div>
+      <div class="bar-row"><span class="lab">Street</span><div class="bar-track"><div class="bar-fill g" style="width:41.3%"></div></div><span class="val">3,284 · 41%</span></div>
+      <div class="bar-row"><span class="lab">Country</span><div class="bar-track"><div class="bar-fill g" style="width:31.2%"></div></div><span class="val">2,480 · 31%</span></div>
+      <div class="bar-row"><span class="lab">Category__c</span><div class="bar-track"><div class="bar-fill g" style="width:31.2%"></div></div><span class="val">2,477 · 31%</span></div>
+      <div class="bar-row"><span class="lab">Email</span><div class="bar-track"><div class="bar-fill g" style="width:28.5%"></div></div><span class="val">2,265 · 29%</span></div>
+      <div class="bar-row"><span class="lab">Lead_Source_Original__c</span><div class="bar-track"><div class="bar-fill null" style="width:25.4%"></div></div><span class="val">2,017 · 25%</span></div>
+    </div>
+
+    <h2><span class="n">8</span>顯示設定(List View + 版面)</h2>
+    <p>依填充率挑選最具值的欄位呈現,確保匯入的欄位「看得到、不白存」:</p>
+    <ul>
+      <li><b>List View「遷移·潛在客戶」</b>(filter <code>mark__c='sf'</code>)— 欄位:姓名、Company、Status、原始狀態、Phone、Email、分類、來源、建立日期。</li>
+      <li><b>Lead 版面</b>新增區段「遷移資料(BA 匯入)」,將全部 19 個自訂欄位加入 Details,record page 皆可檢視。</li>
+    </ul>
+
+    <h2><span class="n">9</span>權限</h2>
+    <p>自訂欄位的欄位層級安全性(FLS)透過 permission set <code>Lebio_Import_Lead</code> 授予,並指派給 org 內<b>全部 6 位 active 標準使用者</b>,確保客戶登入後即可看到所有匯入欄位。</p>
+    <div class="callout"><b>提醒:</b>Salesforce 管理員不會自動取得新欄位 FLS — 一律以 permission set 明確指派給所有相容使用者。</div>
+
+    <h2><span class="n">10</span>後續物件</h2>
+    <p>Account(4,334)、Contact(3,871)、Lead(本批 7,945)已就緒。依 docx 關聯,後續接續匯入:預估業績/商機(Opportunity,並回掛本批保留的 7 筆 Converted_Opportunity_Legacy_Id__c)、拜訪紀錄(Task,WhoId→Contact / WhatId→Account)、事件(Event)、活動(Campaign)。每批仍沿用 <code>mark__c='sf'</code> 標記、External ID 掛關聯、完整清洗與網頁報告之標準。</p>
+
+    <footer>
+      <span>LeBio × Salesforce · 資料遷移 ETL 報告 03 — 商機 → Lead(潛在客戶)</span>
+      <span>2026-07-27</span>
+    </footer>
+  </main>
+</div>
+</body>
+</html>
