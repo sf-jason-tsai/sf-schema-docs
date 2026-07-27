@@ -22,6 +22,10 @@
     --ref-brand:#0176D3;         /* Reference · SLDS 藍 */
     --ref-brand-dk:#014486;
     --ref-brand-tint:#EEF4FF;
+
+    --lebio-brand:#2b7d75;       /* LeBio · 綠 */
+    --lebio-brand-dk:#1c5651;
+    --lebio-brand-tint:#EEF7F5;
 }
 * { box-sizing:border-box; }
 body {
@@ -87,6 +91,7 @@ body {
 .section-hd.cbusdo   { border-bottom-color:var(--cbusdo-brand); }
 .section-hd.firstsdo { border-bottom-color:var(--firstsdo-brand); }
 .section-hd.ref      { border-bottom-color:var(--ref-brand); }
+.section-hd.lebio    { border-bottom-color:var(--lebio-brand); }
 
 .section-org {
     display:inline-flex; align-items:center; gap:6px;
@@ -99,6 +104,7 @@ body {
 .section-org.cbusdo   { background:var(--cbusdo-brand);    color:#fff; }
 .section-org.firstsdo { background:var(--firstsdo-brand);  color:#fff; }
 .section-org.ref      { background:var(--ref-brand);       color:#fff; }
+.section-org.lebio    { background:var(--lebio-brand);     color:#fff; }
 
 .section-title {
     font-size:18px; font-weight:800; letter-spacing:-0.3px;
@@ -126,6 +132,7 @@ body {
 .section-note.cbusdo   { border-left-color:var(--cbusdo-brand);   background:var(--cbusdo-brand-tint); }
 .section-note.firstsdo { border-left-color:var(--firstsdo-brand); background:var(--firstsdo-brand-tint); }
 .section-note.ref      { border-left-color:var(--ref-brand);      background:var(--ref-brand-tint); }
+.section-note.lebio    { border-left-color:var(--lebio-brand);    background:var(--lebio-brand-tint); }
 
 /* ===== Cards Grid ===== */
 .cards {
@@ -147,6 +154,7 @@ body {
 .card.cbusdo   { border-left-color:var(--cbusdo-brand); }
 .card.firstsdo { border-left-color:var(--firstsdo-brand); }
 .card.ref      { border-left-color:var(--ref-brand); }
+.card.lebio    { border-left-color:var(--lebio-brand); }
 
 .card:hover {
     transform:translateY(-2px);
@@ -155,6 +163,7 @@ body {
 .card.cbusdo:hover   { border-color:var(--cbusdo-brand);   box-shadow:0 8px 24px rgba(228,0,43,0.14); }
 .card.firstsdo:hover { border-color:var(--firstsdo-brand); box-shadow:0 8px 24px rgba(92,30,173,0.14); }
 .card.ref:hover      { border-color:var(--ref-brand);      box-shadow:0 8px 24px rgba(1,118,211,0.14); }
+.card.lebio:hover    { border-color:var(--lebio-brand);    box-shadow:0 8px 24px rgba(43,125,117,0.16); }
 
 .card__badge {
     display:inline-block; padding:3px 10px;
@@ -166,6 +175,7 @@ body {
 .card.cbusdo   .card__badge { background:var(--cbusdo-brand-tint);   color:var(--cbusdo-brand-dk); }
 .card.firstsdo .card__badge { background:var(--firstsdo-brand-tint); color:var(--firstsdo-brand-dk); }
 .card.ref      .card__badge { background:var(--ref-brand-tint);      color:var(--ref-brand-dk); }
+.card.lebio    .card__badge { background:var(--lebio-brand-tint);    color:var(--lebio-brand-dk); }
 
 .card__title {
     font-size:17px; font-weight:800; margin:0 0 8px;
@@ -192,6 +202,7 @@ body {
 .card.cbusdo   .card__stat strong { color:var(--cbusdo-brand-dk); }
 .card.firstsdo .card__stat strong { color:var(--firstsdo-brand-dk); }
 .card.ref      .card__stat strong { color:var(--ref-brand-dk); }
+.card.lebio    .card__stat strong { color:var(--lebio-brand-dk); }
 
 .card__foot {
     display:flex; align-items:center; justify-content:space-between;
@@ -206,6 +217,7 @@ body {
 .card.cbusdo   .card__link { color:var(--cbusdo-brand); }
 .card.firstsdo .card__link { color:var(--firstsdo-brand); }
 .card.ref      .card__link { color:var(--ref-brand); }
+.card.lebio    .card__link { color:var(--lebio-brand); }
 
 .card__meta {
     font-family:'SF Mono',Consolas,monospace;
@@ -377,7 +389,45 @@ body {
         </div>
     </div>
 
-    <!-- ============ SECTION 3 · Reference ============ -->
+    <!-- ============ SECTION 3 · lifenergy (LeBio) ============ -->
+    <div class="section">
+        <div class="section-hd lebio">
+            <span class="section-org lebio">● lifenergy</span>
+            <h2 class="section-title">LeBio · 真實客戶資料遷移</h2>
+            <div class="section-sub">
+                <span>銷售 App · 7 標準物件 · 87,401 筆</span>
+                <span class="section-sub-count">1 專案</span>
+            </div>
+        </div>
+        <div class="section-note lebio">
+            <b>lifenergy 是 LeBio 的正式生產 org</b>，將舊 BA 系統與 Salesforce 匯出的<b>真實客戶 CRM 資料</b>依《CRM 資料表關聯說明文件》逐一遷移至「銷售」App。
+            全程原生優先（7 份來源全對應標準物件、零 Custom Object），所有記錄標記 <code>mark__c='sf'</code>，去重 0、關聯依 Legacy Id 完整掛回。
+        </div>
+
+        <div class="cards">
+
+            <a href="lebio/" class="card lebio">
+                <span class="card__badge">LEBIO · 資料遷移總覽</span>
+                <div class="card__title">LeBio · 資料遷移總覽（全 7 Object）</div>
+                <p class="card__desc">
+                    Account 4,334 / Contact 3,871 / Lead 7,945 / Campaign 47 / Task 36,366 / Opportunity 4,984 / Event 29,854。
+                    一頁整合物件對應、關聯結構、完整性驗證、App 可見性與權限，並連往 6 份逐物件 ETL 報告。
+                </p>
+                <div class="card__stats">
+                    <span class="card__stat"><strong>7</strong> Objects</span>
+                    <span class="card__stat"><strong>87,401</strong> records</span>
+                    <span class="card__stat"><strong>0</strong> Custom Obj</span>
+                </div>
+                <div class="card__foot">
+                    <span class="card__link">開啟 <span class="card__arrow">→</span></span>
+                    <span class="card__meta">lebio/</span>
+                </div>
+            </a>
+
+        </div>
+    </div>
+
+    <!-- ============ SECTION 4 · Reference ============ -->
     <div class="section">
         <div class="section-hd ref">
             <span class="section-org ref">● Reference</span>
