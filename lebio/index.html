@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LeBio · 資料遷移總覽 (lifenergy 銷售 App)</title>
+<style>
+  :root{
+    --ink:#1a1a1a; --ink2:#4a4a4a; --ink3:#8a8a8a; --line:#d0d0d0;
+    --bg:#f5f5f5; --white:#fff; --blue:#2167dd; --blue2:#a1c1f6;
+    --green:#4ab2a8; --green2:#95d4ce;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{font-family:"Microsoft JhengHei","Noto Sans TC","Noto Sans",Arial,sans-serif;
+    color:var(--ink);background:var(--bg);line-height:1.5;font-size:15px;}
+  .wrap{max-width:1080px;margin:0 auto;padding:0 24px 80px;}
+  /* hero */
+  .hero{background:var(--blue);color:#fff;padding:56px 24px 48px;margin-bottom:40px;}
+  .hero-in{max-width:1080px;margin:0 auto;}
+  .hero .tag{font-size:13px;letter-spacing:2px;opacity:.85;text-transform:uppercase;}
+  .hero h1{font-size:30px;font-weight:700;margin:10px 0 8px;}
+  .hero p{font-size:15px;opacity:.92;max-width:720px;}
+  .hero .meta{margin-top:20px;font-size:13px;opacity:.85;}
+  /* section */
+  h2{font-size:21px;font-weight:700;margin:44px 0 6px;padding-bottom:8px;border-bottom:2px solid var(--line);}
+  h2 .en{font-size:13px;color:var(--ink3);font-weight:400;margin-left:8px;}
+  .lead{color:var(--ink2);margin:10px 0 20px;font-size:14px;}
+  /* stat cards */
+  .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin:26px 0 8px;}
+  .stat{background:#fff;border:1px solid var(--line);border-radius:8px;padding:18px 16px;}
+  .stat .n{font-size:26px;font-weight:700;color:var(--blue);}
+  .stat .l{font-size:13px;color:var(--ink2);margin-top:4px;}
+  .stat.big .n{color:var(--green);}
+  /* table */
+  table{width:100%;border-collapse:collapse;background:#fff;border:1px solid var(--blue);
+    border-radius:8px;overflow:hidden;margin:14px 0 8px;font-size:14px;}
+  thead th{background:var(--blue);color:#fff;font-weight:600;text-align:left;padding:11px 13px;}
+  tbody td{padding:10px 13px;border-top:1px solid var(--line);vertical-align:top;}
+  tbody tr:nth-child(even){background:var(--bg);}
+  td .obj{font-weight:700;color:var(--ink);}
+  td .api{font-family:Consolas,"Courier New",monospace;font-size:12px;color:var(--ink3);}
+  .num{text-align:right;font-variant-numeric:tabular-nums;font-weight:600;}
+  .badge{display:inline-block;font-size:12px;padding:2px 9px;border-radius:20px;
+    background:var(--green2);color:#14514b;font-weight:600;}
+  .badge.gray{background:#e7e7e7;color:var(--ink2);}
+  a.link{color:var(--blue);text-decoration:none;font-weight:600;}
+  a.link:hover{text-decoration:underline;}
+  /* ERD */
+  .erd{background:#fff;border:1px solid var(--line);border-radius:8px;padding:26px 22px;margin:16px 0;
+    font-family:Consolas,"Courier New",monospace;font-size:13.5px;line-height:1.9;color:var(--ink2);white-space:pre;overflow-x:auto;}
+  .erd b{color:var(--blue);}
+  .erd i{color:var(--green);font-style:normal;}
+  /* integrity */
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:14px 0;}
+  .card{background:#fff;border:1px solid var(--line);border-radius:8px;padding:18px 20px;}
+  .card h3{font-size:15px;color:var(--blue);margin-bottom:10px;}
+  .chk{list-style:none;}
+  .chk li{padding:5px 0 5px 26px;position:relative;font-size:14px;color:var(--ink2);}
+  .chk li::before{content:"✓";position:absolute;left:0;top:5px;color:var(--green);font-weight:700;}
+  .note{background:#fff;border-left:3px solid var(--blue);padding:12px 16px;margin:14px 0;font-size:13.5px;color:var(--ink2);}
+  footer{margin-top:56px;padding-top:20px;border-top:1px solid var(--line);
+    font-size:12px;color:var(--ink3);text-align:center;}
+  @media(max-width:720px){.stats{grid-template-columns:repeat(2,1fr);}.grid2{grid-template-columns:1fr;}}
+</style>
+</head>
+<body>
+<div class="hero"><div class="hero-in">
+  <div class="tag">LeBio · lifenergy Org · 銷售 App</div>
+  <h1>真實客戶資料遷移 · 總覽</h1>
+  <p>將 LeBio 舊 BA 系統與 Salesforce 匯出的真實客戶 CRM 資料，依《CRM 資料表關聯說明文件》逐一遷移至 lifenergy 正式組織的「銷售」App，涵蓋 7 個標準物件、共 87,401 筆記錄。所有記錄標記 <code>mark__c = 'sf'</code> 以利篩選與追溯。</p>
+  <div class="meta">最後更新：2026-07-28　·　資料來源：客戶管理 / 聯絡人 / 商機(Lead) / 拜訪紀錄 / 活動TMP / 預估業績 / 事件列表</div>
+</div></div>
+
+<div class="wrap">
+
+  <h2>遷移總計 <span class="en">Migration Summary</span></h2>
+  <div class="stats">
+    <div class="stat big"><div class="n">87,401</div><div class="l">總記錄數</div></div>
+    <div class="stat"><div class="n">7</div><div class="l">標準物件</div></div>
+    <div class="stat"><div class="n">0</div><div class="l">重複記錄</div></div>
+    <div class="stat"><div class="n">100%</div><div class="l">原生物件（無 Custom）</div></div>
+  </div>
+  <div class="note">全程優先採用 Salesforce <b>原生標準物件</b>，7 份來源資料皆對應到既有標準物件（Account／Contact／Lead／Campaign／Task／Opportunity／Event），未新增任何 Custom Object；僅以 <code>Legacy_*__c</code> 自訂欄位承接原系統無對應的欄位。</div>
+
+  <h2>物件對應與筆數 <span class="en">Objects &amp; Record Counts</span></h2>
+  <p class="lead">每一份來源檔皆對應到一個原生標準物件；點選右欄可檢視該物件的完整 ETL 報告。</p>
+  <table>
+    <thead><tr>
+      <th>來源檔</th><th>Salesforce 物件</th><th class="num">筆數</th><th>關鍵關聯</th><th>ETL 報告</th>
+    </tr></thead>
+    <tbody>
+      <tr>
+        <td>客戶管理.xlsx</td>
+        <td><span class="obj">客戶公司</span><br><span class="api">Account</span></td>
+        <td class="num">4,334</td>
+        <td>Contact / Opportunity / Task 的母體</td>
+        <td><a class="link" href="etl-account-report.html">開啟 →</a></td>
+      </tr>
+      <tr>
+        <td>聯絡人.xlsx</td>
+        <td><span class="obj">聯絡人</span><br><span class="api">Contact</span></td>
+        <td class="num">3,871</td>
+        <td>3,870 筆掛回 Account</td>
+        <td><a class="link" href="etl-contact-report.html">開啟 →</a></td>
+      </tr>
+      <tr>
+        <td>商機.xlsx</td>
+        <td><span class="obj">潛在客戶</span><br><span class="api">Lead</span></td>
+        <td class="num">7,945</td>
+        <td>獨立潛客名單</td>
+        <td><a class="link" href="etl-lead-report.html">開啟 →</a></td>
+      </tr>
+      <tr>
+        <td>活動TMP.xlsx</td>
+        <td><span class="obj">行銷活動</span><br><span class="api">Campaign</span></td>
+        <td class="num">47</td>
+        <td>行銷檔期主檔</td>
+        <td><a class="link" href="etl-campaign-report.html">開啟 →</a></td>
+      </tr>
+      <tr>
+        <td>拜訪紀錄.xlsx</td>
+        <td><span class="obj">工作（活動）</span><br><span class="api">Task</span></td>
+        <td class="num">36,366</td>
+        <td>4,921 掛 Who · 30,526 掛 What</td>
+        <td><a class="link" href="etl-visit-report.html">開啟 →</a></td>
+      </tr>
+      <tr>
+        <td>預估業績.xlsx</td>
+        <td><span class="obj">商機</span><br><span class="api">Opportunity</span></td>
+        <td class="num">4,984</td>
+        <td>4,971 掛 Account · 1,928 已成交</td>
+        <td><a class="link" href="etl-opportunity-report.html">開啟 →</a></td>
+      </tr>
+      <tr>
+        <td>事件列表.xlsx</td>
+        <td><span class="obj">行事曆事件</span><br><span class="api">Event</span></td>
+        <td class="num">29,854</td>
+        <td>2,027 掛 Who · 4,213 掛 What</td>
+        <td><a class="link" href="etl-event-report.html">開啟 →</a></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2>關聯結構 <span class="en">Relationship Map</span></h2>
+  <p class="lead">依《CRM 資料表關聯說明文件》還原原系統關聯：SF 格式 Id（001/003/00Q/701）比對目標的 <code>Legacy_Id__c</code>；數字型舊 Id 比對 <code>Legacy_IDNo__c</code>。</p>
+  <div class="erd"><b>客戶公司 Account</b> (4,334)
+   │
+   ├──&lt; <b>聯絡人 Contact</b> (3,871)        <i>AccountId</i>
+   ├──&lt; <b>商機 Opportunity</b> (4,984)      <i>AccountId</i>
+   ├──&lt; <b>工作 Task</b> (36,366)            <i>WhatId → Account / WhoId → Contact·Lead</i>
+   └──&lt; <b>行事曆事件 Event</b> (29,854)      <i>WhatId → Account / WhoId → Contact·Lead</i>
+
+<b>潛在客戶 Lead</b> (7,945)      獨立名單，Task/Event 可經 WhoId(00Q) 掛回
+<b>行銷活動 Campaign</b> (47)      行銷檔期主檔</div>
+
+  <h2>資料完整性 <span class="en">Data Integrity</span></h2>
+  <p class="lead">全 7 物件已完成完整性總掃描 — 去重、必填、空白清洗、關聯掛回皆通過。</p>
+  <div class="grid2">
+    <div class="card">
+      <h3>清洗與去重</h3>
+      <ul class="chk">
+        <li>僅去除「完全相同」的重複列，保留合法多筆</li>
+        <li>Task / Event 舊 Id 重複組 = 0</li>
+        <li>所有欄位去除前後空白（含全形 U+3000）</li>
+        <li>移除不可見／控制字元，收斂連續空白</li>
+        <li>0 筆缺主旨、0 筆缺必填名稱／結案日</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3>關聯正確性</h3>
+      <ul class="chk">
+        <li>Contact → Account 掛回 3,870 / 3,871</li>
+        <li>Opportunity → Account 掛回 4,971 / 4,984</li>
+        <li>Task 掛 Who 4,921、掛 What 30,526</li>
+        <li>Event 掛 Who 2,027、掛 What 4,213</li>
+        <li>時間型 Event 皆有起始時間（+08:00 正確換算 UTC）</li>
+      </ul>
+    </div>
+  </div>
+  <div class="note">少數未掛回的記錄（1 筆 Contact、13 筆 Opportunity）為<b>來源資料本身無可解析關聯</b>，非遷移錯誤；已完整保留 <code>Legacy_Account_Name__c</code> 等原始文字供追溯。</div>
+
+  <h2>App 可見性與權限 <span class="en">App &amp; Permissions</span></h2>
+  <div class="grid2">
+    <div class="card">
+      <h3>銷售 App Tabs</h3>
+      <ul class="chk">
+        <li>客戶公司 / 聯絡人 / 潛在客戶 / 行銷活動</li>
+        <li>工作 / 商機 / 行事曆事件</li>
+        <li>7 個物件皆列於「銷售」App 導覽列</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3>欄位可見性</h3>
+      <ul class="chk">
+        <li>各物件 Record Page 皆含「遷移資料 (LeBio)」區塊</li>
+        <li>List View（filterScope = Everything）全 User 可見</li>
+        <li>FLS 以 Permission Set 指派給全部 active User</li>
+      </ul>
+    </div>
+  </div>
+
+  <footer>
+    LeBio 資料遷移 · lifenergy Org「銷售」App　·　依《CRM 資料表關聯說明文件》施工　·　2026-07-28
+  </footer>
+</div>
+</body>
+</html>
