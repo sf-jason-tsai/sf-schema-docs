@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LeBio 客戶資料遷移 ETL 報告 — 拜訪紀錄 → 活動(Task)</title>
+<style>
+  :root{
+    --ink:#1a1a1a; --ink2:#4a4a4a; --ink3:#8a8a8a;
+    --line:#d0d0d0; --bg:#f5f5f5; --white:#fff;
+    --blue:#2167dd; --blue-l:#a1c1f6; --green:#4ab2a8; --green-l:#95d4ce;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0; color:var(--ink); background:#eceef1;
+    font-family:"Microsoft JhengHei","Noto Sans TC","Noto Sans",Arial,sans-serif;
+    line-height:1.5; font-size:15px;
+  }
+  .page{max-width:960px; margin:0 auto; background:var(--white);
+    box-shadow:0 1px 4px rgba(0,0,0,.08);}
+  .hero{background:var(--blue); color:#fff; padding:44px 48px 38px;}
+  .hero .kicker{font-size:13px; letter-spacing:2px; color:var(--blue-l); margin:0 0 10px;}
+  .hero h1{font-size:27px; font-weight:700; margin:0 0 6px; line-height:1.25;}
+  .hero .sub{font-size:15px; color:#e6eefb; margin:0;}
+  .hero .meta{margin-top:22px; font-size:12.5px; color:#cfe0fb; display:flex; gap:26px; flex-wrap:wrap;}
+  .hero .meta b{color:#fff; font-weight:600;}
+  main{padding:40px 48px 56px;}
+  h2{font-size:19px; font-weight:700; color:var(--ink); margin:38px 0 4px;
+    padding-bottom:8px; border-bottom:2px solid var(--blue);}
+  h2:first-child{margin-top:0;}
+  h2 .n{color:var(--blue); font-weight:700; margin-right:10px;}
+  h3{font-size:15px; font-weight:600; color:var(--blue); margin:22px 0 8px;}
+  p{margin:8px 0; color:var(--ink);}
+  .note{font-size:12.5px; color:var(--ink3);}
+  .cards{display:grid; grid-template-columns:repeat(4,1fr); gap:14px; margin:22px 0 4px;}
+  .card{border:1px solid var(--line); border-radius:8px; padding:16px 16px 14px; background:var(--white);}
+  .card .v{font-size:28px; font-weight:700; color:var(--blue); line-height:1;}
+  .card .v.green{color:var(--green);}
+  .card .l{font-size:12.5px; color:var(--ink2); margin-top:7px;}
+  table{border-collapse:collapse; width:100%; margin:14px 0; font-size:13.5px;}
+  th{background:var(--blue); color:#fff; font-weight:600; text-align:left; padding:9px 11px; border:1px solid var(--blue);}
+  td{padding:8px 11px; border:1px solid var(--line); color:var(--ink); vertical-align:top;}
+  tr:nth-child(even) td{background:var(--bg);}
+  td.mono,th.mono{font-family:Consolas,"Courier New",monospace; font-size:12.5px;}
+  .tag{display:inline-block; font-size:11.5px; padding:1px 8px; border-radius:10px; font-weight:600;}
+  .tag.native{background:#e4f4f2; color:#2b7d75;}
+  .tag.custom{background:#e7effc; color:var(--blue);}
+  .tag.drop{background:#f0f0f0; color:#8a8a8a;}
+  .bars{margin:14px 0;}
+  .bar-row{display:grid; grid-template-columns:180px 1fr 90px; align-items:center; gap:10px; margin:5px 0; font-size:13px;}
+  .bar-row .lab{color:var(--ink2); text-align:right;}
+  .bar-track{background:var(--bg); border-radius:4px; height:18px; overflow:hidden;}
+  .bar-fill{height:100%; background:var(--blue); border-radius:4px;}
+  .bar-fill.g{background:var(--green);}
+  .bar-fill.null{background:var(--line);}
+  .bar-row .val{color:var(--ink3); font-size:12px; text-align:right;}
+  .callout{border-left:4px solid var(--blue); background:#f6f9fe; padding:12px 16px; margin:14px 0; font-size:13.5px;}
+  .callout.warn{border-left-color:var(--green); background:#f1faf9;}
+  .callout b{color:var(--ink);}
+  ul{margin:8px 0; padding-left:22px;}
+  li{margin:4px 0;}
+  code{font-family:Consolas,"Courier New",monospace; background:var(--bg); padding:1px 6px; border-radius:4px; font-size:12.5px; color:#33475b;}
+  footer{border-top:1px solid var(--line); margin-top:44px; padding-top:16px;
+    font-size:11.5px; color:var(--ink3); display:flex; justify-content:space-between;}
+  .steps{counter-reset:s; margin:16px 0;}
+  .step{position:relative; padding:12px 16px 12px 52px; border:1px solid var(--line); border-radius:8px; margin:10px 0;}
+  .step:before{counter-increment:s; content:counter(s); position:absolute; left:14px; top:12px;
+    width:26px; height:26px; background:var(--blue); color:#fff; border-radius:50%;
+    display:flex; align-items:center; justify-content:center; font-size:14px; font-weight:700;}
+  .step .st{font-weight:600; color:var(--ink);}
+  .ok{color:var(--green); font-weight:600;}
+  @media(max-width:680px){.cards{grid-template-columns:repeat(2,1fr);} main,.hero{padding-left:22px;padding-right:22px;} .bar-row{grid-template-columns:120px 1fr 70px;}}
+</style>
+</head>
+<body>
+<div class="page">
+  <div class="hero">
+    <p class="kicker">DATA MIGRATION · ETL REPORT · 04</p>
+    <h1>LeBio 客戶資料遷移紀錄 — 拜訪紀錄</h1>
+    <p class="sub">來源:拜訪紀錄.xlsx　→　目標:Salesforce「銷售」App／活動(Task)</p>
+    <div class="meta">
+      <span><b>Org</b>　lifenergy (lebio.my.salesforce.com)</span>
+      <span><b>執行日期</b>　2026-07-28</span>
+      <span><b>執行者</b>　sophietso@salesforce.com</span>
+      <span><b>標記</b>　mark = &#39;sf&#39;</span>
+    </div>
+  </div>
+  <main>
+
+    <h2><span class="n">1</span>執行摘要</h2>
+    <div class="cards">
+      <div class="card"><div class="v">36,366</div><div class="l">來源資料列</div></div>
+      <div class="card"><div class="v green">36,366</div><div class="l">成功匯入 (100%)</div></div>
+      <div class="card"><div class="v green">0</div><div class="l">失敗</div></div>
+      <div class="card"><div class="v">12</div><div class="l">新增自訂欄位</div></div>
+    </div>
+    <p>本批依 <b>CRM資料表關聯說明文件.docx §6.2–6.4</b> 將舊系統的 <b>拜訪紀錄.xlsx</b>(36,366 筆)遷入 lifenergy 正式 org 的標準物件 <code>Task</code>(SF UI 顯示為「活動／待辦事項」)。全部成功寫入,<b>0 失敗</b>。所有紀錄標記 <code>mark__c = 'sf'</code>。</p>
+    <div class="callout"><b>原生優先:</b>拜訪紀錄的核心欄位(主題、日期、狀態、優先順序、聯絡對象、相關客戶、內容)全部對應到 <code>Task</code> 標準欄位,無需自訂;僅將舊系統特有的補充資訊(原始負責人、機會點、來源商機名稱…)存入 12 個 <code>Legacy_*</code> 自訂欄位保留可回溯性。</div>
+    <div class="callout warn"><b>關聯即體驗:</b>拜訪紀錄透過標準 <code>WhoId</code>(聯絡人／潛在客戶)與 <code>WhatId</code>(客戶)掛回,因此在 <b>客戶／聯絡人／潛在客戶</b>的記錄頁「活動時間軸」會<b>自動顯示</b>所有相關拜訪 — 客戶登入即見完整往來歷程。</div>
+
+    <h2><span class="n">2</span>欄位對應</h2>
+    <h3>標準欄位(native)</h3>
+    <table>
+      <tr><th>來源欄位</th><th>目標欄位</th><th>型別</th><th>處理</th></tr>
+      <tr><td>主題</td><td class="mono">Subject</td><td>Text(255)</td><td>trim;空值 fallback「(無主題)」283 筆</td></tr>
+      <tr><td>拜訪/聯繫日期</td><td class="mono">ActivityDate</td><td>Date</td><td>Excel 序列值 → 日期</td></tr>
+      <tr><td>Status</td><td class="mono">Status</td><td>Picklist</td><td>Open / Completed 直接對映</td></tr>
+      <tr><td>Priority</td><td class="mono">Priority</td><td>Picklist</td><td>Normal / High;空值預設 Normal</td></tr>
+      <tr><td>內容</td><td class="mono">Description</td><td>Long Text</td><td>trim + 收合空白</td></tr>
+      <tr><td>WhoId(003/00Q)</td><td class="mono">WhoId</td><td>Lookup</td><td>Contact Id 或 Lead Id 解析掛回</td></tr>
+      <tr><td>WhatId / AccountId</td><td class="mono">WhatId</td><td>Lookup</td><td>Account 解析掛回(見 §3)</td></tr>
+      <tr><td>OwnerId</td><td class="mono">OwnerId</td><td>Lookup</td><td>沿用系統擁有者(未覆寫)</td></tr>
+    </table>
+
+    <h3>自訂欄位(custom,共 12)</h3>
+    <table>
+      <tr><th>來源欄位</th><th>目標欄位(API)</th><th>型別</th><th>說明</th></tr>
+      <tr><td>Id</td><td class="mono">Legacy_Id__c</td><td>Text(18)</td><td>來源主鍵(Activity 不可設 External ID)</td></tr>
+      <tr><td>IDNo</td><td class="mono">Legacy_IDNo__c</td><td>Text(18)</td><td>來源流水號</td></tr>
+      <tr><td>—</td><td class="mono">mark__c</td><td>Text(20)</td><td>批次標記 = sf</td></tr>
+      <tr><td>CreatedDate</td><td class="mono">Legacy_Created_Date__c</td><td>DateTime</td><td>原始建立時間</td></tr>
+      <tr><td>CompletedDateTime</td><td class="mono">Legacy_Completed_Date__c</td><td>DateTime</td><td>原始完成時間</td></tr>
+      <tr><td>指派員工/Apply User</td><td class="mono">Legacy_Owner_Name__c</td><td>Text(255)</td><td>原始負責人姓名</td></tr>
+      <tr><td>相關機會點</td><td class="mono">Opportunity_Point__c</td><td>Text(255)</td><td>—</td></tr>
+      <tr><td>機會描述</td><td class="mono">Opportunity_Desc__c</td><td>Text(255)</td><td>—</td></tr>
+      <tr><td>來源商機(潛在客戶)</td><td class="mono">Source_Lead_Name__c</td><td>Text(255)</td><td>原始來源商機名稱</td></tr>
+      <tr><td>相關對象(客戶)</td><td class="mono">Related_Account_Name__c</td><td>Text(255)</td><td>原始客戶名稱(列表檢視用)</td></tr>
+      <tr><td>CustomerStatus</td><td class="mono">Customer_Status__c</td><td>Text(50)</td><td>—</td></tr>
+      <tr><td>圖片或附件</td><td class="mono">Attachment_Ref__c</td><td>Text(255)</td><td>附件參照文字</td></tr>
+    </table>
+    <div class="callout"><b>技術限制:</b>Salesforce 的 Activity(Task/Event)自訂欄位<b>不可</b>設為 External ID 或 Unique,故本批採 <b>INSERT</b> 匯入(非 upsert)。若需重跑,先刪除 <code>mark__c='sf'</code> 的 Task 再匯。</div>
+
+    <h2><span class="n">3</span>關聯解析(WhoId / WhatId)</h2>
+    <p>依 docx §6.2–6.4,拜訪紀錄同時可掛「聯絡人/潛在客戶」與「客戶」。解析邏輯:</p>
+    <ul>
+      <li><b>WhoId</b>:來源為 <code>003…</code> → 對映既有 Contact;<code>00Q…</code> → 對映既有 Lead;佔位碼/空白則留空。</li>
+      <li><b>WhatId</b>:優先取 <code>WhatId(001…)</code> → Account;否則以 <code>AccountId</code>(舊 BA 數字碼)對映 Account IDNo;再否則取 <code>AccountId(001…)</code>。</li>
+      <li><b>Salesforce 限制:</b>當 WhoId 指向 <b>Lead</b> 時,系統禁止同時設 WhatId,故該類紀錄的 WhatId 一律清空(3,451 筆)。</li>
+    </ul>
+    <div class="bars">
+      <div class="bar-row"><span class="lab">WhatId → 客戶(Account)</span><div class="bar-track"><div class="bar-fill" style="width:83.9%"></div></div><span class="val">30,526</span></div>
+      <div class="bar-row"><span class="lab">WhoId → 潛在客戶(Lead)</span><div class="bar-track"><div class="bar-fill g" style="width:9.5%"></div></div><span class="val">3,451</span></div>
+      <div class="bar-row"><span class="lab">WhoId → 聯絡人(Contact)</span><div class="bar-track"><div class="bar-fill g" style="width:4.0%"></div></div><span class="val">1,470</span></div>
+    </div>
+    <p class="note">未解析(來源對象不在已遷移範圍內)之 WhoId 2,290 筆留空,不影響任何拜訪內容;WhatId 未解析僅 7 筆。全部 36,366 筆拜訪內容皆完整保留。</p>
+
+    <h2><span class="n">4</span>資料清洗</h2>
+    <ul>
+      <li>所有文字欄位 trim 前後空白(含全形 U+3000)、收合連續空白、移除不可見控制字元。</li>
+      <li>日期:Excel 序列值統一換算為 ISO 日期/時間。</li>
+      <li>主題空值以「(無主題)」補入(283 筆),避免列表空白。</li>
+      <li>Priority/Status 空值套用預設(Normal / Open)。</li>
+      <li>去重原則:僅完全相同的列才去重;本批來源無完全重複列。</li>
+    </ul>
+
+    <h2><span class="n">5</span>驗證結果</h2>
+    <table>
+      <tr><th>項目</th><th>數值</th><th>結果</th></tr>
+      <tr><td>Task 總數(mark=sf)</td><td>36,366</td><td><span class="ok">✓ 全數匯入</span></td></tr>
+      <tr><td>已完成(Completed)</td><td>18,062</td><td>—</td></tr>
+      <tr><td>掛回客戶(What.Type=Account)</td><td>30,526</td><td><span class="ok">✓</span></td></tr>
+      <tr><td>掛回聯絡人(Contact)</td><td>1,470</td><td><span class="ok">✓</span></td></tr>
+      <tr><td>掛回潛在客戶(Lead)</td><td>3,451</td><td><span class="ok">✓</span></td></tr>
+      <tr><td>單一客戶最多拜訪</td><td>166 筆</td><td>抽樣正確</td></tr>
+    </table>
+    <div class="callout warn"><b>抽樣佐證:</b>拜訪「佑全-三民明誠藥局」由聯絡人「佑全三民明誠店門市代表」發起,主題為「【超級好抗】線上教育訓練」— 聯絡人、客戶、主題三者關聯正確。</div>
+
+    <h2><span class="n">6</span>顯示與關聯呈現</h2>
+    <ul>
+      <li><b>列表檢視</b>「遷移·拜訪紀錄」(篩選 mark=sf):主題、聯絡對象、相關客戶、日期、狀態、優先順序、原始負責人、客戶狀態。</li>
+      <li><b>Task 版面</b>新增區段「遷移資料(原始 CRM)」,12 個自訂欄位全部加入,record page 皆可檢視。</li>
+      <li><b>關聯自動顯示:</b>客戶/聯絡人/潛在客戶記錄頁的<b>活動時間軸</b>自動列出所有相關拜訪 — 無需額外設定。</li>
+    </ul>
+
+    <h2><span class="n">7</span>權限</h2>
+    <p>自訂欄位 FLS 透過 permission set <code>Lebio_Import_Activity</code> 授予,並指派給 org 內全部相容 active 使用者,確保客戶登入後即可看到所有匯入欄位。</p>
+
+    <footer>
+      <span>LeBio × Salesforce · 資料遷移 ETL 報告 04 — 拜訪紀錄 → 活動(Task)</span>
+      <span>2026-07-28</span>
+    </footer>
+  </main>
+</div>
+</body>
+</html>

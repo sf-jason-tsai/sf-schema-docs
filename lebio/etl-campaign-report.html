@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LeBio 客戶資料遷移 ETL 報告 — 活動TMP → 行銷活動(Campaign)</title>
+<style>
+  :root{
+    --ink:#1a1a1a; --ink2:#4a4a4a; --ink3:#8a8a8a;
+    --line:#d0d0d0; --bg:#f5f5f5; --white:#fff;
+    --blue:#2167dd; --blue-l:#a1c1f6; --green:#4ab2a8; --green-l:#95d4ce;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0; color:var(--ink); background:#eceef1;
+    font-family:"Microsoft JhengHei","Noto Sans TC","Noto Sans",Arial,sans-serif;
+    line-height:1.5; font-size:15px;
+  }
+  .page{max-width:960px; margin:0 auto; background:var(--white);
+    box-shadow:0 1px 4px rgba(0,0,0,.08);}
+  .hero{background:var(--blue); color:#fff; padding:44px 48px 38px;}
+  .hero .kicker{font-size:13px; letter-spacing:2px; color:var(--blue-l); margin:0 0 10px;}
+  .hero h1{font-size:27px; font-weight:700; margin:0 0 6px; line-height:1.25;}
+  .hero .sub{font-size:15px; color:#e6eefb; margin:0;}
+  .hero .meta{margin-top:22px; font-size:12.5px; color:#cfe0fb; display:flex; gap:26px; flex-wrap:wrap;}
+  .hero .meta b{color:#fff; font-weight:600;}
+  main{padding:40px 48px 56px;}
+  h2{font-size:19px; font-weight:700; color:var(--ink); margin:38px 0 4px;
+    padding-bottom:8px; border-bottom:2px solid var(--blue);}
+  h2:first-child{margin-top:0;}
+  h2 .n{color:var(--blue); font-weight:700; margin-right:10px;}
+  h3{font-size:15px; font-weight:600; color:var(--blue); margin:22px 0 8px;}
+  p{margin:8px 0; color:var(--ink);}
+  .note{font-size:12.5px; color:var(--ink3);}
+  .cards{display:grid; grid-template-columns:repeat(4,1fr); gap:14px; margin:22px 0 4px;}
+  .card{border:1px solid var(--line); border-radius:8px; padding:16px 16px 14px; background:var(--white);}
+  .card .v{font-size:28px; font-weight:700; color:var(--blue); line-height:1;}
+  .card .v.green{color:var(--green);}
+  .card .l{font-size:12.5px; color:var(--ink2); margin-top:7px;}
+  table{border-collapse:collapse; width:100%; margin:14px 0; font-size:13.5px;}
+  th{background:var(--blue); color:#fff; font-weight:600; text-align:left; padding:9px 11px; border:1px solid var(--blue);}
+  td{padding:8px 11px; border:1px solid var(--line); color:var(--ink); vertical-align:top;}
+  tr:nth-child(even) td{background:var(--bg);}
+  td.mono,th.mono{font-family:Consolas,"Courier New",monospace; font-size:12.5px;}
+  .tag{display:inline-block; font-size:11.5px; padding:1px 8px; border-radius:10px; font-weight:600;}
+  .tag.native{background:#e4f4f2; color:#2b7d75;}
+  .tag.custom{background:#e7effc; color:var(--blue);}
+  .tag.drop{background:#f0f0f0; color:#8a8a8a;}
+  .bars{margin:14px 0;}
+  .bar-row{display:grid; grid-template-columns:180px 1fr 90px; align-items:center; gap:10px; margin:5px 0; font-size:13px;}
+  .bar-row .lab{color:var(--ink2); text-align:right;}
+  .bar-track{background:var(--bg); border-radius:4px; height:18px; overflow:hidden;}
+  .bar-fill{height:100%; background:var(--blue); border-radius:4px;}
+  .bar-fill.g{background:var(--green);}
+  .bar-fill.null{background:var(--line);}
+  .bar-row .val{color:var(--ink3); font-size:12px; text-align:right;}
+  .callout{border-left:4px solid var(--blue); background:#f6f9fe; padding:12px 16px; margin:14px 0; font-size:13.5px;}
+  .callout.warn{border-left-color:var(--green); background:#f1faf9;}
+  .callout b{color:var(--ink);}
+  ul{margin:8px 0; padding-left:22px;}
+  li{margin:4px 0;}
+  code{font-family:Consolas,"Courier New",monospace; background:var(--bg); padding:1px 6px; border-radius:4px; font-size:12.5px; color:#33475b;}
+  footer{border-top:1px solid var(--line); margin-top:44px; padding-top:16px;
+    font-size:11.5px; color:var(--ink3); display:flex; justify-content:space-between;}
+  .steps{counter-reset:s; margin:16px 0;}
+  .step{position:relative; padding:12px 16px 12px 52px; border:1px solid var(--line); border-radius:8px; margin:10px 0;}
+  .step:before{counter-increment:s; content:counter(s); position:absolute; left:14px; top:12px;
+    width:26px; height:26px; background:var(--blue); color:#fff; border-radius:50%;
+    display:flex; align-items:center; justify-content:center; font-size:14px; font-weight:700;}
+  .step .st{font-weight:600; color:var(--ink);}
+  .ok{color:var(--green); font-weight:600;}
+  @media(max-width:680px){.cards{grid-template-columns:repeat(2,1fr);} main,.hero{padding-left:22px;padding-right:22px;} .bar-row{grid-template-columns:120px 1fr 70px;}}
+</style>
+</head>
+<body>
+<div class="page">
+  <div class="hero">
+    <p class="kicker">DATA MIGRATION · ETL REPORT · 05</p>
+    <h1>LeBio 客戶資料遷移紀錄 — 行銷活動</h1>
+    <p class="sub">來源:活動TMP.xlsx　→　目標:Salesforce「銷售」App／行銷活動(Campaign)</p>
+    <div class="meta">
+      <span><b>Org</b>　lifenergy (lebio.my.salesforce.com)</span>
+      <span><b>執行日期</b>　2026-07-28</span>
+      <span><b>執行者</b>　sophietso@salesforce.com</span>
+      <span><b>標記</b>　mark = &#39;sf&#39;</span>
+    </div>
+  </div>
+  <main>
+
+    <h2><span class="n">1</span>執行摘要</h2>
+    <div class="cards">
+      <div class="card"><div class="v">47</div><div class="l">來源資料列</div></div>
+      <div class="card"><div class="v green">47</div><div class="l">成功匯入 (100%)</div></div>
+      <div class="card"><div class="v green">23</div><div class="l">階層關聯(上層活動)</div></div>
+      <div class="card"><div class="v">12</div><div class="l">新增自訂欄位</div></div>
+    </div>
+    <p>本批將舊系統的 <b>活動TMP.xlsx</b>(47 筆)遷入 lifenergy 正式 org 的標準物件 <code>Campaign</code>(SF UI 顯示為「行銷活動」)。全部成功寫入,並依來源 <code>ParentId</code> 重建 <b>23 筆</b>活動階層(上層/子活動)。所有紀錄標記 <code>mark__c = 'sf'</code>。</p>
+    <div class="callout"><b>原生優先:</b>活動名稱、類型、狀態、起訖日、預期收入、已傳送數、啟用旗標、描述、上層活動全部對應 <code>Campaign</code> 標準欄位;僅將舊系統的<b>統計匯總數(唯讀)</b>另存 <code>Legacy_*</code> 自訂欄位保留原值。</div>
+    <div class="callout warn"><b>階層即體驗:</b>透過標準 <code>ParentId</code> 掛回,行銷活動記錄頁的「<b>行銷活動階層</b>」關聯清單會自動呈現上層/子活動樹狀結構 — 例:【好抗隨身組】隸屬「DS方案」,原始贏單金額 NT$379,458。</div>
+
+    <h2><span class="n">2</span>欄位對應</h2>
+    <h3>標準欄位(native)</h3>
+    <table>
+      <tr><th>來源欄位</th><th>目標欄位</th><th>型別</th><th>處理</th></tr>
+      <tr><td>行銷活動名稱</td><td class="mono">Name</td><td>Text(必填)</td><td>trim;空值 fallback「(未命名活動)-IDNo」</td></tr>
+      <tr><td>類型</td><td class="mono">Type</td><td>Picklist</td><td>Event / Email(既有值,無需新增)</td></tr>
+      <tr><td>狀態</td><td class="mono">Status</td><td>Picklist</td><td>Planned / Completed / Aborted</td></tr>
+      <tr><td>開始日期</td><td class="mono">StartDate</td><td>Date</td><td>Excel 序列值 → 日期</td></tr>
+      <tr><td>結束日期</td><td class="mono">EndDate</td><td>Date</td><td>Excel 序列值 → 日期</td></tr>
+      <tr><td>預期收入</td><td class="mono">ExpectedRevenue</td><td>Currency</td><td>科學記號 → 數值</td></tr>
+      <tr><td>已傳送數目</td><td class="mono">NumberSent</td><td>Number</td><td>—</td></tr>
+      <tr><td>IsActive</td><td class="mono">IsActive</td><td>Checkbox</td><td>—</td></tr>
+      <tr><td>描述</td><td class="mono">Description</td><td>Long Text</td><td>trim</td></tr>
+      <tr><td>ParentId</td><td class="mono">ParentId</td><td>Lookup(自我)</td><td>兩階段:先建全部,再依 Legacy_Id 解析掛回上層</td></tr>
+    </table>
+
+    <h3>自訂欄位(custom,共 12)</h3>
+    <table>
+      <tr><th>來源欄位</th><th>目標欄位(API)</th><th>型別</th><th>說明</th></tr>
+      <tr><td>Id</td><td class="mono">Legacy_Id__c</td><td>Text(18)</td><td>External ID · Unique · 來源主鍵</td></tr>
+      <tr><td>IDNo</td><td class="mono">Legacy_IDNo__c</td><td>Text(18)</td><td>External ID · Unique · upsert 鍵</td></tr>
+      <tr><td>—</td><td class="mono">mark__c</td><td>Text(20)</td><td>批次標記 = sf</td></tr>
+      <tr><td>CreatedDate</td><td class="mono">Legacy_Created_Date__c</td><td>DateTime</td><td>原始建立時間</td></tr>
+      <tr><td>Apply User Name</td><td class="mono">Legacy_Owner_Name__c</td><td>Text(255)</td><td>原始負責人</td></tr>
+      <tr><td>NumberOfContacts</td><td class="mono">Legacy_Num_Contacts__c</td><td>Number</td><td>唯讀匯總(見說明)</td></tr>
+      <tr><td>NumberOfResponses</td><td class="mono">Legacy_Num_Responses__c</td><td>Number</td><td>唯讀匯總</td></tr>
+      <tr><td>NumberOfLeads</td><td class="mono">Legacy_Num_Leads__c</td><td>Number</td><td>唯讀匯總</td></tr>
+      <tr><td>NumberOfOpportunities</td><td class="mono">Legacy_Num_Opportunities__c</td><td>Number</td><td>唯讀匯總</td></tr>
+      <tr><td>NumberOfWonOpportunities</td><td class="mono">Legacy_Num_Won_Opps__c</td><td>Number</td><td>唯讀匯總</td></tr>
+      <tr><td>AmountAllOpportunities</td><td class="mono">Legacy_Amount_All_Opps__c</td><td>Currency</td><td>唯讀匯總</td></tr>
+      <tr><td>AmountWonOpportunities</td><td class="mono">Legacy_Amount_Won_Opps__c</td><td>Currency</td><td>唯讀匯總</td></tr>
+    </table>
+    <div class="callout"><b>為何另存匯總數:</b>Campaign 的 <code>NumberOfContacts</code>、<code>AmountWonOpportunities</code> 等標準欄位為<b>系統自動 rollup</b>(依 CampaignMember/Opportunity 即時計算),無法直接寫入。因本批未遷 CampaignMember,標準匯總會顯示 0,故將舊系統原值保存於 <code>Legacy_*</code> 欄位供對照。</div>
+
+    <h2><span class="n">3</span>活動階層(ParentId)</h2>
+    <p>來源 47 筆中有 23 筆設有上層活動。採<b>兩階段</b>匯入:① 以 <code>Legacy_IDNo__c</code> upsert 全部 47 筆;② 依來源 ParentId(Legacy_Id)解析為新 Salesforce Id,再 update 掛回。<b>23/23 全數解析成功</b>。</p>
+    <div class="bars">
+      <div class="bar-row"><span class="lab">有上層活動</span><div class="bar-track"><div class="bar-fill" style="width:48.9%"></div></div><span class="val">23</span></div>
+      <div class="bar-row"><span class="lab">頂層活動</span><div class="bar-track"><div class="bar-fill g" style="width:51.1%"></div></div><span class="val">24</span></div>
+      <div class="bar-row"><span class="lab">啟用中(IsActive)</span><div class="bar-track"><div class="bar-fill g" style="width:80.9%"></div></div><span class="val">38</span></div>
+    </div>
+
+    <h2><span class="n">4</span>資料清洗</h2>
+    <ul>
+      <li>所有文字欄位 trim 前後空白(含全形 U+3000)、收合連續空白、移除不可見控制字元。</li>
+      <li>日期:Excel 序列值換算 ISO 日期;預期收入科學記號(如 1.2e+006)以 parseFloat 還原。</li>
+      <li>金額/數字:移除千分位與貨幣符號後轉數值。</li>
+      <li>去重原則:僅完全相同的列才去重;本批無重複列。</li>
+    </ul>
+
+    <h2><span class="n">5</span>驗證結果</h2>
+    <table>
+      <tr><th>項目</th><th>數值</th><th>結果</th></tr>
+      <tr><td>Campaign 總數(mark=sf)</td><td>47</td><td><span class="ok">✓ 全數匯入</span></td></tr>
+      <tr><td>階層關聯(ParentId≠null)</td><td>23</td><td><span class="ok">✓ 23/23 解析</span></td></tr>
+      <tr><td>啟用中</td><td>38</td><td>—</td></tr>
+      <tr><td>抽樣:【好抗隨身組】→ 上層「DS方案」</td><td>贏單 379,458</td><td><span class="ok">✓ 正確</span></td></tr>
+    </table>
+
+    <h2><span class="n">6</span>顯示與關聯呈現</h2>
+    <ul>
+      <li><b>列表檢視</b>「遷移·行銷活動」(篩選 mark=sf):名稱、類型、狀態、起訖日、原始商機數、原始贏單金額、原始負責人。</li>
+      <li><b>Campaign 版面</b>新增區段「遷移資料(原始 CRM 統計)」與「遷移識別碼」,12 個自訂欄位全部加入。</li>
+      <li><b>階層自動顯示:</b>記錄頁「行銷活動階層」關聯清單自動呈現上層/子活動樹。</li>
+    </ul>
+
+    <h2><span class="n">7</span>權限與 Marketing User</h2>
+    <p>自訂欄位 FLS 透過 permission set <code>Lebio_Import_Campaign</code> 授予全部相容 active 使用者。<br>另註:Campaign 建立/編輯需 User 層級的 <b>Marketing User</b> 旗標(非 permission set 權限),已為 active 標準使用者開啟 <code>UserPermissionsMarketingUser=true</code>。</p>
+
+    <footer>
+      <span>LeBio × Salesforce · 資料遷移 ETL 報告 05 — 活動TMP → 行銷活動(Campaign)</span>
+      <span>2026-07-28</span>
+    </footer>
+  </main>
+</div>
+</body>
+</html>

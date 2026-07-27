@@ -121,6 +121,16 @@ const PAGES = [
         dest: 'lebio/etl-lead-report.html',
         title: 'LeBio · 商機→Lead(潛在客戶) ETL 報告 (2026-07-27)'
     },
+    {
+        src: 'C:/Users/bingyan.tsai/Desktop/Claude/lebio-import/etl-visit-report.html',
+        dest: 'lebio/etl-visit-report.html',
+        title: 'LeBio · 拜訪紀錄→活動(Task) ETL 報告 (2026-07-28)'
+    },
+    {
+        src: 'C:/Users/bingyan.tsai/Desktop/Claude/lebio-import/etl-campaign-report.html',
+        dest: 'lebio/etl-campaign-report.html',
+        title: 'LeBio · 活動TMP→行銷活動(Campaign) ETL 報告 (2026-07-28)'
+    },
     // ─── 104 遠距藍海職缺分析 ───
     {
         src: 'C:/Users/bingyan.tsai/Desktop/Claude/job-crawler/out/report.html',
