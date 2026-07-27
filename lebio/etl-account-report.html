@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LeBio 客戶資料遷移 ETL 報告 — 客戶管理 → Account</title>
+<style>
+  :root{
+    --ink:#1a1a1a; --ink2:#4a4a4a; --ink3:#8a8a8a;
+    --line:#d0d0d0; --bg:#f5f5f5; --white:#fff;
+    --blue:#2167dd; --blue-l:#a1c1f6; --green:#4ab2a8; --green-l:#95d4ce;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0; color:var(--ink); background:#eceef1;
+    font-family:"Microsoft JhengHei","Noto Sans TC","Noto Sans",Arial,sans-serif;
+    line-height:1.5; font-size:15px;
+  }
+  .page{max-width:960px; margin:0 auto; background:var(--white);
+    box-shadow:0 1px 4px rgba(0,0,0,.08);}
+  /* 封面色塊 */
+  .hero{background:var(--blue); color:#fff; padding:44px 48px 38px;}
+  .hero .kicker{font-size:13px; letter-spacing:2px; color:var(--blue-l); margin:0 0 10px;}
+  .hero h1{font-size:27px; font-weight:700; margin:0 0 6px; line-height:1.25;}
+  .hero .sub{font-size:15px; color:#e6eefb; margin:0;}
+  .hero .meta{margin-top:22px; font-size:12.5px; color:#cfe0fb; display:flex; gap:26px; flex-wrap:wrap;}
+  .hero .meta b{color:#fff; font-weight:600;}
+  main{padding:40px 48px 56px;}
+  h2{font-size:19px; font-weight:700; color:var(--ink); margin:38px 0 4px;
+    padding-bottom:8px; border-bottom:2px solid var(--blue);}
+  h2:first-child{margin-top:0;}
+  h2 .n{color:var(--blue); font-weight:700; margin-right:10px;}
+  h3{font-size:15px; font-weight:600; color:var(--blue); margin:22px 0 8px;}
+  p{margin:8px 0; color:var(--ink);}
+  .note{font-size:12.5px; color:var(--ink3);}
+  /* 指標卡 */
+  .cards{display:grid; grid-template-columns:repeat(4,1fr); gap:14px; margin:22px 0 4px;}
+  .card{border:1px solid var(--line); border-radius:8px; padding:16px 16px 14px; background:var(--white);}
+  .card .v{font-size:28px; font-weight:700; color:var(--blue); line-height:1;}
+  .card .v.green{color:var(--green);}
+  .card .l{font-size:12.5px; color:var(--ink2); margin-top:7px;}
+  /* 表格 */
+  table{border-collapse:collapse; width:100%; margin:14px 0; font-size:13.5px;}
+  th{background:var(--blue); color:#fff; font-weight:600; text-align:left; padding:9px 11px; border:1px solid var(--blue);}
+  td{padding:8px 11px; border:1px solid var(--line); color:var(--ink); vertical-align:top;}
+  tr:nth-child(even) td{background:var(--bg);}
+  td.mono,th.mono{font-family:Consolas,"Courier New",monospace; font-size:12.5px;}
+  .tag{display:inline-block; font-size:11.5px; padding:1px 8px; border-radius:10px; font-weight:600;}
+  .tag.native{background:#e4f4f2; color:#2b7d75;}
+  .tag.custom{background:#e7effc; color:var(--blue);}
+  /* 條狀圖 */
+  .bars{margin:14px 0;}
+  .bar-row{display:grid; grid-template-columns:120px 1fr 60px; align-items:center; gap:10px; margin:5px 0; font-size:13px;}
+  .bar-row .lab{color:var(--ink2); text-align:right;}
+  .bar-track{background:var(--bg); border-radius:4px; height:18px; overflow:hidden;}
+  .bar-fill{height:100%; background:var(--blue); border-radius:4px;}
+  .bar-fill.g{background:var(--green);}
+  .bar-fill.null{background:var(--line);}
+  .bar-row .val{color:var(--ink3); font-size:12px; text-align:right;}
+  /* callout */
+  .callout{border-left:4px solid var(--blue); background:#f6f9fe; padding:12px 16px; margin:14px 0; font-size:13.5px;}
+  .callout.warn{border-left-color:var(--green); background:#f1faf9;}
+  .callout b{color:var(--ink);}
+  ul{margin:8px 0; padding-left:22px;}
+  li{margin:4px 0;}
+  code{font-family:Consolas,"Courier New",monospace; background:var(--bg); padding:1px 6px; border-radius:4px; font-size:12.5px; color:#33475b;}
+  footer{border-top:1px solid var(--line); margin-top:44px; padding-top:16px;
+    font-size:11.5px; color:var(--ink3); display:flex; justify-content:space-between;}
+  .steps{counter-reset:s; margin:16px 0;}
+  .step{position:relative; padding:12px 16px 12px 52px; border:1px solid var(--line); border-radius:8px; margin:10px 0;}
+  .step:before{counter-increment:s; content:counter(s); position:absolute; left:14px; top:12px;
+    width:26px; height:26px; background:var(--blue); color:#fff; border-radius:50%;
+    display:flex; align-items:center; justify-content:center; font-size:14px; font-weight:700;}
+  .step .st{font-weight:600; color:var(--ink);}
+  .ok{color:var(--green); font-weight:600;}
+  @media(max-width:680px){.cards{grid-template-columns:repeat(2,1fr);} main,.hero{padding-left:22px;padding-right:22px;}}
+</style>
+</head>
+<body>
+<div class="page">
+  <div class="hero">
+    <p class="kicker">DATA MIGRATION · ETL REPORT</p>
+    <h1>LeBio 客戶資料遷移紀錄</h1>
+    <p class="sub">來源:客戶管理.xlsx　→　目標:Salesforce「銷售」App／客戶公司(Account)</p>
+    <div class="meta">
+      <span><b>Org</b>　lifenergy (lebio.my.salesforce.com)</span>
+      <span><b>執行日期</b>　2026-07-27</span>
+      <span><b>執行者</b>　sophietso@salesforce.com</span>
+      <span><b>標記</b>　mark = &#39;sf&#39;</span>
+    </div>
+  </div>
+
+  <main>
+    <!-- 摘要 -->
+    <h2><span class="n">01</span>執行摘要</h2>
+    <p>將舊 CRM／BA 系統匯出的 <b>客戶管理.xlsx</b> 全量遷入 Salesforce 標準 <b>Account</b> 物件。採「原生欄位優先、custom 為輔」原則,建立 External ID 供後續物件掛關聯,並全量標記 <code>mark='sf'</code> 以識別本次上傳來源。</p>
+    <div class="cards">
+      <div class="card"><div class="v">4,334</div><div class="l">來源總筆數(全數匯入)</div></div>
+      <div class="card"><div class="v green">100%</div><div class="l">匯入成功率(0 筆遺漏)</div></div>
+      <div class="card"><div class="v">15</div><div class="l">新增 custom 欄位</div></div>
+      <div class="card"><div class="v">5</div><div class="l">User 獲授權(FLS)</div></div>
+    </div>
+    <p class="note">來源 4,334 筆 → 成功寫入 4,334 筆(第一批 4,153 + 補匯 181)。全部含 <code>Legacy_IDNo__c</code>;其中 4,153 筆另含 <code>Legacy_Id__c</code>。</p>
+
+    <!-- 來源檔案 -->
+    <h2><span class="n">02</span>來源檔案</h2>
+    <table>
+      <tr><th style="width:180px">項目</th><th>內容</th></tr>
+      <tr><td>檔名</td><td>客戶管理.xlsx</td></tr>
+      <tr><td>資料列</td><td>4,334 列(不含標題列)</td></tr>
+      <tr><td>欄位數</td><td>32 欄</td></tr>
+      <tr><td>來源欄位</td><td class="mono">IDNo, Id, IsDeleted, 客戶名稱, 帳單地址, BillingPostalCode, BillingCountry, 送貨地址, 電話, 網站, 員工人數, 客戶描述, OwnerId, CreatedDate, CreatedById, LastModifiedDate, …, AccountSource, Person_Email_2__c, 電話2, 客戶分類, 付款條件, 傳真, 統一編號, 通路類別, 發票抬頭, Apply User ID, Apply Time, Update Time, 送貨備註</td></tr>
+      <tr><td>解析方式</td><td>手動解壓 xlsx (unzip) + Node.js 解析 sharedStrings／sheet XML(本機無 Python)。已修正 self-closing 空白儲存格造成的欄位位移 bug。</td></tr>
+    </table>
+
+    <!-- 欄位對應 -->
+    <h2><span class="n">03</span>欄位對應表</h2>
+    <p>符合規則「能用原生就用原生,不行才用 custom」。8 個原生 + 15 個 custom,共 23 個目標欄位。</p>
+    <h3>對應到原生 Account 欄位</h3>
+    <table>
+      <tr><th style="width:34%">來源欄位</th><th style="width:33%">目標欄位</th><th>型別</th></tr>
+      <tr><td>客戶名稱</td><td class="mono">Name</td><td><span class="tag native">原生</span></td></tr>
+      <tr><td>帳單地址</td><td class="mono">BillingStreet</td><td><span class="tag native">原生</span></td></tr>
+      <tr><td>BillingPostalCode</td><td class="mono">BillingPostalCode</td><td><span class="tag native">原生</span></td></tr>
+      <tr><td>BillingCountry</td><td class="mono">BillingCountry</td><td><span class="tag native">原生</span></td></tr>
+      <tr><td>送貨地址</td><td class="mono">ShippingStreet</td><td><span class="tag native">原生</span></td></tr>
+      <tr><td>電話</td><td class="mono">Phone</td><td><span class="tag native">原生</span></td></tr>
+      <tr><td>員工人數</td><td class="mono">NumberOfEmployees</td><td><span class="tag native">原生</span></td></tr>
+      <tr><td>客戶描述</td><td class="mono">Description</td><td><span class="tag native">原生</span></td></tr>
+    </table>
+    <h3>新增 custom 欄位(原生無對應)</h3>
+    <table>
+      <tr><th style="width:26%">來源欄位</th><th style="width:32%">目標欄位(API)</th><th>型別／說明</th></tr>
+      <tr><td>Id(來源主鍵)</td><td class="mono">Legacy_Id__c</td><td>Text(18)・External ID・Unique — 關聯用</td></tr>
+      <tr><td>IDNo(來源編號)</td><td class="mono">Legacy_IDNo__c</td><td>Text(18)・External ID・Unique — 主要關聯 key</td></tr>
+      <tr><td>(本次上傳標記)</td><td class="mono">mark__c</td><td>Text(20)・固定值 <code>sf</code></td></tr>
+      <tr><td>統一編號</td><td class="mono">Tax_ID__c</td><td>Text(8)</td></tr>
+      <tr><td>發票抬頭</td><td class="mono">Invoice_Title__c</td><td>Text(255)</td></tr>
+      <tr><td>網站</td><td class="mono">Web_Email__c</td><td>Text(255)</td></tr>
+      <tr><td>傳真</td><td class="mono">Fax__c</td><td>Text(40)</td></tr>
+      <tr><td>Person_Email_2__c</td><td class="mono">Email_2__c</td><td>Text(255)</td></tr>
+      <tr><td>電話2</td><td class="mono">Phone_2__c</td><td>Phone</td></tr>
+      <tr><td>送貨備註</td><td class="mono">Shipping_Note__c</td><td>Text(255)</td></tr>
+      <tr><td>AccountSource</td><td class="mono">Account_Source_Text__c</td><td>Text(255)・見決策 ①</td></tr>
+      <tr><td>CreatedDate</td><td class="mono">Legacy_Created_Date__c</td><td>DateTime・原始建立日期</td></tr>
+      <tr><td>通路類別</td><td class="mono">Channel_Type__c</td><td>Picklist(6 值)</td></tr>
+      <tr><td>客戶分類</td><td class="mono">Customer_Category__c</td><td>Picklist(5 值)</td></tr>
+      <tr><td>付款條件</td><td class="mono">Payment_Terms__c</td><td>Picklist(3 值)</td></tr>
+    </table>
+    <h3>未匯入欄位(來源系統中繼資料,新 org 無效)</h3>
+    <p class="note">IsDeleted、OwnerId、CreatedById、LastModifiedById、SystemModstamp、PersonContactId、Apply User ID — 皆為舊系統的內部 ID／時間戳,在新 org 無對應意義,故略過。</p>
+
+    <!-- 清洗規則 -->
+    <h2><span class="n">04</span>資料清洗與轉換規則</h2>
+    <table>
+      <tr><th style="width:28%">規則</th><th>處理邏輯</th><th style="width:16%">影響筆數</th></tr>
+      <tr><td>空客戶名稱補值</td><td>Name 為空 → 以 <code>未命名客戶-IDNo{編號}</code> 補上(Name 為必填)</td><td>8 筆</td></tr>
+      <tr><td>國家正規化</td><td>台灣／臺灣／台?／台湾 等異體 → 統一為 <code>臺灣</code></td><td>2,637 筆</td></tr>
+      <tr><td>員工人數清洗</td><td>「5人」等字串 → 取數字 <code>5</code>(NumberOfEmployees 為數值型)</td><td>8 筆有值</td></tr>
+      <tr><td>Excel 日期轉換</td><td>序列值 → ISO8601:<code>(serial−25569)×86400×1000</code> 毫秒</td><td>3,587 筆</td></tr>
+      <tr><td>CSV 逸出</td><td>含逗號／引號／換行的值以雙引號包覆並跳脫</td><td>全量</td></tr>
+      <tr><td>來源標記</td><td>每筆固定寫入 <code>mark__c = 'sf'</code></td><td>4,334 筆</td></tr>
+    </table>
+
+    <!-- 匯入過程 -->
+    <h2><span class="n">05</span>匯入批次過程</h2>
+    <p>使用 Bulk API 2.0 <code>upsert</code>,以 External ID 為 key 確保可重跑不重複。</p>
+    <div class="steps">
+      <div class="step"><span class="st">試批驗證(5 筆)</span><br>先匯 5 筆確認中文、日期、picklist、正規化皆正確落地,才進行全量。</div>
+      <div class="step"><span class="st">第一批(4,153 筆)</span><br>以 <code>Legacy_Id__c</code> 為 key 匯入 → <span class="ok">4,153 成功</span>;181 筆因來源無 Id 而 MISSING_ARGUMENT 失敗。</div>
+      <div class="step"><span class="st">診斷</span><br>失敗 181 筆為純 BA 系統資料:僅有 IDNo、無 Salesforce Id,故無法用 Legacy_Id__c 當 key。</div>
+      <div class="step"><span class="st">補匯(181 筆)</span><br>改以 <code>Legacy_IDNo__c</code> 為 key 匯入該子集 → <span class="ok">181 成功、0 失敗</span>。</div>
+      <div class="step"><span class="st">最終驗證</span><br>SOQL 核對:<code>mark='sf'</code> 共 <b>4,334</b> 筆,與來源一致。</div>
+    </div>
+    <div class="callout"><b>指令範例:</b><br>
+      <code>sf data upsert bulk --sobject Account --external-id Legacy_IDNo__c --file accounts.csv --line-ending LF --target-org lifenergy</code>
+    </div>
+
+    <!-- 資料品質 -->
+    <h2><span class="n">06</span>資料品質分布</h2>
+    <h3>通路類別(Channel_Type__c)</h3>
+    <div class="bars">
+      <div class="bar-row"><span class="lab">藥局</span><div class="bar-track"><div class="bar-fill" style="width:100%"></div></div><span class="val">1,800</span></div>
+      <div class="bar-row"><span class="lab">(未填)</span><div class="bar-track"><div class="bar-fill null" style="width:83%"></div></div><span class="val">1,496</span></div>
+      <div class="bar-row"><span class="lab">診所</span><div class="bar-track"><div class="bar-fill" style="width:51%"></div></div><span class="val">922</span></div>
+      <div class="bar-row"><span class="lab">醫學中心</span><div class="bar-track"><div class="bar-fill" style="width:6%"></div></div><span class="val">99</span></div>
+      <div class="bar-row"><span class="lab">口罩廠</span><div class="bar-track"><div class="bar-fill" style="width:1%"></div></div><span class="val">9</span></div>
+      <div class="bar-row"><span class="lab">動物醫院</span><div class="bar-track"><div class="bar-fill" style="width:1%"></div></div><span class="val">6</span></div>
+      <div class="bar-row"><span class="lab">國內客戶</span><div class="bar-track"><div class="bar-fill" style="width:1%"></div></div><span class="val">2</span></div>
+    </div>
+    <h3>客戶分類(Customer_Category__c)</h3>
+    <div class="bars">
+      <div class="bar-row"><span class="lab">(未填)</span><div class="bar-track"><div class="bar-fill null" style="width:100%"></div></div><span class="val">3,932</span></div>
+      <div class="bar-row"><span class="lab">一般客戶</span><div class="bar-track"><div class="bar-fill g" style="width:5%"></div></div><span class="val">197</span></div>
+      <div class="bar-row"><span class="lab">直走價客戶</span><div class="bar-track"><div class="bar-fill g" style="width:4.5%"></div></div><span class="val">176</span></div>
+      <div class="bar-row"><span class="lab">切口客戶</span><div class="bar-track"><div class="bar-fill g" style="width:1%"></div></div><span class="val">26</span></div>
+      <div class="bar-row"><span class="lab">診所</span><div class="bar-track"><div class="bar-fill g" style="width:1%"></div></div><span class="val">2</span></div>
+      <div class="bar-row"><span class="lab">外匯客戶</span><div class="bar-track"><div class="bar-fill g" style="width:1%"></div></div><span class="val">1</span></div>
+    </div>
+    <h3>欄位填充率(有值筆數 / 4,334)</h3>
+    <table>
+      <tr><th>欄位</th><th>有值筆數</th><th>填充率</th></tr>
+      <tr><td>Legacy_IDNo__c(關聯 key)</td><td>4,334</td><td>100%</td></tr>
+      <tr><td>Legacy_Id__c</td><td>4,153</td><td>95.8%</td></tr>
+      <tr><td>原始建立日期</td><td>3,587</td><td>82.8%</td></tr>
+      <tr><td>帳單地址</td><td>3,041</td><td>70.2%</td></tr>
+      <tr><td>電話</td><td>2,745</td><td>63.3%</td></tr>
+      <tr><td>國家 = 臺灣</td><td>2,637</td><td>60.8%</td></tr>
+      <tr><td>帳戶來源(原始)</td><td>403</td><td>9.3%</td></tr>
+      <tr><td>統一編號</td><td>26</td><td>0.6%</td></tr>
+      <tr><td>員工人數</td><td>8</td><td>0.2%</td></tr>
+    </table>
+    <p class="note">付款條件:月結30天 22、月結60天 4、月結90天 1,其餘未填。分布反映來源資料本身的填寫狀況,未做臆測補值。</p>
+
+    <!-- 陷阱與決策 -->
+    <h2><span class="n">07</span>陷阱與關鍵決策</h2>
+    <div class="callout warn"><b>決策 ① AccountSource 改存 custom 文字欄</b><br>
+      本 org 的標準值集 <code>AccountSource</code> 無法透過 Metadata API 新增中文值(retrieve/deploy 皆被拒)。為不遺失來源資料,原始值先存入 <code>Account_Source_Text__c</code>(403 筆有值)。如需轉為原生 picklist 選項,須於 Setup UI 手動加值,可另行提供清單。</div>
+    <div class="callout warn"><b>決策 ② 181 筆無 Id 資料改用 IDNo 補匯</b><br>
+      來源 181 筆為純 BA 系統資料,只有 IDNo、無 Salesforce Id。以 <code>Legacy_IDNo__c</code> 為 key 分批 upsert 補齊,確保全量到位且可重跑不重複。</div>
+    <ul>
+      <li><b>custom field API name 須 ASCII</b> — 一律用英文 API 名 + 中文 Label。</li>
+      <li><b>FLS 陷阱</b> — 新 custom 欄位 admin 不會自動有 FLS,靠 permission set 集中授權(見下節)。</li>
+      <li><b>git-bash 相容</b> — <code>sf data query</code> 有 'C:\Program' bug,查詢改走 <code>sf apex run</code>。</li>
+    </ul>
+
+    <!-- 權限 -->
+    <h2><span class="n">08</span>權限指派(FLS)</h2>
+    <p>15 個 custom 欄位的 FLS 由 permission set <b>Lebio Import Fields</b>(<code>Lebio_Import_Fields</code>)集中管理,並依「權限開給所有 User,客戶才看得到」原則,指派給所有相容 license 的 active User。</p>
+    <table>
+      <tr><th style="width:200px">項目</th><th>結果</th></tr>
+      <tr><td>Permission Set</td><td>Lebio Import Fields(0PSd5000007fyLxGAI)</td></tr>
+      <tr><td>涵蓋欄位</td><td>15 個 custom 欄位(read + edit)</td></tr>
+      <tr><td>指派對象</td><td>所有 IsActive=true 且 license ∈ {Salesforce, Salesforce Platform}</td></tr>
+      <tr><td>指派結果</td><td><span class="ok">總計 5 位 User(含 sophietso),新增 4、0 失敗</span></td></tr>
+    </table>
+
+    <!-- 後續 -->
+    <h2><span class="n">09</span>後續待辦</h2>
+    <p>依「一個 Object 一批」的計畫,後續物件透過 <code>Legacy_IDNo__c</code>／<code>Legacy_Id__c</code> 建立與 Account 的關聯:</p>
+    <ul>
+      <li>聯絡人(Contact) — lookup Account</li>
+      <li>商機／名單(Lead / Opportunity)</li>
+      <li>拜訪紀錄(Task)、事件(Event)</li>
+      <li>活動(Campaign)</li>
+    </ul>
+    <p class="note">規範依據:CRM資料表關聯說明文件.docx。每批同樣加 <code>mark='sf'</code>、原生優先、真實 org 謹慎處理。</p>
+
+    <footer>
+      <span>LeBio 客戶資料遷移 ETL 報告 · 客戶管理 → Account</span>
+      <span>lifenergy org · 2026-07-27 · 保密文件</span>
+    </footer>
+  </main>
+</div>
+</body>
+</html>

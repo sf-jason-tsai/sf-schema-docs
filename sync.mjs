@@ -105,6 +105,12 @@ const PAGES = [
         dest: 'thermos/ai-features.html',
         title: 'THERMOS · AI 功能總覽（誠實對照版）'
     },
+    // ─── LeBio (lifenergy org · 真實客戶資料遷移) ───
+    {
+        src: 'C:/Users/bingyan.tsai/Desktop/Claude/lebio-import/etl-report.html',
+        dest: 'lebio/etl-account-report.html',
+        title: 'LeBio · 客戶管理→Account ETL 報告 (2026-07-27)'
+    },
     // ↑ 加新頁時只需在這裡插入 { src, dest, title }
 ];
 
