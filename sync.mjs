@@ -129,7 +129,7 @@ const PAGES = [
     {
         src: 'C:/Users/bingyan.tsai/Desktop/Claude/lebio-import/etl-campaign-report.html',
         dest: 'lebio/etl-campaign-report.html',
-        title: 'LeBio · 活動TMP→行銷活動(Campaign) ETL 報告 (2026-07-28)'
+        title: 'LeBio · 活動TMP+行銷活動→行銷活動(Campaign) ETL 報告 (2026-07-28)'
     },
     // ─── 104 遠距藍海職缺分析 ───
     {

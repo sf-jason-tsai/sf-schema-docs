@@ -77,7 +77,7 @@
   <div class="hero">
     <p class="kicker">DATA MIGRATION · ETL REPORT · 05</p>
     <h1>LeBio 客戶資料遷移紀錄 — 行銷活動</h1>
-    <p class="sub">來源:活動TMP.xlsx　→　目標:Salesforce「銷售」App／行銷活動(Campaign)</p>
+    <p class="sub">來源:活動TMP.xlsx（建檔）＋ 行銷活動.xlsx（增修）　→　目標:Salesforce「銷售」App／行銷活動(Campaign)</p>
     <div class="meta">
       <span><b>Org</b>　lifenergy (lebio.my.salesforce.com)</span>
       <span><b>執行日期</b>　2026-07-28</span>
@@ -92,7 +92,12 @@
       <div class="card"><div class="v">47</div><div class="l">來源資料列</div></div>
       <div class="card"><div class="v green">47</div><div class="l">成功匯入 (100%)</div></div>
       <div class="card"><div class="v green">23</div><div class="l">階層關聯(上層活動)</div></div>
-      <div class="card"><div class="v">12</div><div class="l">新增自訂欄位</div></div>
+      <div class="card"><div class="v">14</div><div class="l">新增自訂欄位</div></div>
+    </div>
+    <div class="cards" style="grid-template-columns:repeat(3,1fr);">
+      <div class="card"><div class="v green">39</div><div class="l">第二批增修既有(行銷活動.xlsx)</div></div>
+      <div class="card"><div class="v green">0</div><div class="l">重複新增(未建任何重複)</div></div>
+      <div class="card"><div class="v">2</div><div class="l">增修新增欄位(帳號/報表連結)</div></div>
     </div>
     <p>本批將舊系統的 <b>活動TMP.xlsx</b>(47 筆)遷入 lifenergy 正式 org 的標準物件 <code>Campaign</code>(SF UI 顯示為「行銷活動」)。全部成功寫入,並依來源 <code>ParentId</code> 重建 <b>23 筆</b>活動階層(上層/子活動)。所有紀錄標記 <code>mark__c = 'sf'</code>。</p>
     <div class="callout"><b>原生優先:</b>活動名稱、類型、狀態、起訖日、預期收入、已傳送數、啟用旗標、描述、上層活動全部對應 <code>Campaign</code> 標準欄位;僅將舊系統的<b>統計匯總數(唯讀)</b>另存 <code>Legacy_*</code> 自訂欄位保留原值。</div>
@@ -129,6 +134,8 @@
       <tr><td>NumberOfWonOpportunities</td><td class="mono">Legacy_Num_Won_Opps__c</td><td>Number</td><td>唯讀匯總</td></tr>
       <tr><td>AmountAllOpportunities</td><td class="mono">Legacy_Amount_All_Opps__c</td><td>Currency</td><td>唯讀匯總</td></tr>
       <tr><td>AmountWonOpportunities</td><td class="mono">Legacy_Amount_Won_Opps__c</td><td>Currency</td><td>唯讀匯總</td></tr>
+      <tr><td>擁有者(帳號)</td><td class="mono">Campaign_Owner_Handle__c</td><td>Text(50)</td><td>第二批 · 原始登入帳號(sean/fifi/elaine…)</td></tr>
+      <tr><td>功能(報表)</td><td class="mono">Legacy_Report_Link__c</td><td>Long Text</td><td>第二批 · 原始系統報表連結(HTML)</td></tr>
     </table>
     <div class="callout"><b>為何另存匯總數:</b>Campaign 的 <code>NumberOfContacts</code>、<code>AmountWonOpportunities</code> 等標準欄位為<b>系統自動 rollup</b>(依 CampaignMember/Opportunity 即時計算),無法直接寫入。因本批未遷 CampaignMember,標準匯總會顯示 0,故將舊系統原值保存於 <code>Legacy_*</code> 欄位供對照。</div>
 
@@ -157,18 +164,37 @@
       <tr><td>抽樣:【好抗隨身組】→ 上層「DS方案」</td><td>贏單 379,458</td><td><span class="ok">✓ 正確</span></td></tr>
     </table>
 
-    <h2><span class="n">6</span>顯示與關聯呈現</h2>
+    <h2><span class="n">6</span>第二批:行銷活動.xlsx 增修既有(不重複)</h2>
+    <p>使用者另提供 <b>行銷活動.xlsx</b>(39 筆)。經名稱比對,<b>39 筆全數與第一批已匯入的 Campaign 完全同名</b> — 屬同一批活動的另一份匯出視圖,<b>非新資料</b>。為避免在正式 org 產生 39 筆重複,採<b>增修既有記錄</b>(以名稱對應既有 Campaign Id、<code>sf data update bulk</code> 依 Id 更新),<b>未新增任何紀錄</b>。</p>
+    <div class="callout"><b>差異比對(39 筆 vs 既有):</b>狀態、回應數<b>完全相同</b>(略過不動);<b>傳送數</b>39 筆全部不同(既有為 0,本檔為真實值 → 更新標準欄 <code>NumberSent</code>);<b>擁有者</b>39 筆全部不同(既有=中文全名,本檔=登入帳號 → 另存新欄保留兩者);<b>功能</b>=原始系統報表連結,全新資訊 → 另存新欄。</div>
+    <table>
+      <tr><th>來源欄位</th><th>動作</th><th>目標欄位</th><th>說明</th></tr>
+      <tr><td>傳送數</td><td>更新</td><td class="mono">NumberSent</td><td>既有 0 → 真實傳送數(如 1,392 / 1,165)</td></tr>
+      <tr><td>擁有者</td><td>新增欄</td><td class="mono">Campaign_Owner_Handle__c</td><td>登入帳號(sean/fifi/elaine),與既有中文全名 <code>Legacy_Owner_Name__c</code> 並存</td></tr>
+      <tr><td>功能</td><td>新增欄</td><td class="mono">Legacy_Report_Link__c</td><td>原始報表/新增資料連結(保留完整 HTML)</td></tr>
+      <tr><td>狀態 / 回應數</td><td>略過</td><td>—</td><td>與既有完全相同,不動</td></tr>
+    </table>
+    <table>
+      <tr><th>項目</th><th>數值</th><th>結果</th></tr>
+      <tr><td>行銷活動.xlsx 來源列</td><td>39</td><td>—</td></tr>
+      <tr><td>名稱配對既有 Campaign</td><td>39 / 39</td><td><span class="ok">✓ 全數配對</span></td></tr>
+      <tr><td>bulk update 成功</td><td>39</td><td><span class="ok">✓ 0 失敗</span></td></tr>
+      <tr><td>新增(重複)紀錄</td><td>0</td><td><span class="ok">✓ 未建重複</span></td></tr>
+      <tr><td>驗證:handle≠null 且 NumberSent&gt;0</td><td>39</td><td><span class="ok">✓ 正確</span></td></tr>
+    </table>
+
+    <h2><span class="n">7</span>顯示與關聯呈現</h2>
     <ul>
       <li><b>列表檢視</b>「遷移·行銷活動」(篩選 mark=sf):名稱、類型、狀態、起訖日、原始商機數、原始贏單金額、原始負責人。</li>
-      <li><b>Campaign 版面</b>新增區段「遷移資料(原始 CRM 統計)」與「遷移識別碼」,12 個自訂欄位全部加入。</li>
+      <li><b>Campaign 版面</b>新增區段「遷移資料(原始 CRM 統計)」與「遷移識別碼」,14 個自訂欄位全部加入(含第二批的原始擁有者帳號、原始報表連結)。</li>
       <li><b>階層自動顯示:</b>記錄頁「行銷活動階層」關聯清單自動呈現上層/子活動樹。</li>
     </ul>
 
-    <h2><span class="n">7</span>權限與 Marketing User</h2>
-    <p>自訂欄位 FLS 透過 permission set <code>Lebio_Import_Campaign</code> 授予全部相容 active 使用者。<br>另註:Campaign 建立/編輯需 User 層級的 <b>Marketing User</b> 旗標(非 permission set 權限),已為 active 標準使用者開啟 <code>UserPermissionsMarketingUser=true</code>。</p>
+    <h2><span class="n">8</span>權限與 Marketing User</h2>
+    <p>自訂欄位 FLS 透過 permission set <code>Lebio_Import_Campaign</code> 授予全部相容 active 使用者(第二批新增的 2 個欄位同步授權)。<br>另註:Campaign 建立/編輯需 User 層級的 <b>Marketing User</b> 旗標(非 permission set 權限),已為 active 標準使用者開啟 <code>UserPermissionsMarketingUser=true</code>。</p>
 
     <footer>
-      <span>LeBio × Salesforce · 資料遷移 ETL 報告 05 — 活動TMP → 行銷活動(Campaign)</span>
+      <span>LeBio × Salesforce · 資料遷移 ETL 報告 05 — 活動TMP(建檔) + 行銷活動(增修) → 行銷活動(Campaign)</span>
       <span>2026-07-28</span>
     </footer>
   </main>
