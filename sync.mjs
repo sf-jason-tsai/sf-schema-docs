@@ -116,6 +116,12 @@ const PAGES = [
         dest: 'lebio/etl-contact-report.html',
         title: 'LeBio · 聯絡人→Contact ETL 報告 (2026-07-27)'
     },
+    // ─── 104 遠距藍海職缺分析 ───
+    {
+        src: 'C:/Users/bingyan.tsai/Desktop/Claude/job-crawler/out/report.html',
+        dest: 'jobs/bluocean-report.html',
+        title: '104 遠距藍海職缺分析報告 (2026-07-27)'
+    },
     // ↑ 加新頁時只需在這裡插入 { src, dest, title }
 ];
 

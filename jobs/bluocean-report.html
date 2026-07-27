@@ -1,0 +1,748 @@
+<!DOCTYPE html>
+<html lang="zh-Hant"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>104 遠距藍海職缺分析報告</title>
+<style>
+:root{--ink:#1a1a1a;--ink2:#4a4a4a;--ink3:#8a8a8a;--line:#d0d0d0;--bg:#f5f5f5;--blue:#2167dd;--blue2:#a1c1f6;--green:#4ab2a8;--green2:#95d4ce;}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:"Microsoft JhengHei","Noto Sans TC","Noto Sans",Arial,sans-serif;color:var(--ink);background:#fff;line-height:1.5;font-size:15px;}
+.wrap{max-width:1140px;margin:0 auto;padding:0 28px 80px;}
+.cover{background:var(--blue);color:#fff;padding:52px 28px 40px;margin-bottom:0;}
+.cover .in{max-width:1140px;margin:0 auto;}
+.cover h1{font-size:30px;font-weight:700;letter-spacing:1px;}
+.cover .sub{font-size:15px;color:#dbe6fb;margin-top:10px;}
+.cover .meta{font-size:13px;color:#b9cdf5;margin-top:18px;}
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin:28px 0 8px;}
+.kpi{border:1px solid var(--line);border-top:3px solid var(--blue);padding:16px 18px;background:#fff;}
+.kpi .v{font-size:30px;font-weight:700;color:var(--blue);}
+.kpi.green .v{color:var(--green);}
+.kpi .v small{font-size:14px;color:var(--ink3);font-weight:400;}
+.kpi .l{font-size:12.5px;color:var(--ink2);margin-top:4px;}
+h2{font-size:20px;font-weight:700;margin:40px 0 6px;padding-bottom:8px;border-bottom:1px solid var(--line);}
+h2 .hint{font-size:13px;font-weight:400;color:var(--ink3);}
+h3{font-size:15.5px;font-weight:600;color:var(--blue);margin:22px 0 8px;}
+p.lead{color:var(--ink2);margin:10px 0;}
+table{width:100%;border-collapse:collapse;border:1px solid var(--blue);margin-top:12px;font-size:13.5px;}
+th{background:var(--blue);color:#fff;font-weight:600;text-align:left;padding:9px 10px;font-size:13px;}
+td{padding:8px 10px;border-bottom:1px solid var(--line);vertical-align:middle;}
+tr:nth-child(even) td{background:var(--bg);}
+.num{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap;}
+.muted{color:var(--ink3);}
+.bar{background:var(--bg);height:12px;border-radius:2px;overflow:hidden;min-width:120px;}
+.bar span{display:block;height:100%;background:var(--blue2);}
+.score{display:inline-block;min-width:30px;text-align:center;font-weight:700;color:#fff;background:var(--blue);border-radius:3px;padding:2px 6px;font-size:13px;}
+.jobcell a{color:var(--ink);text-decoration:none;font-weight:600;}
+.jobcell a:hover{color:var(--blue);text-decoration:underline;}
+.jobcell .cust{font-size:12px;color:var(--ink3);margin-top:2px;}
+.tag{display:inline-block;background:#eef3fd;color:var(--blue);border:1px solid var(--blue2);border-radius:3px;padding:1px 7px;font-size:12px;white-space:nowrap;}
+.dots{white-space:nowrap;}
+.dot{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:2px;}
+.dot.blue{background:var(--blue);}
+.dot.green{background:var(--green);}
+.dot.off{background:#e2e2e2;}
+.reason{font-size:12.5px;color:var(--ink2);max-width:260px;}
+.method{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:14px;}
+.mcard{border:1px solid var(--line);padding:14px 16px;background:#fff;}
+.mcard .no{color:var(--blue);font-weight:700;font-size:13px;}
+.mcard h4{font-size:14.5px;margin:4px 0 6px;}
+.mcard p{font-size:12.5px;color:var(--ink2);}
+.formula{background:var(--bg);border-left:3px solid var(--green);padding:12px 16px;margin:16px 0;font-size:14px;color:var(--ink);}
+.formula code{font-family:Consolas,monospace;color:var(--blue);font-weight:600;}
+.deep{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;margin-top:14px;}
+.deepcard{border:1px solid var(--line);padding:14px 18px;}
+.deepcard h4{font-size:15px;color:var(--ink);border-bottom:1px solid var(--line);padding-bottom:6px;margin-bottom:8px;}
+.deepcard h4 .cnt{float:right;font-size:12px;color:var(--ink3);font-weight:400;}
+.deepcard ul{list-style:none;}
+.deepcard li{padding:7px 0;border-bottom:1px dashed #e6e6e6;font-size:13.5px;}
+.deepcard li:last-child{border:0;}
+.deepcard a{color:var(--ink);text-decoration:none;font-weight:600;}
+.deepcard a:hover{color:var(--blue);}
+.mini{font-size:11.5px;color:var(--ink3);display:block;margin-top:1px;}
+.reason2{color:var(--ink2);}
+.legend{font-size:12px;color:var(--ink3);margin-top:8px;}
+.legend b{color:var(--blue);}.legend .g{color:var(--green);}
+.note{background:#fbfbfb;border:1px solid var(--line);padding:14px 18px;font-size:12.5px;color:var(--ink2);margin-top:14px;}
+footer{color:var(--ink3);font-size:12px;text-align:center;margin-top:48px;padding-top:16px;border-top:1px solid var(--line);}
+</style></head>
+<body>
+<div class="cover"><div class="in">
+  <h1>104 遠距藍海職缺分析報告</h1>
+  <div class="sub">遠距 × AI 可代工 × 資訊落差 × CP 值 — 找出雇主仍以傳統人力定價、但 AI 已能高效完成的機會</div>
+  <div class="meta">資料來源：104 人力銀行「完全遠端」職缺 · 分析日期 2026-07-27 · LLM 逐筆評分</div>
+</div></div>
+<div class="wrap">
+
+  <div class="kpis">
+    <div class="kpi"><div class="v">2,999</div><div class="l">104 完全遠端職缺(去重後)</div></div>
+    <div class="kpi green"><div class="v">1,352</div><div class="l">通過真遠端驗證<br>(剔除 1,647 筆誤標實體職缺)</div></div>
+    <div class="kpi"><div class="v">188</div><div class="l">高藍海機會 <small>blueScore ≥ 11</small></div></div>
+    <div class="kpi green"><div class="v">506</div><div class="l">次級機會 <small>blueScore 8–10</small></div></div>
+  </div>
+
+  <h2>一、核心洞察</h2>
+  <p class="lead">在 104 標記「完全遠端」的 2,999 筆職缺中，近半數（1,647 筆）其實是雇主為衝曝光而<strong>誤標</strong>的實體工作（倉儲包裝、門市、櫃台、外勤裝機等），經 LLM 逐筆閱讀職務描述後剔除。真正可完全遠距者 1,352 筆。</p>
+  <p class="lead">其中 <strong>188 筆屬高藍海</strong>：核心產出（翻譯、字幕、文案、研究報告、資料整理、文字客服等）已能由現行 AI 大幅代勞，<strong>但雇主的職務描述與計價完全未提及 AI</strong>——仍以「聘一名專業人力」的思維在招募。這正是可套利的資訊落差：接案者以 AI 輔助交付，投入成本遠低於雇主的定價假設。</p>
+  <div class="note">反向排除：職缺若已明講「使用 Midjourney / AI SEO / ChatGPT 自動化」，代表雇主已知 AI 價值、無資訊落差（紅海），評分中 <b>資訊落差</b> 維度即壓低。</div>
+
+  <h2>二、評分方法 <span class="hint">四維度 · 每筆由 LLM 閱讀職務描述後評 0–5 分</span></h2>
+  <div class="method">
+    <div class="mcard"><div class="no">維度 1</div><h4>真遠端驗證</h4><p>閱讀 JD 判斷是否真能完全遠距、無需到場。剔除倉儲/門市/櫃台/外勤/駐廠等被誤標者。此關為 0 則整筆歸零。</p></div>
+    <div class="mcard"><div class="no">維度 2</div><h4>AI 可代工度</h4><p>核心產出有多少能由現行 AI 完成。文案/翻譯/字幕/研究彙整/資料處理/基礎程式與設計得高分；需臨場、關係銷售、執照判斷得低分。</p></div>
+    <div class="mcard"><div class="no">維度 3</div><h4>資訊落差</h4><p>雇主是否<b>未察覺</b> AI 可代工、仍以傳統人力描述與定價。完全沒提 AI＝落差最大（真藍海）；明講用 AI＝落差為 0。</p></div>
+    <div class="mcard"><div class="no">維度 4</div><h4>CP 值</h4><p>薪資相對於 AI 代工後的實際投入，並參考應徵人數（越少越藍海）。薪資佳且乏人問津者最高。</p></div>
+  </div>
+  <div class="formula">綜合藍海分數 &nbsp; <code>blueScore = 真遠端(0/1) × (AI可代工 + 資訊落差 + CP值)</code> &nbsp; 範圍 0–15，≥11 視為高藍海機會。</div>
+
+  <h2>三、分類分布 <span class="hint">僅計真遠端職缺</span></h2>
+  <table>
+    <thead><tr><th>職缺分類</th><th class="num">數量</th><th style="width:32%">相對規模</th><th class="num">平均分</th><th class="num">高藍海</th></tr></thead>
+    <tbody>
+  <tr>
+    <td>線上客服</td>
+    <td class="num">112</td>
+    <td><div class="bar"><span style="width:15.7%"></span></div></td>
+    <td class="num">10.1</td>
+    <td class="num"><b>40</b></td>
+  </tr>
+  <tr>
+    <td>翻譯</td>
+    <td class="num">44</td>
+    <td><div class="bar"><span style="width:6.2%"></span></div></td>
+    <td class="num">11.5</td>
+    <td class="num"><b>32</b></td>
+  </tr>
+  <tr>
+    <td>平面設計</td>
+    <td class="num">75</td>
+    <td><div class="bar"><span style="width:10.5%"></span></div></td>
+    <td class="num">9.2</td>
+    <td class="num"><b>27</b></td>
+  </tr>
+  <tr>
+    <td>文案寫作</td>
+    <td class="num">37</td>
+    <td><div class="bar"><span style="width:5.2%"></span></div></td>
+    <td class="num">11.1</td>
+    <td class="num"><b>26</b></td>
+  </tr>
+  <tr>
+    <td>行銷社群</td>
+    <td class="num">121</td>
+    <td><div class="bar"><span style="width:16.9%"></span></div></td>
+    <td class="num">8.2</td>
+    <td class="num"><b>18</b></td>
+  </tr>
+  <tr>
+    <td>資料處理</td>
+    <td class="num">48</td>
+    <td><div class="bar"><span style="width:6.7%"></span></div></td>
+    <td class="num">9.7</td>
+    <td class="num"><b>17</b></td>
+  </tr>
+  <tr>
+    <td>研究報告</td>
+    <td class="num">36</td>
+    <td><div class="bar"><span style="width:5.0%"></span></div></td>
+    <td class="num">9.4</td>
+    <td class="num"><b>11</b></td>
+  </tr>
+  <tr>
+    <td>其他</td>
+    <td class="num">715</td>
+    <td><div class="bar"><span style="width:100.0%"></span></div></td>
+    <td class="num">6.2</td>
+    <td class="num"><b>9</b></td>
+  </tr>
+  <tr>
+    <td>程式開發</td>
+    <td class="num">117</td>
+    <td><div class="bar"><span style="width:16.4%"></span></div></td>
+    <td class="num">7.5</td>
+    <td class="num"><b>5</b></td>
+  </tr>
+  <tr>
+    <td>影音剪輯</td>
+    <td class="num">45</td>
+    <td><div class="bar"><span style="width:6.3%"></span></div></td>
+    <td class="num">7.5</td>
+    <td class="num"><b>3</b></td>
+  </tr>
+  <tr>
+    <td>社群行銷</td>
+    <td class="num">1</td>
+    <td><div class="bar"><span style="width:0.1%"></span></div></td>
+    <td class="num">10.0</td>
+    <td class="num"><b>0</b></td>
+  </tr>
+  <tr>
+    <td>社群經營</td>
+    <td class="num">1</td>
+    <td><div class="bar"><span style="width:0.1%"></span></div></td>
+    <td class="num">7.0</td>
+    <td class="num"><b>0</b></td>
+  </tr></tbody>
+  </table>
+
+  <h2>四、高藍海職缺 Top 40 <span class="hint">每家雇主最多列 2 筆，避免同職缺洗版</span></h2>
+  <p class="legend">評分點：<b>● AI可代工</b> ／ <span class="g">● 資訊落差</span> ／ <b>● CP值</b>（各 5 點滿分）；薪資為月薪區間，k=千元，部分為面議或按件/時計。</p>
+  <table>
+    <thead><tr><th class="num">#</th><th>分數</th><th>職缺 / 公司</th><th>分類</th><th>AI</th><th>落差</th><th>CP</th><th class="num">月薪</th><th class="num">應徵</th><th>藍海理由</th></tr></thead>
+    <tbody>
+  <tr>
+    <td class="num muted">1</td>
+    <td><span class="score">14</span></td>
+    <td class="jobcell"><a href="https://www.104.com.tw/job/8ydns" target="_blank">兼職電影影視馬來文字幕潤稿人員 (English to Malay Subtitle QCer)</a><div class="cust">群輪錄影企業有限公司</div></td>
+    <td><span class="tag">翻譯</span></td>
+    <td class="dots" title="AI可代工"><span class="dot blue"></span><span class="dot blue"></span><span class="dot blue"></span><span class="dot blue"></span><span class="dot blue"></span></td>
+    <td class="dots" title="資訊落差"><span class="dot green"></span><span class="dot green"></span><span class="dot green"></span><span class="dot green"></span><span class="dot green"></span></td>
+    <td class="dots" title="CP值"><span class="dot blue"></span><span class="dot blue"></span><span class="dot blue"></span><span class="dot blue"></span><span class="dot off"></span></td>
+    <td class="num">1–100k</td>
+    <td class="num muted">1</td>
+    <td class="reason">字幕潤稿QC是AI強項，雇主未提AI仍走傳統計價</td>
+  </tr>
+  <tr>
+    <td class="num muted">2</td>
+    <td><span class="score">14</span></td>
+    <td class="jobcell"><a href="https://www.104.com.tw/job/844xw" target="_blank">特約譯者－中西文筆譯（兼職）</a><div class="cust">CLN_新貴語文顧問股份有限公司</div></td>
+    <td><span class="tag">翻譯</span></td>
+    <td class="dots" title="AI可代工"><span class="dot blue"></span><span class="dot blue"></span><span class="dot blue"></span><span class="dot blue"></span><span class="dot blue"></span></td>
+    <td class="dots" title="資訊落差"><span class="dot green"></span><span class="dot green"></span><span class="dot green"></span><span class="dot green"></span><span class="dot green"></span></td>
+    <td class="dots" title="CP值"><span class="dot blue"></span><span class="dot blue"></span><span class="dot blue"></span><span class="dot blue"></span><span class="dot off"></span></td>
+    <td class="num">100–50k</td>
+    <td class="num muted">6</td>
+    <td class="reason">筆譯AI可大幅代勞，論字計酬且應徵少</td>
+  </tr>
+  <tr>
+    <td class="num muted">3</td>
+    <td><span class="score">14</span></td>
+    <td class="jobcell"><a href="https://www.104.com.tw/job/8lngi" target="_blank">Freelance Translator and Reviewer for ES-TW Localization Project</a><div class="cust">美商昇迪凡科技術有限公司台灣分公司</div></td>
+    <td><span class="tag">翻譯</span></td>
+    <td class="dots" title="AI可代工"><span class="dot blue"></span><span class="dot blue"></span><span class="dot blue"></span><span class="dot blue"></span><span class="dot blue"></span></td>
+    <td class="dots" title="資訊落差"><span class="dot green"></span><span class="dot green"></span><span class="dot green"></span><span class="dot green"></span><span class="dot green"></span></td>
+    <td class="dots" title="CP值"><span class="dot blue"></span><span class="dot blue"></span><span class="dot blue"></span><span class="dot blue"></span><span class="dot off"></span></td>
+    <td class="num">700–800</td>
+    <td class="num muted">2</td>
+    <td class="reason">一般網站內容ES-TW本地化翻譯全遠端，LLM可高度代工，應徵僅2人且雇主完全未提AI</td>
+  </tr>
+  <tr>
+    <td class="num muted">4</td>
+    <td><span class="score">14</span></td>
+    <td class="jobcell"><a href="https://www.104.com.tw/job/92vh4" target="_blank">【TOPIK 4級以上必備！】影音編輯企劃／剪輯(兼職)</a><div class="cust">明天見未來有限公司</div></td>
+    <td><span class="tag">影音剪輯</span></td>
+    <td class="dots" title="AI可代工"><span class="dot blue"></span><span class="dot blue"></span><span class="dot blue"></span><span class="dot blue"></span><span class="dot blue"></span></td>
+    <td class="dots" title="資訊落差"><span class="dot green"></span><span class="dot green"></span><span class="dot green"></span><span class="dot green"></span><span class="dot green"></span></td>
+    <td class="dots" title="CP值"><span class="dot blue"></span><span class="dot blue"></span><span class="dot blue"></span><span class="dot blue"></span><span class="dot off"></span></td>
+    <td class="num">250–250</td>
+    <td class="num muted">16</td>
+    <td class="reason">翻譯剪輯全遠端，AI可大幅代勞，雇主仍按工時計價</td>
+  </tr>
+  <tr>
+    <td class="num muted">5</td>
+    <td><span class="score">14</span></td>
+    <td class="jobcell"><a href="https://www.104.com.tw/job/90u2r" target="_blank">[ 兼職 ] 英翻中翻譯（需 Google 專案翻譯經驗）</a><div class="cust">RWS Group/SDL plc_英商思迪股份有限公司</div></td>
+    <td><span class="tag">翻譯</span></td>
+    <td class="dots" title="AI可代工"><span class="dot blue"></span><span class="dot blue"></span><span class="dot blue"></span><span class="dot blue"></span><span class="dot blue"></span></td>
+    <td class="dots" title="資訊落差"><span class="dot green"></span><span class="dot green"></span><span class="dot green"></span><span class="dot green"></span><span class="dot green"></span></td>
+    <td class="dots" title="CP值"><span class="dot blue"></span><span class="dot blue"></span><span class="dot blue"></span><span class="dot blue"></span><span class="dot off"></span></td>
+    <td class="num">面議</td>
+    <td class="num muted">4</td>
+    <td class="reason">IT技術翻譯AI/MT可代勞,雇主全無提及AI輔助</td>
+  </tr>
+  <tr>
+    <td class="num muted">6</td>
+    <td><span class="score">14</span></td>
+    <td class="jobcell"><a href="https://www.104.com.tw/job/944xa" target="_blank">車輛物流調度人員｜訂單管理專員｜大量資訊處理（遠端在家）</a><div class="cust">玩遍天下旅行社有限公司</div></td>
+    <td><span class="tag">線上客服</span></td>
+    <td class="dots" title="AI可代工"><span class="dot blue"></span><span class="dot blue"></span><span class="dot blue"></span><span class="dot blue"></span><span class="dot off"></span></td>
+    <td class="dots" title="資訊落差"><span class="dot green"></span><span class="dot green"></span><span class="dot green"></span><span class="dot green"></span><span class="dot green"></span></td>
+    <td class="dots" title="CP值"><span class="dot blue"></span><span class="dot blue"></span><span class="dot blue"></span><span class="dot blue"></span><span class="dot blue"></span></td>
+    <td class="num">40k–90k</td>
+    <td class="num muted">0</td>
+    <td class="reason">文字客服調度可大量借助AI草稿，雇主完全未提AI且零應徵，藍海度高</td>
+  </tr>
+  <tr>
+    <td class="num muted">7</td>
+    <td><span class="score">14</span></td>
+    <td class="jobcell"><a href="https://www.104.com.tw/job/945gl" target="_blank">【遠端英文客服】專員 （月薪43000起）(全遠端上班)</a><div class="cust">玩遍天下旅行社有限公司</div></td>
+    <td><span class="tag">線上客服</span></td>
+    <td class="dots" title="AI可代工"><span class="dot blue"></span><span class="dot blue"></span><span class="dot blue"></span><span class="dot blue"></span><span class="dot off"></span></td>
+    <td class="dots" title="資訊落差"><span class="dot green"></span><span class="dot green"></span><span class="dot green"></span><span class="dot green"></span><span class="dot green"></span></td>
+    <td class="dots" title="CP值"><span class="dot blue"></span><span class="dot blue"></span><span class="dot blue"></span><span class="dot blue"></span><span class="dot blue"></span></td>
+    <td class="num">43k–80k</td>
+    <td class="num muted">0</td>
+    <td class="reason">全遠端英文文字客服薪資佳應徵少，雇主未提AI輔助屬藍海</td>
+  </tr>
+  <tr>
+    <td class="num muted">8</td>
+    <td><span class="score">14</span></td>
+    <td class="jobcell"><a href="https://www.104.com.tw/job/92iss" target="_blank">[全遠端/實領7萬起] 台中受僱律師｜自案100%回饋｜自由排班</a><div class="cust">以諾法律事務所</div></td>
+    <td><span class="tag">研究報告</span></td>
+    <td class="dots" title="AI可代工"><span class="dot blue"></span><span class="dot blue"></span><span class="dot blue"></span><span class="dot blue"></span><span class="dot off"></span></td>
+    <td class="dots" title="資訊落差"><span class="dot green"></span><span class="dot green"></span><span class="dot green"></span><span class="dot green"></span><span class="dot green"></span></td>
+    <td class="dots" title="CP值"><span class="dot blue"></span><span class="dot blue"></span><span class="dot blue"></span><span class="dot blue"></span><span class="dot blue"></span></td>
+    <td class="num">70k~</td>
+    <td class="num muted">2</td>
+    <td class="reason">書狀撰寫/法律研究可AI輔助，薪資高應徵僅2人</td>
+  </tr>
+  <tr>
+    <td class="num muted">9</td>
+    <td><span class="score">13</span></td>
+    <td class="jobcell"><a href="https://www.104.com.tw/job/6olvs" target="_blank">[ 兼職 ] 摩門教類型文件_英翻中翻譯人員 (freelance translator) English to Traditional Chinese Translator</a><div class="cust">RWS Group/SDL plc_英商思迪股份有限公司</div></td>
+    <td><span class="tag">翻譯</span></td>
+    <td class="dots" title="AI可代工"><span class="dot blue"></span><span class="dot blue"></span><span class="dot blue"></span><span class="dot blue"></span><span class="dot blue"></span></td>
+    <td class="dots" title="資訊落差"><span class="dot green"></span><span class="dot green"></span><span class="dot green"></span><span class="dot green"></span><span class="dot green"></span></td>
+    <td class="dots" title="CP值"><span class="dot blue"></span><span class="dot blue"></span><span class="dot blue"></span><span class="dot off"></span><span class="dot off"></span></td>
+    <td class="num">100–100k</td>
+    <td class="num muted">2</td>
+    <td class="reason">純文字翻譯工作，雇主完全未提AI工具，用人力翻譯思維定價</td>
+  </tr>
+  <tr>
+    <td class="num muted">10</td>
+    <td><span class="score">13</span></td>
+    <td class="jobcell"><a href="https://www.104.com.tw/job/93lmv" target="_blank">(全遠端) (全職）高階私人行政專員</a><div class="cust">振元開發有限公司</div></td>
+    <td><span class="tag">資料處理</span></td>
+    <td class="dots" title="AI可代工"><span class="dot blue"></span><span class="dot blue"></span><span class="dot blue"></span><span class="dot blue"></span><span class="dot blue"></span></td>
+    <td class="dots" title="資訊落差"><span class="dot green"></span><span class="dot green"></span><span class="dot green"></span><span class="dot green"></span><span class="dot green"></span></td>
+    <td class="dots" title="CP值"><span class="dot blue"></span><span class="dot blue"></span><span class="dot blue"></span><span class="dot off"></span><span class="dot off"></span></td>
+    <td class="num">55k–80k</td>
+    <td class="num muted">21</td>
+    <td class="reason">全遠端英文資料輸入比對，核心產出AI幾乎可全代工且雇主完全未提AI</td>
+  </tr>
+  <tr>
+    <td class="num muted">11</td>
+    <td><span class="score">13</span></td>
+    <td class="jobcell"><a href="https://www.104.com.tw/job/945co" target="_blank">大夜班客服人員</a><div class="cust">富智利國際股份有限公司</div></td>
+    <td><span class="tag">線上客服</span></td>
+    <td class="dots" title="AI可代工"><span class="dot blue"></span><span class="dot blue"></span><span class="dot blue"></span><span class="dot blue"></span><span class="dot blue"></span></td>
+    <td class="dots" title="資訊落差"><span class="dot green"></span><span class="dot green"></span><span class="dot green"></span><span class="dot green"></span><span class="dot green"></span></td>
+    <td class="dots" title="CP值"><span class="dot blue"></span><span class="dot blue"></span><span class="dot blue"></span><span class="dot off"></span><span class="dot off"></span></td>
+    <td class="num">40k–60k</td>
+    <td class="num muted">11</td>
+    <td class="reason">純文字遊戲客服/FAQ整理AI可大幅代勞但完全未提AI</td>
+  </tr>
+  <tr>
+    <td class="num muted">12</td>
+    <td><span class="score">13</span></td>
+    <td class="jobcell"><a href="https://www.104.com.tw/job/844ud" target="_blank">特約譯者－中韓筆譯（兼職）</a><div class="cust">CLN_新貴語文顧問股份有限公司</div></td>
+    <td><span class="tag">翻譯</span></td>
+    <td class="dots" title="AI可代工"><span class="dot blue"></span><span class="dot blue"></span><span class="dot blue"></span><span class="dot blue"></span><span class="dot blue"></span></td>
+    <td class="dots" title="資訊落差"><span class="dot green"></span><span class="dot green"></span><span class="dot green"></span><span class="dot green"></span><span class="dot green"></span></td>
+    <td class="dots" title="CP值"><span class="dot blue"></span><span class="dot blue"></span><span class="dot blue"></span><span class="dot off"></span><span class="dot off"></span></td>
+    <td class="num">100–50k</td>
+    <td class="num muted">12</td>
+    <td class="reason">中韓筆譯AI可代勞，論字計酬藍海</td>
+  </tr>
+  <tr>
+    <td class="num muted">13</td>
+    <td><span class="score">13</span></td>
+    <td class="jobcell"><a href="https://www.104.com.tw/job/93z0h" target="_blank">✦全遠端35K✦【酷澎｜美編PS去背人員】#長短期 #筆電公司寄到家 - UH</a><div class="cust">瑞星管理顧問股份有限公司</div></td>
+    <td><span class="tag">平面設計</span></td>
+    <td class="dots" title="AI可代工"><span class="dot blue"></span><span class="dot blue"></span><span class="dot blue"></span><span class="dot blue"></span><span class="dot blue"></span></td>
+    <td class="dots" title="資訊落差"><span class="dot green"></span><span class="dot green"></span><span class="dot green"></span><span class="dot green"></span><span class="dot green"></span></td>
+    <td class="dots" title="CP值"><span class="dot blue"></span><span class="dot blue"></span><span class="dot blue"></span><span class="dot off"></span><span class="dot off"></span></td>
+    <td class="num">35k–35k</td>
+    <td class="num muted">24</td>
+    <td class="reason">PS去背校對已可被AI工具高效取代，雇主仍用傳統人力敘述開35K。</td>
+  </tr>
+  <tr>
+    <td class="num muted">14</td>
+    <td><span class="score">13</span></td>
+    <td class="jobcell"><a href="https://www.104.com.tw/job/8jghq" target="_blank">✦全遠端35K✦【酷澎｜美編PS去背人員】#長短期 #筆電公司寄到家 - SY</a><div class="cust">瑞星管理顧問股份有限公司</div></td>
+    <td><span class="tag">平面設計</span></td>
+    <td class="dots" title="AI可代工"><span class="dot blue"></span><span class="dot blue"></span><span class="dot blue"></span><span class="dot blue"></span><span class="dot blue"></span></td>
+    <td class="dots" title="資訊落差"><span class="dot green"></span><span class="dot green"></span><span class="dot green"></span><span class="dot green"></span><span class="dot green"></span></td>
+    <td class="dots" title="CP值"><span class="dot blue"></span><span class="dot blue"></span><span class="dot blue"></span><span class="dot off"></span><span class="dot off"></span></td>
+    <td class="num">35k–35k</td>
+    <td class="num muted">34</td>
+    <td class="reason">PS去背校對已可被AI工具高效取代，雇主仍用傳統人力敘述開35K。</td>
+  </tr>
+  <tr>
+    <td class="num muted">15</td>
+    <td><span class="score">13</span></td>
+    <td class="jobcell"><a href="https://www.104.com.tw/job/8q2fk" target="_blank">兼職日翻簡體中文筆譯人員freelance translator(日翻簡中)</a><div class="cust">品捷翻譯有限公司</div></td>
+    <td><span class="tag">翻譯</span></td>
+    <td class="dots" title="AI可代工"><span class="dot blue"></span><span class="dot blue"></span><span class="dot blue"></span><span class="dot blue"></span><span class="dot blue"></span></td>
+    <td class="dots" title="資訊落差"><span class="dot green"></span><span class="dot green"></span><span class="dot green"></span><span class="dot green"></span><span class="dot green"></span></td>
+    <td class="dots" title="CP值"><span class="dot blue"></span><span class="dot blue"></span><span class="dot blue"></span><span class="dot off"></span><span class="dot off"></span></td>
+    <td class="num">300–20k</td>
+    <td class="num muted">10</td>
+    <td class="reason">日翻簡中一般文本翻譯屬LLM可高度代工項目，雇主完全未提AI</td>
+  </tr>
+  <tr>
+    <td class="num muted">16</td>
+    <td><span class="score">13</span></td>
+    <td class="jobcell"><a href="https://www.104.com.tw/job/8mdxk" target="_blank">兼職泰文筆譯人員freelance translator(文件中翻泰/英翻泰/泰翻中)</a><div class="cust">品捷翻譯有限公司</div></td>
+    <td><span class="tag">翻譯</span></td>
+    <td class="dots" title="AI可代工"><span class="dot blue"></span><span class="dot blue"></span><span class="dot blue"></span><span class="dot blue"></span><span class="dot blue"></span></td>
+    <td class="dots" title="資訊落差"><span class="dot green"></span><span class="dot green"></span><span class="dot green"></span><span class="dot green"></span><span class="dot green"></span></td>
+    <td class="dots" title="CP值"><span class="dot blue"></span><span class="dot blue"></span><span class="dot blue"></span><span class="dot off"></span><span class="dot off"></span></td>
+    <td class="num">300–10k</td>
+    <td class="num muted">8</td>
+    <td class="reason">泰文一般文本筆譯屬LLM可高度代工項目，雇主完全未提AI</td>
+  </tr>
+  <tr>
+    <td class="num muted">17</td>
+    <td><span class="score">13</span></td>
+    <td class="jobcell"><a href="https://www.104.com.tw/job/6i9wd" target="_blank">Document creative writer and proofreader (Native speaker, STEM background Preferred)</a><div class="cust">津橋管理顧問股份有限公司</div></td>
+    <td><span class="tag">文案寫作</span></td>
+    <td class="dots" title="AI可代工"><span class="dot blue"></span><span class="dot blue"></span><span class="dot blue"></span><span class="dot blue"></span><span class="dot blue"></span></td>
+    <td class="dots" title="資訊落差"><span class="dot green"></span><span class="dot green"></span><span class="dot green"></span><span class="dot green"></span><span class="dot green"></span></td>
+    <td class="dots" title="CP值"><span class="dot blue"></span><span class="dot blue"></span><span class="dot blue"></span><span class="dot off"></span><span class="dot off"></span></td>
+    <td class="num">800–3k</td>
+    <td class="num muted">13</td>
+    <td class="reason">留學文件改寫校對LLM可高度代勞雇主完全未提AI</td>
+  </tr>
+  <tr>
+    <td class="num muted">18</td>
+    <td><span class="score">13</span></td>
+    <td class="jobcell"><a href="https://www.104.com.tw/job/8582m" target="_blank">網路論壇口碑文案寫手</a><div class="cust">奧藝數位行銷有限公司</div></td>
+    <td><span class="tag">文案寫作</span></td>
+    <td class="dots" title="AI可代工"><span class="dot blue"></span><span class="dot blue"></span><span class="dot blue"></span><span class="dot blue"></span><span class="dot blue"></span></td>
+    <td class="dots" title="資訊落差"><span class="dot green"></span><span class="dot green"></span><span class="dot green"></span><span class="dot green"></span><span class="dot green"></span></td>
+    <td class="dots" title="CP值"><span class="dot blue"></span><span class="dot blue"></span><span class="dot blue"></span><span class="dot off"></span><span class="dot off"></span></td>
+    <td class="num">300–3k</td>
+    <td class="num muted">13</td>
+    <td class="reason">論壇口碑文案AI可大量代寫，雇主完全未提AI，屬典型資訊落差藍海</td>
+  </tr>
+  <tr>
+    <td class="num muted">19</td>
+    <td><span class="score">13</span></td>
+    <td class="jobcell"><a href="https://www.104.com.tw/job/904k0" target="_blank">法務文件整理助理（兼職／按件計酬）</a><div class="cust">普泰光電股份有限公司</div></td>
+    <td><span class="tag">資料處理</span></td>
+    <td class="dots" title="AI可代工"><span class="dot blue"></span><span class="dot blue"></span><span class="dot blue"></span><span class="dot blue"></span><span class="dot blue"></span></td>
+    <td class="dots" title="資訊落差"><span class="dot green"></span><span class="dot green"></span><span class="dot green"></span><span class="dot green"></span><span class="dot green"></span></td>
+    <td class="dots" title="CP值"><span class="dot blue"></span><span class="dot blue"></span><span class="dot blue"></span><span class="dot off"></span><span class="dot off"></span></td>
+    <td class="num">500–2k</td>
+    <td class="num muted">5</td>
+    <td class="reason">合約去識別化摘錄標記為典型LLM可代勞任務，雇主當純文書兼職處理</td>
+  </tr>
+  <tr>
+    <td class="num muted">20</td>
+    <td><span class="score">13</span></td>
+    <td class="jobcell"><a href="https://www.104.com.tw/job/8onth" target="_blank">【總公司】★Python程式設計內容專欄作家★</a><div class="cust">聯成電腦股份有限公司(聯成電腦/聯成外語)</div></td>
+    <td><span class="tag">文案寫作</span></td>
+    <td class="dots" title="AI可代工"><span class="dot blue"></span><span class="dot blue"></span><span class="dot blue"></span><span class="dot blue"></span><span class="dot blue"></span></td>
+    <td class="dots" title="資訊落差"><span class="dot green"></span><span class="dot green"></span><span class="dot green"></span><span class="dot green"></span><span class="dot green"></span></td>
+    <td class="dots" title="CP值"><span class="dot blue"></span><span class="dot blue"></span><span class="dot blue"></span><span class="dot off"></span><span class="dot off"></span></td>
+    <td class="num">1k–1k</td>
+    <td class="num muted">3</td>
+    <td class="reason">純寫作可遠端由AI代寫,雇主未提AI且應徵少</td>
+  </tr>
+  <tr>
+    <td class="num muted">21</td>
+    <td><span class="score">13</span></td>
+    <td class="jobcell"><a href="https://www.104.com.tw/job/8jgcn" target="_blank">Freelance Translators-TW&lt;&gt;RU</a><div class="cust">美商昇迪凡科技術有限公司台灣分公司</div></td>
+    <td><span class="tag">翻譯</span></td>
+    <td class="dots" title="AI可代工"><span class="dot blue"></span><span class="dot blue"></span><span class="dot blue"></span><span class="dot blue"></span><span class="dot blue"></span></td>
+    <td class="dots" title="資訊落差"><span class="dot green"></span><span class="dot green"></span><span class="dot green"></span><span class="dot green"></span><span class="dot green"></span></td>
+    <td class="dots" title="CP值"><span class="dot blue"></span><span class="dot blue"></span><span class="dot blue"></span><span class="dot off"></span><span class="dot off"></span></td>
+    <td class="num">260–470</td>
+    <td class="num muted">1</td>
+    <td class="reason">文件翻譯LLM可高度代勞,雇主未提AI應徵極少</td>
+  </tr>
+  <tr>
+    <td class="num muted">22</td>
+    <td><span class="score">13</span></td>
+    <td class="jobcell"><a href="https://www.104.com.tw/job/8h0vv" target="_blank">【網路事業群】日文網站編輯助理（工讀／實習／兼職）</a><div class="cust">國風傳媒有限公司</div></td>
+    <td><span class="tag">翻譯</span></td>
+    <td class="dots" title="AI可代工"><span class="dot blue"></span><span class="dot blue"></span><span class="dot blue"></span><span class="dot blue"></span><span class="dot blue"></span></td>
+    <td class="dots" title="資訊落差"><span class="dot green"></span><span class="dot green"></span><span class="dot green"></span><span class="dot green"></span><span class="dot green"></span></td>
+    <td class="dots" title="CP值"><span class="dot blue"></span><span class="dot blue"></span><span class="dot blue"></span><span class="dot off"></span><span class="dot off"></span></td>
+    <td class="num">196–200</td>
+    <td class="num muted">4</td>
+    <td class="reason">純日文編譯撰稿工讀,雇主未提AI且時薪尚可</td>
+  </tr>
+  <tr>
+    <td class="num muted">23</td>
+    <td><span class="score">13</span></td>
+    <td class="jobcell"><a href="https://www.104.com.tw/job/54swe" target="_blank">[解惑通]行動解題老師-以題計費</a><div class="cust">學習王科技股份有限公司</div></td>
+    <td><span class="tag">研究報告</span></td>
+    <td class="dots" title="AI可代工"><span class="dot blue"></span><span class="dot blue"></span><span class="dot blue"></span><span class="dot blue"></span><span class="dot blue"></span></td>
+    <td class="dots" title="資訊落差"><span class="dot green"></span><span class="dot green"></span><span class="dot green"></span><span class="dot green"></span><span class="dot green"></span></td>
+    <td class="dots" title="CP值"><span class="dot blue"></span><span class="dot blue"></span><span class="dot blue"></span><span class="dot off"></span><span class="dot off"></span></td>
+    <td class="num">10–40</td>
+    <td class="num muted">40</td>
+    <td class="reason">中小學解題以題計費，LLM可高效解答，雇主完全未設防AI</td>
+  </tr>
+  <tr>
+    <td class="num muted">24</td>
+    <td><span class="score">13</span></td>
+    <td class="jobcell"><a href="https://www.104.com.tw/job/942j0" target="_blank">*️⃣外商正職★全遠端【國際知名電商｜線上客服】月薪38K起＋每月獎金+15天特休｜無經驗可、完整培訓｜電商職涯、最佳轉換跳板 ★AMR_206</a><div class="cust">藝珂人事顧問股份有限公司</div></td>
+    <td><span class="tag">線上客服</span></td>
+    <td class="dots" title="AI可代工"><span class="dot blue"></span><span class="dot blue"></span><span class="dot blue"></span><span class="dot blue"></span><span class="dot blue"></span></td>
+    <td class="dots" title="資訊落差"><span class="dot green"></span><span class="dot green"></span><span class="dot green"></span><span class="dot green"></span><span class="dot green"></span></td>
+    <td class="dots" title="CP值"><span class="dot blue"></span><span class="dot blue"></span><span class="dot blue"></span><span class="dot off"></span><span class="dot off"></span></td>
+    <td class="num">38k~</td>
+    <td class="num muted">15</td>
+    <td class="reason">Email文字客服訂單查詢AI可大量代勞雇主全未提AI</td>
+  </tr>
+  <tr>
+    <td class="num muted">25</td>
+    <td><span class="score">13</span></td>
+    <td class="jobcell"><a href="https://www.104.com.tw/job/9145q" target="_blank">口碑行銷寫手（接案／論件計酬）</a><div class="cust">蔡森數位創意有限公司</div></td>
+    <td><span class="tag">文案寫作</span></td>
+    <td class="dots" title="AI可代工"><span class="dot blue"></span><span class="dot blue"></span><span class="dot blue"></span><span class="dot blue"></span><span class="dot blue"></span></td>
+    <td class="dots" title="資訊落差"><span class="dot green"></span><span class="dot green"></span><span class="dot green"></span><span class="dot green"></span><span class="dot green"></span></td>
+    <td class="dots" title="CP值"><span class="dot blue"></span><span class="dot blue"></span><span class="dot blue"></span><span class="dot off"></span><span class="dot off"></span></td>
+    <td class="num">面議</td>
+    <td class="num muted">10</td>
+    <td class="reason">論壇口碑文案高度AI可代寫，雇主完全未提AI</td>
+  </tr>
+  <tr>
+    <td class="num muted">26</td>
+    <td><span class="score">13</span></td>
+    <td class="jobcell"><a href="https://www.104.com.tw/job/8lcj4" target="_blank">國考解題作者</a><div class="cust">新學林出版股份有限公司</div></td>
+    <td><span class="tag">文案寫作</span></td>
+    <td class="dots" title="AI可代工"><span class="dot blue"></span><span class="dot blue"></span><span class="dot blue"></span><span class="dot blue"></span><span class="dot blue"></span></td>
+    <td class="dots" title="資訊落差"><span class="dot green"></span><span class="dot green"></span><span class="dot green"></span><span class="dot green"></span><span class="dot green"></span></td>
+    <td class="dots" title="CP值"><span class="dot blue"></span><span class="dot blue"></span><span class="dot blue"></span><span class="dot off"></span><span class="dot off"></span></td>
+    <td class="num">40~</td>
+    <td class="num muted">4</td>
+    <td class="reason">考題解答撰寫高度可用AI生成，雇主未提AI</td>
+  </tr>
+  <tr>
+    <td class="num muted">27</td>
+    <td><span class="score">13</span></td>
+    <td class="jobcell"><a href="https://www.104.com.tw/job/8v51g" target="_blank">你不必外向，也能成為優秀業務｜ 知名英語品牌 × 線上文字邀約 × 可申請遠端工作</a><div class="cust">菁英國際文教事業股份有限公司</div></td>
+    <td><span class="tag">線上客服</span></td>
+    <td class="dots" title="AI可代工"><span class="dot blue"></span><span class="dot blue"></span><span class="dot blue"></span><span class="dot blue"></span><span class="dot off"></span></td>
+    <td class="dots" title="資訊落差"><span class="dot green"></span><span class="dot green"></span><span class="dot green"></span><span class="dot green"></span><span class="dot green"></span></td>
+    <td class="dots" title="CP值"><span class="dot blue"></span><span class="dot blue"></span><span class="dot blue"></span><span class="dot blue"></span><span class="dot off"></span></td>
+    <td class="num">40k–70k</td>
+    <td class="num muted">4</td>
+    <td class="reason">純文字LINE/IG邀約按腳本操作，AI可大幅代工但雇主完全未提AI</td>
+  </tr>
+  <tr>
+    <td class="num muted">28</td>
+    <td><span class="score">13</span></td>
+    <td class="jobcell"><a href="https://www.104.com.tw/job/8w6fv" target="_blank">(全遠端)【Google 專案】(韓+英)文內容審核專員 Content Review Specialist | 需韓+英文流利 | AMR_220</a><div class="cust">藝珂人事顧問股份有限公司</div></td>
+    <td><span class="tag">資料處理</span></td>
+    <td class="dots" title="AI可代工"><span class="dot blue"></span><span class="dot blue"></span><span class="dot blue"></span><span class="dot blue"></span><span class="dot off"></span></td>
+    <td class="dots" title="資訊落差"><span class="dot green"></span><span class="dot green"></span><span class="dot green"></span><span class="dot green"></span><span class="dot green"></span></td>
+    <td class="dots" title="CP值"><span class="dot blue"></span><span class="dot blue"></span><span class="dot blue"></span><span class="dot blue"></span><span class="dot off"></span></td>
+    <td class="num">35k–53k</td>
+    <td class="num muted">4</td>
+    <td class="reason">內容審核近似資料標註可AI輔助，雇主全未提AI</td>
+  </tr>
+  <tr>
+    <td class="num muted">29</td>
+    <td><span class="score">13</span></td>
+    <td class="jobcell"><a href="https://www.104.com.tw/job/7lpa9" target="_blank">兼職-泰文中文互譯(漫畫遊戲類)-翻譯人員</a><div class="cust">富海科技翻譯有限公司</div></td>
+    <td><span class="tag">翻譯</span></td>
+    <td class="dots" title="AI可代工"><span class="dot blue"></span><span class="dot blue"></span><span class="dot blue"></span><span class="dot blue"></span><span class="dot off"></span></td>
+    <td class="dots" title="資訊落差"><span class="dot green"></span><span class="dot green"></span><span class="dot green"></span><span class="dot green"></span><span class="dot green"></span></td>
+    <td class="dots" title="CP值"><span class="dot blue"></span><span class="dot blue"></span><span class="dot blue"></span><span class="dot blue"></span><span class="dot off"></span></td>
+    <td class="num">100–10k</td>
+    <td class="num muted">3</td>
+    <td class="reason">泰中翻譯AI可代勞，件計酬應徵僅3人</td>
+  </tr>
+  <tr>
+    <td class="num muted">30</td>
+    <td><span class="score">13</span></td>
+    <td class="jobcell"><a href="https://www.104.com.tw/job/8ont9" target="_blank">【總公司】★Linux程式設計內容專欄作家★</a><div class="cust">聯成電腦股份有限公司(聯成電腦/聯成外語)</div></td>
+    <td><span class="tag">文案寫作</span></td>
+    <td class="dots" title="AI可代工"><span class="dot blue"></span><span class="dot blue"></span><span class="dot blue"></span><span class="dot blue"></span><span class="dot blue"></span></td>
+    <td class="dots" title="資訊落差"><span class="dot green"></span><span class="dot green"></span><span class="dot green"></span><span class="dot green"></span><span class="dot off"></span></td>
+    <td class="dots" title="CP值"><span class="dot blue"></span><span class="dot blue"></span><span class="dot blue"></span><span class="dot blue"></span><span class="dot off"></span></td>
+    <td class="num">1k–1k</td>
+    <td class="num muted">0</td>
+    <td class="reason">月1篇技術專欄,LLM可代寫,雇主用傳統寫手思維</td>
+  </tr>
+  <tr>
+    <td class="num muted">31</td>
+    <td><span class="score">13</span></td>
+    <td class="jobcell"><a href="https://www.104.com.tw/job/7mwjc" target="_blank">國中刊物撰稿(社會科)</a><div class="cust">學生週刊出版有限公司</div></td>
+    <td><span class="tag">文案寫作</span></td>
+    <td class="dots" title="AI可代工"><span class="dot blue"></span><span class="dot blue"></span><span class="dot blue"></span><span class="dot blue"></span><span class="dot off"></span></td>
+    <td class="dots" title="資訊落差"><span class="dot green"></span><span class="dot green"></span><span class="dot green"></span><span class="dot green"></span><span class="dot green"></span></td>
+    <td class="dots" title="CP值"><span class="dot blue"></span><span class="dot blue"></span><span class="dot blue"></span><span class="dot blue"></span><span class="dot off"></span></td>
+    <td class="num">500–800</td>
+    <td class="num muted">2</td>
+    <td class="reason">文章撰稿可用AI大幅代勞起草，雇主仍以傳統稿費計價</td>
+  </tr>
+  <tr>
+    <td class="num muted">32</td>
+    <td><span class="score">13</span></td>
+    <td class="jobcell"><a href="https://www.104.com.tw/job/7mwiw" target="_blank">國中學科類(數學、自然)撰稿</a><div class="cust">學生週刊出版有限公司</div></td>
+    <td><span class="tag">文案寫作</span></td>
+    <td class="dots" title="AI可代工"><span class="dot blue"></span><span class="dot blue"></span><span class="dot blue"></span><span class="dot blue"></span><span class="dot off"></span></td>
+    <td class="dots" title="資訊落差"><span class="dot green"></span><span class="dot green"></span><span class="dot green"></span><span class="dot green"></span><span class="dot green"></span></td>
+    <td class="dots" title="CP值"><span class="dot blue"></span><span class="dot blue"></span><span class="dot blue"></span><span class="dot blue"></span><span class="dot off"></span></td>
+    <td class="num">500–800</td>
+    <td class="num muted">6</td>
+    <td class="reason">學科文章可AI輔助撰寫，雇主未提AI具資訊落差</td>
+  </tr>
+  <tr>
+    <td class="num muted">33</td>
+    <td><span class="score">13</span></td>
+    <td class="jobcell"><a href="https://www.104.com.tw/job/905s5" target="_blank">顧家醫療｜數位護理衛教顧問 (遠端模式&amp;需輪班)</a><div class="cust">顧家醫療_顧芳瑜泌尿科診所</div></td>
+    <td><span class="tag">線上客服</span></td>
+    <td class="dots" title="AI可代工"><span class="dot blue"></span><span class="dot blue"></span><span class="dot blue"></span><span class="dot blue"></span><span class="dot off"></span></td>
+    <td class="dots" title="資訊落差"><span class="dot green"></span><span class="dot green"></span><span class="dot green"></span><span class="dot green"></span><span class="dot green"></span></td>
+    <td class="dots" title="CP值"><span class="dot blue"></span><span class="dot blue"></span><span class="dot blue"></span><span class="dot blue"></span><span class="dot off"></span></td>
+    <td class="num">36k~</td>
+    <td class="num muted">7</td>
+    <td class="reason">制式QA線上關懷可大量交AI代勞，雇主完全未提AI仍全招人力</td>
+  </tr>
+  <tr>
+    <td class="num muted">34</td>
+    <td><span class="score">12</span></td>
+    <td class="jobcell"><a href="https://www.104.com.tw/job/8nt6p" target="_blank">【LOC】【外包】英文中文化翻譯 Translator (EN→TC)</a><div class="cust">新加坡商賽德科技有限公司台灣分公司</div></td>
+    <td><span class="tag">翻譯</span></td>
+    <td class="dots" title="AI可代工"><span class="dot blue"></span><span class="dot blue"></span><span class="dot blue"></span><span class="dot blue"></span><span class="dot blue"></span></td>
+    <td class="dots" title="資訊落差"><span class="dot green"></span><span class="dot green"></span><span class="dot green"></span><span class="dot green"></span><span class="dot green"></span></td>
+    <td class="dots" title="CP值"><span class="dot blue"></span><span class="dot blue"></span><span class="dot off"></span><span class="dot off"></span><span class="dot off"></span></td>
+    <td class="num">1k–70k</td>
+    <td class="num muted">23</td>
+    <td class="reason">遊戲翻譯校對可高度用LLM代勞，雇主僅提傳統CAT工具未察覺AI，但應徵人數多</td>
+  </tr>
+  <tr>
+    <td class="num muted">35</td>
+    <td><span class="score">12</span></td>
+    <td class="jobcell"><a href="https://www.104.com.tw/job/8y493" target="_blank">【壯壯營養師團隊】社群回覆專員</a><div class="cust">壯潤有限公司</div></td>
+    <td><span class="tag">線上客服</span></td>
+    <td class="dots" title="AI可代工"><span class="dot blue"></span><span class="dot blue"></span><span class="dot blue"></span><span class="dot blue"></span><span class="dot blue"></span></td>
+    <td class="dots" title="資訊落差"><span class="dot green"></span><span class="dot green"></span><span class="dot green"></span><span class="dot green"></span><span class="dot green"></span></td>
+    <td class="dots" title="CP值"><span class="dot blue"></span><span class="dot blue"></span><span class="dot off"></span><span class="dot off"></span><span class="dot off"></span></td>
+    <td class="num">33k–45k</td>
+    <td class="num muted">21</td>
+    <td class="reason">LINE/IG依SOP話術回覆預約，典型可用AI客服取代但應徵已多</td>
+  </tr>
+  <tr>
+    <td class="num muted">36</td>
+    <td><span class="score">12</span></td>
+    <td class="jobcell"><a href="https://www.104.com.tw/job/8x8ee" target="_blank">遠端居家上班 |  PS、AI | 平面美編助理 | 35000 | 固定9-18 | 休六日 | 【知名電商】_JX</a><div class="cust">康彼斯顧問股份有限公司</div></td>
+    <td><span class="tag">平面設計</span></td>
+    <td class="dots" title="AI可代工"><span class="dot blue"></span><span class="dot blue"></span><span class="dot blue"></span><span class="dot blue"></span><span class="dot blue"></span></td>
+    <td class="dots" title="資訊落差"><span class="dot green"></span><span class="dot green"></span><span class="dot green"></span><span class="dot green"></span><span class="dot green"></span></td>
+    <td class="dots" title="CP值"><span class="dot blue"></span><span class="dot blue"></span><span class="dot off"></span><span class="dot off"></span><span class="dot off"></span></td>
+    <td class="num">35k–35k</td>
+    <td class="num muted">26</td>
+    <td class="reason">重複性修圖AI工具可大幅取代，但競爭已激烈</td>
+  </tr>
+  <tr>
+    <td class="num muted">37</td>
+    <td><span class="score">12</span></td>
+    <td class="jobcell"><a href="https://www.104.com.tw/job/8jg7y" target="_blank">外包校對人員</a><div class="cust">星巡文化有限公司</div></td>
+    <td><span class="tag">文案寫作</span></td>
+    <td class="dots" title="AI可代工"><span class="dot blue"></span><span class="dot blue"></span><span class="dot blue"></span><span class="dot blue"></span><span class="dot blue"></span></td>
+    <td class="dots" title="資訊落差"><span class="dot green"></span><span class="dot green"></span><span class="dot green"></span><span class="dot green"></span><span class="dot green"></span></td>
+    <td class="dots" title="CP值"><span class="dot blue"></span><span class="dot blue"></span><span class="dot off"></span><span class="dot off"></span><span class="dot off"></span></td>
+    <td class="num">30k–35k</td>
+    <td class="num muted">24</td>
+    <td class="reason">文字校對潤飾核心產出AI可代勞，雇主完全未提AI但應徵者已多</td>
+  </tr>
+  <tr>
+    <td class="num muted">38</td>
+    <td><span class="score">12</span></td>
+    <td class="jobcell"><a href="https://www.104.com.tw/job/9477x" target="_blank">接案美編</a><div class="cust">聯發光電股份有限公司</div></td>
+    <td><span class="tag">平面設計</span></td>
+    <td class="dots" title="AI可代工"><span class="dot blue"></span><span class="dot blue"></span><span class="dot blue"></span><span class="dot blue"></span><span class="dot blue"></span></td>
+    <td class="dots" title="資訊落差"><span class="dot green"></span><span class="dot green"></span><span class="dot green"></span><span class="dot green"></span><span class="dot green"></span></td>
+    <td class="dots" title="CP值"><span class="dot blue"></span><span class="dot blue"></span><span class="dot off"></span><span class="dot off"></span><span class="dot off"></span></td>
+    <td class="num">200–4k</td>
+    <td class="num muted">0</td>
+    <td class="reason">遠距接案美編，AI繪圖可大幅代勞，雇主未提AI屬藍海</td>
+  </tr>
+  <tr>
+    <td class="num muted">39</td>
+    <td><span class="score">12</span></td>
+    <td class="jobcell"><a href="https://www.104.com.tw/job/93i1h" target="_blank">口碑行銷論壇寫手 （遠端接案合作）</a><div class="cust">AnyMind Group_新加坡商艾雅思股份有限公司台灣分公司</div></td>
+    <td><span class="tag">文案寫作</span></td>
+    <td class="dots" title="AI可代工"><span class="dot blue"></span><span class="dot blue"></span><span class="dot blue"></span><span class="dot blue"></span><span class="dot blue"></span></td>
+    <td class="dots" title="資訊落差"><span class="dot green"></span><span class="dot green"></span><span class="dot green"></span><span class="dot green"></span><span class="dot green"></span></td>
+    <td class="dots" title="CP值"><span class="dot blue"></span><span class="dot blue"></span><span class="dot off"></span><span class="dot off"></span><span class="dot off"></span></td>
+    <td class="num">1k–3k</td>
+    <td class="num muted">21</td>
+    <td class="reason">論壇口碑文可AI寫，但已多人應徵</td>
+  </tr>
+  <tr>
+    <td class="num muted">40</td>
+    <td><span class="score">12</span></td>
+    <td class="jobcell"><a href="https://www.104.com.tw/job/93e3h" target="_blank">文案小編（遠端辦公、論件計酬）</a><div class="cust">SEED BAKERY_青浩食品國際有限公司</div></td>
+    <td><span class="tag">文案寫作</span></td>
+    <td class="dots" title="AI可代工"><span class="dot blue"></span><span class="dot blue"></span><span class="dot blue"></span><span class="dot blue"></span><span class="dot blue"></span></td>
+    <td class="dots" title="資訊落差"><span class="dot green"></span><span class="dot green"></span><span class="dot green"></span><span class="dot green"></span><span class="dot green"></span></td>
+    <td class="dots" title="CP值"><span class="dot blue"></span><span class="dot blue"></span><span class="dot off"></span><span class="dot off"></span><span class="dot off"></span></td>
+    <td class="num">280–800</td>
+    <td class="num muted">49</td>
+    <td class="reason">品牌推廣文案可完全用AI代寫，雇主未提AI但單價偏低</td>
+  </tr></tbody>
+  </table>
+
+  <h2>五、重點分類深掘</h2>
+  <div class="deep"><div class="deepcard">
+    <h4>線上客服 <span class="cnt">112 筆 · 高藍海 40</span></h4>
+    <ul>
+    <li><a href="https://www.104.com.tw/job/944xa" target="_blank">車輛物流調度人員｜訂單管理專員｜大量資訊處理（遠端在家）</a>
+    <span class="mini">玩遍天下旅行社有限公司 · 40k–90k · 應徵 0 人</span>
+    <div class="mini reason2">文字客服調度可大量借助AI草稿，雇主完全未提AI且零應徵，藍海度高</div></li>
+    <li><a href="https://www.104.com.tw/job/945gl" target="_blank">【遠端英文客服】專員 （月薪43000起）(全遠端上班)</a>
+    <span class="mini">玩遍天下旅行社有限公司 · 43k–80k · 應徵 0 人</span>
+    <div class="mini reason2">全遠端英文文字客服薪資佳應徵少，雇主未提AI輔助屬藍海</div></li>
+    <li><a href="https://www.104.com.tw/job/944y7" target="_blank">文字客服專員｜行政助理｜大量訊息處理（彰化）</a>
+    <span class="mini">玩遍天下旅行社有限公司 · 40k–80k · 應徵 1 人</span>
+    <div class="mini reason2">純文字高量客服可用AI草稿協助，應徵僅1人資訊落差高</div></li></ul></div><div class="deepcard">
+    <h4>翻譯 <span class="cnt">44 筆 · 高藍海 32</span></h4>
+    <ul>
+    <li><a href="https://www.104.com.tw/job/8ydns" target="_blank">兼職電影影視馬來文字幕潤稿人員 (English to Malay Subtitle QCer)</a>
+    <span class="mini">群輪錄影企業有限公司 · 1–100k · 應徵 1 人</span>
+    <div class="mini reason2">字幕潤稿QC是AI強項，雇主未提AI仍走傳統計價</div></li>
+    <li><a href="https://www.104.com.tw/job/844xw" target="_blank">特約譯者－中西文筆譯（兼職）</a>
+    <span class="mini">CLN_新貴語文顧問股份有限公司 · 100–50k · 應徵 6 人</span>
+    <div class="mini reason2">筆譯AI可大幅代勞，論字計酬且應徵少</div></li>
+    <li><a href="https://www.104.com.tw/job/8lngi" target="_blank">Freelance Translator and Reviewer for ES-TW Localization Project</a>
+    <span class="mini">美商昇迪凡科技術有限公司台灣分公司 · 700–800 · 應徵 2 人</span>
+    <div class="mini reason2">一般網站內容ES-TW本地化翻譯全遠端，LLM可高度代工，應徵僅2人且雇主完全未提AI</div></li></ul></div><div class="deepcard">
+    <h4>平面設計 <span class="cnt">75 筆 · 高藍海 27</span></h4>
+    <ul>
+    <li><a href="https://www.104.com.tw/job/93z0h" target="_blank">✦全遠端35K✦【酷澎｜美編PS去背人員】#長短期 #筆電公司寄到家 - UH</a>
+    <span class="mini">瑞星管理顧問股份有限公司 · 35k–35k · 應徵 24 人</span>
+    <div class="mini reason2">PS去背校對已可被AI工具高效取代，雇主仍用傳統人力敘述開35K。</div></li>
+    <li><a href="https://www.104.com.tw/job/8jghq" target="_blank">✦全遠端35K✦【酷澎｜美編PS去背人員】#長短期 #筆電公司寄到家 - SY</a>
+    <span class="mini">瑞星管理顧問股份有限公司 · 35k–35k · 應徵 34 人</span>
+    <div class="mini reason2">PS去背校對已可被AI工具高效取代，雇主仍用傳統人力敘述開35K。</div></li>
+    <li><a href="https://www.104.com.tw/job/8x8ee" target="_blank">遠端居家上班 |  PS、AI | 平面美編助理 | 35000 | 固定9-18 | 休六日 | 【知名電商】_JX</a>
+    <span class="mini">康彼斯顧問股份有限公司 · 35k–35k · 應徵 26 人</span>
+    <div class="mini reason2">重複性修圖AI工具可大幅取代，但競爭已激烈</div></li></ul></div><div class="deepcard">
+    <h4>文案寫作 <span class="cnt">37 筆 · 高藍海 26</span></h4>
+    <ul>
+    <li><a href="https://www.104.com.tw/job/6i9wd" target="_blank">Document creative writer and proofreader (Native speaker, STEM background Preferred)</a>
+    <span class="mini">津橋管理顧問股份有限公司 · 800–3k · 應徵 13 人</span>
+    <div class="mini reason2">留學文件改寫校對LLM可高度代勞雇主完全未提AI</div></li>
+    <li><a href="https://www.104.com.tw/job/8582m" target="_blank">網路論壇口碑文案寫手</a>
+    <span class="mini">奧藝數位行銷有限公司 · 300–3k · 應徵 13 人</span>
+    <div class="mini reason2">論壇口碑文案AI可大量代寫，雇主完全未提AI，屬典型資訊落差藍海</div></li>
+    <li><a href="https://www.104.com.tw/job/8onth" target="_blank">【總公司】★Python程式設計內容專欄作家★</a>
+    <span class="mini">聯成電腦股份有限公司(聯成電腦/聯成外語) · 1k–1k · 應徵 3 人</span>
+    <div class="mini reason2">純寫作可遠端由AI代寫,雇主未提AI且應徵少</div></li></ul></div><div class="deepcard">
+    <h4>行銷社群 <span class="cnt">121 筆 · 高藍海 18</span></h4>
+    <ul>
+    <li><a href="https://www.104.com.tw/job/941i1" target="_blank">居家工作電話行銷人員</a>
+    <span class="mini">曜楷有限公司 · 30k–100k · 應徵 5 人</span>
+    <div class="mini reason2">既有名單追蹤與LINE訊息追中可由AI輔助撰寫，雇主未提AI且應徵僅5人、薪資彈性高</div></li>
+    <li><a href="https://www.104.com.tw/job/93jn6" target="_blank">社群營運暨主播招募行政特助｜居家辦公｜新竹</a>
+    <span class="mini">沐光星娛傳媒有限公司 · 40k–70k · 應徵 33 人</span>
+    <div class="mini reason2">社群管理與報表製作可AI大幅代勞，雇主未提AI</div></li>
+    <li><a href="https://www.104.com.tw/job/931hg" target="_blank">tripool旅步｜한국어 콘텐츠 마케팅 크리에이터 및 SEO 전문가－台北</a>
+    <span class="mini">旅捷小客車租賃有限公司 · 250–350 · 應徵 0 人</span>
+    <div class="mini reason2">韓語SEO內容撰寫與關鍵字研究可由AI大幅代勞，雇主未提AI且應徵為0</div></li></ul></div><div class="deepcard">
+    <h4>資料處理 <span class="cnt">48 筆 · 高藍海 17</span></h4>
+    <ul>
+    <li><a href="https://www.104.com.tw/job/93lmv" target="_blank">(全遠端) (全職）高階私人行政專員</a>
+    <span class="mini">振元開發有限公司 · 55k–80k · 應徵 21 人</span>
+    <div class="mini reason2">全遠端英文資料輸入比對，核心產出AI幾乎可全代工且雇主完全未提AI</div></li>
+    <li><a href="https://www.104.com.tw/job/8w6fv" target="_blank">(全遠端)【Google 專案】(韓+英)文內容審核專員 Content Review Specialist | 需韓+英文流利 | AMR_220</a>
+    <span class="mini">藝珂人事顧問股份有限公司 · 35k–53k · 應徵 4 人</span>
+    <div class="mini reason2">內容審核近似資料標註可AI輔助，雇主全未提AI</div></li>
+    <li><a href="https://www.104.com.tw/job/904k0" target="_blank">法務文件整理助理（兼職／按件計酬）</a>
+    <span class="mini">普泰光電股份有限公司 · 500–2k · 應徵 5 人</span>
+    <div class="mini reason2">合約去識別化摘錄標記為典型LLM可代勞任務，雇主當純文書兼職處理</div></li></ul></div></div>
+
+  <div class="note" style="margin-top:28px">
+    <b>資料與限制說明：</b>本報告涵蓋 104「完全遠端」職缺（remoteWork=1），不含部分遠端。評分由 LLM 依職務描述判讀，屬輔助決策參考；薪資欄位部分雇主未揭露（面議）或以按件/時計價，數值僅供相對比較。真遠端驗證已濾除大量誤標，但仍建議點入原始職缺頁核實。資料每日自動更新至 BigQuery（<code>demo.bluocean_jobs</code>）。
+  </div>
+
+  <footer>104 遠距藍海職缺分析 · 產出於 2026-07-27 · 資料落地 BigQuery ehc-bingyan-tsai-e103d3.demo.bluocean_jobs</footer>
+</div>
+</body></html>
