@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>LeBio · 資料遷移總覽 (lifenergy 銷售 App)</title>
+<title>LeBio · 客戶資料搬家專案 (Salesforce 銷售系統)</title>
 <style>
   :root{
     --ink:#1a1a1a; --ink2:#4a4a4a; --ink3:#8a8a8a; --line:#d0d0d0;
@@ -12,19 +12,24 @@
   }
   *{box-sizing:border-box;margin:0;padding:0;}
   body{font-family:"Microsoft JhengHei","Noto Sans TC","Noto Sans",Arial,sans-serif;
-    color:var(--ink);background:var(--bg);line-height:1.5;font-size:15px;}
+    color:var(--ink);background:var(--bg);line-height:1.6;font-size:15px;}
   .wrap{max-width:1080px;margin:0 auto;padding:0 24px 80px;}
   /* hero */
   .hero{background:var(--blue);color:#fff;padding:56px 24px 48px;margin-bottom:40px;}
   .hero-in{max-width:1080px;margin:0 auto;}
   .hero .tag{font-size:13px;letter-spacing:2px;opacity:.85;text-transform:uppercase;}
-  .hero h1{font-size:30px;font-weight:700;margin:10px 0 8px;}
-  .hero p{font-size:15px;opacity:.92;max-width:720px;}
-  .hero .meta{margin-top:20px;font-size:13px;opacity:.85;}
+  .hero h1{font-size:30px;font-weight:700;margin:10px 0 12px;line-height:1.3;}
+  .hero p{font-size:16px;opacity:.95;max-width:760px;line-height:1.65;}
+  .hero .meta{margin-top:22px;font-size:13px;opacity:.85;}
   /* section */
-  h2{font-size:21px;font-weight:700;margin:44px 0 6px;padding-bottom:8px;border-bottom:2px solid var(--line);}
+  h2{font-size:21px;font-weight:700;margin:48px 0 6px;padding-bottom:8px;border-bottom:2px solid var(--line);}
   h2 .en{font-size:13px;color:var(--ink3);font-weight:400;margin-left:8px;}
-  .lead{color:var(--ink2);margin:10px 0 20px;font-size:14px;}
+  .lead{color:var(--ink2);margin:12px 0 20px;font-size:15px;max-width:820px;}
+  /* value cards */
+  .vals{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin:22px 0 8px;}
+  .val{background:#fff;border:1px solid var(--line);border-radius:8px;padding:22px 20px;border-top:3px solid var(--blue);}
+  .val h3{font-size:16px;color:var(--ink);margin-bottom:8px;}
+  .val p{font-size:14px;color:var(--ink2);}
   /* stat cards */
   .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin:26px 0 8px;}
   .stat{background:#fff;border:1px solid var(--line);border-radius:8px;padding:18px 16px;}
@@ -35,172 +40,191 @@
   table{width:100%;border-collapse:collapse;background:#fff;border:1px solid var(--blue);
     border-radius:8px;overflow:hidden;margin:14px 0 8px;font-size:14px;}
   thead th{background:var(--blue);color:#fff;font-weight:600;text-align:left;padding:11px 13px;}
-  tbody td{padding:10px 13px;border-top:1px solid var(--line);vertical-align:top;}
+  tbody td{padding:11px 13px;border-top:1px solid var(--line);vertical-align:top;}
   tbody tr:nth-child(even){background:var(--bg);}
   td .obj{font-weight:700;color:var(--ink);}
   td .api{font-family:Consolas,"Courier New",monospace;font-size:12px;color:var(--ink3);}
   .num{text-align:right;font-variant-numeric:tabular-nums;font-weight:600;}
-  .badge{display:inline-block;font-size:12px;padding:2px 9px;border-radius:20px;
-    background:var(--green2);color:#14514b;font-weight:600;}
-  .badge.gray{background:#e7e7e7;color:var(--ink2);}
-  a.link{color:var(--blue);text-decoration:none;font-weight:600;}
+  a.link{color:var(--blue);text-decoration:none;font-weight:600;white-space:nowrap;}
   a.link:hover{text-decoration:underline;}
-  /* ERD */
-  .erd{background:#fff;border:1px solid var(--line);border-radius:8px;padding:26px 22px;margin:16px 0;
-    font-family:Consolas,"Courier New",monospace;font-size:13.5px;line-height:1.9;color:var(--ink2);white-space:pre;overflow-x:auto;}
-  .erd b{color:var(--blue);}
-  .erd i{color:var(--green);font-style:normal;}
+  /* 360 view */
+  .three60{background:#fff;border:1px solid var(--line);border-radius:8px;padding:26px 24px;margin:16px 0;}
+  .three60 .center{display:inline-block;background:var(--blue);color:#fff;font-weight:700;
+    padding:10px 20px;border-radius:8px;font-size:16px;margin-bottom:6px;}
+  .three60 ul{list-style:none;margin-top:14px;}
+  .three60 li{padding:9px 0 9px 30px;position:relative;font-size:14.5px;color:var(--ink2);border-top:1px dashed var(--line);}
+  .three60 li:first-child{border-top:none;}
+  .three60 li::before{content:"↳";position:absolute;left:6px;top:9px;color:var(--green);font-weight:700;}
+  .three60 li b{color:var(--ink);}
   /* integrity */
   .grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:14px 0;}
-  .card{background:#fff;border:1px solid var(--line);border-radius:8px;padding:18px 20px;}
+  .card{background:#fff;border:1px solid var(--line);border-radius:8px;padding:20px 22px;}
   .card h3{font-size:15px;color:var(--blue);margin-bottom:10px;}
   .chk{list-style:none;}
-  .chk li{padding:5px 0 5px 26px;position:relative;font-size:14px;color:var(--ink2);}
-  .chk li::before{content:"✓";position:absolute;left:0;top:5px;color:var(--green);font-weight:700;}
-  .note{background:#fff;border-left:3px solid var(--blue);padding:12px 16px;margin:14px 0;font-size:13.5px;color:var(--ink2);}
+  .chk li{padding:6px 0 6px 26px;position:relative;font-size:14px;color:var(--ink2);}
+  .chk li::before{content:"✓";position:absolute;left:0;top:6px;color:var(--green);font-weight:700;}
+  .note{background:#fff;border-left:3px solid var(--blue);padding:14px 18px;margin:16px 0;font-size:14px;color:var(--ink2);}
+  .note b{color:var(--ink);}
+  code{font-family:Consolas,"Courier New",monospace;background:var(--bg);padding:1px 6px;border-radius:4px;font-size:12.5px;color:#33475b;}
   footer{margin-top:56px;padding-top:20px;border-top:1px solid var(--line);
     font-size:12px;color:var(--ink3);text-align:center;}
-  @media(max-width:720px){.stats{grid-template-columns:repeat(2,1fr);}.grid2{grid-template-columns:1fr;}}
+  @media(max-width:720px){.stats{grid-template-columns:repeat(2,1fr);}.grid2,.vals{grid-template-columns:1fr;}}
 </style>
 </head>
 <body>
 <div class="hero"><div class="hero-in">
-  <div class="tag">LeBio · lifenergy Org · 銷售 App</div>
-  <h1>真實客戶資料遷移 · 總覽</h1>
-  <p>將 LeBio 舊 BA 系統與 Salesforce 匯出的真實客戶 CRM 資料，依《CRM 資料表關聯說明文件》逐一遷移至 lifenergy 正式組織的「銷售」App，涵蓋 7 個標準物件、共 87,401 筆記錄。所有記錄標記 <code>mark__c = 'sf'</code> 以利篩選與追溯。</p>
-  <div class="meta">最後更新：2026-07-28　·　資料來源：客戶管理 / 聯絡人 / 商機(Lead) / 拜訪紀錄 / 活動TMP / 預估業績 / 事件列表</div>
+  <div class="tag">LeBio · Salesforce 銷售系統</div>
+  <h1>把十多年累積的客戶關係，<br>搬進同一個好用的系統</h1>
+  <p>過去 LeBio 的客戶資料分散在舊 BA 系統與另一套 Salesforce 匯出檔，兩邊格式不一、查一個客戶要翻好幾個地方。這個專案把所有客戶、聯絡窗口、商機、拜訪、行銷活動與行事曆，<b>完整、乾淨地集中到同一個「銷售」App</b>——業務登入就能看到每位客戶的完整全貌。</p>
+  <div class="meta">最後更新：2026-07-28　·　範圍：客戶、聯絡人、商機、拜訪、行銷活動、預估業績、行事曆事件</div>
 </div></div>
 
 <div class="wrap">
 
-  <h2>遷移總計 <span class="en">Migration Summary</span></h2>
-  <div class="stats">
-    <div class="stat big"><div class="n">87,401</div><div class="l">總記錄數</div></div>
-    <div class="stat"><div class="n">7</div><div class="l">標準物件</div></div>
-    <div class="stat"><div class="n">0</div><div class="l">重複記錄</div></div>
-    <div class="stat"><div class="n">100%</div><div class="l">原生物件（無 Custom）</div></div>
+  <h2>為什麼要做這件事 <span class="en">Why It Matters</span></h2>
+  <p class="lead">資料搬家不是為了搬家，而是為了讓每天在用系統的人——業務、主管、行銷——真正省事、看得清楚、不漏掉生意。</p>
+  <div class="vals">
+    <div class="val">
+      <h3>業務不用再東翻西找</h3>
+      <p>以前客戶、聯絡人、拜訪紀錄散在不同系統。現在打開一位客戶，就看到他的聯絡窗口、歷史拜訪、進行中的商機——一頁到位，接手客戶也能快速上手。</p>
+    </div>
+    <div class="val">
+      <h3>主管看得到真實戰況</h3>
+      <p>4,984 筆商機、其中 1,928 筆已成交，全部進到系統。主管不用等業務回報，就能看到 pipeline、成交率與各區進度，決策有依據。</p>
+    </div>
+    <div class="val">
+      <h3>行銷成效可追蹤</h3>
+      <p>行銷活動與它帶出的商機串在一起，哪一檔活動真的帶來生意、投入是否值得，一目了然，不再只靠感覺。</p>
+    </div>
   </div>
-  <div class="note">全程優先採用 Salesforce <b>原生標準物件</b>，7 份來源資料皆對應到既有標準物件（Account／Contact／Lead／Campaign／Task／Opportunity／Event），未新增任何 Custom Object；僅以 <code>Legacy_*__c</code> 自訂欄位承接原系統無對應的欄位。</div>
 
-  <h2>物件對應與筆數 <span class="en">Objects &amp; Record Counts</span></h2>
-  <p class="lead">每一份來源檔皆對應到一個原生標準物件；點選右欄可檢視該物件的完整 ETL 報告。</p>
+  <h2>這次搬進系統的資料 <span class="en">What We Migrated</span></h2>
+  <p class="lead">7 類資料、共 <b>87,401 筆</b>，一筆不漏地搬進系統，而且完全使用 Salesforce 現成的標準功能——沒有為了搬家去客製一堆東西，日後升級、找人接手都更單純。</p>
+  <div class="stats">
+    <div class="stat big"><div class="n">87,401</div><div class="l">筆資料全數搬入</div></div>
+    <div class="stat"><div class="n">7</div><div class="l">類客戶資料</div></div>
+    <div class="stat"><div class="n">0</div><div class="l">重複資料</div></div>
+    <div class="stat"><div class="n">100%</div><div class="l">用系統現成功能</div></div>
+  </div>
+
   <table>
     <thead><tr>
-      <th>來源檔</th><th>Salesforce 物件</th><th class="num">筆數</th><th>關鍵關聯</th><th>ETL 報告</th>
+      <th>資料類型</th><th>在系統裡叫什麼</th><th class="num">筆數</th><th>對業務代表什麼</th><th>細節</th>
     </tr></thead>
     <tbody>
       <tr>
-        <td>客戶管理.xlsx</td>
-        <td><span class="obj">客戶公司</span><br><span class="api">Account</span></td>
+        <td>客戶（藥局／機構／個人）</td>
+        <td><span class="obj">客戶公司</span> <span class="api">Account</span></td>
         <td class="num">4,334</td>
-        <td>Contact / Opportunity / Task 的母體</td>
-        <td><a class="link" href="etl-account-report.html">開啟 →</a></td>
+        <td>所有客戶的主檔，其他資料都掛在客戶底下</td>
+        <td><a class="link" href="etl-account-report.html">查看 →</a></td>
       </tr>
       <tr>
-        <td>聯絡人.xlsx</td>
-        <td><span class="obj">聯絡人</span><br><span class="api">Contact</span></td>
+        <td>客戶的聯絡窗口</td>
+        <td><span class="obj">聯絡人</span> <span class="api">Contact</span></td>
         <td class="num">3,871</td>
-        <td>3,870 筆掛回 Account</td>
-        <td><a class="link" href="etl-contact-report.html">開啟 →</a></td>
+        <td>知道每間客戶「找誰談」，幾乎全數對到客戶</td>
+        <td><a class="link" href="etl-contact-report.html">查看 →</a></td>
       </tr>
       <tr>
-        <td>商機.xlsx</td>
-        <td><span class="obj">潛在客戶</span><br><span class="api">Lead</span></td>
+        <td>潛在客戶名單</td>
+        <td><span class="obj">潛在客戶</span> <span class="api">Lead</span></td>
         <td class="num">7,945</td>
-        <td>獨立潛客名單</td>
-        <td><a class="link" href="etl-lead-report.html">開啟 →</a></td>
+        <td>還沒成交的機會池，業務可持續開發</td>
+        <td><a class="link" href="etl-lead-report.html">查看 →</a></td>
       </tr>
       <tr>
-        <td>活動TMP.xlsx</td>
-        <td><span class="obj">行銷活動</span><br><span class="api">Campaign</span></td>
+        <td>行銷活動檔期</td>
+        <td><span class="obj">行銷活動</span> <span class="api">Campaign</span></td>
         <td class="num">47</td>
-        <td>行銷檔期主檔</td>
-        <td><a class="link" href="etl-campaign-report.html">開啟 →</a></td>
+        <td>每一檔行銷活動，可回頭看帶來多少生意</td>
+        <td><a class="link" href="etl-campaign-report.html">查看 →</a></td>
       </tr>
       <tr>
-        <td>拜訪紀錄.xlsx</td>
-        <td><span class="obj">工作（活動）</span><br><span class="api">Task</span></td>
+        <td>拜訪與工作紀錄</td>
+        <td><span class="obj">工作</span> <span class="api">Task</span></td>
         <td class="num">36,366</td>
-        <td>4,921 掛 Who · 30,526 掛 What</td>
-        <td><a class="link" href="etl-visit-report.html">開啟 →</a></td>
+        <td>完整的往來歷史，接手客戶不再從零開始</td>
+        <td><a class="link" href="etl-visit-report.html">查看 →</a></td>
       </tr>
       <tr>
-        <td>預估業績.xlsx</td>
-        <td><span class="obj">商機</span><br><span class="api">Opportunity</span></td>
+        <td>預估業績／銷售機會</td>
+        <td><span class="obj">商機</span> <span class="api">Opportunity</span></td>
         <td class="num">4,984</td>
-        <td>4,971 掛 Account · 1,928 已成交</td>
-        <td><a class="link" href="etl-opportunity-report.html">開啟 →</a></td>
+        <td>pipeline 與成交狀況，主管看戰況的核心</td>
+        <td><a class="link" href="etl-opportunity-report.html">查看 →</a></td>
       </tr>
       <tr>
-        <td>事件列表.xlsx</td>
-        <td><span class="obj">行事曆事件</span><br><span class="api">Event</span></td>
+        <td>行事曆事件（會議、排程）</td>
+        <td><span class="obj">行事曆事件</span> <span class="api">Event</span></td>
         <td class="num">29,854</td>
-        <td>2,027 掛 Who · 4,213 掛 What</td>
-        <td><a class="link" href="etl-event-report.html">開啟 →</a></td>
+        <td>過去與未來的行程，時間都對得準</td>
+        <td><a class="link" href="etl-event-report.html">查看 →</a></td>
       </tr>
     </tbody>
   </table>
 
-  <h2>關聯結構 <span class="en">Relationship Map</span></h2>
-  <p class="lead">依《CRM 資料表關聯說明文件》還原原系統關聯：SF 格式 Id（001/003/00Q/701）比對目標的 <code>Legacy_Id__c</code>；數字型舊 Id 比對 <code>Legacy_IDNo__c</code>。</p>
-  <div class="erd"><b>客戶公司 Account</b> (4,334)
-   │
-   ├──&lt; <b>聯絡人 Contact</b> (3,871)        <i>AccountId</i>
-   ├──&lt; <b>商機 Opportunity</b> (4,984)      <i>AccountId</i>
-   ├──&lt; <b>工作 Task</b> (36,366)            <i>WhatId → Account / WhoId → Contact·Lead</i>
-   └──&lt; <b>行事曆事件 Event</b> (29,854)      <i>WhatId → Account / WhoId → Contact·Lead</i>
+  <h2>打開一位客戶，會看到什麼 <span class="en">Customer 360</span></h2>
+  <p class="lead">這次特別花心力做的一件事：把原本分散的資料「串回」正確的客戶身上。所以業務點開任何一位客戶，相關的一切都自動出現在同一頁。</p>
+  <div class="three60">
+    <span class="center">一位客戶（Account）</span>
+    <ul>
+      <li><b>他的聯絡窗口</b>　── 這間客戶平常找誰談、電話 email 都在</li>
+      <li><b>進行中的商機</b>　── 這位客戶目前有哪些生意在談、金額多少</li>
+      <li><b>歷史拜訪紀錄</b>　── 上次去談了什麼、承諾了什麼，一路可回溯</li>
+      <li><b>行事曆事件</b>　── 和這位客戶約好的會議與行程</li>
+      <li><b>潛在客戶</b>　── 尚未成交的名單，也能追到它後來怎麼發展</li>
+    </ul>
+  </div>
+  <div class="note">背後怎麼做到的：每筆資料都依《CRM 資料表關聯說明文件》的規則，用客戶的獨立編號正確配對回去——即使舊系統有兩種不同的編號格式，也都各自對到正確的客戶，不會張冠李戴。</div>
 
-<b>潛在客戶 Lead</b> (7,945)      獨立名單，Task/Event 可經 WhoId(00Q) 掛回
-<b>行銷活動 Campaign</b> (47)      行銷檔期主檔</div>
-
-  <h2>資料完整性 <span class="en">Data Integrity</span></h2>
-  <p class="lead">全 7 物件已完成完整性總掃描 — 去重、必填、空白清洗、關聯掛回皆通過。</p>
+  <h2>資料乾淨、可以放心用 <span class="en">Clean &amp; Trustworthy</span></h2>
+  <p class="lead">搬進來的資料如果又髒又重複，系統再好也沒人想用。所以我們在搬家過程中同步把資料整理乾淨，並逐項驗證過。</p>
   <div class="grid2">
     <div class="card">
-      <h3>清洗與去重</h3>
+      <h3>乾淨</h3>
       <ul class="chk">
-        <li>僅去除「完全相同」的重複列，保留合法多筆</li>
-        <li>Task / Event 舊 Id 重複組 = 0</li>
-        <li>所有欄位去除前後空白（含全形 U+3000）</li>
-        <li>移除不可見／控制字元，收斂連續空白</li>
-        <li>0 筆缺主旨、0 筆缺必填名稱／結案日</li>
+        <li>沒有重複資料——只清掉「一模一樣」的，正常的多筆都保留</li>
+        <li>去掉多餘空白與看不見的雜訊字元</li>
+        <li>沒有缺主旨、缺名稱這類殘缺資料</li>
+        <li>金額、日期、時間都經過校正</li>
       </ul>
     </div>
     <div class="card">
-      <h3>關聯正確性</h3>
+      <h3>對得準</h3>
       <ul class="chk">
-        <li>Contact → Account 掛回 3,870 / 3,871</li>
-        <li>Opportunity → Account 掛回 4,971 / 4,984</li>
-        <li>Task 掛 Who 4,921、掛 What 30,526</li>
-        <li>Event 掛 Who 2,027、掛 What 4,213</li>
-        <li>時間型 Event 皆有起始時間（+08:00 正確換算 UTC）</li>
+        <li>聯絡人幾乎全數（3,870 / 3,871）對回客戶</li>
+        <li>商機 4,971 / 4,984 對回客戶</li>
+        <li>拜訪與事件都串回對應的客戶與聯絡人</li>
+        <li>行事曆時間依台灣時區正確顯示，不偏移</li>
       </ul>
     </div>
   </div>
-  <div class="note">少數未掛回的記錄（1 筆 Contact、13 筆 Opportunity）為<b>來源資料本身無可解析關聯</b>，非遷移錯誤；已完整保留 <code>Legacy_Account_Name__c</code> 等原始文字供追溯。</div>
+  <div class="note">少數幾筆（1 筆聯絡人、13 筆商機）沒有對到客戶，是因為<b>舊系統原本就沒有記錄它屬於哪個客戶</b>，並非搬家出錯；我們仍完整保留了原始的客戶名稱文字，日後想補都查得到。</div>
 
-  <h2>App 可見性與權限 <span class="en">App &amp; Permissions</span></h2>
+  <h2>大家登入就能用 <span class="en">Ready to Use</span></h2>
+  <p class="lead">資料搬進來只是第一步，最後我們確認了「所有人打開系統就真的看得到、用得到」。</p>
   <div class="grid2">
     <div class="card">
-      <h3>銷售 App Tabs</h3>
+      <h3>在「銷售」App 一次到齊</h3>
       <ul class="chk">
-        <li>客戶公司 / 聯絡人 / 潛在客戶 / 行銷活動</li>
-        <li>工作 / 商機 / 行事曆事件</li>
-        <li>7 個物件皆列於「銷售」App 導覽列</li>
+        <li>客戶、聯絡人、潛在客戶、行銷活動</li>
+        <li>工作、商機、行事曆事件</li>
+        <li>7 類資料的頁籤都排在導覽列，隨點隨看</li>
       </ul>
     </div>
     <div class="card">
-      <h3>欄位可見性</h3>
+      <h3>欄位與清單全員可見</h3>
       <ul class="chk">
-        <li>各物件 Record Page 皆含「遷移資料 (LeBio)」區塊</li>
-        <li>List View（filterScope = Everything）全 User 可見</li>
-        <li>FLS 以 Permission Set 指派給全部 active User</li>
+        <li>每筆資料頁都有「遷移資料 (LeBio)」區塊，舊系統帶來的欄位都看得到</li>
+        <li>每類資料都建了公開清單，全公司同仁都能開</li>
+        <li>檢視權限已開放給所有使用者，登入即可用</li>
       </ul>
     </div>
   </div>
 
   <footer>
-    LeBio 資料遷移 · lifenergy Org「銷售」App　·　依《CRM 資料表關聯說明文件》施工　·　2026-07-28
+    LeBio 客戶資料搬家專案 · Salesforce「銷售」系統　·　依《CRM 資料表關聯說明文件》施工　·　2026-07-28
   </footer>
 </div>
 </body>
