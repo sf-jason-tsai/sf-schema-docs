@@ -85,6 +85,12 @@ const PAGES = [
         dest: 'thermos/index.html',
         title: 'THERMOS 膳魔師 · Demo 文件集 Landing'
     },
+    // ─── 銀樺國際 Silverbirch (B2B Retail Wholesale · CBUSDO) ───
+    {
+        src: 'C:/Users/bingyan.tsai/Desktop/Claude/silverbirch-demo/specs/index.html',
+        dest: 'silverbirch/index.html',
+        title: '銀樺國際 Silverbirch · Sales Cloud B2B Wholesale Demo'
+    },
     {
         src: 'C:/Users/bingyan.tsai/Desktop/Claude/thermos-demo/specs/THERMOS_Agentforce_Setup.html',
         dest: 'thermos/agentforce-setup.html',

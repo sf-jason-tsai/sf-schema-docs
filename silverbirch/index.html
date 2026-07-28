@@ -1,0 +1,391 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<title>銀樺國際 Silverbirch · Sales Cloud B2B Wholesale Demo</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<style>
+  :root{
+    --ink:#181818;--sub:#706E6B;--mute:#B0AFAE;--line:#DDDBDA;--tint:#F3F2F2;
+    --navy:#1B2951;--navy-dk:#0F1A38;--navy-tint:#EAEEF7;
+    --gold:#B8A170;--gold-dk:#8A7856;--gold-tint:#F5F1E8;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0;background:#F1EFED;font-family:"Salesforce Sans",-apple-system,"PingFang TC","Microsoft JhengHei",sans-serif;color:var(--ink);line-height:1.65}
+  .wrap{max-width:1140px;margin:0 auto;padding:36px 32px 60px}
+
+  .tag{font-size:11px;letter-spacing:2px;color:var(--sub);text-transform:uppercase;font-weight:600}
+  h1{font-size:30px;letter-spacing:-0.5px;margin:6px 0 8px;color:var(--navy-dk)}
+  .lede{font-size:14px;color:var(--sub);line-height:1.75;max-width:800px}
+
+  .backlink{display:inline-flex;align-items:center;gap:6px;font-size:12px;color:var(--sub);text-decoration:none;margin-bottom:16px;padding:4px 10px;background:#fff;border:1px solid var(--line);border-radius:20px}
+  .backlink:hover{color:var(--navy);border-color:var(--navy)}
+
+  h2{font-size:17px;margin:36px 0 14px;padding-bottom:8px;border-bottom:2px solid var(--navy);letter-spacing:0.5px;color:var(--navy-dk);display:flex;align-items:center;gap:10px}
+  h2 .num{width:26px;height:26px;background:var(--navy);color:var(--gold);border-radius:4px;display:inline-flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;letter-spacing:0}
+  h3{font-size:14px;margin:16px 0 8px;color:var(--navy-dk);font-weight:700}
+
+  .card{background:#fff;border:1px solid var(--line);border-radius:8px;padding:18px 22px;margin-bottom:12px}
+  .card.accent{border-left:4px solid var(--gold);background:linear-gradient(90deg,#fff 0%,var(--gold-tint) 500%)}
+
+  .grid-4{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:12px 0}
+  .grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:12px 0}
+  .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:12px 0}
+  @media (max-width:800px){.grid-4,.grid-3,.grid-2{grid-template-columns:1fr}}
+
+  .kpi{background:#fff;border:1px solid var(--line);border-radius:8px;padding:14px 16px;text-align:center}
+  .kpi-num{font-size:24px;font-weight:800;color:var(--navy);letter-spacing:-0.3px}
+  .kpi-lbl{font-size:11px;color:var(--sub);letter-spacing:.5px;text-transform:uppercase;font-weight:600;margin-top:4px}
+
+  table{width:100%;border-collapse:collapse;font-size:13px;margin:8px 0 12px;background:#fff}
+  th,td{border:1px solid var(--line);padding:8px 12px;text-align:left;vertical-align:top}
+  th{background:var(--navy-tint);font-weight:700;color:var(--navy-dk);font-size:12px}
+  code{background:var(--tint);padding:1px 6px;border-radius:3px;font-size:12px;font-family:Consolas,monospace;color:var(--navy)}
+
+  .step-list{counter-reset:step;list-style:none;padding:0}
+  .step-list li{counter-increment:step;padding-left:38px;position:relative;margin:12px 0;font-size:13px;line-height:1.7}
+  .step-list li::before{content:counter(step);position:absolute;left:0;top:0;width:26px;height:26px;background:var(--navy);color:var(--gold);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800}
+
+  .flow{display:flex;gap:6px;align-items:center;flex-wrap:wrap;margin:12px 0;font-size:12px}
+  .flow .step{background:#fff;border:1px solid var(--line);border-radius:4px;padding:6px 10px;font-weight:600;color:var(--navy-dk)}
+  .flow .arw{color:var(--mute);font-weight:700}
+
+  pre.form-code{background:var(--navy-dk);color:#DFE6F0;padding:16px;border-radius:6px;font-family:Consolas,monospace;font-size:11.5px;overflow-x:auto;line-height:1.55;max-height:400px}
+
+  .badge{display:inline-block;font-size:10.5px;padding:2px 8px;border-radius:10px;letter-spacing:.4px;font-weight:600}
+  .b-ok{background:#E3F2E1;color:#2E844A;border:1px solid #B7DBB2}
+  .b-todo{background:var(--gold-tint);color:var(--gold-dk);border:1px solid #E1D3AF}
+  .b-info{background:var(--navy-tint);color:var(--navy);border:1px solid #C6D2E8}
+
+  .foot{margin-top:40px;padding-top:16px;border-top:1px solid var(--line);font-size:11.5px;color:var(--sub);line-height:1.6}
+
+  .brand-strip{display:flex;gap:8px;align-items:center;margin:16px 0 20px}
+  .brand-dot{width:10px;height:10px;border-radius:50%}
+  .navy-dot{background:var(--navy)}
+  .gold-dot{background:var(--gold)}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<a class="backlink" href="../">← 返回 sf-schema-docs</a>
+
+<div class="tag">CBUSDO · 銀樺國際 Silverbirch International</div>
+<h1>銀樺國際 Sales · B2B Wholesale Demo Package</h1>
+<div class="brand-strip">
+  <span class="brand-dot navy-dot"></span><span style="font-size:11px;color:var(--sub);letter-spacing:0.5px">#1B2951 深藍</span>
+  <span style="margin:0 8px;color:var(--mute)">·</span>
+  <span class="brand-dot gold-dot"></span><span style="font-size:11px;color:var(--sub);letter-spacing:0.5px">#B8A170 銀金</span>
+</div>
+<p class="lede">
+  進口服飾／精品配件／葡萄酒／烈酒 綜合代理總經銷 · 100% Salesforce Sales Cloud 標準物件展示。
+  代理 9 個歐洲/日本品牌，服務全台 20 個通路（百貨精品櫃/精品獨立店/酒商/星級餐飲/電商），
+  展示完整 B2B Wholesale pipeline（Lead → Opp → Quote → Order → Contract）+ Campaign Hierarchy + Sales Path + Global Actions。
+</p>
+
+<div class="grid-4">
+  <div class="kpi"><div class="kpi-num">10</div><div class="kpi-lbl">Sales OOTB 物件</div></div>
+  <div class="kpi"><div class="kpi-num">13</div><div class="kpi-lbl">Custom Fields (SBH_)</div></div>
+  <div class="kpi"><div class="kpi-num">200+</div><div class="kpi-lbl">Real Records</div></div>
+  <div class="kpi"><div class="kpi-num">15</div><div class="kpi-lbl">OOTB Features</div></div>
+</div>
+
+<!-- ==================== 1. Deployed 資料 ==================== -->
+<h2><span class="num">1</span>Deployed 資料量</h2>
+
+<table>
+  <thead>
+    <tr><th>物件</th><th style="width:70px;text-align:center">筆數</th><th>展示 OOTB Feature</th></tr>
+  </thead>
+  <tbody>
+    <tr><td><b>Account</b>（含 Hierarchy）</td><td style="text-align:center">20</td><td>ParentId Account Hierarchy · 4 集團母公司 + 6 分店 + 10 獨立通路（酒商/餐飲/電商/獨立店）</td></tr>
+    <tr><td><b>Contact</b>（採購/MD/店長/侍酒師）</td><td style="text-align:center">35</td><td>標準 Title 表達決策角色 · OpportunityContactRole 綁 Opp</td></tr>
+    <tr><td><b>Lead</b></td><td style="text-align:center">8</td><td>標準 LeadSource（Trade Show/Referral/Web/Partner）· Lead Conversion 流程</td></tr>
+    <tr><td><b>Opportunity</b></td><td style="text-align:center">15</td><td>3 RT × 5 Stages 分布 · Kanban view · Sales Path · Amount 累計 NT$ 88M+ · Forecast Category</td></tr>
+    <tr><td>&nbsp;&nbsp;&nbsp;├─ SBH_Product_Listing</td><td style="text-align:center">5</td><td>新品上架商機</td></tr>
+    <tr><td>&nbsp;&nbsp;&nbsp;├─ SBH_Seasonal_Deal</td><td style="text-align:center">5</td><td>季度檔期商機</td></tr>
+    <tr><td>&nbsp;&nbsp;&nbsp;└─ SBH_Renewal</td><td style="text-align:center">5</td><td>年度續約商機</td></tr>
+    <tr><td><b>OpportunityContactRole</b></td><td style="text-align:center">~30</td><td>每 Opp 2 位 Contact 綁角色（Decision Maker/Economic Buyer）</td></tr>
+    <tr><td><b>Product2</b></td><td style="text-align:center">30</td><td>Family = 品牌（9 個）· SBH_Category__c 4 大類（服飾/皮件/紅酒/烈酒）</td></tr>
+    <tr><td><b>Pricebook2</b>（Custom + Standard）</td><td style="text-align:center">5</td><td>4 個通路 pricebook + Standard MSRP · 75%/70%/72%/65% 折扣階梯</td></tr>
+    <tr><td><b>PricebookEntry</b></td><td style="text-align:center">150</td><td>30 商品 × 5 pricebook</td></tr>
+    <tr><td><b>Quote / QuoteLineItem</b></td><td style="text-align:center">5 / 15</td><td>Quote Sync · PDF button · Quote Pricebook = Channel Tier</td></tr>
+    <tr><td><b>Order / OrderItem</b></td><td style="text-align:center">15 / ~45</td><td>Draft → Activated lifecycle · Standard PoNumber · ShippingAddress</td></tr>
+    <tr><td><b>Contract</b></td><td style="text-align:center">5</td><td>年度框架 · SBH_Guarantee_Amount__c 保底 + SBH_Bonus_Tier__c 獎金階梯</td></tr>
+    <tr><td><b>Campaign</b>（含 Hierarchy）</td><td style="text-align:center">6</td><td>Campaign Hierarchy · 2 父檔期（春夏/秋冬）→ 4 子活動（品鑑會/快閃/大促）</td></tr>
+    <tr><td><b>CampaignMember</b></td><td style="text-align:center">~35</td><td>Contact + Lead 混合 · Campaign Influence on Opps</td></tr>
+    <tr><td><b>Task / Event</b></td><td style="text-align:center">~30 / 5</td><td>Activity Timeline · 拜訪/樣品送達/品飲會</td></tr>
+  </tbody>
+</table>
+
+<!-- ==================== 2. OOTB Features 已 showcase ==================== -->
+<h2><span class="num">2</span>Sales Cloud OOTB Features · 已 showcase</h2>
+
+<div class="grid-2">
+  <div class="card">
+    <h3>✅ 已完成的 15 個 OOTB Features</h3>
+    <ol style="margin:8px 0;padding-left:20px;font-size:12.5px;line-height:1.9">
+      <li><b>Account Hierarchy</b>（ParentId）— SOGO Corp → 忠孝/復興館</li>
+      <li><b>OpportunityContactRole</b> — 每個 Opp 綁 2+ Contact 帶 Role</li>
+      <li><b>Opp Stages + Forecast Category</b> — Simple Sales Process</li>
+      <li><b>Multi-Pricebook</b> — Standard + 4 個 Channel Pricebook</li>
+      <li><b>Kanban View for Opp</b> — Opp by Stage 拖拉</li>
+      <li><b>Activity Timeline</b> — Task/Event 掛 Opp/Account</li>
+      <li><b>Chatter Feed</b> — Opp/Account 討論</li>
+      <li><b>Reports & Dashboards</b> — Standard Opp Pipeline / Sales Manager Dashboard</li>
+      <li><b>Standard List Views + Split View</b></li>
+      <li><b>Campaign Hierarchy</b>（ParentId + Type）</li>
+      <li><b>Campaign Members</b>（Contact + Lead）</li>
+      <li><b>Order Activation</b>（Draft → Activated）</li>
+      <li><b>Contract Lifecycle</b>（Draft 起）</li>
+      <li><b>Quote / QuoteLineItem</b> · 標準 Sync</li>
+      <li><b>Global Quick Actions</b>（SBH_Log_Channel_Visit / SBH_New_Tasting_Event / SBH_New_Opportunity）</li>
+    </ol>
+  </div>
+
+  <div class="card">
+    <h3>🔧 需要 UI 手動設定（5-10 min）</h3>
+    <ul style="margin:8px 0;padding-left:20px;font-size:12.5px;line-height:1.9">
+      <li><b>Sales Path</b> — Setup → Path Settings → New Path for SBH Opp RT</li>
+      <li><b>Web-to-Lead form</b> — Setup → Web-to-Lead → Create Form（HTML 已附下面 ↓）</li>
+      <li><b>Outlook Integration</b> — Setup → Outlook Integration → Enable</li>
+      <li><b>Einstein Activity Capture</b> — Setup → EAC → Config</li>
+      <li><b>Big Deal Alert</b> — Setup → Big Deal Alert → 設 NT$ 5M 門檻</li>
+      <li><b>Duplicate Rule</b> — Setup → Duplicate Rules → Standard Account Rule Activate</li>
+      <li><b>Approval Process</b>（Contract 送簽）— Setup → Approval Processes</li>
+      <li><b>Account Team / Opp Team</b> — Setup → Team → Enable + 加 utility</li>
+      <li><b>Reports 客製版</b> — Report Builder 直接建（資料已 seed）</li>
+      <li><b>Sales Console App</b> — Setup → App Manager → Silverbirch_Sales change navType</li>
+    </ul>
+  </div>
+</div>
+
+<!-- ==================== 3. Data Model ==================== -->
+<h2><span class="num">3</span>Data Model · 13 Custom Fields（都是 Sales 標準無法對應才 custom）</h2>
+
+<table>
+  <thead>
+    <tr><th>物件</th><th>Custom Field</th><th>用途</th><th>備註</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>Account</td><td><code>SBH_Channel_Type__c</code></td><td>通路類型（百貨/精品獨立店/酒商/餐飲/電商/VIP 私宅）</td><td>標準 Industry 無對應零售通路分類</td></tr>
+    <tr><td>Contact</td><td><code>SBH_Preferred_Category__c</code></td><td>負責品類（服飾/皮件/紅酒/烈酒）Multi-picklist</td><td>—</td></tr>
+    <tr><td>Opportunity</td><td><code>SBH_Slot_Fee__c</code></td><td>上架費（Currency）</td><td>零售 wholesale 特有概念</td></tr>
+    <tr><td>Product2</td><td>SBH_Category__c / SBH_Origin__c / SBH_Vintage__c / SBH_Volume__c / SBH_Season__c / SBH_ABV__c</td><td>品類/產地/年份/容量/季別/酒精濃度</td><td>Product 標準沒這些屬性</td></tr>
+    <tr><td>Contract</td><td>SBH_Guarantee_Amount__c / SBH_Bonus_Tier__c</td><td>保底金額 + 獎金階梯</td><td>Contract 標準沒 bonus 概念</td></tr>
+    <tr><td>Campaign</td><td>SBH_Event_Type__c / SBH_Target_Channel__c</td><td>活動類型 + 目標通路</td><td>不擴充標準 Type picklist（避免影響其他 demo）</td></tr>
+  </tbody>
+</table>
+
+<h3>👉 用 Salesforce 標準欄位取代的 15 個（原本設計要 custom）</h3>
+<div class="card">
+  <table>
+    <thead><tr><th>原本要 custom</th><th>改用 OOTB</th></tr></thead>
+    <tbody>
+      <tr><td>SBH_Store_Count__c 分店數</td><td><code>Account.NumberOfEmployees</code></td></tr>
+      <tr><td>SBH_Annual_Purchase__c 年採購</td><td><code>Account.AnnualRevenue</code></td></tr>
+      <tr><td>SBH_HQ_Account__c 通路總部</td><td><b><code>Account.ParentId</code></b>（原生 Account Hierarchy）</td></tr>
+      <tr><td>SBH_Decision_Role__c 決策角色</td><td><b><code>OpportunityContactRole.Role</code></b></td></tr>
+      <tr><td>SBH_Source_Event__c 開發來源</td><td><b><code>Lead.LeadSource</code></b></td></tr>
+      <tr><td>SBH_Deal_Type__c 商機類型</td><td><b>3 個 RT</b>（Product_Listing/Seasonal_Deal/Renewal）</td></tr>
+      <tr><td>SBH_Brand__c 品牌</td><td><b><code>Product2.Family</code></b></td></tr>
+      <tr><td>SBH_MSRP__c 建議售價</td><td><code>Standard PricebookEntry.UnitPrice</code></td></tr>
+      <tr><td>SBH_Channel_Tier__c 通路等級</td><td><b><code>Quote.Pricebook2Id</code></b></td></tr>
+      <tr><td>SBH_PO_Number__c 通路 PO</td><td><b><code>Order.PoNumber</code></b>（Salesforce 就有）</td></tr>
+      <tr><td>SBH_Delivery_Store__c 目標門市</td><td><code>Order.ShippingAddress</code></td></tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- ==================== 4. Web-to-Lead ==================== -->
+<h2><span class="num">4</span>Web-to-Lead · 官網「合作洽詢」表單</h2>
+
+<div class="card accent">
+  <p style="font-size:13px;margin:0 0 8px"><b>Setup 步驟</b>（設定完成後把下方 HTML 貼到官網或 landing page）：</p>
+  <ol class="step-list">
+    <li>CBUSDO Setup → 搜尋「Web-to-Lead」→ 開啟 <b>Web-to-Lead Enabled</b> ✓</li>
+    <li>指定 Default Lead Creator（用你自己）· Default Response Template（可選）</li>
+    <li>Setup → Web-to-Lead → <b>Create Web-to-Lead Form</b> → 選欄位（Name/Company/Email/Phone/LeadSource/Industry/AnnualRevenue）→ Generate</li>
+    <li>Salesforce 會給你一段 HTML，含你的 org id（<code>oid</code>）→ 貼下面替換 <code>YOUR_ORG_ID</code> 位置</li>
+    <li>官網嵌入後客戶填 → Salesforce 自動建 Lead → 觸發 Lead Assignment Rule</li>
+  </ol>
+
+  <h3 style="margin-top:20px">合作洽詢表單 · HTML 參考範本</h3>
+  <pre class="form-code">&lt;!-- 銀樺國際官網 · 合作洽詢表單 · Web-to-Lead --&gt;
+&lt;form action="https://webto.salesforce.com/servlet/servlet.WebToLead?encoding=UTF-8" method="POST"&gt;
+  &lt;input type="hidden" name="oid" value="00DJ2000000HP36"&gt;  &lt;!-- CBUSDO Org ID · 從 Setup 取代 --&gt;
+  &lt;input type="hidden" name="retURL" value="https://silverbirch.com.tw/thank-you"&gt;
+
+  &lt;label&gt;姓氏 *&lt;/label&gt;&lt;input type="text" name="last_name" required maxlength="80"&gt;
+  &lt;label&gt;名字&lt;/label&gt;&lt;input type="text" name="first_name" maxlength="40"&gt;
+  &lt;label&gt;公司名稱 *&lt;/label&gt;&lt;input type="text" name="company" required maxlength="40"&gt;
+  &lt;label&gt;職稱&lt;/label&gt;&lt;input type="text" name="title" maxlength="40"&gt;
+  &lt;label&gt;Email *&lt;/label&gt;&lt;input type="email" name="email" required maxlength="80"&gt;
+  &lt;label&gt;電話 *&lt;/label&gt;&lt;input type="tel" name="phone" required maxlength="40"&gt;
+  &lt;label&gt;預估年採購額&lt;/label&gt;&lt;input type="number" name="annualRevenue"&gt;
+
+  &lt;label&gt;開發來源&lt;/label&gt;
+  &lt;select name="lead_source"&gt;
+    &lt;option value="Trade Show"&gt;米蘭時裝週 / 巴黎精品展 / 台北酒展&lt;/option&gt;
+    &lt;option value="Web"&gt;官網主動詢問&lt;/option&gt;
+    &lt;option value="Referral"&gt;現有客戶推薦&lt;/option&gt;
+    &lt;option value="Partner Referral"&gt;合作夥伴介紹&lt;/option&gt;
+    &lt;option value="Purchased List"&gt;採購名單&lt;/option&gt;
+  &lt;/select&gt;
+
+  &lt;label&gt;有興趣的品類&lt;/label&gt;
+  &lt;select name="industry"&gt;
+    &lt;option value="Retail"&gt;服飾 / 皮件配件&lt;/option&gt;
+    &lt;option value="Consumer Goods"&gt;紅酒 / 烈酒&lt;/option&gt;
+    &lt;option value="Hospitality"&gt;餐飲通路&lt;/option&gt;
+  &lt;/select&gt;
+
+  &lt;label&gt;訊息&lt;/label&gt;&lt;textarea name="description" rows="4"&gt;&lt;/textarea&gt;
+
+  &lt;button type="submit"&gt;送出合作洽詢&lt;/button&gt;
+&lt;/form&gt;</pre>
+</div>
+
+<!-- ==================== 5. Outlook Integration ==================== -->
+<h2><span class="num">5</span>Outlook Integration · Salesforce Inbox 設定</h2>
+
+<div class="card">
+  <p style="font-size:13px">讓業務在 Outlook 或 Gmail 直接看/建 Salesforce 資料。三大功能：</p>
+
+  <div class="grid-3">
+    <div style="padding:14px;background:var(--navy-tint);border-radius:6px">
+      <h3 style="margin-top:0">📨 Outlook Integration<br><span style="font-weight:normal;font-size:11px;color:var(--sub)">Side Panel</span></h3>
+      <p style="font-size:12px">Outlook 右側面板顯示信件發信人對應的 Salesforce Contact / Account / Opp，可直接建 Task。</p>
+    </div>
+    <div style="padding:14px;background:var(--gold-tint);border-radius:6px">
+      <h3 style="margin-top:0">🤖 Einstein Activity Capture<br><span style="font-weight:normal;font-size:11px;color:var(--sub)">EAC (免費 Basic 版)</span></h3>
+      <p style="font-size:12px">自動 sync Email + Calendar Event 到相關 Salesforce record，客服/業務不用手動 log activity。</p>
+    </div>
+    <div style="padding:14px;background:#F5F1E8;border-radius:6px">
+      <h3 style="margin-top:0">📧 Email-to-Salesforce<br><span style="font-weight:normal;font-size:11px;color:var(--sub)">BCC alias</span></h3>
+      <p style="font-size:12px">寄信 BCC 到你專屬的 emailtosalesforce alias，Salesforce 自動記為 EmailMessage 綁 Contact。</p>
+    </div>
+  </div>
+
+  <h3>Setup 步驟</h3>
+  <ol class="step-list">
+    <li><b>啟用 Outlook Integration</b>：Setup → Outlook Integration and Sync → Enable → 讓所有 user 可用</li>
+    <li><b>User 端裝 add-in</b>：Outlook 桌面版 → Get Add-ins → 搜尋「Salesforce」→ Install。網頁版 Outlook 也支援。</li>
+    <li><b>啟用 EAC</b>：Setup → Einstein Activity Capture → Configurations → New Config → 選 users → 設 sync 方向（Both/Salesforce-only）</li>
+    <li><b>Email-to-Salesforce</b>：Setup → Email-to-Salesforce → Enable → 每位 user 有專屬 email alias（例：<code>emailtosalesforce@abc123.mysalesforce.com</code>）</li>
+    <li><b>Salesforce Inbox</b>（更進階）：需要額外 Sales Cloud Einstein 或 Inbox licence · Setup → Salesforce Inbox</li>
+  </ol>
+
+  <div class="badge b-info" style="margin-top:12px">💡 CBUSDO 是 SDO org，Outlook Integration 已內建可用，只要 user 端裝 add-in 就能開始 demo</div>
+</div>
+
+<!-- ==================== 6. Sales Path ==================== -->
+<h2><span class="num">6</span>Sales Path · 3 個 Opp RT 各配一條 Path</h2>
+
+<div class="card">
+  <p style="font-size:13px">為 3 個銀樺 Opp RT 各配一條 Path，讓業務有可視化 stage 進度。</p>
+
+  <h3>Setup → Path Settings → New Path</h3>
+  <ol class="step-list">
+    <li><b>Path 1 · 銀樺 · 新品上架 Path</b><br>Object = Opportunity, Record Type = <code>SBH_Product_Listing</code>, Picklist = StageName</li>
+    <li>7 個 stage 各填「關鍵欄位」+「AE 指引」：<br>
+      <div class="flow">
+        <div class="step">Prospecting</div><div class="arw">→</div>
+        <div class="step">Qualification</div><div class="arw">→</div>
+        <div class="step">Needs Analysis</div><div class="arw">→</div>
+        <div class="step">Proposal/Price Quote</div><div class="arw">→</div>
+        <div class="step">Negotiation/Review</div><div class="arw">→</div>
+        <div class="step">Closed Won</div>
+      </div>
+    </li>
+    <li>對 <code>SBH_Seasonal_Deal</code> 和 <code>SBH_Renewal</code> 重複同樣步驟</li>
+    <li>Activate → 到 Opp record page 就會看到頂端 Path bar</li>
+  </ol>
+
+  <h3>建議每 Stage 的 Key Fields + Guidance</h3>
+  <table>
+    <thead><tr><th>Stage</th><th>Key Fields to prompt</th><th>AE 指引</th></tr></thead>
+    <tbody>
+      <tr><td>Prospecting</td><td>SBH_Slot_Fee__c · Description</td><td>初步接觸，準備樣品清單</td></tr>
+      <tr><td>Qualification</td><td>Amount · CloseDate</td><td>確認客戶預算 + 承諾量</td></tr>
+      <tr><td>Needs Analysis</td><td>Amount · SBH_Slot_Fee__c</td><td>了解通路要求、上架費結構</td></tr>
+      <tr><td>Proposal/Price Quote</td><td>SBH_Slot_Fee__c · Amount</td><td>正式提交 Quote，選對應 Pricebook</td></tr>
+      <tr><td>Negotiation/Review</td><td>CloseDate · Description</td><td>談判上架費、獎金階梯、獨家條件</td></tr>
+      <tr><td>Closed Won</td><td>Amount</td><td>建 Order、通知行銷團隊、排首批出貨</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- ==================== 7. Global Actions ==================== -->
+<h2><span class="num">7</span>Global Actions · 已建 3 個</h2>
+
+<div class="card">
+  <p style="font-size:13px">頁面右上「+」下拉可以看到：</p>
+  <div class="grid-3">
+    <div style="padding:14px;background:#fff;border:1px solid var(--line);border-radius:6px">
+      <h3 style="margin:0;color:var(--navy)">✓ 銀樺 · 記錄通路拜訪</h3>
+      <p style="font-size:12px;color:var(--sub);margin-top:6px">Type = Task · 一鍵建立拜訪紀錄</p>
+    </div>
+    <div style="padding:14px;background:#fff;border:1px solid var(--line);border-radius:6px">
+      <h3 style="margin:0;color:var(--navy)">✓ 銀樺 · 排定品飲會活動</h3>
+      <p style="font-size:12px;color:var(--sub);margin-top:6px">Type = Event · 排定品飲會/樣品送達</p>
+    </div>
+    <div style="padding:14px;background:#fff;border:1px solid var(--line);border-radius:6px">
+      <h3 style="margin:0;color:var(--navy)">✓ 銀樺 · 新商機</h3>
+      <p style="font-size:12px;color:var(--sub);margin-top:6px">Type = Opportunity · 業務快速記錄新商機</p>
+    </div>
+  </div>
+  <p class="badge b-info" style="margin-top:12px">💡 進 Setup → App Manager → Silverbirch_Sales → App Utility Bar → 加入這 3 個 Global Action 到 Utility Bar</p>
+</div>
+
+<!-- ==================== 8. Demo Script ==================== -->
+<h2><span class="num">8</span>Demo Script · 5 分鐘走完 pipeline</h2>
+
+<div class="card accent">
+  <ol class="step-list">
+    <li><b>從 Lead 開始</b>（30 秒）— 打開「銀樺國際 Sales」App → Leads tab → 選「Salon de Vin 侍酒沙龍」→ 展示 Lead 詳細（LeadSource=Referral 星坊介紹）→ 點「Convert」→ 產出 Account + Contact + Opp。</li>
+
+    <li><b>Account Hierarchy</b>（30 秒）— 打開「SOGO 太平洋崇光百貨」→ 展示右側 Account Hierarchy → SOGO Corp 底下有忠孝館 + 復興館 → 點分店看 <code>ParentId</code>。</li>
+
+    <li><b>Opp Kanban</b>（1 分鐘）— Opportunities tab → 切 Kanban view → 拖 opp 從 Proposal → Negotiation → 講「業務就這樣移動 pipeline」。點 opp 進 detail → 展示 Sales Path bar + OpportunityContactRole。</li>
+
+    <li><b>Multi-Pricebook Quote</b>（1 分鐘）— 選一個 Opp（例：MAISON HÉLIA 進微風信義）→ Quote related list → 展示 Quote 使用「銀樺國際 · 百貨通路 Pricebook」→ QuoteLineItem 顯示 75% 通路價。點「Create PDF」→ 標準功能。</li>
+
+    <li><b>Order Activation</b>（30 秒）— 從 Opp → Order → 展示 Draft → 點「Activate」→ Status 變 Activated → 講「Order 走完就 revenue recognition」。</li>
+
+    <li><b>Campaign Hierarchy</b>（45 秒）— Campaigns tab → 打開「2026 春夏檔期」→ 底下有 KLIMA 品鑑會 + 微風快閃活動 → Campaign Members 有百貨採購都被邀請。</li>
+
+    <li><b>Reports/Dashboard</b>（30 秒）— Reports → Standard 「Opportunity Pipeline」→ 看 15 個 SBH_ opp 分 Stage 統計 → 講「已有真實資料可玩 report」。</li>
+
+    <li><b>收合 · 定價 story</b>（30 秒）— 「你們現在用 Excel 管 SOGO 上架資料 · Salesforce 上這 20 個 Account × 15 個 Opp 就是每天業務工作的核心 · Sales Cloud licence NT$ 4,500/user/月 起 · 8 個業務 = NT$ 36K/月」</li>
+  </ol>
+</div>
+
+<!-- ==================== 9. 檔案 ==================== -->
+<h2><span class="num">9</span>技術參考</h2>
+
+<table>
+  <thead>
+    <tr><th>資源</th><th>路徑 / 名稱</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>Custom App API Name</td><td><code>Silverbirch_Sales</code></td></tr>
+    <tr><td>Permission Set API Name</td><td><code>Silverbirch_Sales_Demo</code>（已 assign 給 admin）</td></tr>
+    <tr><td>4 個 Custom Pricebook</td><td><code>銀樺國際 · 百貨通路</code> / 精品獨立店 / 餐飲通路 / 電商通路</td></tr>
+    <tr><td>Account RT（3 個）</td><td><code>SBH_Retail_HQ</code> · <code>SBH_Retail_Store</code> · <code>SBH_Boutique</code></td></tr>
+    <tr><td>Opportunity RT（3 個）</td><td><code>SBH_Product_Listing</code> · <code>SBH_Seasonal_Deal</code> · <code>SBH_Renewal</code></td></tr>
+    <tr><td>Custom Fields（13 個）</td><td>全部 <code>SBH_*__c</code> 前綴</td></tr>
+    <tr><td>Global Actions（3 個）</td><td>SBH_Log_Channel_Visit / SBH_New_Tasting_Event / SBH_New_Opportunity</td></tr>
+    <tr><td>SOQL 驗證</td><td><code>SELECT COUNT() FROM Account WHERE RecordType.DeveloperName LIKE 'SBH_%'</code> → 20</td></tr>
+  </tbody>
+</table>
+
+<div class="foot">
+  銀樺國際 Silverbirch Sales · CBUSDO 部署狀態 2026-07-15 · 100% Sales Cloud OOTB Demo Package
+  <br>Deploy IDs：Sub-phase 1a metadata · 1b products · 1c customers · 1d sales · 1e marketing · 1g QuickActions
+  <br><a href="../" style="color:var(--navy);text-decoration:none">← sf-schema-docs</a>
+</div>
+
+</div>
+</body>
+</html>
