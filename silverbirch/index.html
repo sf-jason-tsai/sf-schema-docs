@@ -90,6 +90,34 @@
   <div class="kpi"><div class="kpi-num">15</div><div class="kpi-lbl">OOTB Features</div></div>
 </div>
 
+<!-- ==================== 0. List Views 快速索引（新） ==================== -->
+<h2><span class="num">✓</span>15 個「銀樺 · 」開頭的 List Views · 已部署到 CBUSDO</h2>
+
+<div class="card accent">
+<p style="font-size:13px;margin:0 0 10px"><b>找銀樺國際的資料</b>：進「銀樺國際 Sales」App → 選 tab → 點下拉切「銀樺 · 」開頭的 List View。全部已 deploy 好，直接可用。</p>
+<table>
+<thead><tr><th style="width:130px">Tab</th><th>List View 名稱</th><th>過濾條件</th></tr></thead>
+<tbody>
+<tr><td rowspan="4"><b>Accounts</b></td><td>銀樺 · 全通路（20）</td><td>SBH_Channel_Type__c 有值</td></tr>
+<tr><td>銀樺 · 百貨集團 HQ（4）</td><td>百貨精品櫃 + 無總部</td></tr>
+<tr><td>銀樺 · 通路分店（6+）</td><td>百貨精品櫃 + 有街道地址</td></tr>
+<tr><td>銀樺 · 精品店 / 酒商 / 餐飲 / 電商（10）</td><td>非百貨精品櫃</td></tr>
+<tr><td><b>Contacts</b></td><td>銀樺 · 全通路窗口（35+）</td><td>Account.SBH_Channel_Type__c 有值</td></tr>
+<tr><td><b>Leads</b></td><td>銀樺 · 開發中 Lead（8）</td><td>國家 = 台灣</td></tr>
+<tr><td rowspan="2"><b>Opportunities</b></td><td>銀樺 · 全 Pipeline（15）</td><td>Name 開頭「銀樺國際」</td></tr>
+<tr><td>銀樺 · 新品上架商機（5）</td><td>有上架費</td></tr>
+<tr><td rowspan="3"><b>Products</b></td><td>銀樺 · 全商品（30）</td><td>SBH_Category__c 有值</td></tr>
+<tr><td>銀樺 · 服飾（12）</td><td>Category = 服飾</td></tr>
+<tr><td>銀樺 · 紅酒 / 烈酒（12）</td><td>有酒精濃度</td></tr>
+<tr><td><b>Quotes</b></td><td>銀樺 · 全部報價</td><td>對應 Opp Name 開頭「銀樺國際」</td></tr>
+<tr><td><b>Orders</b></td><td>銀樺 · 全部訂單（15）</td><td>Account.SBH_Channel_Type__c 有值</td></tr>
+<tr><td><b>Contracts</b></td><td>銀樺 · 全部合約（5）</td><td>有保底金額</td></tr>
+<tr><td><b>Campaigns</b></td><td>銀樺 · 全部行銷活動（6）</td><td>SBH_Event_Type__c 有值</td></tr>
+</tbody>
+</table>
+<div class="badge b-ok" style="margin-top:10px">✓ 15 個 List Views · 全部 Everything scope · 所有 user 可見</div>
+</div>
+
 <!-- ==================== 1. Deployed 資料 ==================== -->
 <h2><span class="num">1</span>Deployed 資料量</h2>
 
@@ -146,16 +174,16 @@
   <div class="card">
     <h3>🔧 需要 UI 手動設定（5-10 min）</h3>
     <ul style="margin:8px 0;padding-left:20px;font-size:12.5px;line-height:1.9">
-      <li><b>Sales Path</b> — Setup → Path Settings → New Path for SBH Opp RT</li>
-      <li><b>Web-to-Lead form</b> — Setup → Web-to-Lead → Create Form（HTML 已附下面 ↓）</li>
-      <li><b>Outlook Integration</b> — Setup → Outlook Integration → Enable</li>
-      <li><b>Einstein Activity Capture</b> — Setup → EAC → Config</li>
-      <li><b>Big Deal Alert</b> — Setup → Big Deal Alert → 設 NT$ 5M 門檻</li>
-      <li><b>Duplicate Rule</b> — Setup → Duplicate Rules → Standard Account Rule Activate</li>
-      <li><b>Approval Process</b>（Contract 送簽）— Setup → Approval Processes</li>
-      <li><b>Account Team / Opp Team</b> — Setup → Team → Enable + 加 utility</li>
-      <li><b>Reports 客製版</b> — Report Builder 直接建（資料已 seed）</li>
-      <li><b>Sales Console App</b> — Setup → App Manager → Silverbirch_Sales change navType</li>
+      <li><b>Sales Path</b> — 設定（Setup）→ 路徑設定（Path Settings） → 新增路徑（New Path） for SBH Opp RT</li>
+      <li><b>Web-to-Lead form</b> — 設定（Setup）→ Web-to-Lead → Create Form（HTML 已附下面 ↓）</li>
+      <li><b>Outlook Integration</b> — 設定（Setup）→ Outlook Integration → Enable</li>
+      <li><b>Einstein Activity Capture</b> — 設定（Setup）→ EAC → Config</li>
+      <li><b>大額商機通知（Big Deal Alert）</b> — 設定（Setup）→ 大額商機通知（Big Deal Alert） → 設 NT$ 5M 門檻</li>
+      <li><b>Duplicate Rule</b> — 設定（Setup）→ 重複資料規則（Duplicate Rules） → 啟用標準帳戶規則（Activate Standard Account Rule）</li>
+      <li><b>Approval Process</b>（Contract 送簽）— 設定（Setup）→ 核准程序（Approval Processes）</li>
+      <li><b>帳戶團隊 / 商機團隊（Account Team / Opportunity Team）</b> — 設定（Setup）→ Team → Enable + 加 utility</li>
+      <li><b>Reports 客製版</b> — 報表產生器（Report Builder） 直接建（資料已 seed）</li>
+      <li><b>Sales Console App</b> — 設定（Setup）→ 應用程式管理員（App Manager） → Silverbirch_Sales change navType</li>
     </ul>
   </div>
 </div>
@@ -203,11 +231,11 @@
 <div class="card accent">
   <p style="font-size:13px;margin:0 0 8px"><b>Setup 步驟</b>（設定完成後把下方 HTML 貼到官網或 landing page）：</p>
   <ol class="step-list">
-    <li>CBUSDO Setup → 搜尋「Web-to-Lead」→ 開啟 <b>Web-to-Lead Enabled</b> ✓</li>
-    <li>指定 Default Lead Creator（用你自己）· Default Response Template（可選）</li>
-    <li>Setup → Web-to-Lead → <b>Create Web-to-Lead Form</b> → 選欄位（Name/Company/Email/Phone/LeadSource/Industry/AnnualRevenue）→ Generate</li>
+    <li>CBUSDO 設定（Setup）→ 搜尋「Web-to-Lead」→ 開啟 <b>網頁至潛在客戶已啟用（Web-to-Lead Enabled）</b> ✓</li>
+    <li>指定 預設潛在客戶建立者（Default Lead Creator）（用你自己）· 預設回覆範本（Default Response Template）（可選）</li>
+    <li>設定（Setup）→ Web-to-Lead → <b>建立網頁至潛在客戶表單（Create Web-to-Lead Form）</b> → 選欄位（Name/Company/Email/Phone/LeadSource/Industry/AnnualRevenue）→ Generate</li>
     <li>Salesforce 會給你一段 HTML，含你的 org id（<code>oid</code>）→ 貼下面替換 <code>YOUR_ORG_ID</code> 位置</li>
-    <li>官網嵌入後客戶填 → Salesforce 自動建 Lead → 觸發 Lead Assignment Rule</li>
+    <li>官網嵌入後客戶填 → Salesforce 自動建 Lead → 觸發 潛在客戶指派規則（Lead Assignment Rule）</li>
   </ol>
 
   <h3 style="margin-top:20px">合作洽詢表單 · HTML 參考範本</h3>
@@ -269,11 +297,11 @@
 
   <h3>Setup 步驟</h3>
   <ol class="step-list">
-    <li><b>啟用 Outlook Integration</b>：Setup → Outlook Integration and Sync → Enable → 讓所有 user 可用</li>
-    <li><b>User 端裝 add-in</b>：Outlook 桌面版 → Get Add-ins → 搜尋「Salesforce」→ Install。網頁版 Outlook 也支援。</li>
-    <li><b>啟用 EAC</b>：Setup → Einstein Activity Capture → Configurations → New Config → 選 users → 設 sync 方向（Both/Salesforce-only）</li>
-    <li><b>Email-to-Salesforce</b>：Setup → Email-to-Salesforce → Enable → 每位 user 有專屬 email alias（例：<code>emailtosalesforce@abc123.mysalesforce.com</code>）</li>
-    <li><b>Salesforce Inbox</b>（更進階）：需要額外 Sales Cloud Einstein 或 Inbox licence · Setup → Salesforce Inbox</li>
+    <li><b>啟用 Outlook Integration</b>：設定（Setup）→ Outlook 整合與同步（Outlook Integration and Sync） → Enable → 讓所有 user 可用</li>
+    <li><b>User 端裝 add-in</b>：Outlook 桌面版 → 取得增益集（Get Add-ins） → 搜尋「Salesforce」→ Install。網頁版 Outlook 也支援。</li>
+    <li><b>啟用 EAC</b>：設定（Setup）→ Einstein 活動擷取（Einstein Activity Capture）→ 設定（Configurations） → 新增組態（New Config） → 選 users → 設 sync 方向（Both/Salesforce-only）</li>
+    <li><b>Email-to-Salesforce</b>：設定（Setup）→ 電子郵件至 Salesforce（Email-to-Salesforce）→ Enable → 每位 user 有專屬 email alias（例：<code>emailtosalesforce@abc123.mysalesforce.com</code>）</li>
+    <li><b>Salesforce Inbox</b>（更進階）：需要額外 Sales Cloud Einstein 或 Inbox licence · 設定（Setup）→ Salesforce Inbox</li>
   </ol>
 
   <div class="badge b-info" style="margin-top:12px">💡 CBUSDO 是 SDO org，Outlook Integration 已內建可用，只要 user 端裝 add-in 就能開始 demo</div>
@@ -285,9 +313,9 @@
 <div class="card">
   <p style="font-size:13px">為 3 個銀樺 Opp RT 各配一條 Path，讓業務有可視化 stage 進度。</p>
 
-  <h3>Setup → Path Settings → New Path</h3>
+  <h3>設定（Setup）→ 路徑設定（Path Settings） → 新增路徑（New Path）</h3>
   <ol class="step-list">
-    <li><b>Path 1 · 銀樺 · 新品上架 Path</b><br>Object = Opportunity, Record Type = <code>SBH_Product_Listing</code>, Picklist = StageName</li>
+    <li><b>Path 1 · 銀樺 · 新品上架 Path</b><br>Object = Opportunity, 記錄類型（Record Type）= <code>SBH_Product_Listing</code>, 下拉選單（Picklist）= 階段（StageName）</li>
     <li>7 個 stage 各填「關鍵欄位」+「AE 指引」：<br>
       <div class="flow">
         <div class="step">Prospecting</div><div class="arw">→</div>
@@ -299,12 +327,12 @@
       </div>
     </li>
     <li>對 <code>SBH_Seasonal_Deal</code> 和 <code>SBH_Renewal</code> 重複同樣步驟</li>
-    <li>Activate → 到 Opp record page 就會看到頂端 Path bar</li>
+    <li>啟用（Activate）→ 到商機（Opp）記錄頁 就會看到頂端 Path bar</li>
   </ol>
 
   <h3>建議每 Stage 的 Key Fields + Guidance</h3>
   <table>
-    <thead><tr><th>Stage</th><th>Key Fields to prompt</th><th>AE 指引</th></tr></thead>
+    <thead><tr><th>Stage</th><th>關鍵欄位提示（Key Fields to prompt）</th><th>AE 指引</th></tr></thead>
     <tbody>
       <tr><td>Prospecting</td><td>SBH_Slot_Fee__c · Description</td><td>初步接觸，準備樣品清單</td></tr>
       <tr><td>Qualification</td><td>Amount · CloseDate</td><td>確認客戶預算 + 承諾量</td></tr>
@@ -335,7 +363,7 @@
       <p style="font-size:12px;color:var(--sub);margin-top:6px">Type = Opportunity · 業務快速記錄新商機</p>
     </div>
   </div>
-  <p class="badge b-info" style="margin-top:12px">💡 進 Setup → App Manager → Silverbirch_Sales → App Utility Bar → 加入這 3 個 Global Action 到 Utility Bar</p>
+  <p class="badge b-info" style="margin-top:12px">💡 進 設定（Setup）→ 應用程式管理員（App Manager） → Silverbirch_Sales → App 公用程式列（Utility Bar） → 加入這 3 個 Global Action 到 Utility Bar</p>
 </div>
 
 <!-- ==================== 8. Demo Script ==================== -->
