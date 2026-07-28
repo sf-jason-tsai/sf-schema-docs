@@ -146,6 +146,11 @@ const PAGES = [
         dest: 'lebio/index.html',
         title: 'LeBio · 資料遷移總覽（全 7 Object）(2026-07-28)'
     },
+    {
+        src: 'C:/Users/bingyan.tsai/Desktop/Claude/lebio-import/企業歸戶複核報告.html',
+        dest: 'lebio/enterprise-grouping-report.html',
+        title: 'LeBio · 客戶公司「企業」歸戶複核報告 (2026-07-28)'
+    },
     // ─── 104 遠距藍海職缺分析 ───
     {
         src: 'C:/Users/bingyan.tsai/Desktop/Claude/job-crawler/out/report.html',
