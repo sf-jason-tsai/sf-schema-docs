@@ -90,6 +90,119 @@
   <div class="kpi"><div class="kpi-num">15</div><div class="kpi-lbl">OOTB Features</div></div>
 </div>
 
+<!-- ==================== Service Cloud Phase 2 (新增) ==================== -->
+<h2><span class="num">🎯</span>Phase 2 · Service Cloud 全套 · 已 Deployed</h2>
+
+<div class="card accent" style="border-left-color:#B8A170">
+<p style="font-size:13px;margin:0 0 12px"><b>B2B 通路服務中心</b>：通路夥伴（SOGO 忠孝、星坊酒業、RAW 米其林等）遇到商品瑕疵 / 物流延遲 / 訂單錯誤 / 合作洽談 → 銀樺客服接單處理。同一個「銀樺國際 Sales」App 內就有 Case tab。</p>
+
+<div class="grid-3">
+  <div style="padding:14px;background:var(--navy-tint);border-radius:6px">
+    <h3 style="margin-top:0">🎫 15 個 Case</h3>
+    <p style="font-size:12px">跨 2 個 RT · 5 個案件類型 · 3 個 SLA 影響等級 · 綁 real Account + Product + Order</p>
+  </div>
+  <div style="padding:14px;background:var(--gold-tint);border-radius:6px">
+    <h3 style="margin-top:0">📚 4 個 Case List Views</h3>
+    <p style="font-size:12px">銀樺 · 全部服務案件 / 高影響 / 品質問題 / 合作洽談 · 可轉 Lead</p>
+  </div>
+  <div style="padding:14px;background:#F5F1E8;border-radius:6px">
+    <h3 style="margin-top:0">⚙ 5 個 Case Custom Fields</h3>
+    <p style="font-size:12px">SBH_Case_Reason__c · SBH_Business_Impact__c · SBH_Related_Product/Order__c · SBH_SLA_Deadline__c</p>
+  </div>
+</div>
+
+<h3 style="margin-top:16px">2 個 Case Record Types</h3>
+<table>
+<tbody>
+<tr><td style="width:180px"><b>銀樺 · 通路客服（SBH_Trade_Support）</b></td><td>訂單、物流、發票、合作洽談。用於通路夥伴日常客服。</td></tr>
+<tr><td><b>銀樺 · 品質問題（SBH_Quality_Issue）</b></td><td>商品瑕疵、破損、退換貨。高優先處理，SLA 較嚴。</td></tr>
+</tbody>
+</table>
+
+<h3 style="margin-top:16px">15 個 Case 資料分佈</h3>
+<div class="grid-2">
+<div style="padding:12px;background:#fff;border:1px solid var(--line);border-radius:4px;font-size:12.5px">
+<b>SBH_Quality_Issue · 7 件</b>
+<ul style="margin:6px 0;padding-left:20px;line-height:1.7">
+  <li>KLIMA 洋裝縫線瑕疵（SOGO 忠孝 · High · 4h SLA）</li>
+  <li>Craigmore 18Y 破損（星坊酒業 · High）</li>
+  <li>MAISON HÉLIA 皮件染色不均（微風信義客訴 · High）</li>
+  <li>NORDA 拉鍊瑕疵率高（momo 電商 · Medium）</li>
+  <li>KOTO 銀飾氧化異常（新光 A11 · Closed）</li>
+  <li>Villa Bianca Prosecco 過期退貨（天香樓 · Closed）</li>
+  <li>KLIMA 尺寸不合退貨（官網 VIP · Low）</li>
+</ul>
+</div>
+
+<div style="padding:12px;background:#fff;border:1px solid var(--line);border-radius:4px;font-size:12.5px">
+<b>SBH_Trade_Support · 8 件</b>
+<ul style="margin:6px 0;padding-left:20px;line-height:1.7">
+  <li>Château Aubert 到貨延遲（RAW 米其林 · High · 4h SLA）</li>
+  <li>春夏檔期出貨延誤（遠百 A13 · Medium）</li>
+  <li>OFFCLR 短貨 8 件（PChome · Medium）</li>
+  <li>訂單發票重複計算（金醇酒業 · Closed）</li>
+  <li>訂單商品規格錯誤（維克多酒藏 · Medium）</li>
+  <li>💡 <b>合作洽談 · KLIMA 至日本</b>（可轉 Lead 進 Pipeline）</li>
+  <li>💡 <b>合作洽談 · 蝦皮想代理 Craigmore</b>（可轉 Lead）</li>
+  <li>💡 <b>合作洽談 · 米其林一星 AKAME 詢問合作</b>（可轉 Lead）</li>
+</ul>
+</div>
+</div>
+
+<h3 style="margin-top:16px">SLA 分級</h3>
+<div class="flow">
+  <div class="step" style="background:#FDECEC;color:#BA0517;border-color:#F5C4C4"><b>高</b> · 4 小時首回覆</div>
+  <div class="arw">·</div>
+  <div class="step" style="background:#FDF4E6;color:#B65C00;border-color:#F3D5AA"><b>中</b> · 24 小時首回覆</div>
+  <div class="arw">·</div>
+  <div class="step" style="background:#E5F4EE;color:#2E844A;border-color:#B5DEC9"><b>低</b> · 48 小時首回覆</div>
+</div>
+<p class="badge b-info" style="margin-top:8px">💡 SBH_SLA_Deadline__c 欄位已存首回覆截止時間 · 進階可綁 Entitlement Process + Milestone</p>
+
+<h3 style="margin-top:16px">Case-to-Lead 商機轉化流程</h3>
+<div class="card" style="background:#FAFAF9">
+<b>場景</b>：客戶服務中發現新商機 · 例如電商平台 / 米其林餐廳主動來詢問合作 → 應該轉為 Lead 進 Sales Pipeline，而不只是回應 Case。
+<ol class="step-list" style="margin-top:10px">
+<li>Case tab → 選「<b>銀樺 · 合作洽談 · 可轉 Lead</b>」List View → 看到 3 個合作洽談 Case</li>
+<li>打開任一 case → 手動：<b>App Launcher</b>（左上 9 宮格）→ 找「潛在客戶（Leads）」→ New</li>
+<li>填 Lead 資料（LastName / Company / Email / LeadSource=Referral）→ Description 貼 Case 內容 → 儲存</li>
+<li>回 Case → 更新 Status = Closed · Comment 標「已轉 Lead: L-xxxxx」</li>
+<li>Lead 進 Sales Pipeline → Convert → Account + Contact + Opportunity → 進入 Kanban</li>
+</ol>
+<p class="badge b-todo" style="margin-top:8px">🔧 未來可加：Case Detail 頁「Convert to Lead」QuickAction 或 Flow · 自動帶入 Case 資料</p>
+</div>
+
+<h3 style="margin-top:16px">Case 頁 UI 元素</h3>
+<div class="card" style="background:#FAFAF9">
+<p style="font-size:13px;margin-top:0">打開任一 Case，你會看到 Salesforce 標準 Service Cloud UI：</p>
+<ul style="font-size:12.5px;line-height:1.7">
+<li><b>Case 頁頂 Status Path</b>（New → Working → Escalated → Closed）</li>
+<li><b>Activity Timeline</b>（右側時間軸 · 記錄 Task / Email / Chatter feed）</li>
+<li><b>Related Records</b>（相關 Account / Contact / Product / Order）</li>
+<li><b>Feed 內部討論</b>（@mention 團隊成員）</li>
+<li><b>Case Team</b>（可加多位相關人 · 標準功能）</li>
+<li><b>Milestone Tracker</b>（若掛 Entitlement Process）</li>
+</ul>
+</div>
+
+<h3 style="margin-top:16px">你可以 UI 手動再補強的 Service Cloud 功能</h3>
+<table>
+<thead><tr><th>功能</th><th>設定路徑</th><th>價值</th></tr></thead>
+<tbody>
+<tr><td><b>Entitlement Process + Milestone</b></td><td>設定（Setup）→ 服務授權（Entitlement Management）→ 服務授權程序（Entitlement Processes）</td><td>Case 頁面自動出現 SLA 倒數計時器</td></tr>
+<tr><td><b>Web-to-Case</b></td><td>設定 → 網頁至案件（Web-to-Case）→ 產生 HTML 表單</td><td>官網 「產品瑕疵 / 客訴」表單 → 自動建 Case</td></tr>
+<tr><td><b>Email-to-Case</b></td><td>設定 → 電子郵件至案件（Email-to-Case）→ On-Demand</td><td>service@silverbirch.com.tw 收信自動建 Case</td></tr>
+<tr><td><b>Auto-Response Rule</b></td><td>設定 → 案件（Case）→ 自動回應規則（Auto-Response Rules）</td><td>Web-to-Case 收單後 5 分鐘內自動回信</td></tr>
+<tr><td><b>Case Escalation Rule</b></td><td>設定 → 案件 → 升級規則（Escalation Rules）</td><td>High SLA 4 小時無回覆自動 escalate 給主管</td></tr>
+<tr><td><b>Omni-Channel Routing</b></td><td>設定 → Omni-Channel → 啟用</td><td>依 Impact / RT 自動分派 Case owner</td></tr>
+<tr><td><b>Knowledge Articles</b></td><td>設定 → 知識（Knowledge）→ 啟用 · 建 Article Type</td><td>KB 文章：品牌介紹 / 退換貨政策 / SLA 表 / 商品規格</td></tr>
+<tr><td><b>Macros / Quick Text</b></td><td>Service Console → Utility Bar → Macros / Quick Text</td><td>常用回覆片段一鍵套用</td></tr>
+<tr><td><b>Case Milestones Dashboard</b></td><td>Report Builder → 案件 → SLA 達成率</td><td>老闆看每月 SLA 表現</td></tr>
+</tbody>
+</table>
+
+</div>
+
 <!-- ==================== 0. List Views 快速索引（新） ==================== -->
 <h2><span class="num">✓</span>15 個「銀樺 · 」開頭的 List Views · 已部署到 CBUSDO</h2>
 
