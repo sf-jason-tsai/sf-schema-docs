@@ -90,6 +90,76 @@
   <div class="kpi"><div class="kpi-num">15</div><div class="kpi-lbl">OOTB Features</div></div>
 </div>
 
+<!-- ==================== Phase 3 · Approval + 原生自動化 ==================== -->
+<h2><span class="num">⚙</span>Phase 3 · Approval + Salesforce 原生自動化</h2>
+
+<div class="card accent" style="border-left-color:var(--navy)">
+<p style="font-size:13px;margin:0 0 12px"><b>Salesforce 原生功能全套</b>：Approval Process、Queue、Assignment Rules、Validation Rules、Matching Rule、Email Templates ── 都是 declarative（不寫 code）。</p>
+
+<h3>已 Deployed 到 CBUSDO</h3>
+<table>
+<thead><tr><th>類型</th><th>元件</th><th>行為</th></tr></thead>
+<tbody>
+<tr><td><b>核准程序（Approval Process）</b></td><td>銀樺 · 高額合約審核</td><td>Contract 保底金額 ≥ NT$ 10M + Status=Draft → 觸發送簽業務主管審核</td></tr>
+<tr><td><b>公用群組（Public Group）</b></td><td>銀樺 · 通路客服團隊</td><td>可加入成員，做為 Queue 或 Assignment 對象</td></tr>
+<tr><td rowspan="2"><b>佇列（Queue）</b></td><td>銀樺 · 客服待接 Queue</td><td>一般 Case 進待接池</td></tr>
+<tr><td>銀樺 · 高影響案件升級 Queue</td><td>高影響 Case 進升級池</td></tr>
+<tr><td><b>指派規則（Assignment Rule）</b></td><td>SBH_Case_Auto_Assign</td><td>高影響 Case → 升級 Queue · 其他 → 一般 Queue</td></tr>
+<tr><td rowspan="3"><b>驗證規則（Validation Rule）</b></td><td>Opp · High_Amount_Requires_Slot_Fee</td><td>新品上架 &gt; NT$ 3M 必填上架費</td></tr>
+<tr><td>Case · High_Impact_Requires_Reason</td><td>高影響 Case 必先填案件類型</td></tr>
+<tr><td>Account · Store_Requires_Parent</td><td>通路分店 RT 必填 Parent（總部）</td></tr>
+<tr><td><b>比對規則（Matching Rule）</b></td><td>SBH_Account_Name_Website_Match</td><td>Account 依 Name + Website 判重複</td></tr>
+<tr><td rowspan="2"><b>電子郵件範本（Email Template）</b></td><td>SBH_Case_Auto_Response</td><td>案件建立通知信範本（含案件編號、主旨、SLA 承諾時間）</td></tr>
+<tr><td>SBH_Contract_Proposal</td><td>年度合約提案信範本（帶入合約條款、保底、獎金階梯）</td></tr>
+</tbody>
+</table>
+
+<h3 style="margin-top:16px">Approval Process 觸發條件示意</h3>
+<div class="flow">
+  <div class="step">建立 Contract</div>
+  <div class="arw">→</div>
+  <div class="step" style="background:var(--gold-tint);color:var(--gold-dk)">保底 ≥ NT$ 10M?</div>
+  <div class="arw">是 →</div>
+  <div class="step" style="background:var(--navy);color:#fff">提交審核</div>
+  <div class="arw">→</div>
+  <div class="step">業務主管收到通知</div>
+  <div class="arw">→</div>
+  <div class="step" style="background:#E5F4EE;color:#2E844A">批准 / 拒絕</div>
+</div>
+<p style="font-size:12px;color:var(--sub);margin-top:8px">符合條件的 Contract：SOGO NT$ 15M · 新光三越 NT$ 18M · momo NT$ 12M — 現有 5 個 Contract 有 3 個符合送簽門檻</p>
+
+<h3 style="margin-top:16px">你可以 UI 手動再補的原生功能</h3>
+<table>
+<thead><tr><th>功能</th><th>設定路徑（繁中）</th><th>Metadata Deploy 失敗原因</th></tr></thead>
+<tbody>
+<tr><td>Escalation Rule（升級規則）</td><td>設定 → 案件（Case）→ 升級規則</td><td>SDO enum 值需 UI 選定</td></tr>
+<tr><td>Auto-Response Rule（自動回覆規則）</td><td>設定 → 案件 → 自動回應規則</td><td>需先建 Org-Wide Email Address</td></tr>
+<tr><td>Duplicate Rule（重複規則）</td><td>設定 → 重複資料管理 → 重複規則</td><td>Matching Rule 已 deployed，UI 直接建 Duplicate 5 分鐘</td></tr>
+<tr><td>Case Milestone / Entitlement</td><td>設定 → 服務授權管理 → 服務授權程序</td><td>需啟用 Entitlement Management 功能</td></tr>
+<tr><td>Public Group Member（成員指派）</td><td>設定 → 公用群組 → 銀樺 · 通路客服團隊 → 加成員</td><td>metadata deploy 只建 Group 骨架</td></tr>
+</tbody>
+</table>
+
+<h3 style="margin-top:16px">📄 兩個 Email Templates 使用場景</h3>
+<div class="grid-2">
+<div class="card" style="background:#FAFAF9;border-left:3px solid var(--navy)">
+<h3 style="margin-top:0">📧 SBH_Case_Auto_Response</h3>
+<p style="font-size:12px;color:var(--sub)">Case 建立自動回覆信 · 帶入 CaseNumber / Subject / Reason / SLA</p>
+<pre style="font-size:11px;background:var(--tint);padding:8px;border-radius:3px">案件編號：{!Case.CaseNumber}
+案件主旨：{!Case.Subject}
+案件類型：{!Case.SBH_Case_Reason__c}
+SLA：高 4h / 中 24h / 低 48h</pre>
+</div>
+<div class="card" style="background:#FAFAF9;border-left:3px solid var(--gold)">
+<h3 style="margin-top:0">📧 SBH_Contract_Proposal</h3>
+<p style="font-size:12px;color:var(--sub)">年度合約提案信 · 帶入合約條款 / 保底 / 獎金階梯</p>
+<pre style="font-size:11px;background:var(--tint);padding:8px;border-radius:3px">合約編號：{!Contract.ContractNumber}
+保底：NT$ {!Contract.SBH_Guarantee_Amount__c}
+獎金階梯：{!Contract.SBH_Bonus_Tier__c}</pre>
+</div>
+</div>
+</div>
+
 <!-- ==================== Service Cloud Phase 2 (新增) ==================== -->
 <h2><span class="num">🎯</span>Phase 2 · Service Cloud 全套 · 已 Deployed</h2>
 
