@@ -1,0 +1,253 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<title>KKDAY Travel · Sales+Service+Experience Cloud Demo (CBUSDO)</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<style>
+  :root{
+    --ink:#1F2937;--sub:#6B7280;--mute:#9CA3AF;--line:#E5E7EB;--tint:#F9FAFB;
+    --coral:#FE5C63;--coral-dk:#E24248;--coral-tint:#FEF2F2;
+    --sand:#F5F1E8;--warm:#FF8A65;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0;background:#FAFAFA;font-family:"Salesforce Sans",-apple-system,"PingFang TC","Microsoft JhengHei",sans-serif;color:var(--ink);line-height:1.6}
+  .wrap{max-width:1140px;margin:0 auto;padding:32px 24px 60px}
+
+  .tag{font-size:11px;letter-spacing:2px;color:var(--sub);text-transform:uppercase;font-weight:600}
+  h1{font-size:30px;letter-spacing:-0.5px;margin:6px 0 8px;color:var(--coral-dk)}
+  .lede{font-size:14px;color:var(--sub);line-height:1.75;max-width:800px}
+
+  .backlink{display:inline-flex;align-items:center;gap:6px;font-size:12px;color:var(--sub);text-decoration:none;margin-bottom:16px;padding:4px 10px;background:#fff;border:1px solid var(--line);border-radius:20px}
+  .backlink:hover{color:var(--coral);border-color:var(--coral)}
+
+  .hero{background:linear-gradient(135deg,var(--coral) 0%,var(--warm) 100%);color:#fff;padding:36px 28px;border-radius:12px;margin:20px 0 32px;position:relative;overflow:hidden}
+  .hero::after{content:'';position:absolute;top:0;right:0;width:280px;height:100%;background:radial-gradient(circle at 70% 30%,rgba(255,255,255,.15),transparent 60%);pointer-events:none}
+  .hero h2{font-size:22px;margin:0 0 8px;font-weight:800;letter-spacing:-.3px}
+  .hero p{margin:0;font-size:14px;opacity:.94}
+
+  h2{font-size:17px;margin:36px 0 14px;padding-bottom:8px;border-bottom:2px solid var(--coral);letter-spacing:.5px;color:var(--coral-dk);display:flex;align-items:center;gap:10px}
+  h2 .num{width:26px;height:26px;background:var(--coral);color:#fff;border-radius:4px;display:inline-flex;align-items:center;justify-content:center;font-size:12px;font-weight:800}
+  h3{font-size:14px;margin:16px 0 8px;color:var(--coral-dk);font-weight:700}
+
+  .card{background:#fff;border:1px solid var(--line);border-radius:8px;padding:18px 22px;margin-bottom:12px}
+  .card.accent{border-left:4px solid var(--coral)}
+
+  .grid-4{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:12px 0}
+  .grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:12px 0}
+  .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:12px 0}
+  @media (max-width:800px){.grid-4,.grid-3,.grid-2{grid-template-columns:1fr}}
+
+  .kpi{background:#fff;border:1px solid var(--line);border-radius:8px;padding:14px 16px;text-align:center}
+  .kpi-num{font-size:26px;font-weight:800;color:var(--coral);letter-spacing:-.3px}
+  .kpi-lbl{font-size:11px;color:var(--sub);letter-spacing:.5px;text-transform:uppercase;font-weight:600;margin-top:4px}
+
+  table{width:100%;border-collapse:collapse;font-size:13px;margin:8px 0 12px;background:#fff}
+  th,td{border:1px solid var(--line);padding:8px 12px;text-align:left;vertical-align:top}
+  th{background:var(--coral-tint);font-weight:700;color:var(--coral-dk);font-size:12px}
+  code{background:var(--tint);padding:1px 6px;border-radius:3px;font-size:12px;font-family:Consolas,monospace;color:var(--coral-dk)}
+
+  .step-list{counter-reset:step;list-style:none;padding:0}
+  .step-list li{counter-increment:step;padding-left:38px;position:relative;margin:12px 0;font-size:13px;line-height:1.7}
+  .step-list li::before{content:counter(step);position:absolute;left:0;top:0;width:26px;height:26px;background:var(--coral);color:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800}
+
+  .category-badge{display:inline-block;padding:3px 10px;background:var(--coral-tint);color:var(--coral-dk);border-radius:12px;font-size:11px;font-weight:600;margin-right:4px}
+</style>
+</head>
+<body>
+<div class="wrap">
+<a class="backlink" href="../index.html">← 回到 SF 專案索引</a>
+
+<div class="tag">KKDAY Travel · CBUSDO · Sales+Service+Experience Demo</div>
+<h1>KKDAY · 全通路旅遊 Demo</h1>
+<p class="lede">CBUSDO 上第四個 demo 專案 — 完整 Sales Cloud + Service Cloud + Experience Cloud 三雲整合的 B2B/B2C 混合平台範例。內部管供應商合約與案件、對外展示旅客體驗網站。所有資料完全 fictional、prefix `KKDAY · / KKD-` 隔離、不影響 Thermos / 銀樺國際 / HealthFormula。</p>
+
+<div class="hero">
+    <h2>探索世界的每一種可能</h2>
+    <p>當地行程 · 景點門票 · 交通租車 · Wi-Fi · 住宿 · 一站搞定你的旅程</p>
+</div>
+
+<!-- KPIs -->
+<div class="grid-4">
+    <div class="kpi"><div class="kpi-num">40</div><div class="kpi-lbl">Products</div></div>
+    <div class="kpi"><div class="kpi-num">8</div><div class="kpi-lbl">Categories</div></div>
+    <div class="kpi"><div class="kpi-num">15</div><div class="kpi-lbl">供應商 Accounts</div></div>
+    <div class="kpi"><div class="kpi-num">20</div><div class="kpi-lbl">旅客會員 (PA)</div></div>
+</div>
+<div class="grid-4">
+    <div class="kpi"><div class="kpi-num">12</div><div class="kpi-lbl">Opportunities</div></div>
+    <div class="kpi"><div class="kpi-num">4</div><div class="kpi-lbl">Contracts</div></div>
+    <div class="kpi"><div class="kpi-num">25</div><div class="kpi-lbl">Bookings</div></div>
+    <div class="kpi"><div class="kpi-num">15</div><div class="kpi-lbl">Support Cases</div></div>
+</div>
+
+<!-- ==================== 1. 已部署功能總覽 ==================== -->
+<h2><span class="num">1</span>KKDAY · 已部署到 CBUSDO 功能總覽</h2>
+
+<div class="grid-3">
+<div class="card"><h3 style="margin-top:0">🛒 Sales Cloud</h3>
+<ul style="font-size:12px;line-height:1.85;padding-left:20px;margin:8px 0">
+<li>Lead → Opp → Quote → Order → Contract 全流程</li>
+<li>3 Account Record Types (Local Operator / Transportation / Accommodation)</li>
+<li>3 Opp Record Types (New Supplier / Renewal / Volume Deal)</li>
+<li>4 Custom Pricebook (WEB / VIP / Enterprise / Partner)</li>
+<li>40 Products across 8 categories</li>
+<li>Person Account (旅客會員)</li>
+<li>17 Custom Fields with `KKD_` prefix</li>
+</ul>
+</div>
+
+<div class="card"><h3 style="margin-top:0">📞 Service Cloud</h3>
+<ul style="font-size:12px;line-height:1.85;padding-left:20px;margin:8px 0">
+<li>3 Case Record Types (行程異動 / 退款 / 一般諮詢)</li>
+<li>15 Real Cases across all types</li>
+<li>Case Queue + Refund Queue (退款專責)</li>
+<li>Lead Queue (供應商開發)</li>
+<li>Public Group (KKDAY 客服團隊)</li>
+<li>Case Assignment Rule (退款 → 專責 Queue)</li>
+<li>Lead Assignment Rule</li>
+<li>2 Email Templates</li>
+</ul>
+</div>
+
+<div class="card"><h3 style="margin-top:0">🌐 Experience Cloud + Platform</h3>
+<ul style="font-size:12px;line-height:1.85;padding-left:20px;margin:8px 0">
+<li><b>kkdayHome LWC</b> — Hero + 搜尋 + 8 分類 grid + 熱門推薦 + Trust bar</li>
+<li>KKDControllerLWR Apex（含 search / category / destination）</li>
+<li>4 Reports + 1 Executive Dashboard</li>
+<li>Approval Process (高額合約)</li>
+<li>Record-Triggered Flow (Opp ≥ 5M 警示)</li>
+<li>3 Validation Rules + Sharing Rule</li>
+<li>Field History Tracking × 3</li>
+<li>3 Global Quick Actions + 14 List Views</li>
+</ul>
+</div>
+</div>
+
+<!-- ==================== 2. Data Model ==================== -->
+<h2><span class="num">2</span>Data Model · 8 大商品類別</h2>
+<div class="card">
+<p style="font-size:13px;margin:0 0 12px"><b>Products (40 個)</b> 分佈 8 大類別，覆蓋台灣/日本/韓國/泰國/越南/香港澳門/新加坡/馬來西亞：</p>
+<table>
+<thead><tr><th>類別</th><th>商品數</th><th>目的地舉例</th><th>代表商品</th></tr></thead>
+<tbody>
+<tr><td>當地行程</td><td>6</td><td>九份 / 太魯閣 / 台南 / 京都 / 東京 / 首爾</td><td>京都嵐山文化體驗一日、東京築地美食導覽</td></tr>
+<tr><td>景點門票</td><td>6</td><td>台北 / 高雄 / 東京 / 大阪 / 首爾 / 曼谷</td><td>台北 101 觀景台、大阪環球影城 1 日券</td></tr>
+<tr><td>交通票券</td><td>5</td><td>台灣 / 日本 / 韓國</td><td>JR PASS 全國 7 日、高鐵早鳥 65 折</td></tr>
+<tr><td>租車</td><td>4</td><td>台灣 / 沖繩 / 北海道 / 濟州島</td><td>沖繩機場租車 3 日、北海道雪季 4WD</td></tr>
+<tr><td>Wi-Fi / SIM</td><td>4</td><td>日 / 韓 / 泰 / 全球</td><td>日本 4G 分享器、全球 55 國 eSIM</td></tr>
+<tr><td>住宿</td><td>5</td><td>台北 / 東京 / 沖繩 / 首爾 / 曼谷</td><td>沖繩海景飯店 2 晚、曼谷公寓式酒店 3 晚</td></tr>
+<tr><td>美食券</td><td>5</td><td>台北 / 東京 / 大阪 / 首爾 / 曼谷</td><td>台北鼎泰豐、首爾傳統烤肉吃到飽</td></tr>
+<tr><td>演唱會 / 表演</td><td>5</td><td>台 / 日 / 韓 / 泰</td><td>京都藝伎茶屋文化體驗、曼谷變裝秀晚宴</td></tr>
+</tbody>
+</table>
+</div>
+
+<!-- ==================== 3. Experience Cloud Setup Guide ==================== -->
+<h2><span class="num">3</span>Experience Cloud · 完整建站步驟（LWR + Guest User）</h2>
+
+<div class="card accent">
+<p style="font-size:13px;margin:0 0 12px"><b>核心 LWC 已 deployed：<code>kkdayHome</code></b> ── 一支元件含 Hero banner、Search bar、8 個 category card grid、熱門商品 grid、Trust bar。可放 Lightning Home page（測試）或 Experience Site 頁面。</p>
+
+<h3>Step-by-Step · UI 建立 LWR Experience Site</h3>
+<ol class="step-list">
+<li><b>啟用 Digital Experiences</b>：設定 → 快速搜尋輸入「數位體驗」→ 設定 → 勾「啟用數位體驗」→ 網域自訂 kkday-demo（會產出 https://cbusdo--kkday-demo.sandbox.my.site.com）</li>
+<li><b>New Site</b>：設定 → 全部網站 → 新網站 → 選 <b>Build Your Own (LWR)</b> template → 名稱 <code>KKDAY Travel</code> → URL <code>kkday</code></li>
+<li><b>套用 Branding</b>：Experience Builder → 主題（Theme）→ Colors：主色 <code>#FE5C63</code>（coral）、輔色 <code>#FF8A65</code>（warm）、背景 <code>#FAFAFA</code>、字型 <code>PingFang TC / Salesforce Sans</code></li>
+<li><b>編輯 Home Page</b>：Home → 拖入 <b>Custom Component → kkdayHome</b>（唯一的元件就搞定所有 hero/search/category/product 展示）</li>
+<li><b>Guest User FLS</b>：設定 → 全部網站 → KKDAY Travel → 建置器 → 設定齒輪 → 一般 → Guest User Profile → Object Settings 開 <b>Product2 (Read)</b> 並勾所有 KKD_* 欄位</li>
+<li><b>Public Access</b>：管理員 → 網站設定 → 勾「允許不含登入使用者存取本網站」+ 「允許不用登入的自我註冊」</li>
+<li><b>Guest 對 Product2 分享</b>：Sharing Settings → Product2 → Guest User Access → Read Only</li>
+<li><b>Publish</b>：Experience Builder 右上角「發佈」→ 30-60 秒生效</li>
+<li><b>訪問你的網站</b>：<code>https://cbusdo--kkday-demo.sandbox.my.site.com/kkday</code></li>
+</ol>
+
+<h3 style="margin-top:16px">✨ 客戶會看到什麼 wow 效果？</h3>
+<div class="grid-2">
+<div class="card" style="background:#FAFAFA">
+<p style="font-size:12px;margin:0"><b>Hero 大 Banner</b><br/>珊瑚色漸層背景 + 中央搜尋列 + 「探索世界的每一種可能」slogan · 完全模仿現代旅遊平台第一印象</p>
+</div>
+<div class="card" style="background:#FAFAFA">
+<p style="font-size:12px;margin:0"><b>8 分類卡片 grid</b><br/>每張帶 SLDS icon + 類別名稱 + 商品數（動態從 SOQL 計算）· hover 帶陰影上升動畫</p>
+</div>
+<div class="card" style="background:#FAFAFA">
+<p style="font-size:12px;margin:0"><b>熱門商品 grid</b><br/>4 欄自適應到 1 欄 · 商品含目的地 badge、★ 評分、評論數、時數 · 完全對應 Product2.KKD_* 欄位</p>
+</div>
+<div class="card" style="background:#FAFAFA">
+<p style="font-size:12px;margin:0"><b>即時搜尋</b><br/>輸入「京都」或「KKD-LT-」 · Apex 秒級回傳結果 · 空白時顯示熱門推薦</p>
+</div>
+</div>
+</div>
+
+<!-- ==================== 4. 需你 UI 手動的 ==================== -->
+<h2><span class="num">4</span>需你手動 UI 完成的（Salesforce metadata API 限制）</h2>
+
+<div class="card" style="border-left:4px solid var(--warm)">
+<table>
+<thead><tr><th>#</th><th>功能</th><th>UI 路徑</th><th>時間</th></tr></thead>
+<tbody>
+<tr><td>1</td><td><b>Approval Process 啟用</b></td><td>設定 → 核准程序 → KKDAY · 高額合約審核 → Activate</td><td>30 秒</td></tr>
+<tr><td>2</td><td><b>Public Group 加成員</b></td><td>設定 → 公用群組 → KKDAY · 客服團隊 → 加自己</td><td>1 分</td></tr>
+<tr><td>3</td><td><b>Experience Site Guest FLS</b></td><td>Site → Guest User Profile → Product2 Object Settings → 開 Read + 勾 KKD_* 欄位</td><td>3 分</td></tr>
+<tr><td>4</td><td><b>Site Public Access + Publish</b></td><td>Experience Builder → Publish + 網站設定「允許 Public」</td><td>2 分</td></tr>
+<tr><td>5</td><td><b>Duplicate Rule (Supplier)</b></td><td>設定 → 重複規則 → 新增，選 <code>KKD_Supplier_Name_Phone_Match</code>（若未 deploy 可 UI 另建 Matching Rule）</td><td>3 分</td></tr>
+<tr><td>6</td><td><b>Case Team 預設角色</b></td><td>設定 → 案件團隊角色 → 建 3 角色（Lead / Member / Executive Read-Only）</td><td>5 分</td></tr>
+<tr><td>7</td><td><b>Sales Path (Opp)</b></td><td>設定 → 路徑設定 → Opportunity → 每 Stage 填提示</td><td>10 分</td></tr>
+<tr><td>8</td><td><b>Dashboard 訂閱</b></td><td>Dashboard → 訂閱 → 每週一 8am</td><td>30 秒</td></tr>
+</tbody>
+</table>
+</div>
+
+<!-- ==================== 5. Demo Script ==================== -->
+<h2><span class="num">5</span>15 分鐘 Demo Script（客戶簡報）</h2>
+
+<div class="card">
+<ol class="step-list">
+<li><b>先秀 App Launcher</b> → 選「KKDAY Travel」App → 進入 Lightning Home（可先放 kkdayHome LWC 讓客戶看預覽）</li>
+<li><b>Products tab</b> → 選 List View「KKDAY · 全商品」→ 40 個商品分 8 類別，展示 Rating 、Reviews、Duration 等 KKD_ 欄位</li>
+<li><b>Accounts tab</b> → 選 List View「KKDAY · 全供應商」→ 15 家供應商，含台日韓泰跨地區</li>
+<li><b>Opportunities tab</b> → 選 List View「KKDAY · 全部 Pipeline」→ 12 個商機分佈 Stage 1-6</li>
+<li><b>打開單筆 Contract</b>（例：JR East 2026 年度續約 4.8 億）→ 按「Submit for Approval」→ 觸發核准程序</li>
+<li><b>Cases tab</b> → 選 「KKDAY · 退款申請」→ 展示 Refund Queue 自動路由</li>
+<li><b>Reports tab</b> → 開「KKDAY · 業務執行儀表板」→ 5 個 component 動態圖表</li>
+<li><b>切到 Experience Site</b>：https://cbusdo--kkday-demo.sandbox.my.site.com/kkday → 訪客直接看到珊瑚色 Hero + 8 分類 grid + 熱門推薦 + 即時搜尋</li>
+<li><b>示範搜尋</b>：在 Site 輸入「京都」→ 秒級返回相關商品</li>
+<li><b>Wow 收尾</b>：「所有這些 metadata 都是 declarative + LWC，可完全 Sandbox → Prod 部署，跟你們現有 CRM 不衝突」</li>
+</ol>
+</div>
+
+<!-- ==================== 6. 驗證 SOQL ==================== -->
+<h2><span class="num">6</span>驗證 SOQL 指令</h2>
+<div class="card">
+<pre style="font-size:11px;background:var(--tint);padding:12px;border-radius:4px;overflow-x:auto">-- 40 Products (KKD-)
+SELECT COUNT(Id) FROM Product2 WHERE ProductCode LIKE 'KKD-%'
+
+-- 15 Business Accounts + 20 Person Accounts
+SELECT COUNT(Id) FROM Account WHERE RecordType.DeveloperName LIKE 'KKD_%'
+SELECT COUNT(Id) FROM Account WHERE PersonEmail LIKE 'member10%@kkday-example.com'
+
+-- 12 Opportunities
+SELECT COUNT(Id) FROM Opportunity WHERE Name LIKE 'KKDAY%'
+
+-- 4 Contracts
+SELECT COUNT(Id) FROM Contract WHERE KKD_Commission_Structure__c != NULL
+
+-- 25 Orders
+SELECT COUNT(Id) FROM Order WHERE KKD_Booking_Date__c != NULL
+
+-- 15 Cases
+SELECT COUNT(Id) FROM Case WHERE KKD_Case_Type__c != NULL
+
+-- 4 Custom Pricebooks
+SELECT COUNT(Id) FROM Pricebook2 WHERE Name LIKE 'KKDAY · %'
+
+-- 200 PricebookEntry
+SELECT COUNT(Id) FROM PricebookEntry WHERE Product2.ProductCode LIKE 'KKD-%'</pre>
+</div>
+
+<p style="text-align:center;font-size:11px;color:var(--sub);margin-top:40px">
+CBUSDO · KKDAY Travel Demo · 完全隔離 · Prefix `KKD_` · 不影響 THERMOS / 銀樺國際 / HealthFormula
+</p>
+</div>
+</body>
+</html>

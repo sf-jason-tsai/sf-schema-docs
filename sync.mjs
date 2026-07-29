@@ -91,6 +91,12 @@ const PAGES = [
         dest: 'silverbirch/index.html',
         title: '銀樺國際 Silverbirch · Sales Cloud B2B Wholesale Demo'
     },
+    // ─── KKDAY Travel (Sales+Service+Experience · CBUSDO) ───
+    {
+        src: 'C:/Users/bingyan.tsai/Desktop/Claude/kkday-demo/specs/index.html',
+        dest: 'kkday/index.html',
+        title: 'KKDAY Travel · Sales+Service+Experience Cloud Demo'
+    },
     {
         src: 'C:/Users/bingyan.tsai/Desktop/Claude/thermos-demo/specs/THERMOS_Agentforce_Setup.html',
         dest: 'thermos/agentforce-setup.html',
