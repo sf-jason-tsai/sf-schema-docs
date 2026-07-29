@@ -90,6 +90,115 @@
   <div class="kpi"><div class="kpi-num">15</div><div class="kpi-lbl">OOTB Features</div></div>
 </div>
 
+<!-- ==================== Phase 4 · Reports/Dashboard + Flow + Lead + History ==================== -->
+<h2><span class="num">⭐</span>Phase 4 · Reports/Dashboard + Flow + Lead 自動化 + Field History</h2>
+
+<div class="card accent" style="border-left-color:var(--gold)">
+<p style="font-size:13px;margin:0 0 12px"><b>Salesforce 原生 Sales/Service Cloud 全補齊</b>：Reports 4 支 + Executive Dashboard + Record-Triggered Flow + Lead Queue + Assignment Rule + Field History + Sharing Rule ── 全部 declarative + metadata。</p>
+
+<h3>已 Deployed 到 CBUSDO</h3>
+<table>
+<thead><tr><th>類型</th><th>元件</th><th>行為 / 觸發條件</th></tr></thead>
+<tbody>
+<tr><td rowspan="4"><b>Reports</b><br/>（銀樺國際 · 業務報表 folder）</td><td>銀樺 · 通路業務 Pipeline (Stage × 通路)</td><td>Matrix: Stage vs 通路類型 · 篩選銀樺 Opp</td></tr>
+<tr><td>銀樺 · 通路類型銷售貢獻</td><td>Summary: 依通路類型分組 · Amount SUM</td></tr>
+<tr><td>銀樺 · Top 通路貢獻排行</td><td>Summary: 依 Account 排序 · 金額 desc</td></tr>
+<tr><td>銀樺 · 案件 by 業務影響</td><td>Summary: Business Impact × Status</td></tr>
+<tr><td><b>Dashboard</b><br/>（銀樺國際 · 業務儀表板）</td><td>銀樺國際 · 業務執行儀表板</td><td>5 個 component：Pipeline Bar / Top 通路 Table / 類型 Donut / Case Column / 總 Pipeline Metric</td></tr>
+<tr><td><b>Record-Triggered Flow</b></td><td>銀樺 · 大單警示 (SBH_Big_Deal_Alert)</td><td>Opp 金額 ≥ NT$ 10M 且 Name 開頭「銀樺國際」→ 自動 Chatter Post to Opp Feed 通知業務主管</td></tr>
+<tr><td><b>Lead Queue</b></td><td>銀樺 · Lead 待分派 (SBH_Lead_Queue)</td><td>Queue 給客服團隊 (Public Group)</td></tr>
+<tr><td><b>Lead Assignment Rule</b></td><td>SBH_Lead_Auto_Assign</td><td>Country=台灣 或 LeadSource 有值 → 路由到 SBH_Lead_Queue</td></tr>
+<tr><td rowspan="3"><b>Field History Tracking</b></td><td>Opportunity.SBH_Slot_Fee__c</td><td>上架費變動記錄</td></tr>
+<tr><td>Contract.SBH_Guarantee_Amount__c</td><td>年度保底金額修改記錄</td></tr>
+<tr><td>Case.SBH_Business_Impact__c</td><td>業務影響升降級軌跡</td></tr>
+<tr><td><b>Sharing Rule</b></td><td>SBH_High_Impact_to_Support_Team</td><td>Case 業務影響=高 + Subject 開頭「銀樺」→ Share Edit 給客服團隊</td></tr>
+</tbody>
+</table>
+
+<h3 style="margin-top:16px">Flow · 大單警示邏輯</h3>
+<div class="flow">
+  <div class="step">新建/更新 Opportunity</div>
+  <div class="arw">→</div>
+  <div class="step" style="background:var(--gold-tint);color:var(--gold-dk)">Name 起於「銀樺國際」?</div>
+  <div class="arw">是 →</div>
+  <div class="step" style="background:var(--gold-tint);color:var(--gold-dk)">Amount ≥ NT$ 10M?</div>
+  <div class="arw">是 →</div>
+  <div class="step" style="background:var(--navy);color:#fff">Chatter Post 到該 Opp Feed</div>
+  <div class="arw">→</div>
+  <div class="step">全員 mention 追蹤</div>
+</div>
+
+<h3 style="margin-top:16px">Salesforce 原生功能總覽（本 demo 已 showcase 的）</h3>
+<div class="grid-3">
+<div class="card" style="background:#FAFAF9">
+<h3 style="margin-top:0;color:var(--navy)">Sales Cloud 核心</h3>
+<ul style="font-size:12px;margin:8px 0;padding-left:20px;line-height:1.9">
+<li>Lead → Opp → Quote → Order → Contract 全流程</li>
+<li>Account Hierarchy (ParentId)</li>
+<li>Multi-Pricebook (4 通路等級)</li>
+<li>Product Family (SBH_Category__c)</li>
+<li>Opportunity Contact Roles</li>
+<li>Opportunity Record Type (3 種)</li>
+<li>Quote Sync / Order Activation</li>
+<li>Campaign Hierarchy / Members</li>
+</ul>
+</div>
+<div class="card" style="background:#FAFAF9">
+<h3 style="margin-top:0;color:var(--navy)">Service Cloud 核心</h3>
+<ul style="font-size:12px;margin:8px 0;padding-left:20px;line-height:1.9">
+<li>Case Management (5 客製欄位)</li>
+<li>Case Record Types (Trade / Quality)</li>
+<li>Queues (Case + Lead)</li>
+<li>Public Groups</li>
+<li>Assignment Rules (Case + Lead)</li>
+<li>Case Sharing Rules</li>
+<li>Email Templates (2 支)</li>
+<li>Case Comments (OOTB)</li>
+</ul>
+</div>
+<div class="card" style="background:#FAFAF9">
+<h3 style="margin-top:0;color:var(--navy)">Platform 自動化</h3>
+<ul style="font-size:12px;margin:8px 0;padding-left:20px;line-height:1.9">
+<li>Approval Process (Contract ≥10M)</li>
+<li>Record-Triggered Flow (大單)</li>
+<li>Validation Rules (3 支)</li>
+<li>Matching Rule (Account)</li>
+<li>Field History Tracking (3 欄位)</li>
+<li>Global Quick Actions (3 支)</li>
+<li>List Views (19 支 · 銀樺 前綴)</li>
+<li>Reports & Dashboard</li>
+</ul>
+</div>
+</div>
+</div>
+
+<!-- ==================== 需你手動 UI 完成的 ==================== -->
+<h2><span class="num">👋</span>需你手動 UI 完成的（我這邊 metadata deploy 卡在 Salesforce 限制）</h2>
+
+<div class="card" style="border-left:4px solid #C25454">
+<p style="font-size:13px;margin:0 0 12px"><b>這些是 Salesforce 對 metadata API 有明確限制的功能</b> ── 我做不了但 UI 都是 5-10 分鐘搞定：</p>
+
+<table>
+<thead><tr><th>#</th><th>功能</th><th>設定路徑（繁中 UI）</th><th>為何我沒做</th></tr></thead>
+<tbody>
+<tr><td>1</td><td><b>Escalation Rule</b><br/>案件升級規則</td><td>設定 → 服務 → 案件 → 升級規則</td><td>EscalationStartTimeType enum 值 SDO 特定，UI 5 分鐘</td></tr>
+<tr><td>2</td><td><b>Auto-Response Rule</b><br/>案件自動回覆規則</td><td>設定 → 服務 → 案件 → 自動回應規則<br/>選我 deploy 的 Email Template：SBH_Case_Auto_Response</td><td>需先設定 Org-Wide Email Address（發信人）· UI 3 分鐘</td></tr>
+<tr><td>3</td><td><b>Duplicate Rule</b><br/>Account 重複規則</td><td>設定 → 資料 → 重複規則 → 新增<br/>選我 deploy 的 Matching Rule：SBH_Account_Name_Website_Match</td><td>sortOrder 與 Standard rule 衝突 · UI 3 分鐘</td></tr>
+<tr><td>4</td><td><b>Case Team Predefined</b><br/>案件團隊預設角色</td><td>設定 → 服務 → 案件團隊角色 → 建 3 角色：<br/>· 銀樺 · 通路客服 Lead (Edit)<br/>· 銀樺 · 通路客服 Member (Edit)<br/>· 銀樺 · 主管 Read-Only (Read)</td><td>CaseTeamRole 不在 SFDX registry · UI 5 分鐘</td></tr>
+<tr><td>5</td><td><b>Sales Path</b><br/>Opportunity Path 引導</td><td>設定 → 使用者介面 → 路徑設定 → 新增路徑<br/>· 物件：Opportunity → 各 Stage 填提示語</td><td>PathAssistant metadata 需 PicklistMaster ID · UI 10 分鐘</td></tr>
+<tr><td>6</td><td><b>Web-to-Lead Form</b><br/>官網收 Lead 表單</td><td>設定 → 行銷 → Web-to-Lead → 產生表單<br/>複製 HTML 給資訊部埋 silverbirch.com.tw</td><td>需伺服器端 endpoint · 表單 HTML 5 分鐘</td></tr>
+<tr><td>7</td><td><b>Web-to-Case Form</b><br/>官網收 Case 表單</td><td>設定 → 服務 → Web-to-Case → 產生表單</td><td>同上 · 5 分鐘</td></tr>
+<tr><td>8</td><td><b>Public Group 加成員</b></td><td>設定 → 公用群組 → 銀樺 · 通路客服團隊 → 加你自己 + 相關 User</td><td>metadata deploy 只建 Group 骨架 · 3 分鐘</td></tr>
+<tr><td>9</td><td><b>Approval Process 啟用</b></td><td>設定 → 核准程序 → 銀樺 · 高額合約審核 → Activate</td><td>Deploy 後 status = Inactive · 需 UI 按 Activate · 30 秒</td></tr>
+<tr><td>10</td><td><b>Dashboard subscribe</b></td><td>Dashboard → 銀樺國際 · 業務執行儀表板 → 訂閱 → 每週一 8am</td><td>個人偏好 · 30 秒</td></tr>
+</tbody>
+</table>
+
+<p style="margin-top:16px;padding:12px;background:var(--gold-tint);border-radius:4px;font-size:12px">
+<b>💡 我這邊已經處理的（不用你動手）</b>：Custom Field / Record Type / Layout / Permission Set / App / Tab / Pricebook / Product / Account / Contact / Lead / Opportunity / Quote / Order / Contract / Campaign / Case / List View × 19 / Report × 4 / Dashboard × 1 / Flow / Approval / Queue / Public Group / Assignment Rule × 2 / Validation Rule × 3 / Matching Rule / Sharing Rule / Email Template × 2 / Field History Tracking × 3 / Global Quick Action × 3。共 100+ metadata elements。
+</p>
+</div>
+
 <!-- ==================== Phase 3 · Approval + 原生自動化 ==================== -->
 <h2><span class="num">⚙</span>Phase 3 · Approval + Salesforce 原生自動化</h2>
 
