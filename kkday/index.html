@@ -149,12 +149,40 @@
 <div class="card accent">
 <p style="font-size:13px;margin:0 0 12px"><b>核心 LWC 已 deployed：<code>kkdayHome</code></b> ── 一支元件含 Hero banner、Search bar、8 個 category card grid、熱門商品 grid、Trust bar。可放 Lightning Home page（測試）或 Experience Site 頁面。</p>
 
-<h3>Step-by-Step · UI 建立 LWR Experience Site</h3>
+<h3>已 deployed 的 9 支 LWC 元件（拖放到 Experience Site 各頁）</h3>
+<table>
+<thead><tr><th>#</th><th>LWC 元件</th><th>對應 KKDAY 分頁</th><th>核心功能</th></tr></thead>
+<tbody>
+<tr><td>1</td><td><code>kkdayHeader</code></td><td>所有頁面 · Top Nav</td><td>Logo + 搜尋列 + 語言/貨幣切換 + 登入/購物車（帶 badge）+ 8 大分類 subnav</td></tr>
+<tr><td>2</td><td><code>kkdayHome</code></td><td>首頁</td><td>Hero + 中央搜尋 + 8 分類卡片 + 熱門推薦 + Trust bar</td></tr>
+<tr><td>3</td><td><code>kkdayCategoryPage</code></td><td>分類頁（如當地行程）</td><td>左側 filter（目的地 checkbox / 評分 / 價格 slider）+ 商品 grid + 排序 + 分頁</td></tr>
+<tr><td>4</td><td><code>kkdayProductDetail</code></td><td>商品詳情頁</td><td>圖片畫廊 + 標題 + 評分 + 4 tabs（詳情/評論/取消政策/FAQ）+ 右側 booking box（日期/人數/加入購物車）+ 相似推薦</td></tr>
+<tr><td>5</td><td><code>kkdaySearchResults</code></td><td>搜尋結果頁</td><td>大 hero 搜尋 + 熱門關鍵字 + 結果 list card + 空狀態</td></tr>
+<tr><td>6</td><td><code>kkdayCart</code></td><td>購物車</td><td>商品列表 + qty 加減 + 移除 + 優惠券套用（試 KKDAY100 / SUMMER26）+ 摘要 + 結帳</td></tr>
+<tr><td>7</td><td><code>kkdayCheckout</code></td><td>結帳流程</td><td>3-step stepper（訂購資訊 / 付款方式 / 確認送出）+ 4 種付款選項 + 訂單建立成功頁</td></tr>
+<tr><td>8</td><td><code>kkdayMyAccount</code></td><td>會員中心</td><td>VIP badge + 4 stats + 左側 tab（訂單/收藏/優惠券/個資）+ 訂單狀態徽章 + 優惠券卡</td></tr>
+<tr><td>9</td><td><code>kkdayFooter</code></td><td>所有頁面 · Footer</td><td>Newsletter 訂閱 + 5 欄連結（分類/目的地/客服/關於/App）+ Trust badges + 語言貨幣</td></tr>
+<tr><td>10</td><td><code>kkdayHelpCenter</code></td><td>幫助中心</td><td>搜尋 + 5 分類 tab + 15+ FAQ 手風琴 + 3 種客服（LINE/電話/Email）+ 直接送 Case 表單</td></tr>
+</tbody>
+</table>
+
+<h3 style="margin-top:16px">Step-by-Step · UI 建立 LWR Experience Site</h3>
 <ol class="step-list">
 <li><b>啟用 Digital Experiences</b>：設定 → 快速搜尋輸入「數位體驗」→ 設定 → 勾「啟用數位體驗」→ 網域自訂 kkday-demo（會產出 https://cbusdo--kkday-demo.sandbox.my.site.com）</li>
 <li><b>New Site</b>：設定 → 全部網站 → 新網站 → 選 <b>Build Your Own (LWR)</b> template → 名稱 <code>KKDAY Travel</code> → URL <code>kkday</code></li>
 <li><b>套用 Branding</b>：Experience Builder → 主題（Theme）→ Colors：主色 <code>#FE5C63</code>（coral）、輔色 <code>#FF8A65</code>（warm）、背景 <code>#FAFAFA</code>、字型 <code>PingFang TC / Salesforce Sans</code></li>
-<li><b>編輯 Home Page</b>：Home → 拖入 <b>Custom Component → kkdayHome</b>（唯一的元件就搞定所有 hero/search/category/product 展示）</li>
+<li><b>建各頁面</b>：Experience Builder → 頁面 → 新增：
+    <ul style="font-size:12px;margin:4px 0 4px 20px;color:var(--sub)">
+        <li>Home（URL：/）→ 拖 <code>kkdayHeader</code> + <code>kkdayHome</code> + <code>kkdayFooter</code></li>
+        <li>Category（URL：/category）→ 拖 <code>kkdayHeader</code> + <code>kkdayCategoryPage</code> + <code>kkdayFooter</code></li>
+        <li>Product（URL：/product/:id）→ 拖 <code>kkdayHeader</code> + <code>kkdayProductDetail</code> + <code>kkdayFooter</code></li>
+        <li>Search（URL：/search）→ 拖 <code>kkdayHeader</code> + <code>kkdaySearchResults</code> + <code>kkdayFooter</code></li>
+        <li>Cart（URL：/cart）→ 拖 <code>kkdayHeader</code> + <code>kkdayCart</code> + <code>kkdayFooter</code></li>
+        <li>Checkout（URL：/checkout）→ 拖 <code>kkdayHeader</code> + <code>kkdayCheckout</code> + <code>kkdayFooter</code></li>
+        <li>Account（URL：/account）→ 拖 <code>kkdayHeader</code> + <code>kkdayMyAccount</code> + <code>kkdayFooter</code></li>
+        <li>Help（URL：/help）→ 拖 <code>kkdayHeader</code> + <code>kkdayHelpCenter</code> + <code>kkdayFooter</code></li>
+    </ul>
+</li>
 <li><b>Guest User FLS</b>：設定 → 全部網站 → KKDAY Travel → 建置器 → 設定齒輪 → 一般 → Guest User Profile → Object Settings 開 <b>Product2 (Read)</b> 並勾所有 KKD_* 欄位</li>
 <li><b>Public Access</b>：管理員 → 網站設定 → 勾「允許不含登入使用者存取本網站」+ 「允許不用登入的自我註冊」</li>
 <li><b>Guest 對 Product2 分享</b>：Sharing Settings → Product2 → Guest User Access → Read Only</li>
