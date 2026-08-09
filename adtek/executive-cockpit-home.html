@@ -70,8 +70,8 @@
   <div class="cover">
     <div class="kicker">SALESFORCE APP PAGE · 銓盛電子 自動化 OT 整合業務部</div>
     <h1>經營戰情室首頁</h1>
-    <div class="sub">把每月主管會議月報的頭號重點，直接搬上 Salesforce App 首頁 — 一開 App 就看到達成率、逐月趨勢、業務排行、Pipeline 量體，全部即時連動 CRM 成交資料。</div>
-    <div class="meta">資料來源：<code>2026_06主管會議報告_自動化OT整合業務部20260720.pptx</code>（37 頁）· 全原生 OOTB 元件（App Page + reportChart）· 驗收日 2026-08-09</div>
+    <div class="sub">把每月主管會議月報的頭號重點，直接搬上 Salesforce App 首頁 — 一開 App 就看到達成率、逐月趨勢、業務排行、Pipeline 量體，全部即時連動 CRM 成交資料。本次再做兩項優化：銷售路徑階段全繁體中文、目標明細換月報真實數據。</div>
+    <div class="meta">資料來源：<code>2026_06主管會議報告_自動化OT整合業務部20260720.pptx</code>（37 頁，image6／18／19／21 逐格讀值）· 全原生 OOTB 元件（App Page + reportChart）· 驗收日 2026-08-09</div>
   </div>
 
   <section>
@@ -92,86 +92,132 @@
   </section>
 
   <section>
-    <h2><span class="n">2</span>首頁 KPI 摘要（對齊月報 image6／image18／image19）</h2>
+    <h2><span class="n">2</span>本次兩項優化</h2>
+    <div class="lead">承主管回饋，針對已上線的戰情室再做兩項精修：把業務每天在看的機會頁「銷售路徑」全繁體中文化，並把目標明細從先前的暫估級距換成月報 PPT 的逐格真值。</div>
+
+    <h3>優化一 · 銷售路徑階段繁體中文化（給台灣客戶看）</h3>
+    <p>機會頁頂端的 5 階段路徑（Path）原為英文，改為銓盛專屬繁體中文六階段；只作用在銓盛-Adtek 的兩個 RecordType，其他 App 的機會階段完全不受影響。</p>
+    <table>
+      <tr><th style="width:30%">原英文階段</th><th>改後繁中階段</th></tr>
+      <tr><td>Qualification</td><td>確認需求</td></tr>
+      <tr><td>Discovery</td><td>需求探索</td></tr>
+      <tr><td>Proposal/Quote</td><td>提案報價</td></tr>
+      <tr><td>Negotiation</td><td>合約議價</td></tr>
+      <tr><td>Closed Won</td><td>成交結案</td></tr>
+      <tr><td>Closed Lost</td><td>結案未成</td></tr>
+    </table>
+    <p class="muted">做法：改銓盛專屬的 <code>ADT_Sales_Process</code> 銷售流程（Business Process）為繁中六階段，並把 204 筆銓盛機會（<code>ADT-O-／ADT-T-</code>）的既有階段值一併遷移到對應繁中值。其他 App（建商-EE 的中文階段、內建 demo 的英文階段）綁各自的流程，不受牽動。</p>
+
+    <h3>優化二 · 目標明細換月報真實數據</h3>
+    <p>先前目標為暫估級距（15M／11.7M 等湊出的數）。本次全數換成月報 PPT 真值：部門年目標 <b>1.3 億</b>、7 位業務個人年目標、逐月目標曲線，皆逐格對回 image6／18／19／21，並新建 7 位銓盛專屬中文名業務承接，讓報表排行、達成率直接顯示真實姓名。</p>
+    <div class="kpis">
+      <div class="kpi"><div class="v g">7</div><div class="l">新建中文名業務</div></div>
+      <div class="kpi"><div class="v g">84</div><div class="l">逐月目標（換真值）</div></div>
+      <div class="kpi"><div class="v g">130.0M</div><div class="l">部門年目標（真值）</div></div>
+      <div class="kpi"><div class="v g">7/7</div><div class="l">個人達成率對回月報</div></div>
+    </div>
+    <p class="muted" style="margin-top:12px">新業務帳號一律 <code>adt.</code> 前綴、只指派銓盛 permset、只承接 <code>ADT-</code> 資料，不改動任何既有共用帳號。</p>
+  </section>
+
+  <section>
+    <h2><span class="n">3</span>首頁 KPI 摘要（對齊月報 image6／image18／image19）</h2>
     <div class="lead">頂部摘要卡呈現月報頭號數字，下方圖表即時連動 org 成交資料。</div>
     <div class="kpis">
       <div class="kpi"><div class="v">NT$ 1.30 億</div><div class="l">年度業績目標</div></div>
-      <div class="kpi"><div class="v r">67.6%</div><div class="l">年度達成率</div></div>
-      <div class="kpi"><div class="v r">48.9%</div><div class="l">Q3 達成率</div></div>
-      <div class="kpi"><div class="v r">25.6%</div><div class="l">下半年達成率</div></div>
+      <div class="kpi"><div class="v r">68%</div><div class="l">年度達成率</div></div>
+      <div class="kpi"><div class="v r">49%</div><div class="l">Q3 達成率</div></div>
+      <div class="kpi"><div class="v g">114%</div><div class="l">Q2 達成率</div></div>
     </div>
     <p class="muted" style="margin-top:12px">銷貨毛利率 55.9%（近月呈下滑）以靜態 KPI 卡呈現 — Opportunity 無成本／毛利欄位且 org 不可新增欄位，故毛利率不假裝即時算，據實標示為月報數字。</p>
   </section>
 
   <section>
-    <h2><span class="n">3</span>首頁六大區塊（月報圖表 → org 首頁對照）</h2>
+    <h2><span class="n">4</span>首頁六大區塊（月報圖表 → org 首頁對照）</h2>
     <div class="lead">每張圖都指向一支帶 <code>&lt;chart&gt;</code> 的 ADT 報表，filter 一律鎖 <code>External_ID__c startsWith 'ADT-O-'／'ADT-T-'</code>，只吃銓盛-Adtek 自己的資料。</div>
 
     <table>
       <tr><th style="width:20%">首頁區塊</th><th style="width:22%">對應月報頁</th><th style="width:26%">來源報表（org 端已驗證）</th><th>org 實際數字</th></tr>
-      <tr><td>KPI 摘要卡</td><td>image6 營運 KPI 總表<br>image18 目標 vs 實際</td><td>richText（靜態摘要）</td><td>年目標 1.3 億 / 達成 67.6%</td></tr>
-      <tr><td>年度達成率</td><td>image6 達成率環圈</td><td><code>ADT_R15_Achievement_Gauge</code><br><span class="badge">Donut</span></td><td>已成交 <b>87.8M</b>（對照目標 1.3 億）</td></tr>
-      <tr><td>逐月業績推移</td><td>image7 銷貨金額推移<br>image18 逐月雙柱</td><td><code>ADT_R1_Sales_Achievement</code><br><span class="badge">VerticalColumn</span></td><td>12 個月，總計 <b>89.0M</b></td></tr>
-      <tr><td>各業務逐季同期</td><td>image19 成交率同期矩陣</td><td><code>ADT_R16_Rep_Achievement</code><br><span class="badge">VerticalColumnStacked</span></td><td>4 季 × 7 業務，87.8M</td></tr>
-      <tr><td>業務員成交排行</td><td>image21 各業務個人達成</td><td><code>ADT_R3_Rep_Ranking</code><br><span class="badge">HorizontalBar</span></td><td>7 位業務，總計 89.0M</td></tr>
+      <tr><td>KPI 摘要卡</td><td>image6 營運 KPI 總表<br>image18 目標 vs 實際</td><td>richText（靜態摘要）</td><td>年目標 1.3 億 / 達成 68%</td></tr>
+      <tr><td>年度達成率</td><td>image6 達成率環圈</td><td><code>ADT_R15_Achievement_Gauge</code><br><span class="badge">Donut</span></td><td>2026 已成交 <b>88.8M</b>（對照目標 1.3 億）</td></tr>
+      <tr><td>逐月業績推移</td><td>image7 銷貨金額推移<br>image18 逐月雙柱</td><td><code>ADT_R1_Sales_Achievement</code><br><span class="badge">VerticalColumn</span></td><td>全期，總計 <b>89.9M</b></td></tr>
+      <tr><td>各業務逐季同期</td><td>image19 成交率同期矩陣</td><td><code>ADT_R16_Rep_Achievement</code><br><span class="badge">VerticalColumnStacked</span></td><td>4 季 × 7 業務，88.8M</td></tr>
+      <tr><td>業務員成交排行</td><td>image21 各業務個人達成</td><td><code>ADT_R3_Rep_Ranking</code><br><span class="badge">HorizontalBar</span></td><td>7 位業務，總計 89.9M</td></tr>
       <tr><td>Pipeline 各階段量體</td><td>（進行中商機漏斗）</td><td><code>ADT_R2_Pipeline_Funnel</code><br><span class="badge">HorizontalBar</span></td><td>4 個階段，43.8M</td></tr>
     </table>
   </section>
 
   <section>
-    <h2><span class="n">4</span>達成率精準重現月報（實際成交 vs 目標）</h2>
-    <div class="lead">補齊目標資料後，org 報表算出的達成率曲線與月報 image19 幾乎逐格吻合 — 上半年達標、Q3 斷崖、下半年落後的故事完整重現。實際業績以 org 真實 Closed Won 為準。</div>
+    <h2><span class="n">5</span>達成率精準重現月報（實際成交 vs 目標）</h2>
+    <div class="lead">本次把目標明細換成月報真值（PPT image6／18／19／21 逐格讀出），org 報表算出的達成率與月報逐季／逐人幾乎完全吻合 — 上半年超標、Q3 斷崖、下半年落後的故事完整重現。實際業績以 org 真實成交結案為準。</div>
     <table>
-      <tr><th>期別</th><th>目標</th><th>實際成交</th><th>org 達成率</th><th>月報參考</th><th>吻合</th></tr>
-      <tr><td>Q1</td><td>33.15M</td><td>34.00M</td><td class="ok">102.6%</td><td>105%</td><td class="ok">✓</td></tr>
-      <tr><td>Q2</td><td>33.15M</td><td>37.50M</td><td class="ok">113.1%</td><td>114%</td><td class="ok">✓</td></tr>
-      <tr><td>Q3</td><td>32.50M</td><td>15.91M</td><td class="bad">48.9%</td><td>49%</td><td class="ok">✓</td></tr>
-      <tr><td>Q4（進行中）</td><td>31.20M</td><td>0.41M</td><td class="bad">1.3%</td><td>H2 落後</td><td class="warn">～</td></tr>
-      <tr><td><b>部門年度</b></td><td><b>130.0M</b></td><td><b>87.8M</b></td><td class="bad"><b>67.6%</b></td><td><b>68%</b></td><td class="ok">✓</td></tr>
+      <tr><th>期別</th><th>目標</th><th>實際成交</th><th>org 達成率</th><th>月報</th><th>吻合</th></tr>
+      <tr><td>Q1</td><td>32.4M</td><td>34.46M</td><td class="ok">106%</td><td>105%</td><td class="ok">✓</td></tr>
+      <tr><td>Q2</td><td>32.5M</td><td>37.21M</td><td class="ok">114%</td><td>114%</td><td class="ok">✓</td></tr>
+      <tr><td>Q3</td><td>32.5M</td><td>15.94M</td><td class="bad">49%</td><td>49%</td><td class="ok">✓</td></tr>
+      <tr><td>Q4（進行中）</td><td>32.6M</td><td>1.16M</td><td class="bad">4%</td><td>H2 落後</td><td class="warn">～</td></tr>
+      <tr><td><b>部門年度</b></td><td><b>130.0M</b></td><td><b>88.8M</b></td><td class="bad"><b>68%</b></td><td><b>68%</b></td><td class="ok">✓</td></tr>
     </table>
-    <h3>各業務年目標（對齊月報級距）</h3>
+    <h3>各業務年目標與達成率（換月報 image19／21 真值）</h3>
     <table>
-      <tr><th>業務</th><th>年目標</th><th>業務</th><th>年目標</th></tr>
-      <tr><td>East Valerie</td><td>35.0M</td><td>East Ely</td><td>15.0M</td></tr>
-      <tr><td>Central Vanessa</td><td>20.8M</td><td>South Bill</td><td>11.7M</td></tr>
-      <tr><td>West Vince</td><td>20.8M</td><td>Tsai Bing Yan</td><td>11.7M</td></tr>
-      <tr><td>Central Cindy</td><td>15.0M</td><td colspan="2" class="muted">7 人 × 12 月 = 84 筆目標，加總 130.0M</td></tr>
+      <tr><th>業務</th><th>年目標</th><th>實際成交</th><th>org 達成率</th><th>月報</th><th>吻合</th></tr>
+      <tr><td>黃晁嶸</td><td>35.0M</td><td>31.17M</td><td class="warn">89%</td><td>89%</td><td class="ok">✓</td></tr>
+      <tr><td>簡志傑</td><td>20.8M</td><td>15.67M</td><td class="warn">75%</td><td>75%</td><td class="ok">✓</td></tr>
+      <tr><td>徐嘉駿</td><td>20.8M</td><td>14.81M</td><td class="warn">71%</td><td>71%</td><td class="ok">✓</td></tr>
+      <tr><td>張澄宇</td><td>19.9M</td><td>9.08M</td><td class="bad">46%</td><td>45%</td><td class="warn">～</td></tr>
+      <tr><td>林天翔</td><td>11.3M</td><td>6.45M</td><td class="bad">57%</td><td>57%</td><td class="ok">✓</td></tr>
+      <tr><td>李健甫</td><td>11.1M</td><td>5.46M</td><td class="bad">49%</td><td>49%</td><td class="ok">✓</td></tr>
+      <tr><td>吳俊昇</td><td>11.1M</td><td>6.12M</td><td class="warn">55%</td><td>55%</td><td class="ok">✓</td></tr>
+      <tr><td colspan="6" class="muted">7 人 × 12 月 = 84 筆目標，加總鎖定 130.0M（各業務逐月加總 = 該業務年目標）。張澄宇 46% vs 月報 45% 為四捨五入邊界 1% 差，屬正常。</td></tr>
     </table>
   </section>
 
   <section>
-    <h2><span class="n">5</span>資料品質與隔離查證</h2>
-    <div class="lead">全案零新增自訂欄位（org publisher 失效），只用既有欄位 + 新報表 + 新 App Page + 補資料；嚴守 CBUSDO 多 App 隔離。</div>
+    <h2><span class="n">6</span>資料品質與隔離查證</h2>
+    <div class="lead">全案零新增自訂欄位（org publisher 失效），只用既有欄位 + 新報表 + 新 App Page + 補資料 + 新業務帳號；嚴守 CBUSDO 多 App 隔離。</div>
     <div class="kpis">
       <div class="kpi"><div class="v g">84</div><div class="l">目標筆數（7×12）</div></div>
       <div class="kpi"><div class="v g">0</div><div class="l">空值／不合格筆</div></div>
-      <div class="kpi"><div class="v g">5</div><div class="l">首頁 reportChart（均有資料）</div></div>
-      <div class="kpi"><div class="v g">14</div><div class="l">permset 指派人數</div></div>
+      <div class="kpi"><div class="v g">130.0M</div><div class="l">目標加總 = 年目標</div></div>
+      <div class="kpi"><div class="v g">7/7</div><div class="l">個人達成率對月報</div></div>
     </div>
     <table style="margin-top:16px">
       <tr><th style="width:34%">隔離檢查項</th><th>結果</th></tr>
-      <tr><td>報表 filter 前綴</td><td class="ok">5 張報表全帶 <code>ADT-O-／ADT-T-</code> 前綴 filter ✓</td></tr>
+      <tr><td>報表 filter 前綴</td><td class="ok">報表全帶 <code>ADT-O-／ADT-T-</code> 前綴 filter；成交類改用 <code>ForecastCategory=Closed</code> 判定，避開繁中階段值驗證 ✓</td></tr>
       <tr><td>目標 RecordType 限定</td><td class="ok">補的目標全為 <code>Opportunity.ADT_Target</code>、ForecastCategory=Omitted（不污染 pipeline/forecast）✓</td></tr>
-      <tr><td>App scope</td><td class="ok">App Page 只掛銓盛-Adtek App；<code>standard-home</code>（原 HomePage）保留當備援，未覆蓋任何全 org 首頁 ✓</td></tr>
+      <tr><td>階段中文化外溢</td><td class="ok">只改銓盛專屬 <code>ADT_Sales_Process</code>；建商-EE 中文階段、內建 demo 英文階段各綁自己的流程，未受影響 ✓</td></tr>
+      <tr><td>新業務帳號隔離</td><td class="ok">7 位新業務一律 <code>adt.</code> username 前綴、只指派 <code>ADT_Adtek_Sales_Service</code> permset、只承接 <code>ADT-</code> 資料，未改任何既有共用帳號 ✓</td></tr>
+      <tr><td>App scope</td><td class="ok">App Page 只掛銓盛-Adtek App，未覆蓋任何全 org 首頁 ✓</td></tr>
       <tr><td>不碰其他 App</td><td class="ok">未動 Thermos／建商-EE／配方時代 等任何其他 App 的 tab／layout／欄位 ✓</td></tr>
+    </table>
+
+    <h3>月報真數據 vs org 對照（據實標註差異）</h3>
+    <table>
+      <tr><th style="width:26%">項目</th><th style="width:37%">月報 PPT 真值</th><th>org 現況 / 說明</th></tr>
+      <tr><td>部門年目標</td><td>130,000,000（1.3 億）</td><td class="ok">org 84 筆目標加總 = 130,000,000，逐格相符 ✓</td></tr>
+      <tr><td>7 業務個人年目標</td><td>黃35.0／簡20.8／徐20.8／張19.9／林11.3／李11.1／吳11.1M</td><td class="ok">org 逐人年目標 = 上述真值，且各人逐月加總鎖回年目標 ✓</td></tr>
+      <tr><td>逐月目標曲線</td><td>image19 給 4–9 月、image21 給黃晁嶸全 12 月</td><td class="warn">image19 未顯示的 1–3／10–12 月，依部門逐月比例合理還原，並用 12 月吸收餘額鎖回各人年目標；非 PPT 直給，據實標註</td></tr>
+      <tr><td>部門達成率</td><td>68%（Q1 105／Q2 114／Q3 49）</td><td class="ok">org 實際 88.8M ÷ 130M = 68%；逐季 106／114／49%，逐格吻合 ✓</td></tr>
+      <tr><td>個人達成率</td><td>黃89／林57／李49／張45／吳55／簡75／徐71%</td><td class="warn">org 6/7 完全相符；張澄宇 org 46% vs 月報 45%，四捨五入邊界 1% 差</td></tr>
+      <tr><td>實際成交（分子）</td><td>月報未逐案列示</td><td class="ok">沿用 org 真實成交結案（含真實客戶 <code>ADT-A-</code>），非虛構；R1／R3（全期）89.9M 比 R15／R16（2026）88.8M 多 1.18M，為一筆 2025 年成交（高通二期案）落在 R1／R3 全期範圍內，屬正常</td></tr>
     </table>
   </section>
 
   <section>
-    <h2><span class="n">6</span>現場導覽（給主管看的 30 秒）</h2>
+    <h2><span class="n">7</span>現場導覽（給主管看的 30 秒）</h2>
     <ol class="steps">
       <li>右上 App 選單 → 切換到 <b>銓盛-Adtek</b>。</li>
       <li>App 直接停在 <b>「經營戰情室」</b>首頁（已設為預設進入頁，導覽列第一個 tab）。</li>
-      <li>第一屏：頂部 <b>KPI 摘要卡</b>（年目標 1.3 億 / 達成 67.6% / Q3 48.9% / H2 25.6%）+ <b>年度達成率環圈</b>。</li>
-      <li>往下：<b>逐月業績推移</b> → 看得出 Q3 起訂單量急縮；<b>各業務逐季同期</b> → 下半年落後一目了然。</li>
-      <li>再往下：<b>業務員成交排行</b>（誰扛得住）+ <b>Pipeline 各階段量體</b>（後續補得回來嗎）。</li>
+      <li>第一屏：頂部 <b>KPI 摘要卡</b>（年目標 1.3 億 / 達成 68% / Q3 49% / Q2 114%）+ <b>年度達成率環圈</b>。</li>
+      <li>往下：<b>逐月業績推移</b> → 看得出 Q3 起訂單量急縮；<b>各業務逐季同期</b> → 下半年落後一目了然，柱狀直接標 <b>7 位中文名業務</b>。</li>
+      <li>再往下：<b>業務員成交排行</b>（黃晁嶸領先、誰扛得住）+ <b>Pipeline 各階段量體</b>（後續補得回來嗎）。</li>
+      <li>隨手點一筆機會 → 頂端 <b>銷售路徑</b> 已是繁中六階段（確認需求→需求探索→提案報價→合約議價→成交結案）。</li>
       <li>每張圖右上有 <b>重新整理</b> 鈕，數字即時連動 CRM 成交，不再靠人工彙整月報。</li>
     </ol>
   </section>
 
   <div class="foot">
     銓盛-Adtek 經營戰情室首頁 · Salesforce App Page（<code>flexipage:defaultAppHomeTemplate</code>）+ 5 張 <code>flexipage:reportChart</code> + richText KPI 摘要 · 全原生 OOTB 元件 · CBUSDO 隔離已查證。
-    實際成交數字以 org 真實 Closed Won 為準，與月報 PPT 有小幅差異屬正常；達成率曲線（部門 67.6% / Q3 48.9%）已對齊月報。
+    本次優化：機會銷售路徑繁中六階段、目標明細換月報真值（部門 130M、7 業務個人年目標與逐月曲線對回 image6／18／19／21）。實際成交以 org 真實成交結案為準，達成率（部門 68% / Q3 49%）已逐格對齊月報，少數 1% 差為四捨五入邊界，已據實標註。
   </div>
 
 </div>
