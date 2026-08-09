@@ -286,7 +286,7 @@
       <tr><td>預測型別</td><td><b>Opportunity Revenue（依商機收入）</b> · org 既有型別 <code>SDO_Sales_Opportunity_Revenue</code>（收入型、依會計年度期間）· 未改任何全域預測設定</td></tr>
       <tr><td>角色階層</td><td>新建銓盛專屬三層獨立分支：<b>銓盛業務協理 → 銓盛業務經理 → 銓盛業務專員</b>（<code>ADT_Sales_VP → ADT_Sales_Manager → ADT_Sales_Rep</code>）</td></tr>
       <tr><td>人員指派</td><td>7 位業務掛<b>業務專員</b>、開啟預測；新建 1 個中文名業務主管功能帳號掛<b>業務經理</b>、開啟預測，可向上匯總看到 7 位業務</td></tr>
-      <tr><td>導覽列</td><td>銓盛-Adtek App 導覽列在「機會」後新增 <b>「預測」</b>Tab（<code>standard-Forecasting3</code>）· 僅加本 App，不動其他 App</td></tr>
+      <tr><td>導覽列</td><td>銓盛-Adtek App 導覽列在「機會」後新增 <b>「預測」</b>Tab（<code>standard-Forecasting3</code>）· 僅加本 App，不動其他 App · 已以 <code>AppTabMember</code> 系統物件實測導覽列渲染，「預測」落在<b>第 5 位</b>（首頁／營運戰情台／帳戶／機會／<b>預測</b>／個案…）</td></tr>
     </table>
 
     <h3>預測四大分類 ← 對應繁中六階段（資料天生就能餵進去）</h3>
@@ -325,7 +325,9 @@
       <tr><td>角色階層鏈 協理→經理→專員</td><td class="ok">VP(頂層)→Manager→Rep ✓</td></tr>
       <tr><td>只改 <code>adt.*</code> 帳號、不動任何 SDO 內建預測使用者</td><td class="ok">✓</td></tr>
       <tr><td>不改全域 <code>ForecastingSettings</code>、沿用既有收入型別</td><td class="ok">✓</td></tr>
+      <tr><td>「預測」Tab 眼見為憑 —— 反向 retrieve 確認 org App metadata 含 <code>standard-Forecasting3</code>、再以 <code>AppTabMember</code> 確認導覽列實際渲染</td><td class="ok">✓ 導覽列第 5 位「預測」（非只看部署 Succeeded）</td></tr>
     </table>
+    <p class="muted" style="margin-top:8px">若導覽列一時沒看到「預測」，是瀏覽器快取住舊導覽 —— <b>硬重整（Ctrl+Shift+R）或重新載入 App</b> 即出現；org 端 metadata 與 <code>AppTabMember</code> 均已實測含此 Tab。</p>
   </section>
 
   <section>
