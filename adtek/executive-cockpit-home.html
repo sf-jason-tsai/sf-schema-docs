@@ -70,7 +70,7 @@
   <div class="cover">
     <div class="kicker">SALESFORCE APP PAGE · 銓盛電子 自動化 OT 整合業務部</div>
     <h1>經營戰情室首頁</h1>
-    <div class="sub">把每月主管會議月報的頭號重點，直接搬上 Salesforce App 首頁 — 一開 App 就看到達成率、逐月趨勢、業務排行、Pipeline 量體，全部即時連動 CRM 成交資料。本次再做兩項優化：銷售路徑階段全繁體中文、目標明細換月報真實數據；並對照官網真數據做一輪 Data Quality 精修。</div>
+    <div class="sub">把每月主管會議月報的頭號重點，直接搬上 Salesforce App 首頁 — 一開 App 就看到達成率、逐月趨勢、業務排行、Pipeline 量體，全部即時連動 CRM 成交資料。本次再做多項優化：銷售路徑階段全繁體中文、目標明細換月報真實數據、對照官網真數據做一輪 Data Quality 精修，並在 App 導覽列加上原生<b>「預測」Tab</b>（協同預測），讓主管即時看到 7 位業務逐季 pipeline 匯總。</div>
     <div class="meta">資料來源：<code>2026_06主管會議報告_自動化OT整合業務部20260720.pptx</code>（37 頁，image6／18／19／21 逐格讀值）+ 銓盛電子官網 <code>adtek.com.tw</code>（產品型號池）· 全原生 OOTB 元件（App Page + reportChart）· 驗收日 2026-08-09</div>
   </div>
 
@@ -272,7 +272,64 @@
   </section>
 
   <section>
-    <h2><span class="n">8</span>現場導覽（給主管看的 30 秒）</h2>
+    <h2><span class="n">8</span>銷售預測 · 原生協同預測（Collaborative Forecasts）</h2>
+    <p class="lead">在 App 導覽列直接秀出 Sales Cloud 原生的<b>「預測」</b>Tab —— 主管一開就看到 7 位業務逐季、逐分類的 pipeline 匯總，數字全部即時連動商機，不再靠 Excel 手動彙整。純 OOTB，零自訂程式。</p>
+
+    <div class="pain">
+      <div class="pt">主管的痛：明明每個業務都在填商機，卻要等月底才有一張「這季能收多少」的彙總表</div>
+      <div class="sol">解法：啟用原生<b>協同預測</b>，用<b>角色階層</b>把 7 位業務的商機依<b>預測分類</b>（Commit／Best Case／Pipeline／Closed）逐季向上匯總到業務主管；業務自己也能在同一個 Tab 看到個人數字。全部即時算自 CRM 真實商機金額。</div>
+    </div>
+
+    <h3>做了什麼（全 OOTB，四個動作）</h3>
+    <table>
+      <tr><th style="width:22%">項目</th><th>內容</th></tr>
+      <tr><td>預測型別</td><td><b>Opportunity Revenue（依商機收入）</b> · org 既有型別 <code>SDO_Sales_Opportunity_Revenue</code>（收入型、依會計年度期間）· 未改任何全域預測設定</td></tr>
+      <tr><td>角色階層</td><td>新建銓盛專屬三層獨立分支：<b>銓盛業務協理 → 銓盛業務經理 → 銓盛業務專員</b>（<code>ADT_Sales_VP → ADT_Sales_Manager → ADT_Sales_Rep</code>）</td></tr>
+      <tr><td>人員指派</td><td>7 位業務掛<b>業務專員</b>、開啟預測；新建 1 個中文名業務主管功能帳號掛<b>業務經理</b>、開啟預測，可向上匯總看到 7 位業務</td></tr>
+      <tr><td>導覽列</td><td>銓盛-Adtek App 導覽列在「機會」後新增 <b>「預測」</b>Tab（<code>standard-Forecasting3</code>）· 僅加本 App，不動其他 App</td></tr>
+    </table>
+
+    <h3>預測四大分類 ← 對應繁中六階段（資料天生就能餵進去）</h3>
+    <table>
+      <tr><th style="width:26%">預測分類</th><th style="width:40%">對應銷售路徑階段</th><th>意義</th></tr>
+      <tr><td><b>Commit</b> 已承諾</td><td>合約議價</td><td>業務敢對主管承諾這季會收的單</td></tr>
+      <tr><td><b>Best Case</b> 最佳狀況</td><td>需求探索、提案報價</td><td>樂觀但仍有機會拿下的單</td></tr>
+      <tr><td><b>Pipeline</b> 開發中</td><td>確認需求</td><td>早期、還在培養的機會</td></tr>
+      <tr><td><b>Closed</b> 已結案</td><td>成交結案</td><td>已實際成交入帳</td></tr>
+    </table>
+    <p class="muted">繁中六階段的預測分類對應為 org 既有設定（本次未改）；「結案未成」歸 Omitted 不計入四大分類，與達成率口徑一致。</p>
+
+    <h3>主管在「預測」Tab 應看到的數字（<code>verify_forecast.apex</code> 用 SOQL 直算對照正解）</h3>
+    <p>下列為 2026 會計年度、7 位業務、依預測分類匯總的商機金額 —— 即 Tab 頂部主管視角的團隊數字，逐格可對回 CRM 真實 pipeline。</p>
+    <div class="kpis">
+      <div class="kpi"><div class="v g">2,278.7 萬</div><div class="l">Open Pipeline<br>（Pipeline+Best Case+Commit）</div></div>
+      <div class="kpi"><div class="v">262.8 萬</div><div class="l">Commit 已承諾</div></div>
+      <div class="kpi"><div class="v">1,434.6 萬</div><div class="l">Best Case 最佳狀況</div></div>
+      <div class="kpi"><div class="v">8,860.4 萬</div><div class="l">Closed 已結案</div></div>
+    </div>
+    <table>
+      <tr><th>2026 逐季</th><th>Pipeline</th><th>Best Case</th><th>Commit</th><th>Closed</th></tr>
+      <tr><td>Q1</td><td>0</td><td>0</td><td>0</td><td class="ok">3,440.6 萬</td></tr>
+      <tr><td>Q2</td><td>0</td><td>0</td><td>0</td><td class="ok">4,172.1 萬</td></tr>
+      <tr><td>Q3</td><td>144.3 萬</td><td>797.5 萬</td><td>262.8 萬</td><td>1,247.7 萬</td></tr>
+      <tr><td>Q4</td><td>437.0 萬</td><td>637.1 萬</td><td>0</td><td>0</td></tr>
+    </table>
+    <p class="muted" style="margin-top:8px">逐季故事與月報一致：上半年靠 Closed 撐、Q3 起 pipeline 才開始鋪、Q4 仍在開發中 —— 預測 Tab 把「下半年要補多少單」量化到每一季。<b>ForecastingItem 已自動生成 642 筆（7 業務各 78–102 筆）</b>，主管進 Tab 即刻有數字，demo 零等待、免手動重算。</p>
+
+    <h3>隔離查證（<code>verify_forecast.apex</code>，逐項）</h3>
+    <table>
+      <tr><th style="width:52%">驗證內容</th><th>結果</th></tr>
+      <tr><td>7 業務 role=業務專員 且開啟預測</td><td class="ok">7／7 ✓</td></tr>
+      <tr><td>主管 role=業務經理 且開啟預測</td><td class="ok">1／1 ✓</td></tr>
+      <tr><td>業務管理處（公海）不掛預測角色、不開預測</td><td class="ok">role=null／fc=false ✓（匯總乾淨對齊月報 7 業務）</td></tr>
+      <tr><td>角色階層鏈 協理→經理→專員</td><td class="ok">VP(頂層)→Manager→Rep ✓</td></tr>
+      <tr><td>只改 <code>adt.*</code> 帳號、不動任何 SDO 內建預測使用者</td><td class="ok">✓</td></tr>
+      <tr><td>不改全域 <code>ForecastingSettings</code>、沿用既有收入型別</td><td class="ok">✓</td></tr>
+    </table>
+  </section>
+
+  <section>
+    <h2><span class="n">9</span>現場導覽（給主管看的 30 秒）</h2>
     <ol class="steps">
       <li>右上 App 選單 → 切換到 <b>銓盛-Adtek</b>。</li>
       <li>App 直接停在 <b>「經營戰情室」</b>首頁（已設為預設進入頁，導覽列第一個 tab）。</li>
@@ -280,13 +337,14 @@
       <li>往下：<b>逐月業績推移</b> → 看得出 Q3 起訂單量急縮；<b>各業務逐季同期</b> → 下半年落後一目了然，柱狀直接標 <b>7 位中文名業務</b>。</li>
       <li>再往下：<b>業務員成交排行</b>（黃晁嶸領先、誰扛得住）+ <b>Pipeline 各階段量體</b>（後續補得回來嗎）。</li>
       <li>隨手點一筆機會 → 頂端 <b>銷售路徑</b> 已是繁中六階段（確認需求→需求探索→提案報價→合約議價→成交結案）。</li>
+      <li>導覽列點 <b>「預測」</b>Tab → 以業務主管身分看到 7 位業務逐季的 <b>Commit／Best Case／Pipeline／Closed</b> 匯總；切換季別、展開任一業務即見其貢獻 —— 全部即時算自 CRM 商機。</li>
       <li>每張圖右上有 <b>重新整理</b> 鈕，數字即時連動 CRM 成交，不再靠人工彙整月報。</li>
     </ol>
   </section>
 
   <div class="foot">
     銓盛-Adtek 經營戰情室首頁 · Salesforce App Page（<code>flexipage:defaultAppHomeTemplate</code>）+ 5 張 <code>flexipage:reportChart</code> + richText KPI 摘要 · 全原生 OOTB 元件 · CBUSDO 隔離已查證。
-    本次優化：機會銷售路徑繁中六階段、目標明細換月報真值（部門 130M、7 業務個人年目標與逐月曲線對回 image6／18／19／21）、對照官網真數據的 Data Quality 精修（業務 owner 全中文化＋業務管理處公海帳號、搶單警示去英文名、產品型號對回官網、客戶電話統一 +886/+1）。實際成交以 org 真實成交結案為準，達成率（部門 68% / Q3 49%）已逐格對齊月報且 DQ 精修後未變，少數 1% 差為四捨五入邊界，已據實標註。CBUSDO 多 App 隔離全程查證。
+    本次優化：機會銷售路徑繁中六階段、目標明細換月報真值（部門 130M、7 業務個人年目標與逐月曲線對回 image6／18／19／21）、對照官網真數據的 Data Quality 精修（業務 owner 全中文化＋業務管理處公海帳號、搶單警示去英文名、產品型號對回官網、客戶電話統一 +886/+1）。實際成交以 org 真實成交結案為準，達成率（部門 68% / Q3 49%）已逐格對齊月報且 DQ 精修後未變，少數 1% 差為四捨五入邊界，已據實標註。並新增原生協同預測：新建銓盛專屬三層角色階層（協理→經理→專員）、7 業務＋1 主管開啟預測、導覽列加「預測」Tab（<code>standard-Forecasting3</code>）、沿用既有收入型別 <code>SDO_Sales_Opportunity_Revenue</code> 不動全域設定；<code>verify_forecast.apex</code> 以 SOQL 直算對照正解逐格對回 CRM pipeline。CBUSDO 多 App 隔離全程查證。
   </div>
 
 </div>
