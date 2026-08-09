@@ -169,6 +169,12 @@ const PAGES = [
         dest: 'jobs/bluocean-report.html',
         title: '104 遠距藍海職缺分析報告 (2026-07-27)'
     },
+    // ─── 銓盛-Adtek 銷售 Account 管理優化 ───
+    {
+        src: 'C:/Users/bingyan.tsai/Desktop/Claude/adtek-demo/docs/adtek-sales-mgmt-optimization.html',
+        dest: 'adtek/sales-mgmt-optimization.html',
+        title: '銓盛-Adtek · 銷售 Account 管理優化驗收 (2026-08-09)'
+    },
     // ↑ 加新頁時只需在這裡插入 { src, dest, title }
 ];
 

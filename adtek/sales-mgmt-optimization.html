@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>銓盛-Adtek · 銷售 Account 管理優化驗收</title>
+<style>
+  :root{
+    --ink:#1a1a1a; --ink2:#4a4a4a; --ink3:#8a8a8a;
+    --line:#d0d0d0; --bg:#f5f5f5; --white:#fff;
+    --blue:#2167dd; --blue2:#a1c1f6; --green:#4ab2a8; --green2:#95d4ce;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{font-family:"Microsoft JhengHei","Noto Sans TC",Arial,sans-serif;
+    color:var(--ink);line-height:1.5;background:var(--bg);}
+  .wrap{max-width:1080px;margin:0 auto;background:var(--white);}
+  /* 封面 */
+  .cover{background:var(--blue);color:#fff;padding:56px 48px 44px;}
+  .cover .kicker{font-size:13px;letter-spacing:.08em;opacity:.85;margin-bottom:14px;}
+  .cover h1{font-size:30px;font-weight:700;line-height:1.25;margin-bottom:10px;}
+  .cover .sub{font-size:15px;opacity:.92;font-weight:400;}
+  .cover .meta{margin-top:26px;font-size:12px;opacity:.8;border-top:1px solid rgba(255,255,255,.3);padding-top:14px;}
+  /* 區塊 */
+  section{padding:34px 48px;border-bottom:1px solid var(--line);}
+  h2{font-size:20px;font-weight:700;margin-bottom:6px;display:flex;align-items:center;gap:10px;}
+  h2 .n{display:inline-flex;width:26px;height:26px;border-radius:50%;background:var(--blue);
+    color:#fff;font-size:13px;align-items:center;justify-content:center;flex:0 0 auto;}
+  h2 + .lead{color:var(--ink2);font-size:13px;margin-bottom:18px;}
+  h3{font-size:15px;font-weight:600;color:var(--blue);margin:20px 0 8px;}
+  p{font-size:13px;color:var(--ink);margin-bottom:8px;}
+  .muted{color:var(--ink3);font-size:12px;}
+  /* KPI 卡 */
+  .kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:8px 0 4px;}
+  .kpi{border:1px solid var(--line);border-radius:8px;padding:16px 14px;text-align:center;}
+  .kpi .v{font-size:26px;font-weight:700;color:var(--blue);}
+  .kpi .v.g{color:var(--green);}
+  .kpi .l{font-size:12px;color:var(--ink2);margin-top:4px;}
+  /* 表格 */
+  table{width:100%;border-collapse:collapse;margin:10px 0;font-size:12.5px;
+    border:1px solid var(--blue);}
+  th{background:var(--blue);color:#fff;font-weight:600;text-align:left;padding:9px 11px;}
+  td{padding:8px 11px;border-bottom:1px solid var(--line);vertical-align:top;}
+  tr:nth-child(even) td{background:var(--bg);}
+  .tag{display:inline-block;font-size:11px;padding:2px 8px;border-radius:10px;
+    background:var(--blue2);color:#0f2f66;font-weight:600;}
+  .tag.g{background:var(--green2);color:#134640;}
+  .ok{color:var(--green);font-weight:700;}
+  /* 痛點對照 */
+  .pain{border:1px solid var(--line);border-left:3px solid var(--blue);border-radius:6px;
+    padding:14px 16px;margin-bottom:12px;background:var(--white);}
+  .pain .pt{font-weight:600;font-size:13.5px;margin-bottom:4px;}
+  .pain .sol{font-size:12.5px;color:var(--ink2);}
+  .pain .sol b{color:var(--ink);}
+  /* 樹狀 */
+  .tree{font-size:12.5px;line-height:1.7;background:var(--bg);border:1px solid var(--line);
+    border-radius:6px;padding:16px 18px;font-family:Consolas,"Microsoft JhengHei",monospace;}
+  .tree .root{font-weight:700;color:var(--blue);}
+  .tree .c{color:var(--ink2);padding-left:20px;}
+  /* 導覽步驟 */
+  ol.steps{margin:8px 0 0 0;padding-left:0;counter-reset:s;list-style:none;}
+  ol.steps li{position:relative;padding:10px 0 10px 40px;border-bottom:1px dashed var(--line);font-size:13px;}
+  ol.steps li:last-child{border-bottom:none;}
+  ol.steps li::before{counter-increment:s;content:counter(s);position:absolute;left:0;top:9px;
+    width:24px;height:24px;background:var(--green);color:#fff;border-radius:50%;
+    display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;}
+  code{font-family:Consolas,monospace;background:var(--bg);padding:1px 6px;border-radius:4px;
+    font-size:12px;color:var(--ink2);}
+  footer{padding:22px 48px;color:var(--ink3);font-size:11px;text-align:center;}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="cover">
+    <div class="kicker">SALES CLOUD · ACCOUNT MANAGEMENT 優化</div>
+    <h1>銓盛-Adtek · 銷售 Account 管理優化驗收</h1>
+    <div class="sub">客戶分級 × 集團母子 × 出貨供應鏈 × 搶單警示 × 命名規範</div>
+    <div class="meta">CBUSDO Org · 銓盛-Adtek Sales &amp; Service App · 2026-08-09 · B 方案（零新欄位，全用既有欄位＋標準關聯）</div>
+  </div>
+
+  <!-- 摘要 KPI -->
+  <section>
+    <h2><span class="n">✓</span>驗收總覽</h2>
+    <p class="lead">所有數據由 org 端 <code>sf apex run</code> 實查得出，非估算。</p>
+    <div class="kpis">
+      <div class="kpi"><div class="v g">0</div><div class="l">終端客戶未分級<br>(63 筆全補值)</div></div>
+      <div class="kpi"><div class="v g">100%</div><div class="l">商機命名合規<br>(42 筆)</div></div>
+      <div class="kpi"><div class="v">29</div><div class="l">實際 vs 建議<br>級別落差揪出</div></div>
+      <div class="kpi"><div class="v">5</div><div class="l">搶單警示<br>自動命中</div></div>
+    </div>
+    <div class="kpis" style="margin-top:12px;">
+      <div class="kpi"><div class="v g">78</div><div class="l">Adtek 客戶<br>Rating 全有值</div></div>
+      <div class="kpi"><div class="v">13</div><div class="l">集團母子樹<br>(母公司節點)</div></div>
+      <div class="kpi"><div class="v g">2</div><div class="l">新自動化 Flow<br>org 已啟用</div></div>
+      <div class="kpi"><div class="v g">3</div><div class="l">新驗收報表<br>R12/R13/R14</div></div>
+    </div>
+  </section>
+
+  <!-- 痛點對照 -->
+  <section>
+    <h2><span class="n">1</span>痛點 → 解法對照</h2>
+    <p class="lead">對應 2 份主管會議／週報 PPT 提出的 5 大痛點，逐項落地。</p>
+
+    <div class="pain">
+      <div class="pt">痛點 1 · 8,000+ 客戶未分級，業務資源平均分散</div>
+      <div class="sol"><b>解法：</b>終端客戶 63 筆 tier A/B/C <b>0 未分級</b>；另建「自動建議級別」欄位（Rating），依營收＋策略產業自動評分，業務可對照人工分級是否需調整。</div>
+    </div>
+    <div class="pain">
+      <div class="pt">痛點 2 · 出貨對象與終端客戶脫鉤，同一終端被多業務重複開發、搶單糾紛無機制</div>
+      <div class="sol"><b>解法：</b>① 用 <code>ParentId</code> 建真實供應鏈母子（銓盛原廠→盤商→SI／統包）；② 新增<b>搶單警示 Flow</b>：新商機命中同終端他人進行中商機即自動標記＋寫協調提示，不阻擋存檔。</div>
+    </div>
+    <div class="pain">
+      <div class="pt">痛點 3 · 分級太主觀，未納入外部公開資訊</div>
+      <div class="sol"><b>解法：</b>分級規則納入<b>年營收＋行業別＋員工數</b>，每筆客戶 Description 寫分級理由；R13 報表揪出 29 筆人工分級與系統建議落差。</div>
+    </div>
+    <div class="pain">
+      <div class="pt">痛點 4 · 集團與子公司無母子關聯，看不到集團全貌</div>
+      <div class="sol"><b>解法：</b>台積電／群創／友達 各廠掛回總公司；通路夥伴形成兩層供應鏈樹。R12 報表依出貨方類型彙總、母公司欄位呈現集團歸屬。</div>
+    </div>
+    <div class="pain">
+      <div class="pt">痛點 5 · 商機命名不規範</div>
+      <div class="sol"><b>解法：</b>依 PPT 真實格式 <code>專案內容_通路/SI_客戶簡稱_銓盛電子</code> 改寫 42 筆商機，合規率 100%；Home 頁加命名規範提示卡。</div>
+    </div>
+  </section>
+
+  <!-- 實作明細 -->
+  <section>
+    <h2><span class="n">2</span>交付項目明細</h2>
+    <table>
+      <tr><th style="width:24%">項目</th><th style="width:14%">類型</th><th>內容 / 隔離設計</th></tr>
+      <tr><td>自動建議級別</td><td><span class="tag">Flow</span></td><td><code>ADT_Account_Suggest_Tier</code>（before-save）依營收＋產業算 Rating；嚴格限 RT=ADT_End_Customer</td></tr>
+      <tr><td>搶單警示</td><td><span class="tag">Flow</span></td><td><code>ADT_Opp_Dup_Alert</code>（after-save）查同終端他人進行中商機→打旗標＋Description 警示；限 RT=ADT_Sales</td></tr>
+      <tr><td>搶單警示商機</td><td><span class="tag g">List View</span></td><td><code>ADT_Dup_Alert_Opps</code>（旗標=true），已掛 Adtek Home 最上方</td></tr>
+      <tr><td>R12 集團母子彙總</td><td><span class="tag g">Report</span></td><td>依出貨方類型分組，母公司欄位呈現集團歸屬；filter ADT-A-</td></tr>
+      <tr><td>R13 實際 vs 建議級別</td><td><span class="tag g">Report</span></td><td>矩陣：實際 tier × 建議 Rating，落差一目了然；filter ADT-A-</td></tr>
+      <tr><td>R14 搶單警示清單</td><td><span class="tag g">Report</span></td><td>依終端客戶彙總被標記商機，供主管協調；filter ADT-O-</td></tr>
+      <tr><td>命名規範提示</td><td><span class="tag">Home 卡</span></td><td>Adtek Home sidebar richText，說明命名格式與範例</td></tr>
+      <tr><td>資料補值</td><td><span class="tag">Data</span></td><td>63 終端客戶 tier/Rating/理由；15 通路夥伴 [角色] 標記；42 商機規範命名</td></tr>
+      <tr><td>FLS 權限</td><td><span class="tag">Permset</span></td><td><code>tier__c</code>／<code>SDO_Sales_Stalled_Opportunity__c</code> 補入，已指派 6 業務</td></tr>
+    </table>
+    <p class="muted">＊ 全案 B 方案：CBUSDO publisher 對既有物件新增欄位失效（GATE 0 探針確認），故零新欄位，全用既有欄位＋ParentId 標準關聯。</p>
+  </section>
+
+  <!-- 分級落差亮點 -->
+  <section>
+    <h2><span class="n">3</span>亮點：自動建議級別揪出 29 筆分級落差</h2>
+    <p class="lead">證明「納入營收＋行業別」能揪出人工主觀分級的盲點——這是 demo 最有說服力的一頁。</p>
+    <table>
+      <tr><th>落差型態</th><th>筆數</th><th>意義</th><th>代表客戶（營收）</th></tr>
+      <tr><td>實際 B → 建議 A</td><td><b>11</b></td><td>高價值被低估</td><td>國泰人壽(9000億)、友達龍潭(2700億)、群創南科(2160億)</td></tr>
+      <tr><td>實際 C → 建議 B</td><td><b>10</b></td><td>潛力客戶被埋沒</td><td>建準電機(100億) 等</td></tr>
+      <tr><td>實際 C → 建議 A</td><td><b>4</b></td><td>嚴重低估</td><td>策略產業高營收客戶</td></tr>
+      <tr><td>實際 B → 建議 C</td><td>2</td><td>資源可能過度投入</td><td>印能科技(50億)、中國醫北港(60億)</td></tr>
+      <tr><td>實際 A → 建議 B/C</td><td>2</td><td>人工高估</td><td>台中榮總(200億醫療)、高雄捷運(80億政府)</td></tr>
+    </table>
+    <p class="muted">建議級別僅供業務對照參考，最終分級仍尊重人工判斷（Flow 只寫 Rating 建議、不覆寫既有 tier）。</p>
+  </section>
+
+  <!-- 母子樹 -->
+  <section>
+    <h2><span class="n">4</span>真實供應鏈母子結構（節錄自 PPT）</h2>
+    <h3>出貨供應鏈（通路夥伴）</h3>
+    <div class="tree">
+<span class="root">■ 銓盛電子 Adtek（原廠總部）</span>
+<span class="c">└ 大同綠能（系統整合）　└ 群光電能 Chicony　└ 台達電子能源　└ 士林電機　└ 中興電工　└ 東元電機</span>
+<span class="c">　　大同綠能 └ 克利達科技 · 三井工程</span>
+<span class="c">　　群光電能 └ 唯郡科技(SI) · 詩碼特自動化</span>
+    </div>
+    <p class="muted" style="margin-top:6px;">南港機場公宅案鏈路：銓盛 → 大同綠能 → 群光電能；台中榮總案：統包唯郡 → 詩碼特施工。</p>
+    <h3>終端客戶集團樹</h3>
+    <div class="tree">
+<span class="root">■ 台積電 TSMC（總公司）</span> <span class="c">└ F12 · F15 · F18南科 · AP7嘉義CoWoS · AP8南科 · F21亞利桑那（皆 A 級）</span>
+<span class="root">■ 群創光電 Innolux（總公司）</span> <span class="c">└ 北廠 · T3廠 · 南科廠</span>
+<span class="root">■ 友達光電 AUO（總公司）</span> <span class="c">└ 台中廠 · 龍潭廠</span>
+    </div>
+  </section>
+
+  <!-- Demo 導覽 -->
+  <section>
+    <h2><span class="n">5</span>Demo 導覽路徑</h2>
+    <ol class="steps">
+      <li>開啟 <b>銓盛-Adtek</b> App → Home，最上方即見<b>搶單警示商機</b>清單，sidebar 有命名規範提示。</li>
+      <li>切 <b>客戶（Accounts）</b> → <code>ADT_Sea_Pool</code> 公海清單 → 點「認領客戶」，Owner 轉為自己、拜訪天數歸零。</li>
+      <li>開任一集團客戶（如台積電總公司）→ 記錄頁看<b>子公司 related list</b>（各廠），集團全貌一覽。</li>
+      <li>在已有商機的終端客戶（如台積電 AP7）用<b>另一業務身分</b>新建商機 → 存檔後該商機被自動打上搶單警示旗標＋協調提示。</li>
+      <li>報表資料夾 <b>銓盛-Adtek Reports</b> → 看 <b>R13</b>（分級落差）、<b>R12</b>（集團彙總）、<b>R14</b>（搶單清單）。</li>
+    </ol>
+  </section>
+
+  <!-- 隔離驗證 -->
+  <section>
+    <h2><span class="n">6</span>CBUSDO 多 App 隔離驗證</h2>
+    <table>
+      <tr><th>檢查項</th><th>結果</th></tr>
+      <tr><td>兩支 Flow 皆以 RecordType 等值 filter 限定 Adtek 專屬 RT</td><td class="ok">通過</td></tr>
+      <tr><td>ADT_End_Customer RT 使用純淨度（63 筆 100% ADT-A- 前綴，0 筆他 App）</td><td class="ok">通過</td></tr>
+      <tr><td>所有 List View／Report filter 前綴 ADT-A- / ADT-O-</td><td class="ok">通過</td></tr>
+      <tr><td>Flexipage 僅改 App scope 的 ADT_Adtek_Home，未覆蓋全 org layout</td><td class="ok">通過</td></tr>
+      <tr><td>只用既有欄位（tier__c / Rating / Type / Description / ParentId / SDO 旗標），未碰他 App 專屬欄位</td><td class="ok">通過</td></tr>
+    </table>
+  </section>
+
+  <footer>
+    銓盛-Adtek Sales &amp; Service · CBUSDO Org · 本報告數據皆由 org 實查產生 · 2026-08-09
+  </footer>
+
+</div>
+</body>
+</html>
