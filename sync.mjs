@@ -175,6 +175,11 @@ const PAGES = [
         dest: 'adtek/sales-mgmt-optimization.html',
         title: '銓盛-Adtek · 銷售 Account 管理優化驗收 (2026-08-09)'
     },
+    {
+        src: 'C:/Users/bingyan.tsai/Desktop/Claude/adtek-demo/landing/energy-taiwan-2025.html',
+        dest: 'adtek/energy-taiwan-2025.html',
+        title: 'Energy Taiwan 2025 台灣國際智慧能源週 · 報名登陸頁'
+    },
     // ↑ 加新頁時只需在這裡插入 { src, dest, title }
 ];
 

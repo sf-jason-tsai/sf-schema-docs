@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#006e36">
+<title>Energy Taiwan 2025 台灣國際智慧能源週｜ADTEK 銓盛電子</title>
+<style>
+  /* 仿造 adtek.com.tw 官網品牌：深綠 #006e36 / 亮綠 #6eb92b / 淺綠 #c8ed97、微軟正黑體、小圓角 */
+  :root{
+    --green:#006e36;      /* 官網主色 */
+    --green-l:#6eb92b;    /* 官網亮綠（TEK 色） */
+    --green-p:#c8ed97;    /* 官網淺綠 */
+    --green-d:#005a2c;
+    --ink:#3c3c3c; --sub:#5e5e5e; --line:#e1e1e1; --bg:#ffffff;
+    --soft:#f8f7f4; --soft2:#f4f4f4;
+    --alert:#ca0000;
+    --font:Arial,Helvetica,"Microsoft JhengHei","微軟正黑體","PingFang TC",sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{font-family:var(--font);color:var(--ink);background:var(--bg);line-height:1.7;-webkit-font-smoothing:antialiased}
+  a{color:var(--green);text-decoration:none}
+  .wrap{max-width:1160px;margin:0 auto;padding:0 28px}
+
+  /* ── Top bar（仿官網：白底、綠 logo、綠導覽 hover）── */
+  .topbar{border-bottom:2px solid var(--green);background:#fff;position:sticky;top:0;z-index:20}
+  .topbar .wrap{display:flex;align-items:center;justify-content:space-between;height:70px}
+  .logo{font-size:30px;font-weight:800;font-style:italic;letter-spacing:-1px;line-height:1}
+  .logo .ad{color:var(--green)}
+  .logo .tek{color:var(--green-l)}
+  .logo .cn{font-style:normal;font-size:14px;font-weight:600;color:var(--sub);letter-spacing:1px;margin-left:8px;vertical-align:middle}
+  .topbar nav{display:flex;gap:30px;font-size:15px;color:var(--ink)}
+  .topbar nav a{padding:4px 0;border-bottom:2px solid transparent}
+  .topbar nav a:hover{color:var(--green);border-bottom-color:var(--green-l)}
+  .btn-top{background:var(--green);color:#fff !important;padding:9px 20px;border-radius:3px;font-size:14.5px;font-weight:700}
+  .btn-top:hover{background:var(--green-d)}
+  @media(max-width:880px){.topbar nav{display:none}}
+
+  /* ── Hero ── */
+  .hero{border-bottom:1px solid var(--line);background:linear-gradient(180deg,var(--soft) 0%,#fff 70%)}
+  .hero .wrap{display:grid;grid-template-columns:1.15fr .85fr;gap:56px;padding:64px 28px 56px;align-items:start}
+  @media(max-width:920px){.hero .wrap{grid-template-columns:1fr;gap:40px}}
+  .eyebrow{display:inline-block;background:var(--green);color:#fff;font-weight:700;font-size:13.5px;letter-spacing:1px;padding:6px 16px;border-radius:3px;margin-bottom:22px}
+  h1{font-size:40px;line-height:1.25;font-weight:800;letter-spacing:-.5px;margin-bottom:20px;color:#2a2a2a}
+  h1 .hl{color:var(--green)}
+  .lead{font-size:16.5px;color:var(--sub);margin-bottom:28px;max-width:560px}
+  .kicker{font-size:15px;color:var(--green-d);font-weight:700;margin-bottom:26px;padding-left:14px;border-left:4px solid var(--green-l)}
+  .meta-grid{display:grid;grid-template-columns:repeat(3,1fr);border:1px solid var(--line);border-radius:4px;overflow:hidden;margin-bottom:30px}
+  .meta-card{padding:16px 20px;border-right:1px solid var(--line);background:#fff}
+  .meta-card:last-child{border-right:none}
+  .meta-card .k{font-size:12px;color:var(--sub);letter-spacing:1px;margin-bottom:6px}
+  .meta-card .v{font-size:16px;font-weight:700;color:var(--green-d)}
+  .cta-row{display:flex;gap:14px;flex-wrap:wrap}
+  .btn{display:inline-flex;align-items:center;gap:8px;padding:13px 28px;font-size:15px;font-weight:700;cursor:pointer;border:none;border-radius:3px}
+  .btn-primary{background:var(--green);color:#fff}
+  .btn-primary:hover{background:var(--green-d)}
+  .btn-ghost{background:#fff;color:var(--green);border:1.5px solid var(--green)}
+  .btn-ghost:hover{background:var(--soft)}
+
+  /* ── Form card ── */
+  .form-card{background:#fff;border:1px solid var(--line);border-top:4px solid var(--green);border-radius:5px;padding:32px 30px;position:sticky;top:94px;box-shadow:0 2px 12px rgba(0,0,0,.06)}
+  .form-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:6px}
+  .form-card h2{font-size:20px;font-weight:800;color:var(--green-d)}
+  .form-card .sub{font-size:13.5px;color:var(--sub);margin-bottom:24px}
+  /* demo 用「隨機填入」按鈕：仿 SLDS 原生重整 icon-button（圓形、細邊、hover 淺底、點按旋轉一次）*/
+  .demo-fill{flex:0 0 auto;width:34px;height:34px;border-radius:50%;border:1px solid #d4d7dc;background:#fff;color:var(--green);cursor:pointer;display:inline-flex;align-items:center;justify-content:center;transition:background .15s,border-color .15s,transform .4s}
+  .demo-fill:hover{background:var(--soft2);border-color:var(--green-l);color:var(--green-d)}
+  .demo-fill:active{background:var(--green-p)}
+  .demo-fill svg{width:17px;height:17px;fill:currentColor;display:block}
+  .demo-fill.spin{transform:rotate(360deg)}
+  .field{margin-bottom:16px}
+  .field label{display:block;font-size:13px;font-weight:600;color:#4a4a4a;margin-bottom:6px}
+  .field label .req{color:var(--alert)}
+  .field input{width:100%;padding:12px 13px;border:1px solid #ccc;border-radius:3px;font-size:14.5px;font-family:inherit;color:var(--ink);background:#fff;transition:border-color .15s,box-shadow .15s}
+  .field input:focus{outline:none;border-color:var(--green-l);box-shadow:0 0 0 3px rgba(110,185,43,.15)}
+  .submit{width:100%;margin-top:6px;background:var(--green);color:#fff;padding:14px;border:none;border-radius:3px;font-size:15.5px;font-weight:800;cursor:pointer;letter-spacing:1px}
+  .submit:hover{background:var(--green-d)}
+  .form-foot{font-size:12px;color:#9a9a9a;margin-top:14px;text-align:center;line-height:1.6}
+  .privacy{font-size:12px;color:var(--sub);margin-top:12px;display:flex;gap:8px;align-items:flex-start}
+  .privacy input{margin-top:3px}
+
+  /* ── Section ── */
+  section.block{padding:64px 0;border-bottom:1px solid var(--line)}
+  section.block.alt{background:var(--soft)}
+  .sec-head{max-width:720px;margin:0 auto 44px;text-align:center}
+  .sec-head .tag{color:var(--green-l);font-weight:800;font-size:13px;letter-spacing:2px}
+  .sec-head h3{font-size:28px;font-weight:800;margin:10px 0 12px;letter-spacing:-.3px;color:#2a2a2a}
+  .sec-head h3 .u{border-bottom:3px solid var(--green-l);padding-bottom:4px}
+  .sec-head p{color:var(--sub);font-size:16px}
+  .cards{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
+  @media(max-width:860px){.cards{grid-template-columns:1fr}}
+  .card{border:1px solid var(--line);border-radius:5px;padding:28px 26px;background:#fff}
+  .card .n{display:inline-block;background:var(--green-p);color:var(--green-d);font-size:12.5px;font-weight:800;letter-spacing:1px;padding:4px 12px;border-radius:3px;margin-bottom:16px}
+  .card h4{font-size:18px;font-weight:700;color:#2a2a2a;margin-bottom:10px}
+  .card p{font-size:14.5px;color:var(--sub)}
+
+  /* ── Products ── */
+  .split{display:grid;grid-template-columns:1fr 1fr;gap:52px;align-items:center}
+  @media(max-width:860px){.split{grid-template-columns:1fr;gap:34px}}
+  .prod-list{list-style:none;border-top:1px solid var(--line)}
+  .prod-list li{display:flex;gap:16px;padding:18px 0;border-bottom:1px solid var(--line);align-items:baseline}
+  .prod-list .code{flex:0 0 60px;font-weight:800;color:var(--green);font-size:14px;letter-spacing:.5px;font-style:italic}
+  .prod-list .t{font-weight:700;font-size:15.5px;color:#2a2a2a}
+  .prod-list .d{font-size:13.5px;color:var(--sub);margin-top:2px}
+  .stat-box{background:var(--green);color:#fff;border-radius:5px;padding:34px}
+  .stat-box h4{font-size:18px;color:#fff;margin-bottom:8px}
+  .stat-box .desc{font-size:14px;color:var(--green-p);margin-bottom:26px}
+  .stat-row{display:flex;gap:28px;flex-wrap:wrap}
+  .stat{flex:1;min-width:100px}
+  .stat .num{font-size:34px;font-weight:800;color:#fff;line-height:1}
+  .stat .lbl{font-size:13px;color:var(--green-p);margin-top:8px}
+
+  /* ── Footer（仿官網深底）── */
+  footer{background:#2f2f2f;color:#c1c1c1;padding:46px 0 32px;font-size:14px}
+  footer .wrap{display:grid;grid-template-columns:2fr 1fr 1.3fr;gap:34px}
+  @media(max-width:860px){footer .wrap{grid-template-columns:1fr}}
+  footer h5{color:#fff;font-size:14px;letter-spacing:1px;margin-bottom:14px}
+  footer a{color:#c1c1c1;display:block;margin-bottom:9px}
+  footer a:hover{color:var(--green-l)}
+  .foot-logo{font-size:26px;font-weight:800;font-style:italic;letter-spacing:-1px;margin-bottom:12px}
+  .foot-logo .ad{color:#fff}.foot-logo .tek{color:var(--green-l)}
+  .foot-note{border-top:1px solid #4a4a4a;margin-top:34px;padding-top:20px;text-align:center;color:#8a8a8a;font-size:12.5px}
+
+  .sf-banner{display:none;background:var(--green-p);border:1px solid var(--green);color:var(--green-d);padding:14px 18px;border-radius:4px;margin:18px 0;font-weight:600}
+  .sf-banner.show{display:block}
+</style>
+</head>
+<body>
+
+<!-- ══ Top bar ══ -->
+<div class="topbar">
+  <div class="wrap">
+    <div class="logo"><span class="ad">AD</span><span class="tek">TEK</span><span class="cn">銓盛電子</span></div>
+    <nav>
+      <a href="#why">為何參觀</a>
+      <a href="#products">展出產品</a>
+      <a href="#about">關於銓盛</a>
+      <a href="#register">立即報名</a>
+    </nav>
+    <a href="#register" class="btn-top">免費報名參觀</a>
+  </div>
+</div>
+
+<!-- ══ Hero + Form ══ -->
+<div class="hero">
+  <div class="wrap">
+    <div>
+      <span class="eyebrow">ENERGY TAIWAN 2025 台灣國際智慧能源週</span>
+      <h1>從一顆電表，到<br><span class="hl">全廠能耗看得懂、管得動</span></h1>
+      <p class="kicker">超過 30 年專業電表製造商，IT 與 OT 之間的最佳橋樑</p>
+      <p class="lead">ADTEK 銓盛電子攜自有品牌多功能電力量測儀表、電力轉換器、現場感測器與能源管理系統參展。歡迎至南港展覽館攤位，實地了解如何用數據替企業省下每一度電。</p>
+
+      <div class="meta-grid">
+        <div class="meta-card"><div class="k">展期</div><div class="v">2025.10.15–17</div></div>
+        <div class="meta-card"><div class="k">地點</div><div class="v">台北南港展覽館</div></div>
+        <div class="meta-card"><div class="k">攤位</div><div class="v">K 區 K1218</div></div>
+      </div>
+
+      <div class="cta-row">
+        <a href="#register" class="btn btn-primary">免費報名參觀 →</a>
+        <a href="#products" class="btn btn-ghost">查看展出產品</a>
+      </div>
+    </div>
+
+    <!-- ══ Web-to-Lead 表單（精簡 4 欄）══ -->
+    <div class="form-card" id="register">
+      <div id="sfBanner" class="sf-banner">✓ 報名成功，感謝您！我們的能源顧問將於 3 個工作天內與您聯繫。</div>
+      <div class="form-head">
+        <h2>免費報名參觀</h2>
+        <button type="button" class="demo-fill" id="demoFill" onclick="fillDemoLead()" aria-label="重新整理">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M17.65 6.35A7.958 7.958 0 0 0 12 4a8 8 0 1 0 7.73 10h-2.08A6 6 0 1 1 12 6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/></svg>
+        </button>
+      </div>
+      <p class="sub">填寫後由專屬能源顧問與您聯繫，並提供攤位導覽時段。</p>
+
+      <!-- 真・Salesforce Web-to-Lead：POST 官方 endpoint，自動建 Lead 並掛回 Campaign -->
+      <form action="https://webto.salesforce.com/servlet/servlet.WebToLead?encoding=UTF-8" method="POST">
+        <input type="hidden" name="oid" value="00DJ2000000HP36MAG">
+        <!-- 送出後直接導回 ADTEK 官網 -->
+        <input type="hidden" name="retURL" value="https://www.adtek.com.tw/web/index/index.jsp?lang=tw">
+        <!-- 自動掛回 Campaign：Energy Taiwan 2025，標記「已報名」 -->
+        <input type="hidden" name="Campaign_ID" value="701J2000000Ldf8IAC">
+        <input type="hidden" name="member_status" value="已報名">
+        <input type="hidden" name="lead_source" value="Marketing Event">
+
+        <div class="field">
+          <label>姓名 <span class="req">*</span></label>
+          <input type="text" name="last_name" maxlength="80" required placeholder="王大明">
+        </div>
+        <div class="field">
+          <label>公司名稱 <span class="req">*</span></label>
+          <input type="text" name="company" maxlength="80" required placeholder="○○科技股份有限公司">
+        </div>
+        <div class="field">
+          <label>電子郵件 <span class="req">*</span></label>
+          <input type="email" name="email" maxlength="80" required placeholder="you@company.com">
+        </div>
+        <div class="field">
+          <label>公司電話 <span class="req">*</span></label>
+          <input type="text" name="phone" maxlength="40" required placeholder="02-1234-5678">
+        </div>
+
+        <label class="privacy">
+          <input type="checkbox" required>
+          <span>我同意 ADTEK 銓盛電子依隱私權政策與我聯繫，提供展會與產品資訊。</span>
+        </label>
+
+        <button type="submit" class="submit">送出報名</button>
+        <p class="form-foot">送出後資料即時建立於銓盛電子 CRM，由專屬顧問跟進。</p>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- ══ Why visit ══ -->
+<section class="block" id="why">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="tag">WHY VISIT</span>
+      <h3><span class="u">不只賣電表，而是省下來的每一度電</span></h3>
+      <p>能源成本年年上漲、碳費制度與能源大戶條款上路，企業比過去更需要看得懂、管得動的用電數據。</p>
+    </div>
+    <div class="cards">
+      <div class="card">
+        <div class="n">計量到管理</div>
+        <h4>從量測到 EMS 一條龍</h4>
+        <p>自有品牌多功能電力儀表、電力轉換器、感測器到能源管理系統，單一供應商完成佈建，免拼裝、免相容性風險。</p>
+      </div>
+      <div class="card">
+        <div class="n">IT × OT</div>
+        <h4>工業物聯網最佳橋樑</h4>
+        <p>支援 RS485／Modbus 等主流通訊架構，將現場量測資料上雲，打通 OT 設備與 IT 系統，全廠能耗即時可視化。</p>
+      </div>
+      <div class="card">
+        <div class="n">法規補助</div>
+        <h4>對應碳費與節能補助</h4>
+        <p>對應能源大戶條款、減碳補助新制，數據可直接產出報表，ESG 稽核與補助文件一次到位。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ Products ══ -->
+<section class="block alt" id="products">
+  <div class="wrap">
+    <div class="split">
+      <div>
+        <span class="tag" style="color:var(--green-l);font-weight:800;font-size:13px;letter-spacing:2px">展出產品</span>
+        <h3 style="font-size:26px;font-weight:800;margin:10px 0 20px;color:#2a2a2a">現場展出主力產品線</h3>
+        <ul class="prod-list">
+          <li><span class="code">AEM</span><div><div class="t">多迴路交流電力表</div><div class="d">三相電力量測、RS485／Modbus 通訊，工廠與大樓計量主力，另有軌道式安裝版本。</div></div></li>
+          <li><span class="code">APM</span><div><div class="t">多功能電力品質分析表</div><div class="d">電力品質分析與多迴路量測，適合分表管理與能源監控佈建。</div></div></li>
+          <li><span class="code">CPM</span><div><div class="t">計費型多功能電表</div><div class="d">計費級量測精度，支援 EPLAN 設計文件，租戶電費拆分與計費應用。</div></div></li>
+          <li><span class="code">EMS</span><div><div class="t">能源管理系統</div><div class="d">IoT 架構能源數據管理平台，全廠能耗可視化、需量預測與尖峰管理。</div></div></li>
+        </ul>
+      </div>
+      <div class="stat-box">
+        <h4>ADTEK 銓盛電子</h4>
+        <p class="desc">全台最大專業儀表品牌之一，業務版圖遍及全球 40 餘國</p>
+        <div class="stat-row">
+          <div class="stat"><div class="num">30+</div><div class="lbl">年專業電表製造</div></div>
+          <div class="stat"><div class="num">40+</div><div class="lbl">國業務版圖</div></div>
+          <div class="stat"><div class="num">ISO</div><div class="lbl">14064-1 溫室氣體盤查</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ About ══ -->
+<section class="block" id="about">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="tag">ABOUT ADTEK</span>
+      <h3><span class="u">成熟的工業儀表製造商</span></h3>
+    </div>
+    <p style="max-width:820px;margin:0 auto;text-align:center;color:var(--sub);font-size:16px">
+      銓盛電子是一家成熟的工業儀表製造商，其品牌 ADTEK 在業界享有廣泛知名度，為全台最大專業儀表品牌之一。提供各類交／直流多功能電力量測儀表、電力轉換器、控制儀表、感測器、能源管理系統等豐富產品，是您值得信賴的好夥伴。
+    </p>
+  </div>
+</section>
+
+<!-- ══ Footer ══ -->
+<footer>
+  <div class="wrap">
+    <div>
+      <div class="foot-logo"><span class="ad">AD</span><span class="tek">TEK</span></div>
+      <p style="max-width:360px;color:#9a9a9a">超過 30 年專業電表製造商，IT 與 OT 之間的最佳橋樑。深耕電力量測與能源管理，協助企業把用電變成看得懂、管得動的數據。</p>
+    </div>
+    <div>
+      <h5>展會資訊</h5>
+      <a href="#why">為何參觀</a>
+      <a href="#products">展出產品</a>
+      <a href="#register">立即報名</a>
+    </div>
+    <div>
+      <h5>聯絡我們</h5>
+      <a href="https://www.adtek.com.tw/web/index/index.jsp?lang=tw" target="_blank">www.adtek.com.tw</a>
+      <a href="#">新北市三重區重新路五段 609 巷 14 號 5 樓（湯城園區）</a>
+      <a href="#">台北南港展覽館 K 區 K1218</a>
+    </div>
+  </div>
+  <div class="wrap"><div class="foot-note">© 2025 ADTEK 銓盛電子 · Energy Taiwan 2025 台灣國際智慧能源週報名頁</div></div>
+</footer>
+
+<script>
+  if (new URLSearchParams(location.search).get('submitted')==='1'){
+    var b=document.getElementById('sfBanner'); if(b){b.classList.add('show'); b.scrollIntoView({behavior:'smooth',block:'center'});}
+  }
+
+  var DEMO = {
+    last:['陳','林','黃','張','李','王','吳','劉','蔡','楊','許','鄭','謝','郭','洪','曾','廖','賴','徐','周'],
+    first:['志明','家豪','俊宏','建宏','雅婷','怡君','美玲','淑芬','宗翰','冠廷','承翰','柏翰','詩涵','欣怡','孟儒','品妤','育誠','彥廷','文彬','思瑤'],
+    biz:[
+      {n:'台鋼精密工業',       d:'tksteel',        area:'07'},
+      {n:'鴻運電子科技',       d:'hongyun-tech',   area:'03'},
+      {n:'永光化學工業',       d:'everlight-chem', area:'03'},
+      {n:'豐興金屬製造',       d:'fenghsin',       area:'04'},
+      {n:'中興紡織廠',         d:'chunghsing-tex', area:'04'},
+      {n:'台灣自動化系統整合', d:'twautomation',   area:'02'},
+      {n:'新光食品工業',       d:'shinkong-food',  area:'06'},
+      {n:'廣達智慧製造',       d:'quantasmart',    area:'03'},
+      {n:'長榮塑膠工業',       d:'evergreen-plas', area:'06'},
+      {n:'正隆造紙',           d:'chenglong-paper',area:'03'},
+      {n:'國喬石化',           d:'usipetro',       area:'07'},
+      {n:'大同機電工程',       d:'tatung-ee',      area:'02'},
+      {n:'友達光電材料',       d:'auo-mat',        area:'03'},
+      {n:'裕隆汽車零件',       d:'yulon-parts',    area:'03'},
+      {n:'台泥綠能',           d:'tcc-green',      area:'07'}
+    ],
+    suffix:['股份有限公司','股份有限公司','有限公司','工業股份有限公司']
+  };
+  function pick(a){ return a[Math.floor(Math.random()*a.length)]; }
+  function pad(n,len){ n=''+n; while(n.length<len) n='0'+n; return n; }
+  function fillDemoLead(){
+    var b=pick(DEMO.biz);
+    var company = b.n + pick(DEMO.suffix);
+    var last=pick(DEMO.last), first=pick(DEMO.first);
+    var email = 'sales' + (Math.floor(Math.random()*89)+10) + '@' + b.d + '.com.tw';
+    var localLen = (b.area==='02') ? 8 : 7;
+    var num = pad(Math.floor(Math.random()*Math.pow(10,localLen)), localLen);
+    var phone = b.area + '-' + (localLen===8 ? num.slice(0,4)+'-'+num.slice(4) : num.slice(0,3)+'-'+num.slice(3));
+
+    var f=document.querySelector('form');
+    f.last_name.value = last+first;
+    f.company.value   = company;
+    f.email.value     = email;
+    f.phone.value     = phone;
+    var chk=f.querySelector('input[type=checkbox]'); if(chk) chk.checked=true;
+
+    var btn=document.getElementById('demoFill');
+    btn.classList.remove('spin'); void btn.offsetWidth; btn.classList.add('spin');
+  }
+</script>
+</body>
+</html>
