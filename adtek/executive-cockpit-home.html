@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>銓盛-Adtek · 經營戰情室首頁驗收</title>
+<style>
+  :root{
+    --ink:#1a1a1a; --ink2:#4a4a4a; --ink3:#8a8a8a;
+    --line:#d0d0d0; --bg:#f5f5f5; --white:#fff;
+    --blue:#2167dd; --blue2:#a1c1f6; --green:#4ab2a8; --green2:#95d4ce;
+    --red:#ba0517; --amber:#c98a00;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{font-family:"Microsoft JhengHei","Noto Sans TC",Arial,sans-serif;
+    color:var(--ink);line-height:1.5;background:var(--bg);}
+  .wrap{max-width:1080px;margin:0 auto;background:var(--white);}
+  .cover{background:var(--blue);color:#fff;padding:56px 48px 44px;}
+  .cover .kicker{font-size:13px;letter-spacing:.08em;opacity:.85;margin-bottom:14px;}
+  .cover h1{font-size:30px;font-weight:700;line-height:1.25;margin-bottom:10px;}
+  .cover .sub{font-size:15px;opacity:.92;font-weight:400;}
+  .cover .meta{margin-top:26px;font-size:12px;opacity:.8;border-top:1px solid rgba(255,255,255,.3);padding-top:14px;}
+  section{padding:34px 48px;border-bottom:1px solid var(--line);}
+  h2{font-size:20px;font-weight:700;margin-bottom:6px;display:flex;align-items:center;gap:10px;}
+  h2 .n{display:inline-flex;width:26px;height:26px;border-radius:50%;background:var(--blue);
+    color:#fff;font-size:13px;align-items:center;justify-content:center;flex:0 0 auto;}
+  h2 + .lead{color:var(--ink2);font-size:13px;margin-bottom:18px;}
+  h3{font-size:15px;font-weight:600;color:var(--blue);margin:20px 0 8px;}
+  p{font-size:13px;color:var(--ink);margin-bottom:8px;}
+  .muted{color:var(--ink3);font-size:12px;}
+  .kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:8px 0 4px;}
+  .kpi{border:1px solid var(--line);border-radius:8px;padding:16px 14px;text-align:center;}
+  .kpi .v{font-size:26px;font-weight:700;color:var(--blue);}
+  .kpi .v.r{color:var(--red);}
+  .kpi .v.g{color:var(--green);}
+  .kpi .l{font-size:12px;color:var(--ink2);margin-top:4px;}
+  table{width:100%;border-collapse:collapse;margin:10px 0;font-size:12.5px;border:1px solid var(--blue);}
+  th{background:var(--blue);color:#fff;font-weight:600;text-align:left;padding:9px 11px;}
+  td{padding:8px 11px;border-bottom:1px solid var(--line);vertical-align:top;}
+  tr:nth-child(even) td{background:var(--bg);}
+  .tag{display:inline-block;font-size:11px;padding:2px 8px;border-radius:10px;background:var(--blue2);color:#0f2f66;font-weight:600;}
+  .tag.g{background:var(--green2);color:#134640;}
+  .ok{color:var(--green);font-weight:700;}
+  .warn{color:var(--amber);font-weight:700;}
+  .bad{color:var(--red);font-weight:700;}
+  .pain{border:1px solid var(--line);border-left:3px solid var(--blue);border-radius:6px;padding:14px 16px;margin-bottom:12px;background:var(--white);}
+  .pain .pt{font-weight:600;font-size:13.5px;margin-bottom:4px;}
+  .pain .sol{font-size:12.5px;color:var(--ink2);}
+  .pain .sol b{color:var(--ink);}
+  ol.steps{margin:8px 0 0 0;padding-left:0;counter-reset:s;list-style:none;}
+  ol.steps li{position:relative;padding:10px 0 10px 40px;border-bottom:1px dashed var(--line);font-size:13px;}
+  ol.steps li:before{counter-increment:s;content:counter(s);position:absolute;left:0;top:9px;
+    width:26px;height:26px;border-radius:50%;background:var(--blue);color:#fff;font-size:13px;
+    display:flex;align-items:center;justify-content:center;}
+  ol.steps li b{color:var(--blue);}
+  .chartrow{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:14px 0;}
+  .chartcard{border:1px solid var(--line);border-radius:8px;padding:16px;}
+  .chartcard .ct{font-size:13.5px;font-weight:700;margin-bottom:2px;}
+  .chartcard .cm{font-size:11.5px;color:var(--ink3);margin-bottom:10px;}
+  .chartcard .cd{font-size:12.5px;color:var(--ink2);}
+  .chartcard .num{font-size:18px;font-weight:700;color:var(--blue);}
+  .badge{display:inline-block;font-size:10.5px;padding:1px 7px;border-radius:9px;background:#eef3fc;color:var(--blue);border:1px solid var(--blue2);font-weight:600;}
+  .foot{padding:26px 48px;font-size:11.5px;color:var(--ink3);}
+  code{background:var(--bg);padding:1px 5px;border-radius:4px;font-size:11.5px;font-family:Consolas,monospace;color:#333;}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="cover">
+    <div class="kicker">SALESFORCE APP PAGE · 銓盛電子 自動化 OT 整合業務部</div>
+    <h1>經營戰情室首頁</h1>
+    <div class="sub">把每月主管會議月報的頭號重點，直接搬上 Salesforce App 首頁 — 一開 App 就看到達成率、逐月趨勢、業務排行、Pipeline 量體，全部即時連動 CRM 成交資料。</div>
+    <div class="meta">資料來源：<code>2026_06主管會議報告_自動化OT整合業務部20260720.pptx</code>（37 頁）· 全原生 OOTB 元件（App Page + reportChart）· 驗收日 2026-08-09</div>
+  </div>
+
+  <section>
+    <h2><span class="n">1</span>解決的痛點</h2>
+    <div class="lead">月報的核心指標原本藏在手工 Excel／dashboard 深處，主管開 Salesforce 看不到；每月要人工彙整一份 37 頁 PPT。本次把「主管每月真正在看的那幾張圖」搬到 App 首頁，開 App 即見、即時連動成交資料。</div>
+    <div class="pain">
+      <div class="pt">痛點 1 · 營運重點藏在月報 PPT，開 App 看不到</div>
+      <div class="sol">解法：新建 <b>「經營戰情室」App Page 首頁</b>，設為銓盛-Adtek App 的預設進入頁。開 App 第一眼就是達成率 Gauge、逐月趨勢、業務排行、Pipeline 漏斗、逐季同期。</div>
+    </div>
+    <div class="pain">
+      <div class="pt">痛點 2 · 達成率／同期比較要人工從 Excel 算</div>
+      <div class="sol">解法：補齊<b>「每位業務 × 逐月」目標資料 84 筆（年度加總 1.3 億）</b>，讓報表能依 owner／月／季直接算達成率，重現月報的部門／季／個人達成細度，不再手算。</div>
+    </div>
+    <div class="pain">
+      <div class="pt">痛點 3 · 下半年業績斷崖，月報要翻頁才看得出來</div>
+      <div class="sol">解法：逐月趨勢圖 + 逐季同期圖 + 頂部 KPI 摘要卡直接把<b>「上半年達標、Q3 起訂單急縮、下半年落後」</b>的故事攤在首頁第一屏。</div>
+    </div>
+  </section>
+
+  <section>
+    <h2><span class="n">2</span>首頁 KPI 摘要（對齊月報 image6／image18／image19）</h2>
+    <div class="lead">頂部摘要卡呈現月報頭號數字，下方圖表即時連動 org 成交資料。</div>
+    <div class="kpis">
+      <div class="kpi"><div class="v">NT$ 1.30 億</div><div class="l">年度業績目標</div></div>
+      <div class="kpi"><div class="v r">67.6%</div><div class="l">年度達成率</div></div>
+      <div class="kpi"><div class="v r">48.9%</div><div class="l">Q3 達成率</div></div>
+      <div class="kpi"><div class="v r">25.6%</div><div class="l">下半年達成率</div></div>
+    </div>
+    <p class="muted" style="margin-top:12px">銷貨毛利率 55.9%（近月呈下滑）以靜態 KPI 卡呈現 — Opportunity 無成本／毛利欄位且 org 不可新增欄位，故毛利率不假裝即時算，據實標示為月報數字。</p>
+  </section>
+
+  <section>
+    <h2><span class="n">3</span>首頁六大區塊（月報圖表 → org 首頁對照）</h2>
+    <div class="lead">每張圖都指向一支帶 <code>&lt;chart&gt;</code> 的 ADT 報表，filter 一律鎖 <code>External_ID__c startsWith 'ADT-O-'／'ADT-T-'</code>，只吃銓盛-Adtek 自己的資料。</div>
+
+    <table>
+      <tr><th style="width:20%">首頁區塊</th><th style="width:22%">對應月報頁</th><th style="width:26%">來源報表（org 端已驗證）</th><th>org 實際數字</th></tr>
+      <tr><td>KPI 摘要卡</td><td>image6 營運 KPI 總表<br>image18 目標 vs 實際</td><td>richText（靜態摘要）</td><td>年目標 1.3 億 / 達成 67.6%</td></tr>
+      <tr><td>年度達成率</td><td>image6 達成率環圈</td><td><code>ADT_R15_Achievement_Gauge</code><br><span class="badge">Donut</span></td><td>已成交 <b>87.8M</b>（對照目標 1.3 億）</td></tr>
+      <tr><td>逐月業績推移</td><td>image7 銷貨金額推移<br>image18 逐月雙柱</td><td><code>ADT_R1_Sales_Achievement</code><br><span class="badge">VerticalColumn</span></td><td>12 個月，總計 <b>89.0M</b></td></tr>
+      <tr><td>各業務逐季同期</td><td>image19 成交率同期矩陣</td><td><code>ADT_R16_Rep_Achievement</code><br><span class="badge">VerticalColumnStacked</span></td><td>4 季 × 7 業務，87.8M</td></tr>
+      <tr><td>業務員成交排行</td><td>image21 各業務個人達成</td><td><code>ADT_R3_Rep_Ranking</code><br><span class="badge">HorizontalBar</span></td><td>7 位業務，總計 89.0M</td></tr>
+      <tr><td>Pipeline 各階段量體</td><td>（進行中商機漏斗）</td><td><code>ADT_R2_Pipeline_Funnel</code><br><span class="badge">HorizontalBar</span></td><td>4 個階段，43.8M</td></tr>
+    </table>
+  </section>
+
+  <section>
+    <h2><span class="n">4</span>達成率精準重現月報（實際成交 vs 目標）</h2>
+    <div class="lead">補齊目標資料後，org 報表算出的達成率曲線與月報 image19 幾乎逐格吻合 — 上半年達標、Q3 斷崖、下半年落後的故事完整重現。實際業績以 org 真實 Closed Won 為準。</div>
+    <table>
+      <tr><th>期別</th><th>目標</th><th>實際成交</th><th>org 達成率</th><th>月報參考</th><th>吻合</th></tr>
+      <tr><td>Q1</td><td>33.15M</td><td>34.00M</td><td class="ok">102.6%</td><td>105%</td><td class="ok">✓</td></tr>
+      <tr><td>Q2</td><td>33.15M</td><td>37.50M</td><td class="ok">113.1%</td><td>114%</td><td class="ok">✓</td></tr>
+      <tr><td>Q3</td><td>32.50M</td><td>15.91M</td><td class="bad">48.9%</td><td>49%</td><td class="ok">✓</td></tr>
+      <tr><td>Q4（進行中）</td><td>31.20M</td><td>0.41M</td><td class="bad">1.3%</td><td>H2 落後</td><td class="warn">～</td></tr>
+      <tr><td><b>部門年度</b></td><td><b>130.0M</b></td><td><b>87.8M</b></td><td class="bad"><b>67.6%</b></td><td><b>68%</b></td><td class="ok">✓</td></tr>
+    </table>
+    <h3>各業務年目標（對齊月報級距）</h3>
+    <table>
+      <tr><th>業務</th><th>年目標</th><th>業務</th><th>年目標</th></tr>
+      <tr><td>East Valerie</td><td>35.0M</td><td>East Ely</td><td>15.0M</td></tr>
+      <tr><td>Central Vanessa</td><td>20.8M</td><td>South Bill</td><td>11.7M</td></tr>
+      <tr><td>West Vince</td><td>20.8M</td><td>Tsai Bing Yan</td><td>11.7M</td></tr>
+      <tr><td>Central Cindy</td><td>15.0M</td><td colspan="2" class="muted">7 人 × 12 月 = 84 筆目標，加總 130.0M</td></tr>
+    </table>
+  </section>
+
+  <section>
+    <h2><span class="n">5</span>資料品質與隔離查證</h2>
+    <div class="lead">全案零新增自訂欄位（org publisher 失效），只用既有欄位 + 新報表 + 新 App Page + 補資料；嚴守 CBUSDO 多 App 隔離。</div>
+    <div class="kpis">
+      <div class="kpi"><div class="v g">84</div><div class="l">目標筆數（7×12）</div></div>
+      <div class="kpi"><div class="v g">0</div><div class="l">空值／不合格筆</div></div>
+      <div class="kpi"><div class="v g">5</div><div class="l">首頁 reportChart（均有資料）</div></div>
+      <div class="kpi"><div class="v g">14</div><div class="l">permset 指派人數</div></div>
+    </div>
+    <table style="margin-top:16px">
+      <tr><th style="width:34%">隔離檢查項</th><th>結果</th></tr>
+      <tr><td>報表 filter 前綴</td><td class="ok">5 張報表全帶 <code>ADT-O-／ADT-T-</code> 前綴 filter ✓</td></tr>
+      <tr><td>目標 RecordType 限定</td><td class="ok">補的目標全為 <code>Opportunity.ADT_Target</code>、ForecastCategory=Omitted（不污染 pipeline/forecast）✓</td></tr>
+      <tr><td>App scope</td><td class="ok">App Page 只掛銓盛-Adtek App；<code>standard-home</code>（原 HomePage）保留當備援，未覆蓋任何全 org 首頁 ✓</td></tr>
+      <tr><td>不碰其他 App</td><td class="ok">未動 Thermos／建商-EE／配方時代 等任何其他 App 的 tab／layout／欄位 ✓</td></tr>
+    </table>
+  </section>
+
+  <section>
+    <h2><span class="n">6</span>現場導覽（給主管看的 30 秒）</h2>
+    <ol class="steps">
+      <li>右上 App 選單 → 切換到 <b>銓盛-Adtek</b>。</li>
+      <li>App 直接停在 <b>「經營戰情室」</b>首頁（已設為預設進入頁，導覽列第一個 tab）。</li>
+      <li>第一屏：頂部 <b>KPI 摘要卡</b>（年目標 1.3 億 / 達成 67.6% / Q3 48.9% / H2 25.6%）+ <b>年度達成率環圈</b>。</li>
+      <li>往下：<b>逐月業績推移</b> → 看得出 Q3 起訂單量急縮；<b>各業務逐季同期</b> → 下半年落後一目了然。</li>
+      <li>再往下：<b>業務員成交排行</b>（誰扛得住）+ <b>Pipeline 各階段量體</b>（後續補得回來嗎）。</li>
+      <li>每張圖右上有 <b>重新整理</b> 鈕，數字即時連動 CRM 成交，不再靠人工彙整月報。</li>
+    </ol>
+  </section>
+
+  <div class="foot">
+    銓盛-Adtek 經營戰情室首頁 · Salesforce App Page（<code>flexipage:defaultAppHomeTemplate</code>）+ 5 張 <code>flexipage:reportChart</code> + richText KPI 摘要 · 全原生 OOTB 元件 · CBUSDO 隔離已查證。
+    實際成交數字以 org 真實 Closed Won 為準，與月報 PPT 有小幅差異屬正常；達成率曲線（部門 67.6% / Q3 48.9%）已對齊月報。
+  </div>
+
+</div>
+</body>
+</html>

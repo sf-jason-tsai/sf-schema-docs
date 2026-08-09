@@ -180,6 +180,11 @@ const PAGES = [
         dest: 'adtek/energy-taiwan-2025.html',
         title: 'Energy Taiwan 2025 台灣國際智慧能源週 · 報名登陸頁'
     },
+    {
+        src: 'C:/Users/bingyan.tsai/Desktop/Claude/adtek-demo/docs/銓盛-Adtek-經營戰情室首頁驗收.html',
+        dest: 'adtek/executive-cockpit-home.html',
+        title: '銓盛-Adtek · 經營戰情室首頁驗收 (2026-08-09)'
+    },
     // ↑ 加新頁時只需在這裡插入 { src, dest, title }
 ];
 
