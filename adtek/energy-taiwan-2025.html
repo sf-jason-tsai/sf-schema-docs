@@ -6,11 +6,10 @@
 <meta name="theme-color" content="#006e36">
 <title>Energy Taiwan 2025 台灣國際智慧能源週｜ADTEK 銓盛電子</title>
 <style>
-  /* 仿造 adtek.com.tw 官網品牌：深綠 #006e36 / 亮綠 #6eb92b / 淺綠 #c8ed97、微軟正黑體、小圓角 */
   :root{
-    --green:#006e36;      /* 官網主色 */
-    --green-l:#6eb92b;    /* 官網亮綠（TEK 色） */
-    --green-p:#c8ed97;    /* 官網淺綠 */
+    --green:#006e36;
+    --green-l:#6eb92b;
+    --green-p:#c8ed97;
     --green-d:#005a2c;
     --ink:#3c3c3c; --sub:#5e5e5e; --line:#e1e1e1; --bg:#ffffff;
     --soft:#f8f7f4; --soft2:#f4f4f4;
@@ -23,7 +22,6 @@
   a{color:var(--green);text-decoration:none}
   .wrap{max-width:1160px;margin:0 auto;padding:0 28px}
 
-  /* ── Top bar（仿官網：白底、綠 logo、綠導覽 hover）── */
   .topbar{border-bottom:2px solid var(--green);background:#fff;position:sticky;top:0;z-index:20}
   .topbar .wrap{display:flex;align-items:center;justify-content:space-between;height:70px}
   .logo{font-size:30px;font-weight:800;font-style:italic;letter-spacing:-1px;line-height:1}
@@ -37,7 +35,6 @@
   .btn-top:hover{background:var(--green-d)}
   @media(max-width:880px){.topbar nav{display:none}}
 
-  /* ── Hero ── */
   .hero{border-bottom:1px solid var(--line);background:linear-gradient(180deg,var(--soft) 0%,#fff 70%)}
   .hero .wrap{display:grid;grid-template-columns:1.15fr .85fr;gap:56px;padding:64px 28px 56px;align-items:start}
   @media(max-width:920px){.hero .wrap{grid-template-columns:1fr;gap:40px}}
@@ -58,18 +55,17 @@
   .btn-ghost{background:#fff;color:var(--green);border:1.5px solid var(--green)}
   .btn-ghost:hover{background:var(--soft)}
 
-  /* ── Form card ── */
   .form-card{background:#fff;border:1px solid var(--line);border-top:4px solid var(--green);border-radius:5px;padding:32px 30px;position:sticky;top:94px;box-shadow:0 2px 12px rgba(0,0,0,.06)}
   .form-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:6px}
   .form-card h2{font-size:20px;font-weight:800;color:var(--green-d)}
   .form-card .sub{font-size:13.5px;color:var(--sub);margin-bottom:24px}
-  /* demo 用「隨機填入」按鈕：仿 SLDS 原生重整 icon-button（圓形、細邊、hover 淺底、點按旋轉一次）*/
   .demo-fill{flex:0 0 auto;width:34px;height:34px;border-radius:50%;border:1px solid #d4d7dc;background:#fff;color:var(--green);cursor:pointer;display:inline-flex;align-items:center;justify-content:center;transition:background .15s,border-color .15s,transform .4s}
   .demo-fill:hover{background:var(--soft2);border-color:var(--green-l);color:var(--green-d)}
   .demo-fill:active{background:var(--green-p)}
   .demo-fill svg{width:17px;height:17px;fill:currentColor;display:block}
   .demo-fill.spin{transform:rotate(360deg)}
   .field{margin-bottom:16px}
+  .name-row{display:grid;grid-template-columns:1fr 1fr;gap:14px}
   .field label{display:block;font-size:13px;font-weight:600;color:#4a4a4a;margin-bottom:6px}
   .field label .req{color:var(--alert)}
   .field input{width:100%;padding:12px 13px;border:1px solid #ccc;border-radius:3px;font-size:14.5px;font-family:inherit;color:var(--ink);background:#fff;transition:border-color .15s,box-shadow .15s}
@@ -80,7 +76,6 @@
   .privacy{font-size:12px;color:var(--sub);margin-top:12px;display:flex;gap:8px;align-items:flex-start}
   .privacy input{margin-top:3px}
 
-  /* ── Section ── */
   section.block{padding:64px 0;border-bottom:1px solid var(--line)}
   section.block.alt{background:var(--soft)}
   .sec-head{max-width:720px;margin:0 auto 44px;text-align:center}
@@ -95,7 +90,6 @@
   .card h4{font-size:18px;font-weight:700;color:#2a2a2a;margin-bottom:10px}
   .card p{font-size:14.5px;color:var(--sub)}
 
-  /* ── Products ── */
   .split{display:grid;grid-template-columns:1fr 1fr;gap:52px;align-items:center}
   @media(max-width:860px){.split{grid-template-columns:1fr;gap:34px}}
   .prod-list{list-style:none;border-top:1px solid var(--line)}
@@ -111,7 +105,6 @@
   .stat .num{font-size:34px;font-weight:800;color:#fff;line-height:1}
   .stat .lbl{font-size:13px;color:var(--green-p);margin-top:8px}
 
-  /* ── Footer（仿官網深底）── */
   footer{background:#2f2f2f;color:#c1c1c1;padding:46px 0 32px;font-size:14px}
   footer .wrap{display:grid;grid-template-columns:2fr 1fr 1.3fr;gap:34px}
   @media(max-width:860px){footer .wrap{grid-template-columns:1fr}}
@@ -125,10 +118,10 @@
   .sf-banner{display:none;background:var(--green-p);border:1px solid var(--green);color:var(--green-d);padding:14px 18px;border-radius:4px;margin:18px 0;font-weight:600}
   .sf-banner.show{display:block}
 </style>
+
 </head>
 <body>
 
-<!-- ══ Top bar ══ -->
 <div class="topbar">
   <div class="wrap">
     <div class="logo"><span class="ad">AD</span><span class="tek">TEK</span><span class="cn">銓盛電子</span></div>
@@ -142,7 +135,6 @@
   </div>
 </div>
 
-<!-- ══ Hero + Form ══ -->
 <div class="hero">
   <div class="wrap">
     <div>
@@ -163,7 +155,6 @@
       </div>
     </div>
 
-    <!-- ══ Web-to-Lead 表單（精簡 4 欄）══ -->
     <div class="form-card" id="register">
       <div id="sfBanner" class="sf-banner">✓ 報名成功，感謝您！我們的能源顧問將於 3 個工作天內與您聯繫。</div>
       <div class="form-head">
@@ -174,19 +165,26 @@
       </div>
       <p class="sub">填寫後由專屬能源顧問與您聯繫，並提供攤位導覽時段。</p>
 
-      <!-- 真・Salesforce Web-to-Lead：POST 官方 endpoint，自動建 Lead 並掛回 Campaign -->
       <form action="https://webto.salesforce.com/servlet/servlet.WebToLead?encoding=UTF-8" method="POST">
         <input type="hidden" name="oid" value="00DJ2000000HP36MAG">
-        <!-- 送出後直接導回 ADTEK 官網 -->
         <input type="hidden" name="retURL" value="https://www.adtek.com.tw/web/index/index.jsp?lang=tw">
-        <!-- 自動掛回 Campaign：Energy Taiwan 2025，標記「已報名」 -->
         <input type="hidden" name="Campaign_ID" value="701J2000000Ldf8IAC">
         <input type="hidden" name="member_status" value="已報名">
         <input type="hidden" name="lead_source" value="Marketing Event">
 
+        <div class="name-row">
+          <div class="field">
+            <label>姓 <span class="req">*</span></label>
+            <input type="text" name="last_name" maxlength="40" required placeholder="王">
+          </div>
+          <div class="field">
+            <label>名 <span class="req">*</span></label>
+            <input type="text" name="first_name" maxlength="40" required placeholder="大明">
+          </div>
+        </div>
         <div class="field">
-          <label>姓名 <span class="req">*</span></label>
-          <input type="text" name="last_name" maxlength="80" required placeholder="王大明">
+          <label>職稱 <span class="req">*</span></label>
+          <input type="text" name="title" maxlength="80" required placeholder="廠務能源經理">
         </div>
         <div class="field">
           <label>公司名稱 <span class="req">*</span></label>
@@ -213,7 +211,6 @@
   </div>
 </div>
 
-<!-- ══ Why visit ══ -->
 <section class="block" id="why">
   <div class="wrap">
     <div class="sec-head">
@@ -241,7 +238,6 @@
   </div>
 </section>
 
-<!-- ══ Products ══ -->
 <section class="block alt" id="products">
   <div class="wrap">
     <div class="split">
@@ -268,7 +264,6 @@
   </div>
 </section>
 
-<!-- ══ About ══ -->
 <section class="block" id="about">
   <div class="wrap">
     <div class="sec-head">
@@ -281,7 +276,6 @@
   </div>
 </section>
 
-<!-- ══ Footer ══ -->
 <footer>
   <div class="wrap">
     <div>
@@ -329,24 +323,25 @@
       {n:'裕隆汽車零件',       d:'yulon-parts',    area:'03'},
       {n:'台泥綠能',           d:'tcc-green',      area:'07'}
     ],
-    suffix:['股份有限公司','股份有限公司','有限公司','工業股份有限公司']
+    suffix:['股份有限公司','股份有限公司','有限公司','工業股份有限公司'],
+    title:['廠務能源經理','節能工程師','電控主任','ESG專案負責人','能源管理課長','設備工程師','製程整合工程師','自控工程師','電力系統工程師','廠務副理','智慧工廠顧問','IIoT解決方案經理','SI專案經理','能源工程師','電控課長']
   };
   function pick(a){ return a[Math.floor(Math.random()*a.length)]; }
   function pad(n,len){ n=''+n; while(n.length<len) n='0'+n; return n; }
   function fillDemoLead(){
     var b=pick(DEMO.biz);
-    var company = b.n + pick(DEMO.suffix);
-    var last=pick(DEMO.last), first=pick(DEMO.first);
     var email = 'sales' + (Math.floor(Math.random()*89)+10) + '@' + b.d + '.com.tw';
     var localLen = (b.area==='02') ? 8 : 7;
     var num = pad(Math.floor(Math.random()*Math.pow(10,localLen)), localLen);
     var phone = b.area + '-' + (localLen===8 ? num.slice(0,4)+'-'+num.slice(4) : num.slice(0,3)+'-'+num.slice(3));
 
     var f=document.querySelector('form');
-    f.last_name.value = last+first;
-    f.company.value   = company;
-    f.email.value     = email;
-    f.phone.value     = phone;
+    f.last_name.value  = pick(DEMO.last);
+    f.first_name.value = pick(DEMO.first);
+    f.title.value      = pick(DEMO.title);
+    f.company.value    = b.n + pick(DEMO.suffix);
+    f.email.value      = email;
+    f.phone.value      = phone;
     var chk=f.querySelector('input[type=checkbox]'); if(chk) chk.checked=true;
 
     var btn=document.getElementById('demoFill');
