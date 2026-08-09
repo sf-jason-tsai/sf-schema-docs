@@ -70,8 +70,8 @@
   <div class="cover">
     <div class="kicker">SALESFORCE APP PAGE · 銓盛電子 自動化 OT 整合業務部</div>
     <h1>經營戰情室首頁</h1>
-    <div class="sub">把每月主管會議月報的頭號重點，直接搬上 Salesforce App 首頁 — 一開 App 就看到達成率、逐月趨勢、業務排行、Pipeline 量體，全部即時連動 CRM 成交資料。本次再做兩項優化：銷售路徑階段全繁體中文、目標明細換月報真實數據。</div>
-    <div class="meta">資料來源：<code>2026_06主管會議報告_自動化OT整合業務部20260720.pptx</code>（37 頁，image6／18／19／21 逐格讀值）· 全原生 OOTB 元件（App Page + reportChart）· 驗收日 2026-08-09</div>
+    <div class="sub">把每月主管會議月報的頭號重點，直接搬上 Salesforce App 首頁 — 一開 App 就看到達成率、逐月趨勢、業務排行、Pipeline 量體，全部即時連動 CRM 成交資料。本次再做兩項優化：銷售路徑階段全繁體中文、目標明細換月報真實數據；並對照官網真數據做一輪 Data Quality 精修。</div>
+    <div class="meta">資料來源：<code>2026_06主管會議報告_自動化OT整合業務部20260720.pptx</code>（37 頁，image6／18／19／21 逐格讀值）+ 銓盛電子官網 <code>adtek.com.tw</code>（產品型號池）· 全原生 OOTB 元件（App Page + reportChart）· 驗收日 2026-08-09</div>
   </div>
 
   <section>
@@ -203,7 +203,76 @@
   </section>
 
   <section>
-    <h2><span class="n">7</span>現場導覽（給主管看的 30 秒）</h2>
+    <h2><span class="n">7</span>Data Quality 精修（對照官網真數據）</h2>
+    <div class="lead">讀過銓盛電子官網（<code>adtek.com.tw</code>）與各產品子頁後，逐項比對 org 現況，針對五類會「露餡」或不一致的資料做精修：全案零露餡英文名、產品型號全對回官網真型號、客戶電話統一國際格式、公海管理者用中文功能帳號。所有改動嚴守只動 <code>ADT-A-／ADT-O-</code> 前綴資料，未觸碰其他 App。</div>
+    <div class="kpis">
+      <div class="kpi"><div class="v g">78</div><div class="l">客戶 owner 對齊中文名</div></div>
+      <div class="kpi"><div class="v g">27</div><div class="l">搶單警示改中文名</div></div>
+      <div class="kpi"><div class="v g">17</div><div class="l">用到產品全真型號</div></div>
+      <div class="kpi"><div class="v g">77</div><div class="l">客戶電話 +886/+1</div></div>
+    </div>
+
+    <h3>精修一 · 業務 owner 全面中文化 + 公海管理者用中文功能帳號</h3>
+    <p>上一輪只換了商機 owner，78 個客戶仍掛舊英文名，造成「商機=中文、客戶=英文」的一致性斷層；且台積電／友達等大廠客戶與其商機互相指向英文名，形成死結。本次把客戶 owner 依「該客戶下中文業務商機的多數／金額最大者」為證據精準對齊中文名，公海客戶（原 <code>West Vince</code> 持有）改由新建的中文功能帳號 <b>「業務管理處」</b>承接。</p>
+    <table>
+      <tr><th style="width:34%">項目</th><th>結果（已查證）</th></tr>
+      <tr><td>客戶 owner 對齊中文名</td><td class="ok">78 個 <code>ADT-A-</code> 客戶全數換中文名／業務管理處；含補修 11 個大廠客戶（台積電各廠／友達／台塑／光寶／仁寶）與 6 筆對應商機的英文名死結 ✓</td></tr>
+      <tr><td>公海管理者帳號</td><td class="ok">新建 <b>業務管理處</b>（<code>adt.sea@</code> 前綴、只指派 <code>ADT_Adtek_Sales_Service</code> permset），承接 31 個公海客戶（原通路夥伴 + 端客戶）✓</td></tr>
+      <tr><td>殘留英文 owner</td><td class="ok">客戶 0 筆、商機 0 筆（<code>ADT-A-／ADT-O-</code> 全面查驗）✓</td></tr>
+      <tr><td>達成率不受影響</td><td class="ok">換 owner 的商機全為進行中（非 Closed Won），重跑月報驗證 7 業務／逐季達成率與月報逐格吻合、數字未動 ✓</td></tr>
+    </table>
+
+    <h3>精修二 · 公海機制同步改中文管理者名（不壞釋回邏輯）</h3>
+    <p>公海自動釋回 Flow、公海報表、戰情 Dashboard 原本靠寫死的 <code>West Vince</code> 判定公海持有者。改 owner 前先同步把三處都改成 <b>業務管理處</b>，並確認 Flow 真正啟用（查 <code>FlowDefinitionView.IsActive=true</code>），再跑真資料 E2E（造一筆逾 90 天客戶測釋回），確認不壞。</p>
+    <table>
+      <tr><th style="width:40%">同步改點</th><th>結果</th></tr>
+      <tr><td><code>ADT_Sea_Auto_Release</code> Flow（查公海持有者字串）</td><td class="ok">West Vince → 業務管理處；部署後 <code>IsActive=true</code> 已查證 ✓</td></tr>
+      <tr><td><code>ADT_R4_Sea_Pool</code> 報表描述</td><td class="ok">West Vince → 業務管理處（filter 本就用前綴＋逾 90 天，非人名）✓</td></tr>
+      <tr><td><code>ADT_War_Room</code> Dashboard footer</td><td class="ok">「West Vince 持有」→「業務管理處 持有」✓</td></tr>
+      <tr><td>E2E 釋回測試</td><td class="ok">造逾 90 天測試客戶 → 觸發 Flow → owner 正確釋回業務管理處 → 清除測試資料 ✓</td></tr>
+    </table>
+
+    <h3>精修三 · 搶單警示文字露餡的英文業務名 → 真實中文 owner</h3>
+    <p>重複開單／搶單警示的 Description 原文寫「已有 <i>{英文業務名}</i> 的進行中商機『{商機}』」，在全繁中的 App 裡露餡，且與換過的中文 owner 對不上。逐筆解析被指涉的商機，把英文名換成該商機<b>當前真實的中文 owner</b>，順帶把殘留的英文階段名一併正規化。</p>
+    <table>
+      <tr><th style="width:34%">項目</th><th>結果</th></tr>
+      <tr><td>搶單警示筆數</td><td>27 筆（含 Description 提及既有商機者）</td></tr>
+      <tr><td>英文業務名 → 中文 owner</td><td class="ok">24 筆改寫、英文階段名 2 筆正規化，逐筆對回被指涉商機的真實中文 owner ✓</td></tr>
+      <tr><td>殘留英文業務名</td><td class="ok">0 筆（全文掃描 <code>ADT-O-</code> 商機名 + Description）✓</td></tr>
+    </table>
+
+    <h3>精修四 · 產品型號對齊官網真型號</h3>
+    <p>部分商機名／Description 內嵌的是舊自創型號，與官網（電力量測儀表產品線）真型號對不上。逐一校正成官網現有真型號；產品主檔（Product2）本身已是真型號、機會明細掛的是 FK，改字串即全數同步，價格／Family 不動。</p>
+    <table>
+      <tr><th style="width:22%">原自創型號</th><th style="width:20%">→ 官網真型號</th><th>對應官網品名</th></tr>
+      <tr><td>APM-EMA</td><td><b>CPM-80</b></td><td>多功能電力品質分析表</td></tr>
+      <tr><td>AEM-EMA</td><td><b>CPM-70</b></td><td>多功能電力品質分析表</td></tr>
+      <tr><td>AD-SeeS-Cloud</td><td><b>AD-Cloud-Mate</b></td><td>雲端能源管理平台</td></tr>
+      <tr><td colspan="3" class="muted">商機名修正 3 筆、Description 修正 5 筆，殘留自創型號 0。<code>ADT-O-</code> 商機用到的 17 個產品 ProductCode 全數落在官網真型號白名單內（CPM-80／70／20／12D／10B、AFM-8A、ACS-13、ADP-30、AD-Cloud-Mate 等）。</td></tr>
+    </table>
+
+    <h3>精修五 · 客戶電話補值 + 統一國際格式</h3>
+    <p>56 個客戶原無電話。依客戶所在縣市（<code>BillingState</code>）補台灣區碼代表號格式（不虛構分機、不寫真人手機），海外（亞利桑那廠）補 <code>+1</code> 區碼；既有本地格式一併正規化為 <code>+886</code> 國際格式，對齊真企業總機寫法。</p>
+    <table>
+      <tr><th style="width:34%">項目</th><th>結果</th></tr>
+      <tr><td>補值客戶電話</td><td class="ok">55 筆台灣市話（依縣市對區碼：02 台北新北、03 桃竹宜、04 台中彰化、07 高雄…）+ 1 筆海外 <code>+1 480-</code>（亞利桑那）✓</td></tr>
+      <tr><td>格式統一</td><td class="ok">77 個 <code>ADT-A-</code> 客戶電話全為 <code>+886</code>／<code>+1</code> 國際格式；空電話 0、非標準格式 0 ✓</td></tr>
+    </table>
+
+    <h3>五項總驗證（<code>verify_dq.apex</code>，逐項查證）</h3>
+    <table>
+      <tr><th style="width:8%">項次</th><th style="width:52%">驗證內容</th><th>結果</th></tr>
+      <tr><td>(1)</td><td>商機殘留英文業務名／英文階段／自創型號</td><td class="ok">0 ／ 0 ／ 0 ✓</td></tr>
+      <tr><td>(2)</td><td>客戶殘留英文 owner ／ 商機殘留英文 owner ／ 業務管理處持有客戶</td><td class="ok">0 ／ 0 ／ 31 ✓</td></tr>
+      <tr><td>(3)</td><td>ADT 用到產品（17 個）非官網真型號</td><td class="ok">0 ✓</td></tr>
+      <tr><td>(4)</td><td>客戶空電話 ／ 非（+886/+1）格式</td><td class="ok">0 ／ 0 ✓</td></tr>
+      <tr><td>(5)</td><td>公海 Flow active ／ 業務管理處 active user</td><td class="ok">true ／ 1 ✓</td></tr>
+    </table>
+    <p class="muted" style="margin-top:10px">隔離鐵則：所有 apex 只改 <code>External_ID__c LIKE 'ADT-A-%'／'ADT-O-%'</code>；型號只改 Product2 字串不動 PricebookEntry／OLI 關聯與金額；公海三檔改名前先確認新帳號 <code>IsActive=true</code> 並跑 E2E；重跑首頁月報驗證確認 7 業務／逐季達成率逐格未變（部門 68%、Q1 106／Q2 114／Q3 49）。</p>
+  </section>
+
+  <section>
+    <h2><span class="n">8</span>現場導覽（給主管看的 30 秒）</h2>
     <ol class="steps">
       <li>右上 App 選單 → 切換到 <b>銓盛-Adtek</b>。</li>
       <li>App 直接停在 <b>「經營戰情室」</b>首頁（已設為預設進入頁，導覽列第一個 tab）。</li>
@@ -217,7 +286,7 @@
 
   <div class="foot">
     銓盛-Adtek 經營戰情室首頁 · Salesforce App Page（<code>flexipage:defaultAppHomeTemplate</code>）+ 5 張 <code>flexipage:reportChart</code> + richText KPI 摘要 · 全原生 OOTB 元件 · CBUSDO 隔離已查證。
-    本次優化：機會銷售路徑繁中六階段、目標明細換月報真值（部門 130M、7 業務個人年目標與逐月曲線對回 image6／18／19／21）。實際成交以 org 真實成交結案為準，達成率（部門 68% / Q3 49%）已逐格對齊月報，少數 1% 差為四捨五入邊界，已據實標註。
+    本次優化：機會銷售路徑繁中六階段、目標明細換月報真值（部門 130M、7 業務個人年目標與逐月曲線對回 image6／18／19／21）、對照官網真數據的 Data Quality 精修（業務 owner 全中文化＋業務管理處公海帳號、搶單警示去英文名、產品型號對回官網、客戶電話統一 +886/+1）。實際成交以 org 真實成交結案為準，達成率（部門 68% / Q3 49%）已逐格對齊月報且 DQ 精修後未變，少數 1% 差為四捨五入邊界，已據實標註。CBUSDO 多 App 隔離全程查證。
   </div>
 
 </div>
