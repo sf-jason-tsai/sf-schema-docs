@@ -273,11 +273,11 @@
 
   <section>
     <h2><span class="n">8</span>銷售預測 · 原生協同預測（Collaborative Forecasts）</h2>
-    <p class="lead">在 App 導覽列直接秀出 Sales Cloud 原生的<b>「預測」</b>Tab —— 主管一開就看到 7 位業務逐季、逐分類的 pipeline 匯總，數字全部即時連動商機，不再靠 Excel 手動彙整。純 OOTB，零自訂程式。</p>
+    <p class="lead">在 App 導覽列直接秀出 Sales Cloud 原生的<b>「預測」</b>Tab（協同預測），並搭配一張<b>只撈銓盛</b>的「協同預測分類彙總」報表 —— 依預測分類逐月呈現 pipeline，數字全部即時連動商機，不再靠 Excel 手動彙整。純 OOTB，零自訂程式。</p>
 
     <div class="pain">
       <div class="pt">主管的痛：明明每個業務都在填商機，卻要等月底才有一張「這季能收多少」的彙總表</div>
-      <div class="sol">解法：啟用原生<b>協同預測</b>，用<b>角色階層</b>把 7 位業務的商機依<b>預測分類</b>（Commit／Best Case／Pipeline／Closed）逐季向上匯總到業務主管；業務自己也能在同一個 Tab 看到個人數字。全部即時算自 CRM 真實商機金額。</div>
+      <div class="sol">解法：導覽列加原生<b>協同預測</b> Tab 展示 Sales Cloud 內建能力；並用一張硬過濾銓盛的<b>「協同預測分類彙總」報表</b>，把 8 位業務的商機依<b>預測分類</b>（銷售管道／最高金額／認可／已關閉）逐月彙總。用你自己的帳號打開就是純 Adtek，全部即時算自 CRM 真實商機金額。</div>
     </div>
 
     <h3>做了什麼（全 OOTB）</h3>
@@ -287,10 +287,11 @@
       <tr><td>預測種類中文化</td><td>預測 Tab 頂部三個型別 tab 的顯示名全中文化：<code>Opportunity Amount</code> → <b>商機金額</b>、<code>Opportunity Revenue</code> → <b>商機收入</b>、<code>Opportunity Line Item Revenue</code> → <b>商機明細收入</b>（改 ForecastingType masterLabel，org 端實測已生效）</td></tr>
       <tr><td>角色階層</td><td>新建銓盛專屬三層獨立分支：<b>銓盛業務協理 → 銓盛業務經理 → 銓盛業務專員</b>（<code>ADT_Sales_VP → ADT_Sales_Manager → ADT_Sales_Rep</code>）</td></tr>
       <tr><td>人員指派</td><td>7 位業務掛<b>業務專員</b>、開啟預測；新建 1 個中文名業務主管功能帳號<b>陳志明</b>掛<b>業務經理</b>、開啟預測，可向上匯總看到 7 位業務</td></tr>
-      <tr><td>商機歸屬校正</td><td>發現 6 筆台積電銓盛大案（AP7 嘉義 CoWoS／AP8 南科 EMS／F12 電表汰換／F15 效能監控／F21 亞利桑那）誤掛在 CEO 名下、主管預測撈不到 → 改派給台積電主責業務<b>黃晁嶸</b>；校正後 CEO 名下 ADT 商機歸零、7 業務完整歸屬</td></tr>
+      <tr><td>商機歸屬校正</td><td>發現 7 筆台積電／緯創銓盛大案（AP7 嘉義 CoWoS／AP8 南科 EMS／F12 電表汰換／F15 效能監控／亞利桑那電力品質／緯創儲能 EMS）誤掛在 CEO 名下、主管與報表都撈不到 → 改派給台積電主責業務<b>黃晁嶸</b>；校正後 CEO 名下 ADT 商機歸零、130 筆銓盛商機完整歸屬 8 位業務</td></tr>
       <tr><td>導覽列</td><td>銓盛-Adtek App 導覽列在「機會」後新增 <b>「預測」</b>Tab（<code>standard-Forecasting3</code>）· 僅加本 App，不動其他 App · 已以 <code>AppTabMember</code> 系統物件實測導覽列渲染，「預測」落在<b>第 5 位</b>（首頁／營運戰情台／帳戶／機會／<b>預測</b>／個案…）</td></tr>
-      <tr><td>demo 身分</td><td>於 console 左下角「<b>登入為（Login As）陳志明</b>」以銓盛業務經理身分進「預測」Tab —— 只向下匯總 7 位銓盛業務，<b>不會混入建商等其他 App 商機</b>（協同預測依角色階層匯總，CEO 在最頂會撈進全 org，故用經理身分 demo）</td></tr>
+      <tr><td>純 Adtek 預測報表<br>（demo 主打）</td><td>新增 <b>「銓盛-Adtek · 協同預測分類彙總 (逐月)</b>」報表（<code>ADT_R17_Forecast_Categories</code>）—— 以 <code>External_ID__c 開頭 ADT-O-</code> 硬過濾，<b>只撈 130 筆銓盛商機</b>，依預測分類（銷售管道／最高金額／認可／已關閉）× 逐月堆疊呈現。此過濾<b>不受角色階層影響</b>，用<b>你自己的帳號</b>打開就是純 Adtek、零其他 App 混入</td></tr>
     </table>
+    <p class="muted" style="margin-top:8px"><b>關於原生「預測」Tab：</b>協同預測是依<b>角色階層由上往下匯總</b>的原生功能 —— 以某業務主管身分看，只會匯總其轄下業務；但以 <b>CEO（頂層）身分</b>看會匯總<b>全 org</b>（含建商等其他 demo App 的商機）。因此若要用<b>你自己的 CEO 帳號</b>看純 Adtek 數字，demo 主打上方的<b>「協同預測分類彙總」報表</b>（硬過濾銓盛、不受角色影響）；原生 Tab 則作為「這是 Sales Cloud 內建能力」的展示。</p>
 
     <h3>預測四大分類 ← 對應繁中六階段（資料天生就能餵進去）</h3>
     <table>
@@ -302,22 +303,15 @@
     </table>
     <p class="muted">繁中六階段的預測分類對應為 org 既有設定（本次未改）；「結案未成」歸 Omitted 不計入四大分類，與達成率口徑一致。</p>
 
-    <h3>主管在「預測」Tab 應看到的數字（<code>verify_forecast.apex</code> 用 SOQL 直算對照正解）</h3>
-    <p>下列為 2026 會計年度、以<b>陳志明（銓盛業務經理）</b>身分向下匯總 7 位銓盛業務、依預測分類的商機金額 —— 即 Tab 頂部主管視角的團隊數字，逐格可對回 CRM 真實 pipeline，<b>零其他 App 商機混入</b>。</p>
+    <h3>「協同預測分類彙總」報表的數字（用你自己的帳號實跑，只撈 130 筆銓盛商機）</h3>
+    <p>下列為此報表以 <code>ReportManager.runReport</code> 實跑的真實聚合值 —— 依預測分類彙總、<b>零其他 App 商機混入</b>，逐格可對回 CRM。</p>
     <div class="kpis">
-      <div class="kpi"><div class="v g">4,378.1 萬</div><div class="l">Open Pipeline<br>（Pipeline+Best Case+Commit）</div></div>
-      <div class="kpi"><div class="v">1,183.3 萬</div><div class="l">Commit 已承諾</div></div>
-      <div class="kpi"><div class="v">2,053.6 萬</div><div class="l">Best Case 最佳狀況</div></div>
-      <div class="kpi"><div class="v">8,860.4 萬</div><div class="l">Closed 已結案</div></div>
+      <div class="kpi"><div class="v g">3,194.9 萬</div><div class="l">Pipeline 銷售管道<br>（開發中）</div></div>
+      <div class="kpi"><div class="v">1,183.3 萬</div><div class="l">Best Case 最佳狀況</div></div>
+      <div class="kpi"><div class="v">8,978.3 萬</div><div class="l">Closed 已結案</div></div>
+      <div class="kpi"><div class="v">99.0 萬</div><div class="l">Omitted 已省略<br>（結案未成）</div></div>
     </div>
-    <table>
-      <tr><th>2026 逐季</th><th>Pipeline</th><th>Best Case</th><th>Commit</th><th>Closed</th></tr>
-      <tr><td>Q1</td><td>0</td><td>0</td><td>0</td><td class="ok">3,440.6 萬</td></tr>
-      <tr><td>Q2</td><td>0</td><td>0</td><td>0</td><td class="ok">4,172.1 萬</td></tr>
-      <tr><td>Q3</td><td>144.3 萬</td><td>1,182.5 萬</td><td>1,183.3 萬</td><td>1,247.7 萬</td></tr>
-      <tr><td>Q4</td><td>997.0 萬</td><td>871.1 萬</td><td>0</td><td>0</td></tr>
-    </table>
-    <p class="muted" style="margin-top:8px">逐季故事與月報一致：上半年靠 Closed 撐、Q3 起 pipeline 才開始鋪、Q4 仍在開發中 —— 預測 Tab 把「下半年要補多少單」量化到每一季。<b>demo 時於 console 左下角「登入為（Login As）陳志明」即以主管身分進 Tab</b>，數字即刻呈現、零等待、免手動重算。</p>
+    <p class="muted" style="margin-top:8px">總計 <b>130 筆銓盛商機、USD 13,455.5 萬</b>。報表過濾為 <code>External_ID__c 開頭 ADT-O-</code>（硬過濾），<b>不受角色階層影響</b> —— 這是為何用你自己的 CEO 帳號打開也只看到銓盛。逐月堆疊圖呈現「上半年靠 Closed 撐、下半年 pipeline 才鋪」的故事。<br>註：Opportunity 報表型別的預測分類欄位不拆出獨立 Commit 桶（Commit 併入聚合口徑）；若需 Commit 單列可另用預測專屬報表型別，本次未加以維持零風險。</p>
 
     <h3>隔離查證（<code>verify_forecast.apex</code>，逐項）</h3>
     <table>
@@ -329,11 +323,12 @@
       <tr><td>只改 <code>adt.*</code> 帳號、不動任何 SDO 內建預測使用者</td><td class="ok">✓</td></tr>
       <tr><td>不改全域 <code>ForecastingSettings</code>、沿用既有收入型別</td><td class="ok">✓</td></tr>
       <tr><td>「預測」Tab 眼見為憑 —— 反向 retrieve 確認 org App metadata 含 <code>standard-Forecasting3</code>、再以 <code>AppTabMember</code> 確認導覽列實際渲染</td><td class="ok">✓ 導覽列第 5 位「預測」（非只看部署 Succeeded）</td></tr>
-      <tr><td>預測種類三個 tab 已中文化（org 端 ForecastingType masterLabel 實測）</td><td class="ok">✓ 商機金額／商機收入／商機明細收入</td></tr>
-      <tr><td>陳志明主管身分預測匯總範圍 = 只 7 銓盛業務、零其他 App 混入</td><td class="ok">✓ ADT-O- ×129，非銓盛混入=0</td></tr>
-      <tr><td>CEO 名下誤掛的 6 筆台積電銓盛商機已改派、CEO 名下 ADT 商機歸零</td><td class="ok">✓ 剩餘=0</td></tr>
+      <tr><td>預測種類三個型別 tab 已中文化（org 端 ForecastingType masterLabel 實測）</td><td class="ok">✓ 商機金額／商機收入／商機明細收入</td></tr>
+      <tr><td>「協同預測分類彙總」報表用 CEO 帳號實跑 = 只撈銓盛、零其他 App 混入</td><td class="ok">✓ 130 筆、USD 13,455.5 萬（不受角色階層影響）</td></tr>
+      <tr><td>CEO 名下誤掛的 7 筆台積電／緯創銓盛商機已改派、CEO 名下 ADT 商機歸零</td><td class="ok">✓ 剩餘=0</td></tr>
     </table>
     <p class="muted" style="margin-top:8px">若導覽列一時沒看到「預測」，是瀏覽器快取住舊導覽 —— <b>硬重整（Ctrl+Shift+R）或重新載入 App</b> 即出現；org 端 metadata 與 <code>AppTabMember</code> 均已實測含此 Tab。</p>
+    <p class="muted" style="margin-top:6px"><b>如實說明 —— 預測 Tab 上的 4 個欄位標題（Closed Only／Commit Forecast／Best Case Forecast／Open Pipeline）仍為英文：</b>這些是協同預測的<b>系統內建欄位標題</b>，不屬 ForecastingType（型別 tab 已中文化）、也無 Metadata API／翻譯 workbench 可覆蓋路徑 —— 即便使用者語系為 zh_TW 亦然（已查證 8 帳號 lang 全為 zh_TW）。要動只能改全域預測設定、風險波及 15 個 SDO 內建預測使用者，故未擅改。demo 主打上方<b>報表</b>（欄位名全中文可控）可完全規避此限制。</p>
   </section>
 
   <section>
@@ -345,7 +340,8 @@
       <li>往下：<b>逐月業績推移</b> → 看得出 Q3 起訂單量急縮；<b>各業務逐季同期</b> → 下半年落後一目了然，柱狀直接標 <b>7 位中文名業務</b>。</li>
       <li>再往下：<b>業務員成交排行</b>（黃晁嶸領先、誰扛得住）+ <b>Pipeline 各階段量體</b>（後續補得回來嗎）。</li>
       <li>隨手點一筆機會 → 頂端 <b>銷售路徑</b> 已是繁中六階段（確認需求→需求探索→提案報價→合約議價→成交結案）。</li>
-      <li>console 左下角 <b>「登入為（Login As）陳志明」</b> → 導覽列點 <b>「預測」</b>Tab → 以銓盛業務經理身分看到 7 位業務逐季的 <b>Commit／Best Case／Pipeline／Closed</b> 匯總（頂部型別 tab 已中文化：商機金額／商機收入／商機明細收入）；切換季別、展開任一業務即見其貢獻 —— 全部即時算自 CRM 商機，零其他 App 混入。</li>
+      <li>導覽列點 <b>「預測」</b>Tab → 展示這是 Sales Cloud <b>原生協同預測</b>能力（頂部型別 tab 已中文化：商機金額／商機收入／商機明細收入）。</li>
+      <li>要看<b>純 Adtek</b> 的預測分層：開<b>「報告」→「銓盛-Adtek · 協同預測分類彙總 (逐月)」</b> —— 用<b>你自己的帳號</b>打開就只有銓盛 130 筆，依預測分類 × 逐月堆疊，Pipeline 3,194.9 萬／Best Case 1,183.3 萬／Closed 8,978.3 萬，即時算自 CRM、零其他 App 混入。</li>
       <li>每張圖右上有 <b>重新整理</b> 鈕，數字即時連動 CRM 成交，不再靠人工彙整月報。</li>
     </ol>
   </section>
