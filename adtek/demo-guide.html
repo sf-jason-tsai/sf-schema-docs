@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>銓盛-Adtek · Salesforce Demo 導覽</title>
+<style>
+  :root{
+    --brand:#0B5CAB; --brand-dark:#032D60; --ink:#181818; --sub:#5C5C5C;
+    --line:#E5E5E5; --bg:#F3F3F3; --card:#FFFFFF; --green:#2E844A; --amber:#DD7A01;
+    --red:#BA0517; --chip:#F3F3F3;
+    --font:-apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans TC","Microsoft JhengHei",Arial,sans-serif;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0;font-family:var(--font);color:var(--ink);background:var(--bg);line-height:1.6;font-size:15px;}
+  .wrap{max-width:1080px;margin:0 auto;padding:0 24px;}
+  /* header */
+  header{background:linear-gradient(180deg,var(--brand-dark),var(--brand));color:#fff;padding:44px 0 40px;}
+  header .wrap{display:flex;align-items:flex-start;justify-content:space-between;gap:24px;flex-wrap:wrap;}
+  .h-title{font-size:30px;font-weight:700;margin:0 0 6px;letter-spacing:.5px;}
+  .h-sub{font-size:15px;opacity:.92;margin:0;max-width:640px;}
+  .h-meta{font-size:13px;opacity:.8;margin-top:14px;}
+  .badge-app{display:inline-block;background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.35);
+    border-radius:4px;padding:6px 14px;font-size:14px;font-weight:600;white-space:nowrap;}
+  /* section */
+  section{padding:34px 0 6px;}
+  h2{font-size:20px;font-weight:700;margin:0 0 4px;color:var(--brand-dark);}
+  h2 .num{display:inline-block;width:26px;height:26px;line-height:26px;text-align:center;background:var(--brand);
+    color:#fff;border-radius:4px;font-size:14px;margin-right:10px;vertical-align:2px;}
+  .lead{color:var(--sub);margin:2px 0 20px 36px;font-size:14px;}
+  /* cards grid */
+  .grid{display:grid;gap:16px;}
+  .g2{grid-template-columns:1fr 1fr;} .g3{grid-template-columns:1fr 1fr 1fr;} .g4{grid-template-columns:repeat(4,1fr);}
+  @media(max-width:820px){.g2,.g3,.g4{grid-template-columns:1fr;}}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:20px 22px;}
+  .card h3{margin:0 0 8px;font-size:15px;font-weight:700;display:flex;align-items:center;gap:8px;}
+  .card p{margin:0;color:var(--sub);font-size:13.5px;}
+  .card .pain{color:var(--red);font-size:12.5px;margin-top:10px;padding-top:10px;border-top:1px dashed var(--line);}
+  .card .fix{color:var(--green);font-size:12.5px;margin-top:6px;font-weight:600;}
+  /* stat */
+  .stat{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:18px 20px;text-align:left;}
+  .stat .k{font-size:12px;color:var(--sub);margin:0 0 6px;letter-spacing:.3px;}
+  .stat .v{font-size:28px;font-weight:700;color:var(--brand-dark);margin:0;line-height:1.1;}
+  .stat .v small{font-size:14px;font-weight:600;color:var(--sub);}
+  .stat .d{font-size:12px;color:var(--sub);margin:6px 0 0;}
+  /* table */
+  table{width:100%;border-collapse:collapse;background:var(--card);border:1px solid var(--line);border-radius:8px;overflow:hidden;font-size:13.5px;}
+  th,td{text-align:left;padding:11px 16px;border-bottom:1px solid var(--line);}
+  th{background:#FAFAFA;font-weight:600;color:var(--sub);font-size:12.5px;letter-spacing:.3px;}
+  tr:last-child td{border-bottom:none;}
+  td.r,th.r{text-align:right;font-variant-numeric:tabular-nums;}
+  .chip{display:inline-block;background:var(--chip);border:1px solid var(--line);border-radius:12px;padding:2px 10px;font-size:12px;color:var(--sub);}
+  .chip.b{color:var(--brand);border-color:#CFE0F1;background:#F0F6FC;}
+  .chip.g{color:var(--green);border-color:#C6E7D0;background:#F0F9F3;}
+  /* step flow */
+  .steps{display:flex;gap:0;flex-wrap:wrap;align-items:stretch;margin-left:36px;}
+  .step{flex:1;min-width:150px;background:var(--card);border:1px solid var(--line);border-radius:8px;padding:14px 16px;position:relative;margin-right:26px;margin-bottom:16px;}
+  .step:not(:last-child):after{content:"→";position:absolute;right:-20px;top:50%;transform:translateY(-50%);color:var(--brand);font-weight:700;}
+  .step .n{font-size:11px;color:var(--brand);font-weight:700;letter-spacing:.5px;}
+  .step .t{font-size:14px;font-weight:600;margin:4px 0 2px;}
+  .step .s{font-size:12px;color:var(--sub);}
+  /* callout */
+  .note{margin:20px 0 6px;background:#F0F6FC;border:1px solid #CFE0F1;border-left:4px solid var(--brand);border-radius:6px;padding:14px 18px;font-size:13.5px;color:var(--brand-dark);}
+  .note b{color:var(--brand-dark);}
+  .guard{background:#F0F9F3;border:1px solid #C6E7D0;border-left:4px solid var(--green);}
+  .guard b{color:var(--green);}
+  ul.tight{margin:6px 0 0 36px;padding-left:18px;color:var(--sub);font-size:13.5px;}
+  ul.tight li{margin:3px 0;}
+  footer{margin-top:40px;padding:26px 0 40px;border-top:1px solid var(--line);color:var(--sub);font-size:12.5px;}
+  .kbd{font-family:monospace;background:#F3F3F3;border:1px solid var(--line);border-radius:3px;padding:1px 6px;font-size:12px;color:var(--ink);}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap">
+    <div>
+      <p class="h-title">銓盛-Adtek · Salesforce 示範導覽</p>
+      <p class="h-sub">以原生 Salesforce Sales Cloud + Service Cloud，一比一對應銓盛電子（電表 / 能源監控 / EMS）從行銷、業務、預測到售後派工的完整營運流程 —— 證明可全面接手現行紛享銷客。</p>
+      <p class="h-meta">環境：CBUSDO 共享 Demo Org　·　App：<b>銓盛-Adtek</b>　·　全資產 <span class="kbd">ADT_</span> 前綴、與既有 App 完全隔離</p>
+    </div>
+    <div class="badge-app">App：銓盛-Adtek</div>
+  </div>
+</header>
+
+<div class="wrap">
+
+<!-- 開場數字 -->
+<section>
+  <h2><span class="num">◎</span>一眼看懂這個 Demo</h2>
+  <p class="lead">全部數字皆由 org 內真實商機資料即時算出，可在<b>「經營戰情室」首頁的銷售預測看板（Forecast Table）</b>即時重現。</p>
+  <div class="grid g4">
+    <div class="stat"><p class="k">年度業績目標</p><p class="v">NT$ 1.30 億</p><p class="d">協同預測配額 12 月加總</p></div>
+    <div class="stat"><p class="k">累計成交</p><p class="v">NT$ 8,860 萬</p><p class="d">85 筆成交結案</p></div>
+    <div class="stat"><p class="k">年度達標率</p><p class="v">68.2<small>%</small></p><p class="d">8 月起累計轉落後</p></div>
+    <div class="stat"><p class="k">年度缺口</p><p class="v">NT$ 4,140 萬</p><p class="d">pipeline 覆蓋 1.06 倍</p></div>
+  </div>
+</section>
+
+<!-- 五大主題對應 -->
+<section>
+  <h2><span class="num">1</span>五大營運主題 · 現行痛點 → Salesforce 解法</h2>
+  <p class="lead">每一塊都對應客戶當前用紛享銷客處理、但體驗不佳的環節。</p>
+  <div class="grid g2">
+    <div class="card">
+      <h3>行銷 ROI</h3>
+      <p>Energy Taiwan 智慧能源週、台北自動化展、工廠節能補助 EDM、通路夥伴聯合行銷、中東能源展（杜拜）—— 5 檔真實展會用 <b>原生 Campaign</b> 記錄預算 / 實際花費 / 預期營收。34 位展會潛客（<b>Lead</b>）以 <b>CampaignMember</b> 掛回各活動、商機再掛回 Campaign，形成「潛客 → 成員 → 商機 → 成交金額」完整回推鏈。</p>
+      <p class="pain">紛享銷客：Campaign 成效無法量化，行銷投入是黑箱；不知哪場展會、哪個管道帶來的客戶真的成交，預算分配全憑感覺。</p>
+      <p class="fix">✓ 潛客進 CRM 即掛 Campaign，串接商機成交金額回推各活動 ROI；<b>行銷 ROI 戰情室</b> Dashboard 一頁看完「投入 vs 成交、管道別成交、潛客漏斗」，預算分配有數據依據。</p>
+    </div>
+    <div class="card">
+      <h3>客戶管理（公海 / 分級 / 商機）</h3>
+      <p>60 家終端客戶 + 15 家通路統包商，A/B/C 三級分類（分級欄位 <code>Tier</code> 已上記錄頁「帳戶資訊」，與年營收 / 行業別並列，佐證分級邏輯）；超過 90 天未拜訪自動落入 <b>公海客戶池</b>（21 家），業務可一鍵認領。客戶資料採台灣真實企業公開資訊（官網 / 縣市 / 規模級距 / 總機），非空殼假資料。<b>集團母子結構</b>：台積電（6 廠）、群創（3 廠）、友達（2 廠）各有總公司節點，記錄頁可從母公司下鑽子廠。</p>
+      <p class="pain">紛享銷客：公海規則靠人管，客戶「躺著」沒人追。</p>
+      <p class="fix">✓ 公海：排程 Flow 每日自動釋出（RT=終端客戶 且 未拜訪≥90天 → 收歸公海管理者）+ Screen Flow 一鍵認領（改 Owner + 天數歸零）。分級：A/B/C 為制度規則落地的欄位值（依營收 / 規模判定），頁面與年營收並列佐證，非即時自動重算。</p>
+    </div>
+    <div class="card">
+      <h3>業績預測（Forecast Table + 原生協同預測）</h3>
+      <p>把客戶月報 PPT 的 <b>Forecast 表格形態</b>做成戰情室首頁主視覺 <b>「銷售預測看板」</b>：逐月<b>目標／實際／累計/達標率/缺口</b>一列一月，目標值取自新建原生<b>協同預測配額 <code>ForecastingQuota</code></b>（掛主管 × 12 月 × 商機金額型別，加總 1.3 億），與導覽列原生「預測」Tab <b>同一份配額 = 單一真相</b>；下接階段漏斗轉換率。</p>
+      <p class="pain">現況：無 pipeline forecast、達標與否只能靠感覺；缺口與各階段轉換率只能口頭問業務，無法提前預警。</p>
+      <p class="fix">✓ 戰情室即時顯示逐月達標率與缺口，<b>8 月起累計跌破 100% 自動跳落後預警</b>，年度缺口 4,140 萬、pipeline 覆蓋 1.06 倍一眼看到；階段轉換率低於基準自動標紅供輔導。實際值即時算自 CRM，數字全連動、零手工。</p>
+    </div>
+    <div class="card">
+      <h3>售後服務與派工</h3>
+      <p>20 張售服工單，透過 Flow 自動開 <b>WorkOrder</b> 並產生 <b>ServiceAppointment</b>，指派工程師團隊 —— 可上 Dispatcher 甘特圖排程。工程師處理時右側 <b>Knowledge</b> 即搜即用（19 篇自家維修知識）。</p>
+      <p class="pain">現況：銓盛開單 / 派工目前靠 <b>email 往返</b>，沒有統一的案件狀態與排程視圖，主管無法即時看到「誰在處理、處理到哪」。</p>
+      <p class="fix">✓ Field Service 派工鏈：Case → 工單 → 派工 → 工程師，全程狀態透明、可排程、可查知識庫。</p>
+    </div>
+  </div>
+  <div class="card" style="margin-top:16px;">
+    <h3>內部溝通（第 5 主題）· Slack Swarm 協作已就位（商機 + 售服案）</h3>
+    <p>對應客戶三個角色的溝通需求：<b>業務</b>（隨手查客戶 / 商機、討論案子）、<b>業助</b>（協助業務 / 售服 / 財務跨部門溝通）、<b>工廠</b>（庫存 / 出貨公告）。銓盛-Adtek App 內的<b>商機</b>與<b>售服案</b>記錄頁都已內建官方 <b>Slack Swarm 群集協作</b>元件（Salesforce 原生 <span class="chip">runtime_service_swarming</span>；<code>Swarm.RelatedRecordId</code> 原生支援 Opportunity / Case 等物件）。沿用此 CBUSDO org <b>既有的 Salesforce ↔ Slack 連線</b>（THERMOS demo 2026-07-15 已完成工作區連線 = Slack Demo 35769）。這是 <b>App 層級</b>覆寫，其他 App 開同一筆記錄完全不受影響。</p>
+    <p class="pain">現況：討論在 LINE / 群組、資料在系統，兩邊對不上；跨部門溝通靠人轉述。</p>
+    <p class="fix">✓ 記錄頁直接發起 Swarm 頻道討論，對話與商機 / 案件綁在同一畫面並同步到 Slack，業助可把業務 / 售服 / 財務拉進同一頻道協作。</p>
+    <div class="note" style="margin-top:12px;background:#EAF6EC;border-color:#B7DFC0;border-left-color:var(--green,#2E844A);color:#194E2B;"><b>org↔Slack 連線狀態：</b>此 org <b>已連過 Slack 工作區</b>（THERMOS 那次接好，<code>#service-swarm-thermo</code> 頻道 + incoming-webhook 測試成功可證）。商機頁的 Swarm 元件<b>本來就正確、可運作</b>，非語意錯誤。</div>
+    <div class="note" style="margin-top:10px;"><b>「此處仍空無一物 / 找不到群集頻道」的真正原因：</b>那只是該筆商機<b>尚未有人發起 Swarm</b>（全 org 目前 Swarm 記錄 = 0，屬「還沒建立」而非「壞掉」）。<b>現場動作：</b>開該商機 → Slack 分頁 → 按 <b>建立 / 發起 Swarm（Create Swarm）</b> → 頻道即出現在此並同步至 Slack。首次於新工作區操作時，若跳授權畫面，用 SE / 客戶 Slack 帳號確認一次即可。</div>
+    <div class="note" style="margin-top:10px;background:#FEF5E7;border-color:#F2D18B;border-left-color:var(--amber);color:#7A4E00;"><b>誠實範圍說明：</b>org 內已備妥「記錄頁 → Swarm 協作分頁 + 通知推送」且連線就緒，現場發起 Swarm 即有頻道。至於「在 Slack 裡用 slash 指令<b>主動查詢 CBUSDO 客戶 / 商機資訊的查詢型 bot</b>」，屬 <b>Slack 工作區端</b>能力，需在 Slack 端額外安裝設定 Salesforce Sales / Service for Slack app，<b>不在本次 org 內交付範圍</b>；可作為後續延伸項目。</div>
+  </div>
+</section>
+
+<!-- 資料骨架 -->
+<section>
+  <h2><span class="num">2</span>Demo 資料骨架（皆為「像客戶家的」真實情境資料）</h2>
+  <p class="lead">產品型號、通路商、活動名稱皆貼合銓盛電子實際業務語境；全部帶 <span class="kbd">External_ID__c = ADT-*</span>，可一條 SOQL 完整清除。</p>
+  <div class="grid g4">
+    <div class="stat"><p class="k">客戶（Account）</p><p class="v">75</p><p class="d">終端 60 + 通路 15</p></div>
+    <div class="stat"><p class="k">產品（Product2）</p><p class="v">17</p><p class="d">電表 / 監控模組 / 雲端授權</p></div>
+    <div class="stat"><p class="k">商機（Opportunity）</p><p class="v">40 <small>+13 目標</small></p><p class="d">6 階段 Pipeline</p></div>
+    <div class="stat"><p class="k">售服案（Case）</p><p class="v">20</p><p class="d">→10 工單 / 17 派工</p></div>
+  </div>
+  <div class="grid g2" style="margin-top:16px;">
+    <table>
+      <tr><th>客戶分級（終端 60 家）</th><th class="r">家數</th></tr>
+      <tr><td><span class="chip b">A 級</span> 核心大客戶</td><td class="r">14</td></tr>
+      <tr><td><span class="chip">B 級</span> 成長客戶</td><td class="r">19</td></tr>
+      <tr><td><span class="chip">C 級</span> 長尾客戶</td><td class="r">27</td></tr>
+      <tr><td><span class="chip g">公海池</span> ≥90 天未拜訪</td><td class="r">22</td></tr>
+    </table>
+    <table>
+      <tr><th>商機階段</th><th class="r">金額 NT$</th></tr>
+      <tr><td>需求探索（11）</td><td class="r">1,111 萬</td></tr>
+      <tr><td>確認需求（12）</td><td class="r">1,141 萬</td></tr>
+      <tr><td>提案報價（11）</td><td class="r">943 萬</td></tr>
+      <tr><td>合約議價（7）</td><td class="r">1,183 萬</td></tr>
+      <tr><td><b>成交結案（85）</b></td><td class="r"><b>8,860 萬</b></td></tr>
+    </table>
+  </div>
+</section>
+
+<!-- List View -->
+<section>
+  <h2><span class="num">3</span>每個 Object 都有專屬 List View（一開就定位）</h2>
+  <p class="lead">依約定，銓盛-Adtek App 下每個核心 Object 都建了自己的 <span class="kbd">銓盛-Adtek ·</span> 清單，用 <span class="kbd">External_ID__c</span> / RecordType 精準篩出自家資料，與其他 Demo 共用 org 也互不干擾。現場點一次即成為該 Object 的預設視圖。</p>
+  <table>
+    <tr><th>Object</th><th>List View 名稱</th><th>篩選條件</th></tr>
+    <tr><td>Opportunity 商機</td><td>銓盛-Adtek · 進行中商機 / 本季目標</td><td>ADT-O- / ADT-T-</td></tr>
+    <tr><td>Account 客戶</td><td>銓盛-Adtek · 公海客戶池 / 通路統包商</td><td>ADT-A- · RecordType 分流</td></tr>
+    <tr><td>Campaign 行銷活動</td><td>銓盛-Adtek · 行銷活動</td><td>ADT-CAMP-</td></tr>
+    <tr><td>Product2 產品</td><td>銓盛-Adtek · 產品型錄</td><td>ADT-P-</td></tr>
+    <tr><td>Case 售服案</td><td>銓盛-Adtek · 售服案件 / 借貨管理</td><td>ADT- · RecordType 分流</td></tr>
+    <tr><td>WorkOrder 派工工單</td><td>銓盛-Adtek · 派工工單</td><td>ADT-</td></tr>
+    <tr><td>ServiceAppointment 服務約會</td><td>銓盛-Adtek · 服務約會</td><td>ADT-SA-</td></tr>
+  </table>
+  <div class="note"><b>本輪補齊：</b>新增 Campaign / Product2 / WorkOrder / 通路統包商 / 借貨管理 / <b>服務約會</b>共 <b>6 個</b>清單，加上既有商機 / 公海 / 售服清單，<b>七大 Object</b>全數各有專屬 <span class="kbd">銓盛-Adtek ·</span> List View（服務約會亦與 Field Service 等共用 org 的其他 App 互不干擾，僅框自家 10 筆 <span class="kbd">ADT-SA-*</span>）。</div>
+</section>
+
+<!-- Knowledge -->
+<section>
+  <h2><span class="num">4</span>自家知識庫 · 19 篇專業 Knowledge（Case 右側即搜即用）</h2>
+  <p class="lead">針對「Case 記錄頁沒有可搜的自家文章」補齊：新建 19 篇繁體中文專業知識，全部 <span class="chip g">Online</span>、帶 <span class="kbd">faq_external_id__c = ADT-KB-*</span> 可一鍵清除。工程師開 Case 時右側 Knowledge 元件直接搜得到。</p>
+  <div class="grid g2">
+    <div class="card">
+      <h3>售服維修類 · KCS 12 篇</h3>
+      <p>四段式（問題 / 原因 / 環境 / 解法）標準知識：</p>
+      <ul class="tight" style="margin-left:0;">
+        <li>AEMDRB 韌體升級跳機（v7.22）· 韌體更新與回滾 SOP</li>
+        <li>RS485 / Modbus 通訊異常排除 · 電表安裝校準 SOP</li>
+        <li>AEM-EMA 模組離線 · CPM 讀值飄移校正</li>
+        <li>雲端上傳中斷 · EMS 首次導入 SOP</li>
+        <li>保固判定與 RMA · 借貨機出借歸還</li>
+        <li>需量反應設定 · 停電復電自檢</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3>售前選型類 · FAQ 7 篇</h3>
+      <p>問答式（業務帶著就能回客戶）：</p>
+      <ul class="tight" style="margin-left:0;">
+        <li>APM vs AEM 系列選型 · 單相 / 三相選擇</li>
+        <li>對施耐德 / 西門子 / 台達的優勢對照</li>
+        <li>節能補助與能源大戶條款</li>
+        <li>通訊協定支援清單（Modbus RTU/TCP…）</li>
+        <li>雲端 EMS 授權方案與費用</li>
+        <li>VAW / MWH 應用場景與方案建議</li>
+      </ul>
+    </div>
+  </div>
+  <div class="note guard"><b>內容誠實原則：</b>文章使用真實 Adtek 產品型號與能源監控專業知識撰寫；涉及補助金額 / 報價 / 精度數字處，均明確提醒業務「依主管機關與產品最新資料為準、不對客戶自行承諾」，不編造保證性數字。</div>
+</section>
+
+<!-- 行銷 ROI 表 -->
+<section>
+  <h2><span class="num">5</span>行銷 ROI · 5 檔活動實際回推鏈</h2>
+  <p class="lead">原生 Campaign 承載成本、<b>CampaignMember</b> 掛 34 位展會潛客、商機掛回 Campaign —— 報表 <b>銓盛-Adtek · R9 各活動投報對比</b> 自動算出「投入 vs 成交」，數字皆由 org 內 seed 經 Reports API 實跑重現。</p>
+  <table>
+    <tr><th>活動</th><th class="r">實際成本</th><th class="r">成員</th><th class="r">全部商機額</th><th class="r">已成交</th><th class="r">回收倍數</th></tr>
+    <tr><td>Energy Taiwan 2025 智慧能源週</td><td class="r">1,150,000</td><td class="r">8</td><td class="r">6,067,285</td><td class="r">1,322,285</td><td class="r">1.15×</td></tr>
+    <tr><td>台北自動化展 × APM-EMA 新品發表</td><td class="r">470,000</td><td class="r">8</td><td class="r">3,282,040</td><td class="r">2,080,040</td><td class="r"><b>4.43×</b></td></tr>
+    <tr><td>工廠節能改造補助推廣 EDM</td><td class="r">180,000</td><td class="r">6</td><td class="r">3,231,962</td><td class="r">1,060,962</td><td class="r"><b>5.89×</b></td></tr>
+    <tr><td>通路夥伴聯合行銷（EPLAN 上架）</td><td class="r">520,000</td><td class="r">5</td><td class="r">2,912,100</td><td class="r">234,100</td><td class="r" style="color:var(--red,#C23934);">0.45×</td></tr>
+    <tr><td>Middle East Energy 2025（杜拜）</td><td class="r">95,000</td><td class="r">7</td><td class="r">412,830</td><td class="r">412,830</td><td class="r">4.35×</td></tr>
+    <tr style="font-weight:600;background:#F3F3F3;"><td>合計</td><td class="r">2,415,000</td><td class="r">34</td><td class="r">15,906,217</td><td class="r">5,110,217</td><td class="r">2.12×</td></tr>
+  </table>
+  <div class="note" style="margin-top:12px;"><b>殺手級洞察（demo 敘事）：</b>同樣掛回 Campaign 的商機，一算就看出 <b>節能補助 EDM（5.89×）、台北自動化展（4.43×）最值得加碼</b>；<b>通路夥伴聯合行銷只有 0.45×（投 52 萬只回收 23 萬，賠錢）</b> —— 這正是客戶要的「用數據證明預算該往哪投、哪個管道別再砸錢」，取代憑感覺分配。</div>
+</section>
+
+<!-- 自動化 -->
+<section>
+  <h2><span class="num">6</span>三條原生自動化（全 Flow、零程式碼、org 已啟用）</h2>
+  <p class="lead">以下三支 Flow 皆已在 org 內 <span class="chip g">Active</span>，排程時段避開既有 06:00 作業，不影響其他 App。</p>
+
+  <h3 style="margin:22px 0 4px 36px;font-size:14px;color:var(--brand-dark);">A. Case 自動派工（Record-Triggered）</h3>
+  <div class="steps">
+    <div class="step"><div class="n">STEP 1</div><div class="t">建立售服 Case</div><div class="s">客服 / 業務登記報修</div></div>
+    <div class="step"><div class="n">STEP 2</div><div class="t">Flow 建 WorkOrder</div><div class="s">自動開派工單</div></div>
+    <div class="step"><div class="n">STEP 3</div><div class="t">產生 ServiceAppointment</div><div class="s">可進甘特圖排程</div></div>
+    <div class="step"><div class="n">STEP 4</div><div class="t">指派工程師</div><div class="s">Service 團隊接單</div></div>
+  </div>
+
+  <h3 style="margin:14px 0 4px 36px;font-size:14px;color:var(--brand-dark);">B. 公海自動釋出（Scheduled · 每日）</h3>
+  <ul class="tight">
+    <li>每日掃描：客戶 <b>≥90 天未拜訪</b> → 自動移交公海管理者 <b>West Vince</b>。</li>
+    <li>已在公海者跳過，不重複處理。</li>
+  </ul>
+
+  <h3 style="margin:14px 0 4px 36px;font-size:14px;color:var(--brand-dark);">C. 認領公海客戶（Screen Flow）</h3>
+  <ul class="tight">
+    <li>公海客戶池點進任一客戶 → 記錄頁<b>頂端按鈕列</b>的「<b>認領客戶</b>」→ 確認畫面 → 一鍵把 Owner 改成自己（並重置未拜訪天數）→ 完成畫面。</li>
+    <li class="fix">✓ 認領按鈕掛在 Adtek 專屬客戶頁 <code>ADT_Account_Record</code>（原生 OOTB 版面，App 層指派，不影響其他 App）。</li>
+  </ul>
+</section>
+
+<!-- 報表儀表板 -->
+<section>
+  <h2><span class="num">7</span>報表與經營戰情室首頁</h2>
+  <p class="lead">報表收在資料夾 <b>銓盛-Adtek · 戰情報表</b>；App 首頁＝原生 <b>「經營戰情室」App Page</b>，頂部 KPI 摘要卡下方即主視覺<b>「銷售預測看板」Forecast Table</b>（自製 LWC），再往下接 5 張即時連動的報表圖（達成率環圈 / 逐月推移 / 各業務逐季 / 業務排行 / Pipeline 漏斗）。另有<b>行銷 ROI 戰情室</b> Dashboard 經 Dashboards 分頁存取。</p>
+  <div class="grid g2">
+    <table>
+      <tr><th>報表</th><th>用途</th></tr>
+      <tr><td>R1 業績達成</td><td>逐月成交結案（8,860 萬）</td></tr>
+      <tr><td>R2 Pipeline 漏斗</td><td>進行中商機分階段</td></tr>
+      <tr><td>R3 業務排行</td><td>各業務成交結案排名</td></tr>
+      <tr><td>R4 公海客戶池</td><td>≥90 天未拜訪清單</td></tr>
+      <tr><td>R5 客戶分級</td><td>A/B/C 家數分布</td></tr>
+      <tr><td>R6 Campaign ROI</td><td>各活動預算/成本/預期營收</td></tr>
+      <tr><td>R7 售服看板</td><td>Case 依狀態分組</td></tr>
+      <tr><td>R8 業績目標</td><td>逐月目標（部門 1.3 億）</td></tr>
+      <tr style="background:#EAF3FB;"><td><b>R9 投報對比</b></td><td>各活動 實際成本 vs 已成交</td></tr>
+      <tr style="background:#EAF3FB;"><td><b>R10 管道別成交</b></td><td>展會/EDM/通路 各帶進金額</td></tr>
+      <tr style="background:#EAF3FB;"><td><b>R11 潛客漏斗</b></td><td>各活動 成員→回應→商機</td></tr>
+    </table>
+    <div class="card">
+      <h3>行銷 ROI 戰情室（本輪新增）</h3>
+      <p>6 個原生元件、12 欄 Grid，一頁回答「錢花在哪最值得」：</p>
+      <ul class="tight" style="margin-left:0;">
+        <li>KPI：行銷總投入 241.5 萬 / 活動帶進已成交 511 萬 / 整體 ROI 量表 ≈ 2.1×</li>
+        <li>各活動 投入 vs 成交（橫向長條，一眼看賺賠）</li>
+        <li>管道別帶進商機金額圓餅（Seminar 976 萬 / Email 323 萬 / 通路 291 萬）</li>
+        <li>各活動潛客漏斗（成員 → 回應 → 商機）</li>
+      </ul>
+      <p class="fix" style="border:none;">✓ 全數字與報表即時連動、無寫死；經營戰情室首頁另有 <b>Forecast Table</b>（逐月達標率 / 缺口 / 階段轉換率，年度達標 68.2%、缺口 4,140 萬）與 5 張報表圖。</p>
+    </div>
+  </div>
+</section>
+
+<!-- 建議 demo 動線 -->
+<section>
+  <h2><span class="num">8</span>建議現場 Demo 動線（約 14 分鐘）</h2>
+  <ol style="margin-left:36px;color:var(--sub);font-size:14px;">
+    <li style="margin:6px 0;"><b>開場（1 分）</b>：切到「銓盛-Adtek」App，首頁直接停在<b>「經營戰情室」</b>。第一屏頂部 KPI 摘要卡下方就是主視覺<b>「銷售預測看板」Forecast Table</b>，一句話「這是專業原生 Salesforce，一開 App 就知道達標了沒、缺多少」。</li>
+    <li style="margin:6px 0;"><b>行銷 ROI（3 分）</b>：進 <b>Dashboards 分頁 → 行銷 ROI 戰情室</b>。先指整體 ROI 量表 2.1×，再點「各活動投入 vs 成交」長條 —— 說「<b>台北自動化展 4.4×、節能補助 EDM 5.9×</b> 最該加碼，<b>通路夥伴只有 0.45× 在賠錢</b>」。接著開一檔 Campaign（如 Energy Taiwan）→ 展示<b>相關清單的 34 位潛客成員</b>與活動時間軸，說明「潛客進來就掛 Campaign、商機掛回活動、金額自動回推」——正是取代憑感覺分配預算。</li>
+    <li style="margin:6px 0;"><b>客戶 / 公海（3 分）</b>：全部客戶列表看 A/B/C（Tier 欄位已上帳戶頁）→ 公海客戶池 → 點進一筆（挑 Owner 不是自己的）→ 記錄頁頂端「認領客戶」按鈕跑一次 Screen Flow，Owner 換成自己。順帶點台積電總公司看母子下鑽。</li>
+    <li style="margin:6px 0;"><b>預測（3 分）</b>：回經營戰情室首頁的 <b>Forecast Table</b> —— 逐月往下指「1～7 月月月超標、<b>8 月當月只成交 21 萬</b>、累計首度跌破 100% 跳<b>落後 icon</b>，缺口一路擴大到年底 <b>4,140 萬</b>」，頂部指<b>缺口覆蓋 1.06 倍</b>（守住現有 pipeline 才補得回、沒餘裕）；最下方<b>階段漏斗轉換率</b>看哪段卡住。再點導覽列<b>「預測」Tab</b>：這份逐月目標＝原生協同預測配額，<b>同一份配額餵看板也餵預測 Tab</b>，收口「目標、預測、達成同一份真相」。</li>
+    <li style="margin:6px 0;"><b>售服派工（3 分）</b>：開一張 Case → 展示自動生成的 WorkOrder / ServiceAppointment → Dispatcher 甘特圖排程 → 右側 <b>Knowledge</b> 搜「AEMDRB 跳機」秀出自家維修文章。</li>
+    <li style="margin:6px 0;"><b>Slack 協作（1 分）</b>：在剛開的商機 / 售服案點 <b>Slack 分頁</b> → 按 <b>發起 Swarm</b> 建頻道，說「討論就在記錄頁上、和資料綁在一起、同步進 Slack」。<span style="color:#194E2B;">（連線已就緒；空白 = 尚未發起，按一下即活化。）</span></li>
+    <li style="margin:6px 0;"><b>收尾（2 分）</b>：帶一眼<b>各 Object 專屬 List View</b>（每個物件都定位好）→「以上全是原生 Salesforce，零客製程式碼、對既有環境零影響」。</li>
+  </ol>
+</section>
+
+<!-- 護欄 -->
+<section>
+  <h2><span class="num">✓</span>安全護欄 · 對既有環境零影響（已實測回歸）</h2>
+  <div class="note guard">
+    <b>第一準則：任何操作都不影響、不弄壞既有功能。已逐項驗證通過：</b>
+    <ul class="tight" style="margin-left:0;margin-top:8px;">
+      <li>既有 App（THERMOS <span class="kbd">Jason_Tsai</span>、<span class="kbd">THERMOS_Sales_Service_v2</span> 等）全部存在、未被更動。</li>
+      <li>既有 Account baseline <b>473 筆</b>不變（ADT 新增 75 筆自成一格）。</li>
+      <li>OpportunityStage 選項清單未新增任何值；ADT 只沿用既有英文 6 階段。</li>
+      <li>7 個新 Record Type 全 <span class="chip g">Active</span>，皆 <span class="kbd">ADT_</span> 前綴，不撞既有。</li>
+      <li>本輪新增 6 個 List View（含服務約會）、19 篇 Knowledge、首頁改版，皆 <span class="kbd">ADT_</span> / <span class="kbd">ADT-KB-*</span> 標記；既有 <b>85 篇 Online 知識不變</b>（新增後總數 104）。</li>
+      <li>首頁＝銓盛-Adtek 專屬 App Page <span class="kbd">ADT_Adtek_AppHome</span>，只掛本 App、不覆蓋任何全 org 首頁；未碰其他 App 的首頁與版面。</li>
+      <li>銷售預測看板 LWC <span class="kbd">c:adtForecastTable</span> + Apex <span class="kbd">ADT_ForecastTable</span>（<span class="kbd">with sharing</span>）SOQL 全帶 <span class="kbd">ADT-O-</span> 前綴，不受角色階層影響；4 支測試全過。</li>
+      <li>原生協同預測配額只寫主管本人（<span class="kbd">adt.mgr</span>）12 筆、沿用既有商機金額型別，不動全域 <span class="kbd">ForecastingSettings</span>、不碰任何 SDO 內建帳號 / 配額。</li>
+      <li>全部 seed 帶 <span class="kbd">External_ID__c = 'ADT-*'</span>、知識帶 <span class="kbd">faq_external_id__c = 'ADT-KB-*'</span> → 各一條 SOQL 可完整清除，說收就收。</li>
+    </ul>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap" style="padding:0;">
+    銓盛-Adtek Salesforce Demo　·　建置於 CBUSDO 共享 Demo Org　·　原生 Sales Cloud + Service Cloud + Field Service + 協同預測　·　戰情室銷售預測看板為單一自製 LWC（<span class="kbd">c:adtForecastTable</span> + Apex <span class="kbd">ADT_ForecastTable</span>），其餘全原生 OOTB<br>
+    所有數字以 org 內真實商機資料即時算出並經獨立 SOQL 對照驗證，本頁不含任何示意 / 估算值。
+  </div>
+</footer>
+
+</div>
+</body>
+</html>

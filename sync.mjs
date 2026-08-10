@@ -183,7 +183,12 @@ const PAGES = [
     {
         src: 'C:/Users/bingyan.tsai/Desktop/Claude/adtek-demo/docs/銓盛-Adtek-經營戰情室首頁驗收.html',
         dest: 'adtek/executive-cockpit-home.html',
-        title: '銓盛-Adtek · 經營戰情室首頁驗收 (2026-08-09)'
+        title: '銓盛-Adtek · 經營戰情室首頁驗收 · 銷售預測看板 (2026-08-10)'
+    },
+    {
+        src: 'C:/Users/bingyan.tsai/Desktop/Claude/adtek-demo/銓盛-Adtek_Demo導覽.html',
+        dest: 'adtek/demo-guide.html',
+        title: '銓盛-Adtek · Demo 導覽（單一真相文件）(2026-08-10)'
     },
     // ↑ 加新頁時只需在這裡插入 { src, dest, title }
 ];

@@ -70,8 +70,8 @@
   <div class="cover">
     <div class="kicker">SALESFORCE APP PAGE · 銓盛電子 自動化 OT 整合業務部</div>
     <h1>經營戰情室首頁</h1>
-    <div class="sub">把每月主管會議月報的頭號重點，直接搬上 Salesforce App 首頁 — 一開 App 就看到達成率、逐月趨勢、業務排行、Pipeline 量體，全部即時連動 CRM 成交資料。本次再做多項優化：銷售路徑階段全繁體中文、目標明細換月報真實數據、對照官網真數據做一輪 Data Quality 精修，並在 App 導覽列加上原生<b>「預測」Tab</b>（協同預測），讓主管即時看到 7 位業務逐季 pipeline 匯總。</div>
-    <div class="meta">資料來源：<code>2026_06主管會議報告_自動化OT整合業務部20260720.pptx</code>（37 頁，image6／18／19／21 逐格讀值）+ 銓盛電子官網 <code>adtek.com.tw</code>（產品型號池）· 全原生 OOTB 元件（App Page + reportChart）· 驗收日 2026-08-09</div>
+    <div class="sub">把每月主管會議月報的頭號重點，直接搬上 Salesforce App 首頁 — 一開 App 就看到達成率、逐月趨勢、業務排行、Pipeline 量體，全部即時連動 CRM 成交資料。本次交付主體：把客戶月報 PPT 的 Forecast 表格形態做成原生 LWC <b>「銷售預測看板」</b>（逐月目標／實際／累計/達標率/缺口 + 缺口覆蓋 + 階段漏斗轉換率），掛為戰情室首頁主視覺，目標值取自新建的原生<b>協同預測配額</b>、與「預測」Tab 同一份配額（單一真相），累計未達標自動跳落後預警。並含前次多項優化：銷售路徑階段全繁體中文、目標明細換月報真值、對照官網真數據的 Data Quality 精修、App 導覽列原生<b>「預測」Tab</b>。</div>
+    <div class="meta">資料來源：<code>2026_06主管會議報告_自動化OT整合業務部20260720.pptx</code>（37 頁，image6／18／19／21 逐格讀值）+ 銓盛電子官網 <code>adtek.com.tw</code>（產品型號池）· 全原生 OOTB 元件（App Page + reportChart + 自製 LWC 銷售預測看板）· 驗收日 2026-08-10</div>
   </div>
 
   <section>
@@ -293,15 +293,15 @@
     </table>
     <p class="muted" style="margin-top:8px"><b>關於原生「預測」Tab：</b>協同預測是依<b>角色階層由上往下匯總</b>的原生功能 —— 以某業務主管身分看，只會匯總其轄下業務；但以 <b>CEO（頂層）身分</b>看會匯總<b>全 org</b>（含建商等其他 demo App 的商機）。因此若要用<b>你自己的 CEO 帳號</b>看純 Adtek 數字，demo 主打上方的<b>「協同預測分類彙總」報表</b>（硬過濾銓盛、不受角色影響）；原生 Tab 則作為「這是 Sales Cloud 內建能力」的展示。</p>
 
-    <h3>預測四大分類 ← 對應繁中六階段（資料天生就能餵進去）</h3>
+    <h3>預測分類 ← 對應繁中六階段（org 既有階段→分類映射，本次未改）</h3>
     <table>
       <tr><th style="width:26%">預測分類</th><th style="width:40%">對應銷售路徑階段</th><th>意義</th></tr>
-      <tr><td><b>Commit</b> 已承諾</td><td>合約議價</td><td>業務敢對主管承諾這季會收的單</td></tr>
-      <tr><td><b>Best Case</b> 最佳狀況</td><td>需求探索、提案報價</td><td>樂觀但仍有機會拿下的單</td></tr>
-      <tr><td><b>Pipeline</b> 開發中</td><td>確認需求</td><td>早期、還在培養的機會</td></tr>
+      <tr><td><b>Best Case</b> 最佳狀況</td><td>合約議價</td><td>已進入議約、樂觀可拿下的單</td></tr>
+      <tr><td><b>Pipeline</b> 開發中</td><td>需求探索、初步接觸、確認需求、提案報價</td><td>早期～中期、還在培養的機會</td></tr>
       <tr><td><b>Closed</b> 已結案</td><td>成交結案</td><td>已實際成交入帳</td></tr>
+      <tr><td><b>Omitted</b> 已省略</td><td>結案未成</td><td>不計入預測與達成率口徑</td></tr>
     </table>
-    <p class="muted">繁中六階段的預測分類對應為 org 既有設定（本次未改）；「結案未成」歸 Omitted 不計入四大分類，與達成率口徑一致。</p>
+    <p class="muted">此階段→分類映射為 org 既有設定（本次未改）。實測本 org 進行中商機只落在 <b>Best Case</b>（合約議價）與 <b>Pipeline</b>（其餘進行中階段）兩類，<b>無 Commit 分類商機</b>；「結案未成」歸 Omitted，不計入達成率口徑。</p>
 
     <h3>「協同預測分類彙總」報表的數字（用你自己的帳號實跑，只撈 130 筆銓盛商機）</h3>
     <p>下列為此報表以 <code>ReportManager.runReport</code> 實跑的真實聚合值 —— 依預測分類彙總、<b>零其他 App 商機混入</b>，逐格可對回 CRM。</p>
@@ -332,12 +332,92 @@
   </section>
 
   <section>
-    <h2><span class="n">9</span>現場導覽（給主管看的 30 秒）</h2>
+    <h2><span class="n">9</span>戰情室主視覺 · 銷售預測看板（Forecast Table）</h2>
+    <p class="lead">把客戶自己月報 PPT 的 <b>Forecast 表格形態</b>（逐月「目標值／實際值／累計／達標率／缺口」）直接做成 Salesforce 原生 LWC，掛在<b>戰情室首頁 KPI 摘要卡正下方、報表圖之上</b>，成為一開 App 的主視覺。目標值取自新建的原生<b>協同預測配額</b>（<code>ForecastingQuota</code>），與原生「預測」Tab 同一份配額 —— 單一真相；實際值即時算自 CRM 成交結案商機。純原生 SLDS，數字全部連動、零手工。</p>
+
+    <div class="pain">
+      <div class="pt">痛點 · 無 pipeline forecast，達標與否只能靠感覺、缺口只能口頭問業務</div>
+      <div class="sol">解法：<b>逐月 Forecast Table</b> 直接把「累計目標 vs 累計實際 vs 缺口」攤在首頁，累計達標率用原生綠／黃／紅進度條標示，當月累計一旦落後即跳 <b>SLDS 警示 icon</b>；下方接「商機階段漏斗與轉換率」，各階段量體與相鄰轉換率一目了然，低於基準自動標紅 —— 季末前就看得到缺口、看得到哪一段轉換卡住，不用等月底、不用問業務。</div>
+    </div>
+
+    <h3>做了什麼（全原生）</h3>
+    <table>
+      <tr><th style="width:22%">項目</th><th>內容</th></tr>
+      <tr><td>目標載體</td><td>新建原生 <b>協同預測配額 <code>ForecastingQuota</code></b> 12 筆（逐月），掛主管<b>陳志明</b> × 2026 各月 × 型別<b>商機金額</b>（<code>OpportunityAmount</code>，org 既有啟用型別）· 逐月加總鎖定 <b>NT$ 1.30 億</b> · 同一份配額同時餵原生預測 Tab 與本看板</td></tr>
+      <tr><td>實際值</td><td>各月<b>成交結案</b>商機 <code>Amount</code> 加總（org 真數），逐月累計</td></tr>
+      <tr><td>累計達標率 / 缺口</td><td>累計達標率＝累計實際 ÷ 累計目標；缺口＝累計目標 − 累計實際；當月累計未達標即標<b>落後</b></td></tr>
+      <tr><td>本季預估達成</td><td>已成交 ＋ Best Case ＋ Commit（對應協同預測口徑）· 缺口覆蓋＝進行中 pipeline ÷ 年度缺口</td></tr>
+      <tr><td>階段漏斗轉換率</td><td>各進行中階段金額量體 + 相鄰階段轉換率（本階段金額 ÷ 前一階段金額），低於 50% 標紅供輔導</td></tr>
+      <tr><td>元件</td><td>自製 LWC <code>c:adtForecastTable</code> · <code>lightning-card</code> + SLDS <code>slds-table_bordered</code> 表格 + 原生色進度條 + SLDS <code>utility:warning</code> icon + <code>lightning-helptext</code> 計算口徑說明 · 全繁中 · Apex <code>ADT_ForecastTable</code>（<code>with sharing</code>、<code>cacheable=true</code>）</td></tr>
+      <tr><td>資料錨定</td><td>controller 所有 SOQL 一律 <code>External_ID__c LIKE 'ADT-O-%'</code> —— <b>不受角色階層影響</b>，任何人（含 CEO）自己帳號打開都是純 Adtek 130 筆</td></tr>
+    </table>
+
+    <h3>逐月目標達成（controller 實跑值，經獨立 SOQL 對照正解）</h3>
+    <table>
+      <tr><th>月份</th><th>目標</th><th>實際</th><th>累計目標</th><th>累計實際</th><th>累計達標率</th><th>缺口</th></tr>
+      <tr><td>1 月</td><td>1,200 萬</td><td>1,426 萬</td><td>1,200 萬</td><td>1,426 萬</td><td class="ok">119%</td><td class="ok">超 226 萬</td></tr>
+      <tr><td>2 月</td><td>900 萬</td><td>810 萬</td><td>2,100 萬</td><td>2,236 萬</td><td class="ok">107%</td><td class="ok">超 136 萬</td></tr>
+      <tr><td>3 月</td><td>1,150 萬</td><td>1,204 萬</td><td>3,250 萬</td><td>3,441 萬</td><td class="ok">106%</td><td class="ok">超 191 萬</td></tr>
+      <tr><td>4 月</td><td>1,100 萬</td><td>1,234 萬</td><td>4,350 萬</td><td>4,674 萬</td><td class="ok">107%</td><td class="ok">超 324 萬</td></tr>
+      <tr><td>5 月</td><td>1,150 萬</td><td>1,359 萬</td><td>5,500 萬</td><td>6,034 萬</td><td class="ok">110%</td><td class="ok">超 534 萬</td></tr>
+      <tr><td>6 月</td><td>1,300 萬</td><td>1,579 萬</td><td>6,800 萬</td><td>7,613 萬</td><td class="ok">112%</td><td class="ok">超 813 萬</td></tr>
+      <tr><td>7 月</td><td>1,150 萬</td><td>1,226 萬</td><td>7,950 萬</td><td>8,839 萬</td><td class="ok">111%</td><td class="ok">超 889 萬</td></tr>
+      <tr><td><b>8 月</b> <span class="bad">落後</span></td><td>1,000 萬</td><td class="bad">21 萬</td><td>8,950 萬</td><td>8,860 萬</td><td class="warn">99%</td><td class="bad">缺 90 萬</td></tr>
+      <tr><td>9 月</td><td>1,000 萬</td><td>—</td><td>9,950 萬</td><td>8,860 萬</td><td class="warn">89%</td><td class="bad">缺 1,090 萬</td></tr>
+      <tr><td>10 月</td><td>1,100 萬</td><td>—</td><td>11,050 萬</td><td>8,860 萬</td><td class="bad">80%</td><td class="bad">缺 2,190 萬</td></tr>
+      <tr><td>11 月</td><td>1,150 萬</td><td>—</td><td>12,200 萬</td><td>8,860 萬</td><td class="bad">73%</td><td class="bad">缺 3,340 萬</td></tr>
+      <tr><td>12 月</td><td>800 萬</td><td>—</td><td>13,000 萬</td><td>8,860 萬</td><td class="bad">68%</td><td class="bad">缺 4,140 萬</td></tr>
+    </table>
+    <p class="muted">1～7 月累計月月超標，<b>8 月當月只成交 21 萬</b>、累計達標率首度跌破 100%（99%）→ 觸發落後標示；此後每月缺口擴大，年底累計缺口 <b>NT$ 4,140 萬</b>。這正是客戶「下半年訂單急縮、無法提前預警」痛點的具象化。實際值來自 org 真實成交結案，逐格經 <code>verify_forecast_table.apex</code> 以獨立 SOQL 對照為正解。</p>
+
+    <h3>年度彙總卡（看板頂部 6 格）</h3>
+    <div class="kpis">
+      <div class="kpi"><div class="v">1.30 億</div><div class="l">年度目標</div></div>
+      <div class="kpi"><div class="v">8,860 萬</div><div class="l">累計成交</div></div>
+      <div class="kpi"><div class="v r">68%</div><div class="l">年度達標率</div></div>
+      <div class="kpi"><div class="v r">4,140 萬</div><div class="l">年度缺口</div></div>
+    </div>
+    <div class="kpis" style="margin-top:10px">
+      <div class="kpi"><div class="v">1.00 億</div><div class="l">本季預估達成<br>（Closed+BestCase+Commit）</div></div>
+      <div class="kpi"><div class="v g">1.06 倍</div><div class="l">缺口覆蓋<br>（進行中 pipeline ÷ 缺口）</div></div>
+    </div>
+    <p class="muted" style="margin-top:10px">缺口覆蓋 <b>1.06 倍</b>：現有進行中 pipeline（3,195 萬）僅略高於年度缺口（4,140 萬 中扣掉 Best Case 後），代表<b>只要守住現有商機仍有機會補上，但沒有餘裕</b> —— 主管據此判斷是否要加開商機、投放資源。</p>
+
+    <h3>商機階段漏斗與轉換率（controller 實跑值）</h3>
+    <table>
+      <tr><th style="width:22%">階段</th><th>商機數</th><th>金額量體</th><th>階段轉換率</th></tr>
+      <tr><td>需求探索</td><td>11</td><td>1,111 萬</td><td>—</td></tr>
+      <tr><td>確認需求</td><td>12</td><td>1,141 萬</td><td class="ok">103%</td></tr>
+      <tr><td>提案報價</td><td>11</td><td>943 萬</td><td class="ok">83%</td></tr>
+      <tr><td>合約議價</td><td>7</td><td>1,183 萬</td><td class="ok">126%</td></tr>
+    </table>
+    <p class="muted">轉換率＝本階段金額 ÷ 前一階段金額（金額量體口徑）；本 org 各段轉換率皆高於 50% 基準，未觸發輔導標示。若某段掉到基準以下，該格轉換率會自動標紅，供主管鎖定卡住的階段介入輔導。</p>
+
+    <h3>隔離查證（<code>verify_forecast_table.apex</code>，逐項對照獨立 SOQL 正解）</h3>
+    <table>
+      <tr><th style="width:52%">驗證內容</th><th>結果</th></tr>
+      <tr><td>配額 12 筆、加總 = 年度目標</td><td class="ok">12 筆 ／ 130,000,000 ✓</td></tr>
+      <tr><td>controller 年度目標 / 累計成交 / 缺口 = 獨立 SOQL 正解</td><td class="ok">三項 MATCH 全 true ✓</td></tr>
+      <tr><td>累計實際末月 = 逐月加總 = 年度成交結案</td><td class="ok">88,603,806.95，三值一致 ✓</td></tr>
+      <tr><td>落後標示只在 8 月（當月累計首度跌破 100%）</td><td class="ok">LAG_COUNT=1（8 月）✓</td></tr>
+      <tr><td>ForecastCategory 分類：Best Case（合約議價）／Pipeline，無 Commit</td><td class="ok">BestCase 1,183 萬 ／ Pipeline 3,195 萬 ／ Commit 0 ✓</td></tr>
+      <tr><td>只寫主管本人配額，SDO 內建 / 他人配額未動</td><td class="ok">主管 12 筆 ／ 他人 0 筆 ✓</td></tr>
+      <tr><td>controller SOQL 全帶 <code>ADT-O-</code> 前綴（不受角色階層影響）</td><td class="ok">Adtek 成交 85 筆，不含非 Adtek 第 86 筆 ✓</td></tr>
+      <tr><td>LWC 只掛 <code>ADT_Adtek_AppHome</code>，未碰 <code>ADT_My_Desk</code></td><td class="ok">AppHome 含 1 引用、My_Desk 0 ✓</td></tr>
+      <tr><td>沿用既有 <code>ForecastingType</code>（33 個），未改型別設定 / 全域預測設定</td><td class="ok">✓</td></tr>
+      <tr><td>Apex 測試 <code>ADT_ForecastTableTest</code></td><td class="ok">4 tests 全過（逐月/累計/漏斗/彙總斷言）✓</td></tr>
+    </table>
+    <p class="muted" style="margin-top:8px">隔離鐵則：配額只寫 <code>QuotaOwnerId=陳志明(adt.mgr)</code>；Apex/LWC SOQL 一律 <code>External_ID__c LIKE 'ADT-O-%'</code> 錨定；LWC 只掛 <code>ADT_Adtek_AppHome</code>（App scope），不覆蓋全 org 首頁、不碰鎖定的 <code>ADT_My_Desk</code>；沿用既有 <code>OpportunityAmount</code> 型別，不動 <code>ForecastingSettings</code> 全域設定與任何 SDO 內建帳號。</p>
+  </section>
+
+  <section>
+    <h2><span class="n">10</span>現場導覽（給主管看的 30 秒）</h2>
     <ol class="steps">
       <li>右上 App 選單 → 切換到 <b>銓盛-Adtek</b>。</li>
       <li>App 直接停在 <b>「經營戰情室」</b>首頁（已設為預設進入頁，導覽列第一個 tab）。</li>
-      <li>第一屏：頂部 <b>KPI 摘要卡</b>（年目標 1.3 億 / 達成 68% / Q3 49% / Q2 114%）+ <b>年度達成率環圈</b>。</li>
-      <li>往下：<b>逐月業績推移</b> → 看得出 Q3 起訂單量急縮；<b>各業務逐季同期</b> → 下半年落後一目了然，柱狀直接標 <b>7 位中文名業務</b>。</li>
+      <li>第一屏：頂部 <b>KPI 摘要卡</b>（年目標 1.3 億 / 達成 68% / Q3 40% / 下半年 20%）。</li>
+      <li>正下方就是主視覺 <b>「銷售預測看板」Forecast Table</b>：逐月<b>目標／實際／累計/達標率/缺口</b>一列一月，累計達標率用綠黃紅進度條，<b>8 月起跳落後 icon</b>、缺口一路擴大到年底 4,140 萬；頂部 6 格年度彙總（缺口覆蓋 1.06 倍）；最下方<b>階段漏斗轉換率</b>。這張表一眼回答「達標了沒、缺多少、哪段卡住」。</li>
+      <li>往下：<b>年度達成率環圈</b> + <b>逐月業績推移</b> → 看得出 Q3 起訂單量急縮；<b>各業務逐季同期</b> → 下半年落後一目了然，柱狀直接標 <b>7 位中文名業務</b>。</li>
       <li>再往下：<b>業務員成交排行</b>（黃晁嶸領先、誰扛得住）+ <b>Pipeline 各階段量體</b>（後續補得回來嗎）。</li>
       <li>隨手點一筆機會 → 頂端 <b>銷售路徑</b> 已是繁中六階段（確認需求→需求探索→提案報價→合約議價→成交結案）。</li>
       <li>導覽列點 <b>「預測」</b>Tab → 展示這是 Sales Cloud <b>原生協同預測</b>能力（頂部型別 tab 已中文化：商機金額／商機收入／商機明細收入）。</li>
@@ -347,7 +427,8 @@
   </section>
 
   <div class="foot">
-    銓盛-Adtek 經營戰情室首頁 · Salesforce App Page（<code>flexipage:defaultAppHomeTemplate</code>）+ 5 張 <code>flexipage:reportChart</code> + richText KPI 摘要 · 全原生 OOTB 元件 · CBUSDO 隔離已查證。
+    銓盛-Adtek 經營戰情室首頁 · Salesforce App Page（<code>flexipage:defaultAppHomeTemplate</code>）+ 自製 LWC <code>c:adtForecastTable</code> 銷售預測看板（主視覺）+ 5 張 <code>flexipage:reportChart</code> + richText KPI 摘要 · 全原生元件 · CBUSDO 隔離已查證。
+    本次交付主體：<b>銷售預測看板 Forecast Table</b> —— 逐月目標／實際／累計/達標率/缺口 + 年度彙總（缺口覆蓋 1.06 倍）+ 階段漏斗轉換率；目標值取自新建原生協同預測配額 <code>ForecastingQuota</code>（主管陳志明 × 12 月 × 商機金額型別，加總 1.30 億，與預測 Tab 同一份配額）；實際值即時算自 CRM 成交結案，累計達標率跌破 100%（8 月）自動跳落後預警；Apex <code>ADT_ForecastTable</code>（<code>with sharing</code>、SOQL 全帶 <code>ADT-O-</code> 前綴不受角色階層影響）+ 4 支測試全過 + <code>verify_forecast_table.apex</code> 以獨立 SOQL 對照逐格為正解。
     本次優化：機會銷售路徑繁中六階段、目標明細換月報真值（部門 130M、7 業務個人年目標與逐月曲線對回 image6／18／19／21）、對照官網真數據的 Data Quality 精修（業務 owner 全中文化＋業務管理處公海帳號、搶單警示去英文名、產品型號對回官網、客戶電話統一 +886/+1）。實際成交以 org 真實成交結案為準，達成率（部門 68% / Q3 49%）已逐格對齊月報且 DQ 精修後未變，少數 1% 差為四捨五入邊界，已據實標註。並新增原生協同預測：新建銓盛專屬三層角色階層（協理→經理→專員）、7 業務＋1 主管開啟預測、導覽列加「預測」Tab（<code>standard-Forecasting3</code>）、沿用既有收入型別 <code>SDO_Sales_Opportunity_Revenue</code> 不動全域設定；<code>verify_forecast.apex</code> 以 SOQL 直算對照正解逐格對回 CRM pipeline。CBUSDO 多 App 隔離全程查證。
   </div>
 
