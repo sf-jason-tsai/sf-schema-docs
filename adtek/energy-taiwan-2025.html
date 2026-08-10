@@ -167,7 +167,7 @@
 
       <form action="https://webto.salesforce.com/servlet/servlet.WebToLead?encoding=UTF-8" method="POST">
         <input type="hidden" name="oid" value="00DJ2000000HP36MAG">
-        <input type="hidden" name="retURL" value="https://www.adtek.com.tw/web/index/index.jsp?lang=tw">
+        <input type="hidden" name="retURL" value="https://www.adtek.com.tw/web/index/index.jsp?lang=tw" id="returlField">
         <input type="hidden" name="Campaign_ID" value="701J2000000Ldf8IAC">
         <input type="hidden" name="member_status" value="已報名">
         <input type="hidden" name="lead_source" value="Marketing Event">
@@ -302,6 +302,12 @@
   if (new URLSearchParams(location.search).get('submitted')==='1'){
     var b=document.getElementById('sfBanner'); if(b){b.classList.add('show'); b.scrollIntoView({behavior:'smooth',block:'center'});}
   }
+
+  // 送出後導回本頁並顯示「報名成功」橫幅（不寫死路徑，用當前頁位置）
+  (function(){
+    var r=document.getElementById('returlField');
+    if(r){ r.value = location.origin + location.pathname + '?submitted=1'; }
+  })();
 
   var DEMO = {
     last:['陳','林','黃','張','李','王','吳','劉','蔡','楊','許','鄭','謝','郭','洪','曾','廖','賴','徐','周'],
