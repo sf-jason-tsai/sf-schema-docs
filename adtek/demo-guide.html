@@ -259,9 +259,39 @@
   </ul>
 </section>
 
+<!-- 機會流程 · 報價單歸檔輕量卡控 -->
+<section>
+  <h2><span class="num">7</span>機會流程 · 報價單歸檔輕量卡控</h2>
+  <p class="lead">回應客戶痛點：現行紛享銷客把報價設在流程第 4 關、還要層層批核，太重 → 業務乾脆<b>跳過或口頭自評</b>，管理層失去可視性只能翻 Excel / 逐一問人。本輪不加任何審批，改用<b>輕量卡控</b>：業務照常快推，但商機一進入<b>提案報價（含）之後</b>的階段，就<b>必須先把報價單歸檔</b>，否則存不了。管理層直接在 CRM 看得到，不用再問人。</p>
+
+  <div class="steps">
+    <div class="step"><div class="n">STEP 1</div><div class="t">業務照常推進</div><div class="s">需求探索 / 確認需求 · 零卡控</div></div>
+    <div class="step"><div class="n">STEP 2</div><div class="t">拖到「提案報價」</div><div class="s">尚未歸檔 → 存檔被擋</div></div>
+    <div class="step"><div class="n">STEP 3</div><div class="t">附報價單 + 勾選</div><div class="s">勾「報價單已歸檔」、填報價日期</div></div>
+    <div class="step"><div class="n">STEP 4</div><div class="t">放行 · 全程可視</div><div class="s">管理層報表即時看到歸檔狀態</div></div>
+  </div>
+
+  <div class="grid g2" style="margin-top:18px;">
+    <div class="card">
+      <h3>卡控規則（單一驗證規則，零審批）</h3>
+      <p>商機進入<b>提案報價 / 合約議價 / 成交結案</b>任一階段時，若<b>「報價單已歸檔」未勾選</b>即擋下存檔，跳出引導訊息「進入提案報價階段前，請先附上報價單並勾選『報價單已歸檔』。」。<b>需求探索 / 確認需求</b>完全不卡（業務快推階段），<b>結案未成</b>也不卡（放棄的案子不逼歸檔）。</p>
+      <p class="fix">✓ 新增 2 個 Adtek 專屬欄位 <code>報價單已歸檔</code>（勾選）＋<code>報價日期</code>，掛在 Adtek 商機記錄頁側欄「報價單歸檔」區塊，業務隨手勾。</p>
+    </div>
+    <div class="card">
+      <h3>管理層可視性（取代翻 Excel / 問人）</h3>
+      <p>目前 <b>104 筆</b>已進入報價（含）之後階段的商機中，<b>101 筆已歸檔</b>、<b>3 筆刻意留白</b>作為「未歸檔預警」的活教材。管理層可用報表 / 清單篩「已進報價階段但未歸檔」，一眼抓出漏歸檔的案子。</p>
+      <p class="pain">紛享銷客：報價卡在第 4 關又要批核，業務跳過、口頭自評；管理層看不到，只能回頭翻 Excel 或逐一問業務。</p>
+    </div>
+  </div>
+
+  <div class="note guard"><b>零審批、快推不變：</b>這不是加流程，是把「報價單要歸檔」這件管理層在意的事，用一條驗證規則<b>硬性但輕量</b>地落地——業務體感只多勾一個框，管理層卻換回完整的 CRM 可視性。</div>
+
+  <div class="note" style="margin-top:10px;background:#F0F9F3;border-color:#C6E7D0;border-left-color:var(--green);color:#194E2B;"><b>對其他 App 零影響（已實測）：</b>驗證規則公式含 <code>RecordType.DeveloperName = "ADT_Sales"</code>，僅對銓盛-Adtek 銷售案生效；同 org 其他 App（建商 / 銀樺 / KKDAY…）商機記錄類型不同，公式恆為 false，<b>完全不受卡控</b>。欄位顯示走 Adtek 專屬記錄頁（App 層 View 覆寫），<b>不動任何共用版面配置</b>，其他 App 開同一物件完全不變。已跑 Apex 三項驗證：未歸檔進報價階段被擋 ✓、已歸檔放行 ✓、別 App 商機不受影響 ✓。</div>
+</section>
+
 <!-- 報表儀表板 -->
 <section>
-  <h2><span class="num">7</span>報表與經營戰情室首頁</h2>
+  <h2><span class="num">8</span>報表與經營戰情室首頁</h2>
   <p class="lead">報表收在資料夾 <b>銓盛-Adtek · 戰情報表</b>；App 首頁＝原生 <b>「經營戰情室」App Page</b>，頂部 KPI 摘要卡下方即主視覺<b>「銷售預測看板」Forecast Table</b>（自製 LWC），再往下接 5 張即時連動的報表圖（達成率環圈 / 逐月推移 / 各業務逐季 / 業務排行 / Pipeline 漏斗）。另有<b>行銷 ROI 戰情室</b> Dashboard 經 Dashboards 分頁存取。</p>
   <div class="grid g2">
     <table>
@@ -294,11 +324,12 @@
 
 <!-- 建議 demo 動線 -->
 <section>
-  <h2><span class="num">8</span>建議現場 Demo 動線（約 14 分鐘）</h2>
+  <h2><span class="num">9</span>建議現場 Demo 動線（約 16 分鐘）</h2>
   <ol style="margin-left:36px;color:var(--sub);font-size:14px;">
     <li style="margin:6px 0;"><b>開場（1 分）</b>：切到「銓盛-Adtek」App，首頁直接停在<b>「經營戰情室」</b>。第一屏頂部 KPI 摘要卡下方就是主視覺<b>「銷售預測看板」Forecast Table</b>，一句話「這是專業原生 Salesforce，一開 App 就知道達標了沒、缺多少」。</li>
     <li style="margin:6px 0;"><b>行銷 ROI（3 分）</b>：進 <b>Dashboards 分頁 → 行銷 ROI 戰情室</b>。先指整體 ROI 量表 2.1×，再點「各活動投入 vs 成交」長條 —— 說「<b>台北自動化展 4.4×、節能補助 EDM 5.9×</b> 最該加碼，<b>通路夥伴只有 0.45× 在賠錢</b>」。接著開一檔 Campaign（如 Energy Taiwan）→ 展示<b>相關清單的 34 位潛客成員</b>與活動時間軸，說明「潛客進來就掛 Campaign、商機掛回活動、金額自動回推」——正是取代憑感覺分配預算。</li>
     <li style="margin:6px 0;"><b>客戶 / 公海（3 分）</b>：全部客戶列表看 A/B/C（Tier 欄位已上帳戶頁）→ 公海客戶池 → 點進一筆（挑 Owner 不是自己的）→ 記錄頁頂端「認領客戶」按鈕跑一次 Screen Flow，Owner 換成自己。順帶點台積電總公司看母子下鑽。</li>
+    <li style="margin:6px 0;"><b>機會流程 · 報價卡控（2 分）</b>：開一筆<b>未歸檔</b>的提案報價商機 → 把階段往「合約議價」拖存檔 → <b>當場被擋</b>，跳出「請先附上報價單並勾選『報價單已歸檔』」。回側欄「報價單歸檔」區塊<b>勾選 + 填報價日期</b>再存 → 放行。一句話「業務照常快推，但報價單一定歸檔、管理層不用再問人」。可補一句：其他 App 商機沒這條卡控、完全不受影響。</li>
     <li style="margin:6px 0;"><b>預測（3 分）</b>：回經營戰情室首頁的 <b>Forecast Table</b> —— 逐月往下指「1～7 月月月超標、<b>8 月當月只成交 21 萬</b>、累計首度跌破 100% 跳<b>落後 icon</b>，缺口一路擴大到年底 <b>4,140 萬</b>」，頂部指<b>缺口覆蓋 1.06 倍</b>（守住現有 pipeline 才補得回、沒餘裕）；最下方<b>階段漏斗轉換率</b>看哪段卡住。再點導覽列<b>「預測」Tab</b>：這份逐月目標＝原生協同預測配額，<b>同一份配額餵看板也餵預測 Tab</b>，收口「目標、預測、達成同一份真相」。</li>
     <li style="margin:6px 0;"><b>售服派工（3 分）</b>：開一張 Case → 展示自動生成的 WorkOrder / ServiceAppointment → Dispatcher 甘特圖排程 → 右側 <b>Knowledge</b> 搜「AEMDRB 跳機」秀出自家維修文章。</li>
     <li style="margin:6px 0;"><b>Slack 協作（1 分）</b>：在剛開的商機 / 售服案點 <b>Slack 分頁</b> → 按 <b>發起 Swarm</b> 建頻道，說「討論就在記錄頁上、和資料綁在一起、同步進 Slack」。<span style="color:#194E2B;">（連線已就緒；空白 = 尚未發起，按一下即活化。）</span></li>

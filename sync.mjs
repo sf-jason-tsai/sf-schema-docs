@@ -190,6 +190,11 @@ const PAGES = [
         dest: 'adtek/demo-guide.html',
         title: '銓盛-Adtek · Demo 導覽（單一真相文件）(2026-08-10)'
     },
+    {
+        src: 'C:/Users/bingyan.tsai/Desktop/Claude/adtek-demo/docs/銓盛-Adtek-機會流程報價卡控驗收.html',
+        dest: 'adtek/opportunity-quote-gate.html',
+        title: '銓盛-Adtek · 機會流程報價單歸檔輕量卡控驗收 (2026-08-11)'
+    },
     // ↑ 加新頁時只需在這裡插入 { src, dest, title }
 ];
 

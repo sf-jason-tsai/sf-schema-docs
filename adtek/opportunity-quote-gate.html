@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>銓盛-Adtek · 機會流程報價單歸檔卡控驗收</title>
+<style>
+  :root{
+    --brand:#0B5CAB; --brand-dark:#032D60; --ink:#181818; --sub:#5C5C5C;
+    --line:#E5E5E5; --bg:#F3F3F3; --card:#FFFFFF; --green:#2E844A; --amber:#DD7A01;
+    --red:#BA0517; --chip:#F3F3F3;
+    --font:-apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans TC","Microsoft JhengHei",Arial,sans-serif;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0;font-family:var(--font);color:var(--ink);background:var(--bg);line-height:1.6;font-size:15px;}
+  .wrap{max-width:1040px;margin:0 auto;padding:0 24px;}
+  header{background:linear-gradient(180deg,var(--brand-dark),var(--brand));color:#fff;padding:44px 0 40px;}
+  header .wrap{display:flex;align-items:flex-start;justify-content:space-between;gap:24px;flex-wrap:wrap;}
+  .h-title{font-size:28px;font-weight:700;margin:0 0 6px;letter-spacing:.5px;}
+  .h-sub{font-size:15px;opacity:.92;margin:0;max-width:660px;}
+  .h-meta{font-size:13px;opacity:.8;margin-top:14px;}
+  .badge-app{display:inline-block;background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.35);
+    border-radius:4px;padding:6px 14px;font-size:14px;font-weight:600;white-space:nowrap;}
+  section{padding:32px 0 6px;}
+  h2{font-size:20px;font-weight:700;margin:0 0 4px;color:var(--brand-dark);}
+  h2 .num{display:inline-block;width:26px;height:26px;line-height:26px;text-align:center;background:var(--brand);
+    color:#fff;border-radius:4px;font-size:14px;margin-right:10px;vertical-align:2px;}
+  .lead{color:var(--sub);margin:2px 0 18px 36px;font-size:14px;}
+  .grid{display:grid;gap:16px;}
+  .g2{grid-template-columns:1fr 1fr;} .g4{grid-template-columns:repeat(4,1fr);}
+  @media(max-width:820px){.g2,.g4{grid-template-columns:1fr;}}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:20px 22px;}
+  .card h3{margin:0 0 8px;font-size:15px;font-weight:700;}
+  .card p{margin:0;color:var(--sub);font-size:13.5px;}
+  .card .pain{color:var(--red);font-size:12.5px;margin-top:10px;padding-top:10px;border-top:1px dashed var(--line);}
+  .card .fix{color:var(--green);font-size:12.5px;margin-top:6px;font-weight:600;}
+  .stat{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:18px 20px;}
+  .stat .k{font-size:12px;color:var(--sub);margin:0 0 6px;}
+  .stat .v{font-size:28px;font-weight:700;color:var(--brand-dark);margin:0;line-height:1.1;}
+  .stat .d{font-size:12px;color:var(--sub);margin:6px 0 0;}
+  table{width:100%;border-collapse:collapse;background:var(--card);border:1px solid var(--line);border-radius:8px;overflow:hidden;font-size:13.5px;}
+  th,td{text-align:left;padding:11px 16px;border-bottom:1px solid var(--line);}
+  th{background:#FAFAFA;font-weight:600;color:var(--sub);font-size:12.5px;}
+  tr:last-child td{border-bottom:none;}
+  td.r,th.r{text-align:right;font-variant-numeric:tabular-nums;}
+  .ok{color:var(--green);font-weight:700;}
+  .chip{display:inline-block;background:var(--chip);border:1px solid var(--line);border-radius:12px;padding:2px 10px;font-size:12px;color:var(--sub);}
+  .chip.g{color:var(--green);border-color:#C6E7D0;background:#F0F9F3;}
+  .chip.a{color:var(--amber);border-color:#F2D18B;background:#FEF5E7;}
+  .steps{display:flex;gap:0;flex-wrap:wrap;align-items:stretch;margin-left:36px;}
+  .step{flex:1;min-width:150px;background:var(--card);border:1px solid var(--line);border-radius:8px;padding:14px 16px;position:relative;margin-right:26px;margin-bottom:16px;}
+  .step:not(:last-child):after{content:"→";position:absolute;right:-20px;top:50%;transform:translateY(-50%);color:var(--brand);font-weight:700;}
+  .step .n{font-size:11px;color:var(--brand);font-weight:700;letter-spacing:.5px;}
+  .step .t{font-size:14px;font-weight:600;margin:4px 0 2px;}
+  .step .s{font-size:12px;color:var(--sub);}
+  .note{margin:18px 0 6px;background:#F0F6FC;border:1px solid #CFE0F1;border-left:4px solid var(--brand);border-radius:6px;padding:14px 18px;font-size:13.5px;color:var(--brand-dark);}
+  .guard{background:#F0F9F3;border:1px solid #C6E7D0;border-left:4px solid var(--green);}
+  .guard b{color:var(--green);}
+  code,.kbd{font-family:monospace;background:#F3F3F3;border:1px solid var(--line);border-radius:3px;padding:1px 6px;font-size:12.5px;color:var(--ink);}
+  ul.tight{margin:6px 0 0 36px;padding-left:18px;color:var(--sub);font-size:13.5px;}
+  ul.tight li{margin:4px 0;}
+  footer{margin-top:40px;padding:26px 0 40px;border-top:1px solid var(--line);color:var(--sub);font-size:12.5px;}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap">
+    <div>
+      <p class="h-title">機會流程 · 報價單歸檔輕量卡控 · 驗收</p>
+      <p class="h-sub">不加審批、不改業務推進節奏；只在商機進入報價階段時，硬性要求「報價單已歸檔」，把管理層在意的可視性換回來。單一驗證規則、記錄類型隔離，對同 org 其他 App 零影響。</p>
+      <p class="h-meta">環境：CBUSDO 共享 Demo Org（<span class="kbd">00DJ2000000HP36MAG</span>）　·　App：<b>銓盛-Adtek</b>　·　記錄類型 <span class="kbd">ADT_Sales</span></p>
+    </div>
+    <div class="badge-app">App：銓盛-Adtek</div>
+  </div>
+</header>
+
+<div class="wrap">
+
+<!-- 痛點 → 解法 -->
+<section>
+  <h2><span class="num">1</span>痛點 → 解法</h2>
+  <p class="lead">客戶原話重點：紛享銷客的報價設在流程第 4 關又要層層批核，太重。</p>
+  <div class="grid g2">
+    <div class="card">
+      <h3>現行痛點</h3>
+      <p>報價從階段 4 才開始、還要層層稽核批核，流程過重 → 業務傾向<b>直接跳過或口頭自評</b>。管理層因此失去 CRM 可視性，只能<b>回頭翻 Excel 或逐一問業務</b>報價到哪了、報價單在不在。</p>
+      <p class="pain">要的不是更重的流程，是「報價單一定要歸檔」這件事能被看見。</p>
+    </div>
+    <div class="card">
+      <h3>本輪解法 · 輕量卡控（零審批）</h3>
+      <p>業務照常快推；商機一進入<b>提案報價 / 合約議價 / 成交結案</b>，就必須先勾「報價單已歸檔」，否則存不了。業務體感只多勾一個框，管理層換回完整可視性。</p>
+      <p class="fix">✓ 單一驗證規則落地，無新增審批節點、不動階段選項、不改共用版面。</p>
+    </div>
+  </div>
+</section>
+
+<!-- 卡控流程 -->
+<section>
+  <h2><span class="num">2</span>卡控如何運作</h2>
+  <div class="steps">
+    <div class="step"><div class="n">STEP 1</div><div class="t">業務照常推進</div><div class="s">需求探索 / 確認需求 · 零卡控</div></div>
+    <div class="step"><div class="n">STEP 2</div><div class="t">進「提案報價」</div><div class="s">未歸檔 → 存檔被擋</div></div>
+    <div class="step"><div class="n">STEP 3</div><div class="t">附報價單 + 勾選</div><div class="s">勾「報價單已歸檔」、填報價日期</div></div>
+    <div class="step"><div class="n">STEP 4</div><div class="t">放行 · 全程可視</div><div class="s">管理層報表即時看歸檔狀態</div></div>
+  </div>
+  <div class="note"><b>觸發階段：</b>提案報價、合約議價、成交結案 → <b>卡</b>；需求探索、確認需求（業務快推期）→ 不卡；結案未成（已放棄的案子）→ 不卡。錯誤訊息綁在「報價單已歸檔」欄位旁：<b>「進入提案報價階段前，請先附上報價單並勾選『報價單已歸檔』。」</b></div>
+</section>
+
+<!-- 交付項目 -->
+<section>
+  <h2><span class="num">3</span>交付項目</h2>
+  <table>
+    <tr><th>類型</th><th>API 名稱</th><th>說明</th><th class="r">狀態</th></tr>
+    <tr><td>自訂欄位</td><td><code>Opportunity.ADT_Quote_Archived__c</code></td><td>勾選欄位「報價單已歸檔」（預設未勾）</td><td class="r ok">已部署</td></tr>
+    <tr><td>自訂欄位</td><td><code>Opportunity.ADT_Quote_Date__c</code></td><td>日期「報價日期」（歸檔時順手填，供管理層看板）</td><td class="r ok">已部署</td></tr>
+    <tr><td>驗證規則</td><td><code>ADT_Quote_Archived_Required</code></td><td>報價階段（含）之後未歸檔即擋存，僅對 ADT_Sales 生效</td><td class="r ok">Active</td></tr>
+    <tr><td>權限集 FLS</td><td><code>ADT_Adtek_Sales_Service</code></td><td>2 個新欄位開啟可讀 / 可編輯給 Adtek 業務</td><td class="r ok">已部署</td></tr>
+    <tr><td>記錄頁</td><td><code>ADT_Opportunity_Slack</code></td><td>側欄新增「報價單歸檔」區塊放 2 欄位（App 層 View 覆寫）</td><td class="r ok">已部署</td></tr>
+  </table>
+</section>
+
+<!-- 現況數字 -->
+<section>
+  <h2><span class="num">4</span>Org 現況（即時查詢自 CRM）</h2>
+  <p class="lead">130 筆銓盛-Adtek 商機全數為 <code>ADT_Sales</code> 記錄類型；其中 104 筆已在報價（含）之後階段。</p>
+  <div class="grid g4">
+    <div class="stat"><p class="k">已進報價階段商機</p><p class="v">104</p><p class="d">提案報價 11 / 合約議價 7 / 成交結案 86</p></div>
+    <div class="stat"><p class="k">已歸檔</p><p class="v">101</p><p class="d">補齊報價單歸檔旗標 + 報價日期</p></div>
+    <div class="stat"><p class="k">刻意留白（demo 教材）</p><p class="v">3</p><p class="d">提案報價 · 現場示範卡控與預警</p></div>
+    <div class="stat"><p class="k">受卡控的其他 App</p><p class="v">0</p><p class="d">記錄類型不符 → 恆不觸發</p></div>
+  </div>
+  <div class="note"><b>歸檔前＝痛點本身：</b>導入前這 104 筆<b>全部未歸檔</b>（0 筆有報價單附檔紀錄）——正是「報價都跳過」的現況。本輪把已推進的案子補上歸檔證明，並保留 3 筆未歸檔作為現場示範素材。</div>
+</section>
+
+<!-- 驗證 -->
+<section>
+  <h2><span class="num">5</span>驗證結果（Apex 實跑，最後 rollback 不留副作用）</h2>
+  <table>
+    <tr><th>驗證項</th><th>做法</th><th class="r">結果</th></tr>
+    <tr><td>未歸檔進報價階段被擋</td><td>取未歸檔的提案報價商機更新 → 應拋驗證錯誤</td><td class="r ok">PASS</td></tr>
+    <tr><td>已歸檔放行</td><td>取已歸檔的提案報價商機更新 → 應成功</td><td class="r ok">PASS</td></tr>
+    <tr><td>其他 App 商機不受影響</td><td>取非 ADT_Sales 記錄類型商機更新 → 不應被此規則擋</td><td class="r ok">PASS</td></tr>
+  </table>
+  <div class="note guard"><b>實測佐證：</b>未歸檔案子存檔時實際回傳 <code>FIELD_CUSTOM_VALIDATION_EXCEPTION：進入提案報價階段前，請先附上報價單並勾選「報價單已歸檔」。</code>；別 App 商機「北大御品 B01 客戶洽談」（記錄類型非 ADT_Sales）同樣操作可正常存檔，未被此卡控影響。</div>
+</section>
+
+<!-- 隔離 -->
+<section>
+  <h2><span class="num">6</span>CBUSDO 多 App 隔離（最高準則）</h2>
+  <ul class="tight" style="margin-left:0;">
+    <li>驗證規則公式含 <code>RecordType.DeveloperName = "ADT_Sales"</code>；同 org 其他 App（建商 / 銀樺 / KKDAY / Brinno…）記錄類型不同，公式恆為 false → <b>零卡控、零影響</b>。</li>
+    <li>欄位顯示走 Adtek 專屬記錄頁 <code>ADT_Opportunity_Slack</code>（掛在 <code>Adtek_Sales_Service</code> App 的 View 覆寫）；<b>未新增 / 未修改任何共用版面配置</b>，其他 App 開同一物件完全不變。</li>
+    <li>新欄位皆 <span class="kbd">ADT_</span> 前綴；<b>未碰</b>別 App 報價欄位 <code>AMG_*</code>、未動標準 Quote 物件、未動既有搶單警示 Flow。</li>
+    <li>驗證資料操作全帶記錄類型錨定，且 Apex 測試以 <code>Database.rollback</code> 復原，不留任何副作用。</li>
+  </ul>
+</section>
+
+<footer>
+  <div class="wrap" style="padding:0;">
+    銓盛-Adtek Salesforce Demo　·　CBUSDO 共享 Demo Org　·　機會流程報價單歸檔輕量卡控（單一原生驗證規則 + 2 自訂欄位 + 記錄頁側欄區塊）<br>
+    所有數字即時查自 org 商機資料；卡控 / 隔離結果經 Apex 三項驗證實跑確認，本頁不含示意值。
+  </div>
+</footer>
+
+</div>
+</body>
+</html>
